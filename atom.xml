@@ -4,7 +4,7 @@
   <title><![CDATA[What I learned today]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2014-03-14T20:56:37-07:00</updated>
+  <updated>2014-03-15T09:28:40-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,14 +12,5 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Hello World]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/03/14/hello-world/"/>
-    <updated>2014-03-14T01:52:48-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/03/14/hello-world</id>
-    <content type="html"><![CDATA[<p>Hello World</p>
-]]></content>
-  </entry>
   
 </feed>
