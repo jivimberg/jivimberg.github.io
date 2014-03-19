@@ -5,7 +5,7 @@ date: 2014-03-17 22:48:56 -0700
 comments: true
 categories: offtopic
 ---
-There are billions of blogs of more experienced and talented devs, there is [stackoverflow.com](http://stackoverflow.com) and communities for each tool and language ever created, so why bother creating yet another dev blog? Here are the two reasons why I started this blog.
+There are billions of blogs written by more experienced and talented devs, there is [stackoverflow.com](http://stackoverflow.com) and communities for each tool and language ever created, so why bother creating yet another dev blog? Here are the two reasons why I started this blog.
 
 <!--more-->
 
