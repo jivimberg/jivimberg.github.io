@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Guava, | What I learned today]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/guava/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2014-03-20T20:38:33-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Guava - Using and Avoiding Null]]></title>
+    <link href="http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null/"/>
+    <updated>2014-03-19T00:34:41-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m starting a series of posts on <a href="https://code.google.com/p/guava-libraries/">Guava</a> (Google&rsquo;s core libraries). Today I am going to start with <strong>null</strong>, how to use it, and how to avoid it when necessary.</p>
+
+<!--more-->
+
+
+<blockquote><p><strong>&ldquo;I call it my billion-dollar mistake.&rdquo;</strong><br/>
+Sir C. A. R. Hoare, on his invention of the null reference</p></blockquote>
+
+<h3>Null in Guava Collections</h3>
+
+<p>How many times have you expected null values on your collections? And how many times have you <em>actually</em> check to prevent null values on them?</p>
+
+<p>That&rsquo;s why most of Guava &ldquo;New Collections&rdquo; and utilities will fail fast with a NPE when you try to add null to them. And they provide the <strong>Optional</strong> utilty for those cases where we need to indicate absence of some kind, without using null.</p>
+
+<p><code>java
+//This will fail with java.lang.NullPointerException: at index 2
+ImmutableList.of("one", "two", null);
+</code></p>
+
+<h3>Optional</h3>
+
+<p>Optional is a way of representing a reference which may be present or not. The whole point of using Optional instead of null, is that there is no way the client can miss the case where the reference is absent. It forces him to actively unwrap the value or else the program won&rsquo;t compile.</p>
+
+<p>Here is how you create an optional:</p>
+
+<p>``` java
+Optional<String> creatingAnOptional(){</p>
+
+<pre><code>    Optional&lt;String&gt; result;
+
+    String value = findString(); //may return null
+    result = Optional.fromNullable(value);
+
+    // which is the same as doing:
+    if(value != null){
+        result = Optional.of(value);
+    } else {
+        result = Optional.absent();
+    }
+
+    return result;
+}
+</code></pre>
+
+<p>```</p>
+
+<p>And here is how you query for the value:</p>
+
+<p>``` java
+void queryingOptionals(){</p>
+
+<pre><code>    Optional&lt;String&gt; optional = creatingAnOptional();
+
+    if(optional.isPresent()){
+        String value = optional.get(); //We are sure is the value is there
+        System.out.println("The string is: " + value);
+    }
+
+    //or
+    System.out.println("Value or default: " + optional.or("Default value"));
+}
+</code></pre>
+
+<p>```</p>
+
+<p>The next time you are writing a method that return a values which may or may not be present, remember to use Optional. It will make your API much clearer and force the caller to consider the absent value case.</p>
+]]></content>
+  </entry>
+  
+</feed>
