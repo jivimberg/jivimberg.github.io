@@ -3,7 +3,7 @@ layout: post
 title: "Guava - Using and avoiding null"
 date: 2014-03-19 00:34:41 -0700
 comments: true
-categories: guava, libs
+categories: java, guava, libs
 ---
 I'm starting a series of posts on [Guava](https://code.google.com/p/guava-libraries/) (Google's core libraries). Today I am going to start with **null**, how to use it, and how to avoid it when necessary. 
 
