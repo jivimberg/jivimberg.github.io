@@ -1,24 +1,83 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[What I learned today]]></title>
-  <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2014-03-29T10:40:17-07:00</updated>
-  <id>http://jivimberg.github.io/</id>
-  <author>
-    <name><![CDATA[Juan Ignacio Vimberg]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Guava - Fun With Comparisons - What I learned today</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
 
   
-  <entry>
-    <title type="html"><![CDATA[Guava - Fun With Comparisons]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons/"/>
-    <updated>2014-03-28T17:26:47-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons</id>
-    <content type="html"><![CDATA[<p>Implementing <code>compare()</code> and <code>compareTo()</code> methods was never fun. Luckily <a href="https://code.google.com/p/guava-libraries/">Guava</a> provides an utility that makes comparison methods easier to write and more pleasing to the eye.</p>
+  <meta name="description" content="Guava - Fun With Comparisons written March 28, 2014 in guava, java, libs Implementing compare() and compareTo() methods was never fun. Luckily Guava &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="What I learned today" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49016076-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Guava - Fun With Comparisons</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2014-03-28T17:26:47-07:00" pubdate data-updated="true">March 28, 2014</time> in 
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/guava/'>guava</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/libs/'>libs</a>
+  
+</span>
+
+
+        </div>
+        <p>Implementing <code>compare()</code> and <code>compareTo()</code> methods was never fun. Luckily <a href="https://code.google.com/p/guava-libraries/">Guava</a> provides an utility that makes comparison methods easier to write and more pleasing to the eye.</p>
 
 <!--more-->
 
@@ -142,123 +201,50 @@ Yeah I know, it&rsquo;s hard to read, prone to errors and it has a way too many 
 <p>Furthermore ComparisonChain stops calling the next <code>compare()</code> method as soon as one returns a value different than 0. So if you have an expensive calculation for comparison to untide similar objects you can rest assured it will only be called when absolutely necessary.</p>
 
 <p>If you find this useful you&rsquo;ll probably want to check out other <a href="https://code.google.com/p/guava-libraries/wiki/OrderingExplained">guava&rsquo;s Ordering Utilities</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Guava - Using and Avoiding Null]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null/"/>
-    <updated>2014-03-19T00:34:41-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null</id>
-    <content type="html"><![CDATA[<p>I&rsquo;m starting a series of posts on <a href="https://code.google.com/p/guava-libraries/">Guava</a> (Google&rsquo;s core libraries). Today I am going to start with <strong>null</strong>, how to use it, and how to avoid it when necessary.</p>
 
-<!--more-->
+      </div>
+    </div>
+  </div>
+</article>
 
+<hr class="divider-short"/>
 
-<blockquote><p><strong>&ldquo;I call it my billion-dollar mistake.&rdquo;</strong><br/>
-Sir C. A. R. Hoare, on his invention of the null reference</p></blockquote>
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2014/03/19/guava-using-and-avoiding-null/" title="Previous Post: Guava - Using and avoiding null">&laquo; Previous: Guava - Using and avoiding null</a>
+        
 
-<h3>Null in Guava Collections</h3>
+        
+      </div>
+    </div>
+  </div>
+</div>
 
-<p>How many times have you expected null values on your collections? And how many times have you <em>actually</em> check to prevent null values on them?</p>
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
 
-<p>That&rsquo;s why most of Guava &ldquo;New Collections&rdquo; and utilities will fail fast with a NPE when you try to add null to them. And they provide the <strong>Optional</strong> utilty for those cases where we need to indicate absence of some kind, without using null.</p>
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a href="https://twitter.com/jivimberg"><img src="/images/glyphicons_social_31_twitter.png"/></a>
+    <a href="mailto:jivimberg+wilt@gmail.com"><img src="/images/glyphicons_social_39_e-mail.png"/></a>
+  </div>
+</div>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">//This will fail with java.lang.NullPointerException: at index 2</span>
-</span><span class='line'><span class="n">ImmutableList</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">&quot;one&quot;</span><span class="o">,</span> <span class="s">&quot;two&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Optional</h3>
-
-<p>Optional is a way of representing a reference which may be present or not. The whole point of using Optional instead of null, is that there is no way the client can miss the case where the reference is absent. It forces him to actively unwrap the value or else the program won&rsquo;t compile.</p>
-
-<p>Here is how you create an optional:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">creatingAnOptional</span><span class="o">(){</span>
-</span><span class='line'>        <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">result</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">findString</span><span class="o">();</span> <span class="c1">//may return null</span>
-</span><span class='line'>        <span class="n">result</span> <span class="o">=</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// which is the same as doing:</span>
-</span><span class='line'>        <span class="k">if</span><span class="o">(</span><span class="n">value</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
-</span><span class='line'>            <span class="n">result</span> <span class="o">=</span> <span class="n">Optional</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
-</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">result</span> <span class="o">=</span> <span class="n">Optional</span><span class="o">.</span><span class="na">absent</span><span class="o">();</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
 
 
-<p></p>
+    </div>
+  </div>
+</footer>
 
-<p>And here is how you query for the value:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kt">void</span> <span class="nf">queryingOptionals</span><span class="o">(){</span>
-</span><span class='line'>        <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">optional</span> <span class="o">=</span> <span class="n">creatingAnOptional</span><span class="o">();</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">if</span><span class="o">(</span><span class="n">optional</span><span class="o">.</span><span class="na">isPresent</span><span class="o">()){</span>
-</span><span class='line'>            <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">optional</span><span class="o">.</span><span class="na">get</span><span class="o">();</span> <span class="c1">//We are sure is the value is there</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;The string is: &quot;</span> <span class="o">+</span> <span class="n">value</span><span class="o">);</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">//or</span>
-</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Value or default: &quot;</span> <span class="o">+</span> <span class="n">optional</span><span class="o">.</span><span class="na">or</span><span class="o">(</span><span class="s">&quot;Default value&quot;</span><span class="o">));</span>
-</span><span class='line'>    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The next time you are writing a method that return a values which may or may not be present, remember to use Optional. It will make your API much clearer and force the caller to consider the absent value case.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Why Was This Blog Created]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/03/17/why-was-this-blog-created/"/>
-    <updated>2014-03-17T22:48:56-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/03/17/why-was-this-blog-created</id>
-    <content type="html"><![CDATA[<p>There are billions of blogs written by more experienced and talented devs, there is <a href="http://stackoverflow.com">stackoverflow.com</a> and communities for each tool and language ever created, so why bother creating yet another dev blog? Here are the two reasons why I started this blog.</p>
-
-<!--more-->
-
-
-<p>The first reason why I chose to get my hands dirty writing this pages is that I&rsquo;m like the Memento guy trying to code. Whatever code I&rsquo;m working on today will seem completely new for me the next month. So one day I had an idea, what if I could have a place where I could go back and check my notes and snippets of the things I learned. There&rsquo;s a phrase that goes: <em>&ldquo;To know I read, to learn I do, to understand I teach&rdquo;</em>. So in theory even the process of thinking how to write about something is helping me remember it.</p>
-
-<p>And the second reason is that I&rsquo;ve been using online resources for so long that I already feel that it&rsquo;s affecting my karma for not contributing back. So here is  is my humble contribution. Hopefully someone will find it useful.</p>
-
-<p>Enjoy!</p>
-]]></content>
-  </entry>
-  
-</feed>
+  </body>
+</html>
