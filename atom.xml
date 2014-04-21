@@ -4,7 +4,7 @@
   <title><![CDATA[What I learned today]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2014-04-10T19:55:04-07:00</updated>
+  <updated>2014-04-20T20:39:12-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,28 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[AutoValue for Android]]></title>
+    <link href="http://jivimberg.github.io/blog/2014/04/20/autovalue-for-android/"/>
+    <updated>2014-04-20T17:14:00-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/04/20/autovalue-for-android</id>
+    <content type="html"><![CDATA[<p>Remember <a href="blog/2014/04/07/value-types-the-easy-way/">my last post</a> on value types using <a href="https://github.com/google/auto/tree/master/value">Google&rsquo;s AutoValue</a>? Today while doing some work on a new Android project I&rsquo;m starting I thought: <em>&lsquo;Great chance to use AutoValue!&rsquo;</em>. Guess what, there is a port of Google AutoValue for the Android platform.</p>
+
+<!-- More -->
+
+
+<p>So the first thing I thought was: <em>&lsquo;Why do I need an special port of the AutoValue in the first place?&rsquo;</em>. Even though you could use the original <a href="https://github.com/google/auto/tree/master/value">Google&rsquo;s AutoValue</a> and it will work just find, there are 2 reasons why you should consider the Android port:</p>
+
+<ol>
+<li>Android AutoValue splits the project in 2 libraries. Only one is included in your apk (which just contains the interface) and the other is only used during compile time</li>
+<li>Apart from all the things you get using the original lib the Android AutoValue also includes Parceable generation just adding <code>implements Parcelable</code> to your classes.</li>
+</ol>
+
+
+<p>That&rsquo;s pretty much all. Head to the <a href="https://github.com/frankiesardo/android-auto-value">Android Autovalue github repo</a> to see how to use it in your project.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Value Types the Easy Way]]></title>

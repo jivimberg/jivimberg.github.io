@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Lib - What I learned today</title>
+  <title>AutoValue for Android - What I learned today</title>
   <meta name="author" content="Juan Ignacio Vimberg">
 
   
-  <meta name="description" content="Category: lib">
+  <meta name="description" content="AutoValue for Android written April 20, 2014 in android, java, lib Remember my last post on value types using Google&rsquo;s AutoValue? Today while &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jivimberg.github.ioblog/categories/lib">
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2014/04/20/autovalue-for-android">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="What I learned today" type="application/atom+xml">
@@ -47,30 +47,13 @@
       <img src="/images/home.png"/>
     </a>
 
-    <div class="all-posts">
+    <article role="article" class="full-single-article">
   <div class="container">
     <div class="row">
-      <div class="list-title col-md-offset-3 col-md-6">
-        <h4>Posts in lib</h4>
-      </div>
-    </div>
-  </div>
-
-  <div class="article-list">
-    <div class="container">
-      
-        
-        <div class="row">
-          <div class="col-md-offset-3 col-md-6">
-            <article>
-  <h2><a href="/blog/2014/04/20/autovalue-for-android/">AutoValue for Android</a></h2>
-  
-  <p>
-    <p>Remember [my last post] on value types using [Google&rsquo;s AutoValue]? Today while doing some work on a new Android project I&rsquo;m starting I thought: <em>&lsquo;Great chance to use AutoValue!&rsquo;</em>. Guess what, there is a port of Google AutoValue for the Android platform.</p>
-
-  </p>
-  <span class="meta">
-    written 
+      <div class="col-md-8 col-md-offset-2">
+        <h1>AutoValue for Android</h1>
+        <div class="meta">
+          written 
 
 
 
@@ -84,7 +67,7 @@
 
 
 <time datetime="2014-04-20T17:14:00-07:00" pubdate data-updated="true">April 20, 2014</time> in 
-    
+          
 
 <span class="categories">
   
@@ -93,60 +76,39 @@
 </span>
 
 
-  </span>
+        </div>
+        <p>Remember <a href="blog/2014/04/07/value-types-the-easy-way/">my last post</a> on value types using <a href="https://github.com/google/auto/tree/master/value">Google&rsquo;s AutoValue</a>? Today while doing some work on a new Android project I&rsquo;m starting I thought: <em>&lsquo;Great chance to use AutoValue!&rsquo;</em>. Guess what, there is a port of Google AutoValue for the Android platform.</p>
 
-  
-    <a class="full-article-link pull-right" rel="full-article" href="/blog/2014/04/20/autovalue-for-android/">Read on &rarr;</a>
-  
+<!-- More -->
+
+
+<p>So the first thing I thought was: <em>&lsquo;Why do I need an special port of the AutoValue in the first place?&rsquo;</em>. Even though you could use the original <a href="https://github.com/google/auto/tree/master/value">Google&rsquo;s AutoValue</a> and it will work just find, there are 2 reasons why you should consider the Android port:</p>
+
+<ol>
+<li>Android AutoValue splits the project in 2 libraries. Only one is included in your apk (which just contains the interface) and the other is only used during compile time</li>
+<li>Apart from all the things you get using the original lib the Android AutoValue also includes Parceable generation just adding <code>implements Parcelable</code> to your classes.</li>
+</ol>
+
+
+<p>That&rsquo;s pretty much all. Head to the <a href="https://github.com/frankiesardo/android-auto-value">Android Autovalue github repo</a> to see how to use it in your project.</p>
+
+      </div>
+    </div>
+  </div>
 </article>
 
-          </div>
-        </div>
-      
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
         
-        <div class="row">
-          <div class="col-md-offset-3 col-md-6">
-            <article>
-  <h2><a href="/blog/2014/04/07/value-types-the-easy-way/">Value Types the Easy Way</a></h2>
-  
-  <p>
-    <p>Value types is a fancy name for those classes where you have to implement <code>equals()</code> and <code>hashCode()</code>, and usually <code>toString()</code>. You&rsquo;ve probably wrote thounsands of those classes, but have you ever wonder why do you have write almost 50 lines of code to express such a common concept?</p>
+          <a class="pull-left" href="/blog/2014/04/07/value-types-the-easy-way/" title="Previous Post: Value Types the easy way">&laquo; Previous: Value Types the easy way</a>
+        
 
-  </p>
-  <span class="meta">
-    written 
-
-
-
-
-
-
-
-
-  
-
-
-
-<time datetime="2014-04-07T20:54:07-07:00" pubdate data-updated="true">April 7, 2014</time> in 
-    
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/lib/'>lib</a>
-  
-</span>
-
-
-  </span>
-
-  
-    <a class="full-article-link pull-right" rel="full-article" href="/blog/2014/04/07/value-types-the-easy-way/">Read on &rarr;</a>
-  
-</article>
-
-          </div>
-        </div>
-      
+        
+      </div>
     </div>
   </div>
 </div>
