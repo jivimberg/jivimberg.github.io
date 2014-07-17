@@ -4,7 +4,7 @@
   <title><![CDATA[What I learned today]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2014-04-20T20:39:12-07:00</updated>
+  <updated>2014-07-17T14:32:36-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,83 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Keep Trying With Guava Retrying]]></title>
+    <link href="http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying/"/>
+    <updated>2014-07-17T14:22:07-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying</id>
+    <content type="html"><![CDATA[<p>We were having a <a href="http://en.wikipedia.org/wiki/Race_condition#Software">race condition</a> on a server which was &ldquo;fixed&rdquo; by adding an sleep to the thread to check again later. Yes, it sucked, so I decided to make something more sophisticated and went looking for a library to handle retryies with multiple strategies. That&rsquo;s when I first read about <a href="https://github.com/rholder/guava-retrying">Guava Retrying</a></p>
+
+<!--more-->
+
+
+<p>In the words of it&rsquo;s creator (<a href="https://github.com/rholder">rholder</a>):</p>
+
+<blockquote><p>Guava-Retrying is a small extension to Google&rsquo;s Guava library to allow for the creation of configurable retrying strategies for an arbitrary function call, such as something that talks to a remote service with flaky uptime.</p></blockquote>
+
+<p>Simply put give it a taks and it will retry it until success&hellip; or until a given condition is met, or after X attempts, or until it does not throw exception, or&hellip; well you get the point: <strong>flexibility</strong>.</p>
+
+<h3>Quick example</h3>
+
+<p>Let&rsquo;s say we want to execute a task that will:
+* Retry if the result is null
+* Retry if an exception of type IOException is thrown
+* Wait 300 miliseconds to try again.
+* Stop after 5 attempts</p>
+
+<p>Then we would do something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Callable</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span> <span class="n">yourTask</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">Boolean</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span> <span class="c1">// do something interesting here</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Retryer</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span> <span class="n">retryer</span> <span class="o">=</span> <span class="n">RetryerBuilder</span><span class="o">.&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="n">newBuilder</span><span class="o">()</span>
+</span><span class='line'>        <span class="o">.</span><span class="na">retryIfResult</span><span class="o">(</span><span class="n">Predicates</span><span class="o">.&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="n">isNull</span><span class="o">())</span>
+</span><span class='line'>        <span class="o">.</span><span class="na">retryIfExceptionOfType</span><span class="o">(</span><span class="n">IOException</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class='line'>        <span class="o">.</span><span class="na">withWaitStrategy</span><span class="o">(</span><span class="n">WaitStrategies</span><span class="o">.</span><span class="na">fixedWait</span><span class="o">(</span><span class="mi">300</span><span class="o">,</span>                                                                             <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">))</span>
+</span><span class='line'>        <span class="o">.</span><span class="na">withStopStrategy</span><span class="o">(</span><span class="n">StopStrategies</span><span class="o">.</span><span class="na">stopAfterAttempt</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
+</span><span class='line'>        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">retryer</span><span class="o">.</span><span class="na">call</span><span class="o">(</span><span class="n">yourTask</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">RetryException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ExecutionException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After attempting 5 times it will throw a <code>RetryException</code> with information about the last attempt. Any other exception thrown by your task will be wrapped and rethrown in a <code>ExecutionException</code></p>
+
+<p>Other <strong>wait strategies</strong> supported: Random backoff, Incremental backoff, Exponential backoff, Fibonacci backoff</p>
+
+<p>Other <strong>stop strategies</strong> supported: never stop, stop after delay.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[AutoValue for Android]]></title>

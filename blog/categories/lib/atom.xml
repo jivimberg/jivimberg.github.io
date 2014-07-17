@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Lib | What I learned today]]></title>
   <link href="http://jivimberg.github.io/blog/categories/lib/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2014-04-20T20:39:12-07:00</updated>
+  <updated>2014-07-17T14:32:36-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,77 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Keep Trying With Guava Retrying]]></title>
+    <link href="http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying/"/>
+    <updated>2014-07-17T14:22:07-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying</id>
+    <content type="html"><![CDATA[<p>We were having a <a href="http://en.wikipedia.org/wiki/Race_condition#Software">race condition</a> on a server which was &ldquo;fixed&rdquo; by adding an sleep to the thread to check again later. Yes, it sucked, so I decided to make something more sophisticated and went looking for a library to handle retryies with multiple strategies. That&rsquo;s when I first read about <a href="https://github.com/rholder/guava-retrying">Guava Retrying</a></p>
+
+<!--more-->
+
+
+<p>In the words of it&rsquo;s creator (<a href="https://github.com/rholder">rholder</a>):</p>
+
+<blockquote><p>Guava-Retrying is a small extension to Google&rsquo;s Guava library to allow for the creation of configurable retrying strategies for an arbitrary function call, such as something that talks to a remote service with flaky uptime.</p></blockquote>
+
+<p>Simply put give it a taks and it will retry it until success&hellip; or until a given condition is met, or after X attempts, or until it does not throw exception, or&hellip; well you get the point: <strong>flexibility</strong>.</p>
+
+<h3>Quick example</h3>
+
+<p>Let&rsquo;s say we want to execute a task that will:
+* Retry if the result is null
+* Retry if an exception of type IOException is thrown
+* Wait 300 miliseconds to try again.
+* Stop after 5 attempts</p>
+
+<p>Then we would do something like:</p>
+
+<p>``` java
+Callable<Boolean> yourTask = new Callable<Boolean>() {</p>
+
+<pre><code>public Boolean call() throws Exception {
+    return true; // do something interesting here
+}
+</code></pre>
+
+<p>};</p>
+
+<p>Retryer<Boolean> retryer = RetryerBuilder.<Boolean>newBuilder()</p>
+
+<pre><code>    .retryIfResult(Predicates.&lt;Boolean&gt;isNull())
+    .retryIfExceptionOfType(IOException.class)
+    .withWaitStrategy(WaitStrategies.fixedWait(300,                                                                             TimeUnit.MILLISECONDS))
+    .withStopStrategy(StopStrategies.stopAfterAttempt(5))
+    .build();
+</code></pre>
+
+<p>try {</p>
+
+<pre><code>retryer.call(yourTask);
+</code></pre>
+
+<p>} catch (RetryException e) {</p>
+
+<pre><code>e.printStackTrace();
+</code></pre>
+
+<p>} catch (ExecutionException e) {</p>
+
+<pre><code>e.printStackTrace();
+</code></pre>
+
+<p>}
+```</p>
+
+<p>After attempting 5 times it will throw a <code>RetryException</code> with information about the last attempt. Any other exception thrown by your task will be wrapped and rethrown in a <code>ExecutionException</code></p>
+
+<p>Other <strong>wait strategies</strong> supported: Random backoff, Incremental backoff, Exponential backoff, Fibonacci backoff</p>
+
+<p>Other <strong>stop strategies</strong> supported: never stop, stop after delay.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[AutoValue for Android]]></title>
