@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Android | What I learned today]]></title>
   <link href="http://jivimberg.github.io/blog/categories/android/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2014-07-17T14:32:36-07:00</updated>
+  <updated>2014-08-10T14:18:17-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Android Animations Are Just a Trick]]></title>
+    <link href="http://jivimberg.github.io/blog/2014/08/10/android-animations-are-just-a-trick/"/>
+    <updated>2014-08-10T12:44:27-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/08/10/android-animations-are-just-a-trick</id>
+    <content type="html"><![CDATA[<p>So I was learning to animate Views in Android using <a href="http://youtu.be/_UWXqFBF86U]">this video</a> and was having trouble with the second time the animation runned. First run the objects end up in their destination, second run it was mayhem.
+I had fallen victim to the great misunderstanding everyone makes about Android animations: <strong>they are just a magic trick</strong>.</p>
+
+<!--more-->
+
+
+<p>The animated View isn&rsquo;t actually moving (or rotating, or scaling, or fading). The animation is actually just an order to the rendering engine to perform a last minute transformation on the desired object. <strong>The real object never leaves it&rsquo;s initial position.</strong></p>
+
+<p>So the first time my animation runned I was making the view move from A to B. Now the second time I was trying to move it from B to C, but even when I was seeing the View in B (because I&rsquo;ve setted the <code>android:fillAfter="true"</code> flag) the real object was in A the whole time. Therefore the second run of the animation ended up in disaster.</p>
+
+<p>To fix this there are 2 solutions:</p>
+
+<ol>
+<li>Update the View object once the animation has finished using an <a href="http://developer.android.com/reference/android/view/animation/Animation.AnimationListener.html">AnimationListener</a> and do it <code>onAnimationEnd()</code>.</li>
+<li>Use an <a href="http://developer.android.com/reference/android/animation/ObjectAnimator.html">ObjectAnimator</a> which updates the underlying property while performing the animation. Or use <a href="http://nineoldandroids.com/">NineOldAndroids</a> if your target sdk is &lt;11.</li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[AutoValue for Android]]></title>
