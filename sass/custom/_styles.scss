@@ -26,3 +26,9 @@ em {
     @include fontStyle();
     list-style: decimal inside;
 }
+
+img.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto 
+}	
