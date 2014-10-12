@@ -13,11 +13,11 @@ Here I'll show you how you can email a Google Form daily, weekly or whatever. I'
 
 2 - Send this form to your email address using the **Send Form** button. Send it using the **"send form via email"** option, as shown in the picture:
 
-{% img center /images/SendForm.png 400 'Send Form' %}
+{% img center /images/posts/2014-08-21/SendForm.png 400 'Send Form' %}
 
 3 - Now we need to get that form in HTML. To achieve this we will need the raw email. In GMail you can see it using the **Show original** option in the menu, but YMMV.
 
-{% img center /images/ShowOriginal.png 250 'Show Original' %}
+{% img center /images/posts/2014-08-21/ShowOriginal.png 250 'Show Original' %}
 
 4 - So we have the HTML but, at least if you obtain it like me, you'll notice that it is encoding as **quoted-printable**. I use [this site] to decode it. Make sure you paste your code in the **Encoded** text field and press the **decode** button. Copy this code to your clipboard, we will need it later.
 
@@ -45,7 +45,7 @@ Make sure your replace all the fields with the actual values!
 
 9 - Finally go to _Resources > Current project triggers'_  and create a time driven trigger to run it daily (or weekly, or whatever suits your needs)
 
-{% img center /images/Triggers.png 700 'Triggers' %}
+{% img center /images/posts/2014-08-21/Triggers.png 700 'Triggers' %}
 
 10 - Relax and enjoy!
 
