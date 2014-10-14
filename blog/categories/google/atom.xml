@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Google | What I learned today]]></title>
   <link href="http://jivimberg.github.io/blog/categories/google/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2014-09-21T12:51:19-07:00</updated>
+  <updated>2014-10-13T23:20:53-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -27,11 +27,11 @@
 
 <p>2 &ndash; Send this form to your email address using the <strong>Send Form</strong> button. Send it using the <strong>&ldquo;send form via email&rdquo;</strong> option, as shown in the picture:</p>
 
-<p><img class="center" src="/images/SendForm.png" width="400" title="&lsquo;Send Form&rsquo;" ></p>
+<p><img class="center" src="/images/posts/2014-08-21/SendForm.png" width="400" title="&lsquo;Send Form&rsquo;" ></p>
 
 <p>3 &ndash; Now we need to get that form in HTML. To achieve this we will need the raw email. In GMail you can see it using the <strong>Show original</strong> option in the menu, but YMMV.</p>
 
-<p><img class="center" src="/images/ShowOriginal.png" width="250" title="&lsquo;Show Original&rsquo;" ></p>
+<p><img class="center" src="/images/posts/2014-08-21/ShowOriginal.png" width="250" title="&lsquo;Show Original&rsquo;" ></p>
 
 <p>4 &ndash; So we have the HTML but, at least if you obtain it like me, you&rsquo;ll notice that it is encoding as <strong>quoted-printable</strong>. I use <a href="http://www.webatic.com/run/convert/qp.php">this site</a> to decode it. Make sure you paste your code in the <strong>Encoded</strong> text field and press the <strong>decode</strong> button. Copy this code to your clipboard, we will need it later.</p>
 
@@ -62,7 +62,7 @@ MailApp.sendEmail(emailAddress, subject, message, {
 
 <p>9 &ndash; Finally go to <em>Resources > Current project triggers'</em>  and create a time driven trigger to run it daily (or weekly, or whatever suits your needs)</p>
 
-<p><img class="center" src="/images/Triggers.png" width="700" title="&lsquo;Triggers&rsquo;" ></p>
+<p><img class="center" src="/images/posts/2014-08-21/Triggers.png" width="700" title="&lsquo;Triggers&rsquo;" ></p>
 
 <p>10 &ndash; Relax and enjoy!</p>
 ]]></content>
