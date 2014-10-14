@@ -30,5 +30,15 @@ em {
 img.center {
     display: block;
     margin-left: auto;
-    margin-right: auto 
-}	
+    margin-right: auto
+}
+
+img.left {
+  float: left;
+  margin-right: 1.5em;
+}
+
+img.right {
+  float: right;
+  margin-left: 1.5em;
+}
