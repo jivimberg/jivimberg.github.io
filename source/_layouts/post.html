@@ -9,10 +9,19 @@ single: true
       <div class="col-md-8 col-md-offset-2">
         <h1>{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}</h1>
         <div class="meta">
-          written {% include post/date.html %}{% if updated %}{{ updated }}{% else %}{{ time }}{% endif %} in 
+          written {% include post/date.html %}{% if updated %}{{ updated }}{% else %}{{ time }}{% endif %} in
           {% include post/categories.html %}
         </div>
         {{ content }}
+
+        <hr class="divider-short"/>
+
+        {% if site.disqus_short_name and page.comments == true %}
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">{% include disqus.html %}</div>
+        </section>
+        {% endif %}
       </div>
     </div>
   </div>
