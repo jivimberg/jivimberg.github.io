@@ -9,8 +9,8 @@ There are billions of blogs written by more experienced and talented devs, there
 
 <!--more-->
 
-The first reason why I chose to get my hands dirty writing this pages is that I'm like the Memento guy trying to code. Whatever code I'm working on today will seem completely new for me the next month. So one day I had an idea, what if I could have a place where I could go back and check my notes and snippets of the things I learned. There's a phrase that goes: _"To know I read, to learn I do, to understand I teach"_. So in theory even the process of thinking how to write about something is helping me remember it.
+The first reason why I chose to get my hands dirty writing this pages is that I'm like the Memento guy trying to code. Whatever code I'm working on today will seem completely new for me next month. So one day I had an idea, what if I could have a place where I would go back and check my notes and snippets of the things I learned. There's a phrase that goes: _"To know I read, to learn I do, to understand I teach"_. So even in theory the process of thinking how to write about something is helping me remember it.
 
-And the second reason is that I've been using online resources for so long that I already feel that it's affecting my karma for not contributing back. So here is  is my humble contribution. Hopefully someone will find it useful.
+And the second reason is that I've been using online resources for so long that I'm starting to feel that it's affecting my karma for not contributing back. So here are my two cents. Hopefully someone will find it useful.
 
 Enjoy!
