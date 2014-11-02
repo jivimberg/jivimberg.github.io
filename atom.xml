@@ -4,7 +4,7 @@
   <title><![CDATA[What I learned today]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2014-10-14T23:12:52-07:00</updated>
+  <updated>2014-11-02T19:54:43-03:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Notes on API Design]]></title>
     <link href="http://jivimberg.github.io/blog/2014/10/12/notes-on-api-design/"/>
-    <updated>2014-10-12T15:34:29-07:00</updated>
+    <updated>2014-10-12T19:34:29-03:00</updated>
     <id>http://jivimberg.github.io/blog/2014/10/12/notes-on-api-design</id>
     <content type="html"><![CDATA[<p>This is from a presentation I gave at work about how to design APIs that don&rsquo;t suck. You can download the whole presentation from <a href="http://jivimberg.github.io/downloads/ApiDesignKeynote.zip">here</a></p>
 
@@ -102,7 +102,7 @@ An advantage of using use cases is that since we intereract with the API through
   <entry>
     <title type="html"><![CDATA[Feature Flags]]></title>
     <link href="http://jivimberg.github.io/blog/2014/09/20/feature-flags/"/>
-    <updated>2014-09-20T14:53:01-07:00</updated>
+    <updated>2014-09-20T18:53:01-03:00</updated>
     <id>http://jivimberg.github.io/blog/2014/09/20/feature-flags</id>
     <content type="html"><![CDATA[<p>In this post I&rsquo;ll introduce the concept of Feature Toggles as a release alternative to <a href="http://martinfowler.com/bliki/FeatureBranch.html">FeatureBranches</a>. This technique is also known as: Feature toggles, Feature switches, Feature flippers, etc.</p>
 
@@ -158,9 +158,9 @@ An advantage of using use cases is that since we intereract with the API through
   
   <entry>
     <title type="html"><![CDATA[Email Google Form Daily]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/08/21/email-google-form-daily/"/>
-    <updated>2014-08-21T23:18:14-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/08/21/email-google-form-daily</id>
+    <link href="http://jivimberg.github.io/blog/2014/08/22/email-google-form-daily/"/>
+    <updated>2014-08-22T03:18:14-03:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/08/22/email-google-form-daily</id>
     <content type="html"><![CDATA[<p>Here I&rsquo;ll show you how you can email a Google Form daily, weekly or whatever. I&rsquo;ll achieve this by using <a href="https://developers.google.com/apps-script/">Google App Scripts</a>. Here we go</p>
 
 <!--more-->
@@ -220,7 +220,7 @@ An advantage of using use cases is that since we intereract with the API through
   <entry>
     <title type="html"><![CDATA[Android Animations Are Just a Trick]]></title>
     <link href="http://jivimberg.github.io/blog/2014/08/10/android-animations-are-just-a-trick/"/>
-    <updated>2014-08-10T12:44:27-07:00</updated>
+    <updated>2014-08-10T16:44:27-03:00</updated>
     <id>http://jivimberg.github.io/blog/2014/08/10/android-animations-are-just-a-trick</id>
     <content type="html"><![CDATA[<p>So I was learning to animate Views in Android using <a href="http://youtu.be/_UWXqFBF86U]">this video</a> and was having trouble with the second time the animation runned. First run the objects end up in their destination, second run it was mayhem.
 I had fallen victim to the great misunderstanding everyone makes about Android animations: <strong>they are just a magic trick</strong>.</p>
@@ -245,7 +245,7 @@ I had fallen victim to the great misunderstanding everyone makes about Android a
   <entry>
     <title type="html"><![CDATA[Keep Trying With Guava Retrying]]></title>
     <link href="http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying/"/>
-    <updated>2014-07-17T14:22:07-07:00</updated>
+    <updated>2014-07-17T18:22:07-03:00</updated>
     <id>http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying</id>
     <content type="html"><![CDATA[<p>We were having a <a href="http://en.wikipedia.org/wiki/Race_condition#Software">race condition</a> on a server which was &ldquo;fixed&rdquo; by adding an sleep to the thread to check again later. Yes, it sucked, so I decided to make something more sophisticated and went looking for a library to handle retryies with multiple strategies. That&rsquo;s when I first read about <a href="https://github.com/rholder/guava-retrying">Guava Retrying</a></p>
 
@@ -322,7 +322,7 @@ I had fallen victim to the great misunderstanding everyone makes about Android a
   <entry>
     <title type="html"><![CDATA[AutoValue for Android]]></title>
     <link href="http://jivimberg.github.io/blog/2014/04/20/autovalue-for-android/"/>
-    <updated>2014-04-20T17:14:00-07:00</updated>
+    <updated>2014-04-20T21:14:00-03:00</updated>
     <id>http://jivimberg.github.io/blog/2014/04/20/autovalue-for-android</id>
     <content type="html"><![CDATA[<p>Remember <a href="blog/2014/04/07/value-types-the-easy-way/">my last post</a> on value types using <a href="https://github.com/google/auto/tree/master/value">Google&rsquo;s AutoValue</a>? Today while doing some work on a new Android project I&rsquo;m starting I thought: <em>&lsquo;Great chance to use AutoValue!&rsquo;</em>. Guess what, there is a port of Google AutoValue for the Android platform.</p>
 
@@ -343,9 +343,9 @@ I had fallen victim to the great misunderstanding everyone makes about Android a
   
   <entry>
     <title type="html"><![CDATA[Value Types the Easy Way]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way/"/>
-    <updated>2014-04-07T20:54:07-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way</id>
+    <link href="http://jivimberg.github.io/blog/2014/04/08/value-types-the-easy-way/"/>
+    <updated>2014-04-08T00:54:07-03:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/04/08/value-types-the-easy-way</id>
     <content type="html"><![CDATA[<p>Value types is a fancy name for those classes where you have to implement <code>equals()</code> and <code>hashCode()</code>, and usually <code>toString()</code>. You&rsquo;ve probably wrote thounsands of those classes, but have you ever wonder why do you have write almost 50 lines of code to express such a common concept?</p>
 
 <!-- more -->
@@ -537,7 +537,7 @@ Just know that once it has been added as a src folder you&rsquo;ll have to compi
   <entry>
     <title type="html"><![CDATA[Guava - Fun With Comparisons]]></title>
     <link href="http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons/"/>
-    <updated>2014-03-28T17:26:47-07:00</updated>
+    <updated>2014-03-28T21:26:47-03:00</updated>
     <id>http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons</id>
     <content type="html"><![CDATA[<p>Implementing <code>compare()</code> and <code>compareTo()</code> methods was never fun. Luckily <a href="https://code.google.com/p/guava-libraries/">Guava</a> provides an utility that makes comparison methods easier to write and more pleasing to the eye.</p>
 
@@ -669,7 +669,7 @@ Yeah I know, it&rsquo;s hard to read, prone to errors and it has a way too many 
   <entry>
     <title type="html"><![CDATA[Guava - Using and Avoiding Null]]></title>
     <link href="http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null/"/>
-    <updated>2014-03-19T00:34:41-07:00</updated>
+    <updated>2014-03-19T04:34:41-03:00</updated>
     <id>http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null</id>
     <content type="html"><![CDATA[<p>I&rsquo;m starting a series of posts on <a href="https://code.google.com/p/guava-libraries/">Guava</a> (Google&rsquo;s core libraries). Today I am going to start with <strong>null</strong>, how to use it, and how to avoid it when necessary.</p>
 
@@ -766,9 +766,9 @@ Sir C. A. R. Hoare, on his invention of the null reference</p></blockquote>
   
   <entry>
     <title type="html"><![CDATA[Why Was This Blog Created]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/03/17/why-was-this-blog-created/"/>
-    <updated>2014-03-17T22:48:56-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/03/17/why-was-this-blog-created</id>
+    <link href="http://jivimberg.github.io/blog/2014/03/18/why-was-this-blog-created/"/>
+    <updated>2014-03-18T02:48:56-03:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/03/18/why-was-this-blog-created</id>
     <content type="html"><![CDATA[<p>There are billions of blogs written by more experienced and talented devs, there is <a href="http://stackoverflow.com">stackoverflow.com</a> and communities for each tool and language ever created, so why bother creating yet another dev blog? Here are the two reasons why I started this blog.</p>
 
 <!--more-->
