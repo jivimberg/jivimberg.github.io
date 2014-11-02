@@ -3,7 +3,7 @@ layout: post
 title: "Email Google Form daily"
 date: 2014-08-21 23:18:14 -0700
 comments: true
-categories: Google
+categories: Google, Productivity
 ---
 Here I'll show you how you can email a Google Form daily, weekly or whatever. I'll achieve this by using [Google App Scripts]. Here we go
 

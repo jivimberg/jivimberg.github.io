@@ -3,7 +3,7 @@ layout: post
 title: "AutoValue for Android"
 date: 2014-04-20 17:14:00 -0700
 comments: true
-categories: android java lib 
+categories: android java libs
 ---
 Remember [my last post] on value types using [Google's AutoValue]? Today while doing some work on a new Android project I'm starting I thought: _'Great chance to use AutoValue!'_. Guess what, there is a port of Google AutoValue for the Android platform.
 

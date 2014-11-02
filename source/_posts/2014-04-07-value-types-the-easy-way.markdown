@@ -3,7 +3,7 @@ layout: post
 title: "Value Types the easy way"
 date: 2014-04-07 20:54:07 -0700
 comments: true
-categories: java lib 
+categories: java libs
 ---
 Value types is a fancy name for those classes where you have to implement `equals()` and `hashCode()`, and usually `toString()`. You've probably wrote thounsands of those classes, but have you ever wonder why do you have write almost 50 lines of code to express such a common concept?
 

@@ -3,7 +3,7 @@ layout: post
 title: "Feature Flags"
 date: 2014-09-20 14:53:01 -0700
 comments: true
-categories: release management,
+categories: ["release management"]
 ---
 In this post I'll introduce the concept of Feature Toggles as a release alternative to [FeatureBranches]. This technique is also known as: Feature toggles, Feature switches, Feature flippers, etc.
 

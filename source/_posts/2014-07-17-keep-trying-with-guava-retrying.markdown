@@ -3,7 +3,7 @@ layout: post
 title: "Keep trying with Guava Retrying"
 date: 2014-07-17 14:22:07 -0700
 comments: true
-categories: guava java lib
+categories: guava java libs
 ---
 
 We were having a [race condition] on a server which was "fixed" by adding an sleep to the thread to check again later. Yes, it sucked, so I decided to make something more sophisticated and went looking for a library to handle retryies with multiple strategies. That's when I first read about [Guava Retrying]

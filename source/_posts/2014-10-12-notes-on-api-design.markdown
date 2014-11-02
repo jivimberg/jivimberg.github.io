@@ -3,7 +3,7 @@ layout: post
 title: "Notes on API Design"
 date: 2014-10-12 15:34:29 -0700
 comments: true
-categories: design
+categories: ["Software Design"]
 ---
 This is from a presentation I gave at work about how to design APIs that don't suck. You can download the whole presentation from [here]
 
