@@ -6,7 +6,7 @@ comments: true
 categories: ["soft skills", htwfaip]
 ---
 
-This is the first of a [series of posts] on the book ["How to Win Friends and Influence People] by [Dale Carnegie]. Today: **Handling People**.
+This is the first of a [series of posts] on the book ["How to Win Friends and Influence People"] by [Dale Carnegie]. Today: **Handling People**.
 
 <!-- more -->
 
@@ -21,5 +21,5 @@ Everyone wants to feel important. We usually spend about 95 percent of our time 
 
 
 [series of posts]: http://localhost:4000/blog/categories/htwfaip/
-[How to win friends and influence people]: http://www.amazon.com/How-Win-Friends-Influence-People/dp/0671027034
+["How to win friends and influence people"]: http://www.amazon.com/How-Win-Friends-Influence-People/dp/0671027034
 [Dale Carnegie]: http://en.wikipedia.org/wiki/Dale_Carnegie
