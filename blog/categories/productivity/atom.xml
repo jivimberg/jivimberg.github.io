@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Productivity | What I learned today]]></title>
   <link href="http://jivimberg.github.io/blog/categories/productivity/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2014-11-04T00:49:45-03:00</updated>
+  <updated>2014-11-15T19:11:53-08:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Email Google Form Daily]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/08/22/email-google-form-daily/"/>
-    <updated>2014-08-22T03:18:14-03:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/08/22/email-google-form-daily</id>
+    <link href="http://jivimberg.github.io/blog/2014/08/21/email-google-form-daily/"/>
+    <updated>2014-08-21T23:18:14-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/08/21/email-google-form-daily</id>
     <content type="html"><![CDATA[<p>Here I&rsquo;ll show you how you can email a Google Form daily, weekly or whatever. I&rsquo;ll achieve this by using <a href="https://developers.google.com/apps-script/">Google App Scripts</a>. Here we go</p>
 
 <!--more-->
