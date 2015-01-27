@@ -4,7 +4,7 @@
   <title><![CDATA[What I learned today]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2014-12-22T22:49:45-08:00</updated>
+  <updated>2015-01-26T18:52:14-08:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -292,7 +292,7 @@ An advantage of using use cases is that since we intereract with the API through
 
 <p><img class="center" src="http://jivimberg.github.io/images/posts/2014-08-21/SendForm.png" width="400" title="'Send Form'" ></p>
 
-<p>3 &ndash; Now we need to get that form in HTML. To achieve this we will need the raw email. In GMail you can see it using the <strong>Show original</strong> option in the menu, but YMMV.</p>
+<p>3 &ndash; Now we need to get that form in HTML. To achieve this we will need the raw email. In GMail you can see it using the <strong>Show original</strong> option in the menu, from there you should copy everything that&rsquo;s enclosed in the <code>&lt;html&gt;...&lt;/html&gt;</code> tags (including the tags).</p>
 
 <p><img class="center" src="http://jivimberg.github.io/images/posts/2014-08-21/ShowOriginal.png" width="250" title="'Show Original'" ></p>
 
