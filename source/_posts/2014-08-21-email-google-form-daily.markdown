@@ -15,7 +15,7 @@ Here I'll show you how you can email a Google Form daily, weekly or whatever. I'
 
 {% img center /images/posts/2014-08-21/SendForm.png 400 'Send Form' %}
 
-3 - Now we need to get that form in HTML. To achieve this we will need the raw email. In GMail you can see it using the **Show original** option in the menu, but YMMV.
+3 - Now we need to get that form in HTML. To achieve this we will need the raw email. In GMail you can see it using the **Show original** option in the menu, from there you should copy everything that's enclosed in the ``<html>...</html>`` tags (including the tags).
 
 {% img center /images/posts/2014-08-21/ShowOriginal.png 250 'Show Original' %}
 
