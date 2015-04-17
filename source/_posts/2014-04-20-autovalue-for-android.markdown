@@ -17,6 +17,6 @@ So the first thing I thought was: _'Why do I need an special port of the AutoVal
 That's pretty much all. Head to the [Android Autovalue github repo] to see how to use it in your project. 
 
 
-[my last post]: blog/2014/04/07/value-types-the-easy-way/
+[my last post]: http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way/
 [Android Autovalue github repo]: https://github.com/frankiesardo/android-auto-value
 [Google's AutoValue]: https://github.com/google/auto/tree/master/value
