@@ -23,14 +23,14 @@ Here I'll show you how you can email a Google Form daily, weekly or whatever. I'
 
 5 - Create a new Script from a Google Spreadsheet *( Tools > Script Manager... > New )*. 
 
-6 - In the Script Editor create a new HTML file *( File > New > Html file )* and paste your code from step 4.
+6 - In the Script Editor create a new HTML file *( File > New > Html file )* and paste your code from step 4. Once pasted remember to save the file. If you're seeing a red asterisk <span style="color:red">_*_</span> by the name of the file that means it's not saved. 
 
 7 - In the _*.gs_ paste the following code:
 
 ``` javascript
 function sendFormEmail() {
-    var emailAddress = "Some email address";  
-    var htmlMessage = HtmlService.createHtmlOutputFromFile("Name of your HTML file").getContent();
+    var toEmailAddress = "someone@gmail.com";  
+    var htmlMessage = HtmlService.createHtmlOutputFromFile("Name-of-your-HTML-file.html").getContent();
     var subject = "Subject";
     var message = "Some message";
     MailApp.sendEmail(emailAddress, subject, message, {
