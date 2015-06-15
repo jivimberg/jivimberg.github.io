@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Google, | What I learned today]]></title>
   <link href="http://jivimberg.github.io/blog/categories/google/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2015-04-17T08:02:00-07:00</updated>
+  <updated>2015-06-15T07:33:27-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -37,15 +37,15 @@
 
 <p>5 &ndash; Create a new Script from a Google Spreadsheet <em>( Tools > Script Manager&hellip; > New )</em>.</p>
 
-<p>6 &ndash; In the Script Editor create a new HTML file <em>( File > New > Html file )</em> and paste your code from step 4.</p>
+<p>6 &ndash; In the Script Editor create a new HTML file <em>( File > New > Html file )</em> and paste your code from step 4. Once pasted remember to save the file. If you&rsquo;re seeing a red asterisk <span style="color:red"><em>*</em></span> by the name of the file that means it&rsquo;s not saved.</p>
 
 <p>7 &ndash; In the <em>*.gs</em> paste the following code:</p>
 
 <p>``` javascript
 function sendFormEmail() {</p>
 
-<pre><code>var emailAddress = "Some email address";  
-var htmlMessage = HtmlService.createHtmlOutputFromFile("Name of your HTML file").getContent();
+<pre><code>var toEmailAddress = "someone@gmail.com";  
+var htmlMessage = HtmlService.createHtmlOutputFromFile("Name-of-your-HTML-file.html").getContent();
 var subject = "Subject";
 var message = "Some message";
 MailApp.sendEmail(emailAddress, subject, message, {
