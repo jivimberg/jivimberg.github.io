@@ -33,7 +33,7 @@ function sendFormEmail() {
     var htmlMessage = HtmlService.createHtmlOutputFromFile("Name-of-your-HTML-file.html").getContent();
     var subject = "Subject";
     var message = "Some message";
-    MailApp.sendEmail(emailAddress, subject, message, {
+    MailApp.sendEmail(toEmailAddress, subject, message, {
       htmlBody: htmlMessage
     });
 }
