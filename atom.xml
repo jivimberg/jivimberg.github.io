@@ -4,7 +4,7 @@
   <title><![CDATA[What I learned today]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2015-06-15T20:16:02-07:00</updated>
+  <updated>2015-08-07T19:59:43-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -368,7 +368,7 @@ An advantage of using use cases is that since we intereract with the API through
 </span><span class='line'>    <span class="kd">var</span> <span class="nx">htmlMessage</span> <span class="o">=</span> <span class="nx">HtmlService</span><span class="p">.</span><span class="nx">createHtmlOutputFromFile</span><span class="p">(</span><span class="s2">&quot;Name-of-your-HTML-file.html&quot;</span><span class="p">).</span><span class="nx">getContent</span><span class="p">();</span>
 </span><span class='line'>    <span class="kd">var</span> <span class="nx">subject</span> <span class="o">=</span> <span class="s2">&quot;Subject&quot;</span><span class="p">;</span>
 </span><span class='line'>    <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;Some message&quot;</span><span class="p">;</span>
-</span><span class='line'>    <span class="nx">MailApp</span><span class="p">.</span><span class="nx">sendEmail</span><span class="p">(</span><span class="nx">emailAddress</span><span class="p">,</span> <span class="nx">subject</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">MailApp</span><span class="p">.</span><span class="nx">sendEmail</span><span class="p">(</span><span class="nx">toEmailAddress</span><span class="p">,</span> <span class="nx">subject</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="p">{</span>
 </span><span class='line'>      <span class="nx">htmlBody</span><span class="o">:</span> <span class="nx">htmlMessage</span>
 </span><span class='line'>    <span class="p">});</span>
 </span><span class='line'><span class="p">}</span>
