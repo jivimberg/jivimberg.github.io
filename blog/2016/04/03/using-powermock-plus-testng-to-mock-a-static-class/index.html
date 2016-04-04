@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Using PowerMock + TestNG to Mock a Static Class - What I learned today</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Using PowerMock + TestNG to Mock a Static Class written April 3, 2016 in java, mocking, testing ￼
+This week I needed to test a class that depended &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="What I learned today" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49016076-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Using PowerMock + TestNG to Mock a Static Class</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2016-04-03T08:38:47-07:00" pubdate data-updated="true">April 3, 2016</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/mocking/'>mocking</a>, <a class='category' href='/blog/categories/testing/'>testing</a>
+  
+</span>
+
+
+        </div>
+        <p>￼
+This week I needed to test a class that depended on a method from an static class. I saw we were using <a href="https://github.com/jayway/powermock" title="PowerMock">PowerMock</a> and thought to myself: <em>“Well this sounds pretty common, I bet it’s easy to accomplish”</em>. But of course I ran into half a dozen issues before I was able to make it work. Here’s my two cents to make your experience easier than mine.</p>
+
+<!--more-->
+
+
+<h2>Setup</h2>
+
+<p>Let’s start with the ingredients. To mock static methods you’ll need a couple of libraries:</p>
+
+<ul>
+<li><a href="easymock.org" title="EasyMock">EasyMock</a> for the mocking<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></li>
+<li><a href="http://testng.org/" title="http://testng.org">PowerMock</a></li>
+<li><a href="http://testng.org/">TestNG</a> for the test</li>
+</ul>
+
+
+<p>When choosing your library version you’ll need to make sure <strong>PowerMock</strong> and <strong>TestNG</strong> versions are compatible. You can do so by comparing your versions with the ones specified <a href="https://github.com/jayway/powermock/wiki/TestNG_usage">here</a>.</p>
+
+<p>Also, if you’re not using <strong>Maven</strong> to include PowerMock in your project make sure you also add it’s dependencies. You’ll find a zip file containing everything you need <a href="https://github.com/jayway/powermock/wiki/GettingStarted">here</a>.</p>
+
+<h2>Writing the test</h2>
+
+<p>To have the test working you’ll need to do 3 things:</p>
+
+<ol>
+<li>Configure <strong>TestNG</strong> to use the PowerMock object factory</li>
+<li>User <code>@PrepareForTest</code> annotation to prepare the static class</li>
+<li>Mock the static class method</li>
+<li>Write the rest of the test</li>
+</ol>
+
+
+<p>Let’s go one by one:</p>
+
+<h4>1. Configure TestNG to use the PowerMock object factory</h4>
+
+<p>There are a bunch of ways of doing this, namely:</p>
+
+<ul>
+<li>Configure it on the <code>suite.xml</code> file</li>
+<li>Extending your test class with <code>PowerMockTestCase</code></li>
+<li>Or by adding a method like this to your test</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@ObjectFactory</span>
+</span><span class='line'><span class="kd">public</span> <span class="n">IObjectFactory</span> <span class="nf">getObjectFactory</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="na">powermock</span><span class="o">.</span><span class="na">modules</span><span class="o">.</span><span class="na">testng</span><span class="o">.</span><span class="na">PowerMockObjectFactory</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I choose to go with the latter because I don’t use the <code>suite.xml</code> file and adding an annotated method is less restrictive than extending a class. But feel free to use the way that better suits your purpose</p>
+
+<h4>2. @PrepareForTest</h4>
+
+<p>You’ll need to prepare your static class for mocking. You can do so with the <code>@PrepareForTest</code> annotation like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@PrepareForTest</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyTest</span> <span class="o">{</span>
+</span><span class='line'>  <span class="err">…</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note that you can pass an array of classes to the annotation if you need to prepare multiple classes.</p>
+
+<h4>3. Mocking</h4>
+
+<p>Now you’re ready to mock the static method like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">PowerMock</span><span class="o">.</span><span class="na">mockStatic</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'><span class="n">EasyMock</span><span class="o">.</span><span class="na">expect</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">doSomething</span><span class="o">()).</span><span class="na">andReturn</span><span class="o">(</span><span class="err">“</span><span class="n">hello</span> <span class="n">world</span><span class="err">”</span><span class="o">)).</span><span class="na">anyTimes</span><span class="o">();</span>
+</span><span class='line'><span class="n">PowerMock</span><span class="o">.</span><span class="na">replay</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>4. Writing the rest</h4>
+
+<p>Ok let’s put everything together and write the rest of the test</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@PrepareForTest</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyTest</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'><span class="nd">@ObjectFactory</span>
+</span><span class='line'><span class="kd">public</span> <span class="n">IObjectFactory</span> <span class="nf">getObjectFactory</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="na">powermock</span><span class="o">.</span><span class="na">modules</span><span class="o">.</span><span class="na">testng</span><span class="o">.</span><span class="na">PowerMockObjectFactory</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nd">@Test</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">test</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>  <span class="c1">// mocking static method</span>
+</span><span class='line'>  <span class="n">PowerMock</span><span class="o">.</span><span class="na">mockStatic</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>  <span class="n">EasyMock</span><span class="o">.</span><span class="na">expect</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">doSomething</span><span class="o">()).</span><span class="na">andReturn</span><span class="o">(</span><span class="err">“</span><span class="n">hello</span>  <span class="n">world</span><span class="err">”</span><span class="o">)).</span><span class="na">anyTimes</span><span class="o">();</span>
+</span><span class='line'>  <span class="n">PowerMock</span><span class="o">.</span><span class="na">replay</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">// test</span>
+</span><span class='line'>  <span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="err">“</span><span class="n">hello</span> <span class="n">world</span><span class="err">”</span> <span class="err">”</span> <span class="n">StaticHelper</span><span class="o">.</span><span class="na">doSomething</span><span class="o">());</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Some things to watch out for</h2>
+
+<p>There are a few things to keep in mind when initializing the mock:</p>
+
+<ol>
+<li>You cannot create mocks during field initialization.</li>
+<li>You cannot create mocks inside before static methods.</li>
+</ol>
+
+
+<p>Finally I also run into the following error when running my test:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">VerifyError</span><span class="o">:</span> <span class="n">Expecting</span> <span class="n">a</span> <span class="n">stackmap</span> <span class="n">frame</span> <span class="n">at</span> <span class="n">branch</span> <span class="n">target</span> <span class="mi">71</span> <span class="n">in</span> <span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="na">abc</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">myPackage</span><span class="o">.</span><span class="na">MyClass</span><span class="n">$JaxbAccessorM_getDescription_setDescription_java_lang_String</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="n">Object</span><span class="o">;)</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="n">Object</span><span class="o">;</span> <span class="n">at</span> <span class="n">offset</span> <span class="mi">20</span><span class="n">_</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Turns out that, as explained <a href="http://stackoverflow.com/questions/15122890/java-lang-verifyerror-expecting-a-stackmap-frame-at-branch-target-jdk-1-7">here</a> Java 7 introduced a stricter verification and changed the class format. The byte code generation library PowerMock uses is generating code. But worry not, <strong>this validation can be disabled</strong> by passing <code>-noverify</code> as argument to the JVM.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>This guide uses <strong>EasyMock</strong> but you can also use <strong>Mockito</strong><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class/';
+        var disqus_url = 'http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2016/04/02/javascript-for-a-java-programmer/" title="Previous Post: Javascript for a Java programmer">&laquo; Previous: Javascript for a Java programmer</a>
+        
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a href="https://twitter.com/jivimberg"><img src="/images/glyphicons_social_31_twitter.png"/></a>
+    <a href="mailto:jivimberg+wilt@gmail.com"><img src="/images/glyphicons_social_39_e-mail.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

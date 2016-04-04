@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Javascript | What I learned today]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2016-04-04T00:00:42-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Javascript for a Java Programmer]]></title>
+    <link href="http://jivimberg.github.io/blog/2016/04/02/javascript-for-a-java-programmer/"/>
+    <updated>2016-04-02T20:32:55-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2016/04/02/javascript-for-a-java-programmer</id>
+    <content type="html"><![CDATA[<p>The weird thing is I can write Javascript code if needed (and I’ve done indeed), but at the same time I feel I know nothing about the language itself. In an attempt of making my first formal introduction to the language I’ve put together this article.</p>
+
+<!--more-->
+
+
+<h2>Objects, no classes</h2>
+
+<h2>Functions are first class citizens</h2>
+
+<p>// Show how functions are used in javascript
+// Compare it with Java 7 and 8 lambda expressions</p>
+
+<h2>The ‘this’ keyword</h2>
+
+<p>// play around with it a little bit and show what call does.</p>
+
+<h2>Inheritance and prototype</h2>
+
+<h2>About constructors</h2>
+
+<p>// Why is the <strong>new</strong> syntax not recommended? See <a href="http://stackoverflow.com/questions/5224295/javascript-the-good-parts-how-to-not-use-new-at-all" title="this question">this SO question</a></p>
+]]></content>
+  </entry>
+  
+</feed>

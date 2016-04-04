@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Testing | What I learned today]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/testing/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2016-04-04T00:00:42-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using PowerMock + TestNG to Mock a Static Class]]></title>
+    <link href="http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class/"/>
+    <updated>2016-04-03T08:38:47-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class</id>
+    <content type="html"><![CDATA[<p>￼
+This week I needed to test a class that depended on a method from an static class. I saw we were using <a href="https://github.com/jayway/powermock" title="PowerMock">PowerMock</a> and thought to myself: <em>“Well this sounds pretty common, I bet it’s easy to accomplish”</em>. But of course I ran into half a dozen issues before I was able to make it work. Here’s my two cents to make your experience easier than mine.</p>
+
+<!--more-->
+
+
+<h2>Setup</h2>
+
+<p>Let’s start with the ingredients. To mock static methods you’ll need a couple of libraries:</p>
+
+<ul>
+<li><a href="easymock.org" title="EasyMock">EasyMock</a> for the mocking<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></li>
+<li><a href="http://testng.org/" title="http://testng.org">PowerMock</a></li>
+<li><a href="http://testng.org/">TestNG</a> for the test</li>
+</ul>
+
+
+<p>When choosing your library version you’ll need to make sure <strong>PowerMock</strong> and <strong>TestNG</strong> versions are compatible. You can do so by comparing your versions with the ones specified <a href="https://github.com/jayway/powermock/wiki/TestNG_usage">here</a>.</p>
+
+<p>Also, if you’re not using <strong>Maven</strong> to include PowerMock in your project make sure you also add it’s dependencies. You’ll find a zip file containing everything you need <a href="https://github.com/jayway/powermock/wiki/GettingStarted">here</a>.</p>
+
+<h2>Writing the test</h2>
+
+<p>To have the test working you’ll need to do 3 things:</p>
+
+<ol>
+<li>Configure <strong>TestNG</strong> to use the PowerMock object factory</li>
+<li>User <code>@PrepareForTest</code> annotation to prepare the static class</li>
+<li>Mock the static class method</li>
+<li>Write the rest of the test</li>
+</ol>
+
+
+<p>Let’s go one by one:</p>
+
+<h4>1. Configure TestNG to use the PowerMock object factory</h4>
+
+<p>There are a bunch of ways of doing this, namely:</p>
+
+<ul>
+<li>Configure it on the <code>suite.xml</code> file</li>
+<li>Extending your test class with <code>PowerMockTestCase</code></li>
+<li>Or by adding a method like this to your test</li>
+</ul>
+
+
+<p>```java
+@ObjectFactory
+public IObjectFactory getObjectFactory() {</p>
+
+<pre><code>return new org.powermock.modules.testng.PowerMockObjectFactory();
+</code></pre>
+
+<p>}
+```</p>
+
+<p>I choose to go with the latter because I don’t use the <code>suite.xml</code> file and adding an annotated method is less restrictive than extending a class. But feel free to use the way that better suits your purpose</p>
+
+<h4>2. @PrepareForTest</h4>
+
+<p>You’ll need to prepare your static class for mocking. You can do so with the <code>@PrepareForTest</code> annotation like this:</p>
+
+<p>``` java
+@PrepareForTest(StaticHelper.class)
+public class MyTest {</p>
+
+<pre><code>…
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Note that you can pass an array of classes to the annotation if you need to prepare multiple classes.</p>
+
+<h4>3. Mocking</h4>
+
+<p>Now you’re ready to mock the static method like this:</p>
+
+<p><code>java
+PowerMock.mockStatic(StaticHelper.class);
+EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello world”)).anyTimes();
+PowerMock.replay(StaticHelper.class);
+</code></p>
+
+<h4>4. Writing the rest</h4>
+
+<p>Ok let’s put everything together and write the rest of the test</p>
+
+<p>``` java
+@PrepareForTest(StaticHelper.class)
+public class MyTest {</p>
+
+<p>@ObjectFactory
+public IObjectFactory getObjectFactory() {</p>
+
+<pre><code>return new org.powermock.modules.testng.PowerMockObjectFactory();
+</code></pre>
+
+<p>}</p>
+
+<p>@Test
+public void test() throws Exception {</p>
+
+<pre><code>// mocking static method
+PowerMock.mockStatic(StaticHelper.class);
+EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello  world”)).anyTimes();
+PowerMock.replay(StaticHelper.class);
+
+// test
+Assert.assertEquals(“hello world” ” StaticHelper.doSomething());
+</code></pre>
+
+<p>}</p>
+
+<p>}
+```</p>
+
+<h2>Some things to watch out for</h2>
+
+<p>There are a few things to keep in mind when initializing the mock:</p>
+
+<ol>
+<li>You cannot create mocks during field initialization.</li>
+<li>You cannot create mocks inside before static methods.</li>
+</ol>
+
+
+<p>Finally I also run into the following error when running my test:</p>
+
+<p><code>
+java.lang.VerifyError: Expecting a stackmap frame at branch target 71 in method com.abc.domain.myPackage.MyClass$JaxbAccessorM_getDescription_setDescription_java_lang_String.get(Ljava/lang/Object;)Ljava/lang/Object; at offset 20_
+</code></p>
+
+<p>Turns out that, as explained <a href="http://stackoverflow.com/questions/15122890/java-lang-verifyerror-expecting-a-stackmap-frame-at-branch-target-jdk-1-7">here</a> Java 7 introduced a stricter verification and changed the class format. The byte code generation library PowerMock uses is generating code. But worry not, <strong>this validation can be disabled</strong> by passing <code>-noverify</code> as argument to the JVM.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>This guide uses <strong>EasyMock</strong> but you can also use <strong>Mockito</strong><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>
