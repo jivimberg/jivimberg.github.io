@@ -25,9 +25,9 @@ Also, if you’re not using **Maven** to include PowerMock in your project make 
 To have the test working you’ll need to do 3 things:
 
 1. Configure **TestNG** to use the PowerMock object factory
-2. User `@PrepareForTest` annotation to prepare the static class
-3. Mock the static class method
-4. Write the rest of the test
+2. Use `@PrepareForTest` annotation to prepare the static class
+3. **Mock** the static class method
+4. **Write the rest** of the test
 
 Let’s go one by one:
 
@@ -45,7 +45,7 @@ public IObjectFactory getObjectFactory() {
 }
 ```
 
-I choose to go with the latter because I don’t use the `suite.xml` file and adding an annotated method is less restrictive than extending a class. But feel free to use the way that better suits your purpose
+I choose to go with the latter because I don’t use the `suite.xml` file and adding an annotated method is less restrictive than extending a class. But feel free to use whatever works for you.
 
 #### 2. @PrepareForTest
 You’ll need to prepare your static class for mocking. You can do so with the `@PrepareForTest` annotation like this:
@@ -53,7 +53,7 @@ You’ll need to prepare your static class for mocking. You can do so with the `
 ``` java
 @PrepareForTest(StaticHelper.class)
 public class MyTest {
-	…
+	...
 }
 ```
 
@@ -64,9 +64,14 @@ Note that you can pass an array of classes to the annotation if you need to prep
 Now you’re ready to mock the static method like this:
 
 ``` java
-PowerMock.mockStatic(StaticHelper.class);
-EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello world”)).anyTimes();
-PowerMock.replay(StaticHelper.class);
+@Test
+public void test() throws Exception {
+	// mocking static method
+	PowerMock.mockStatic(StaticHelper.class);
+	EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello world”)).anyTimes();
+	PowerMock.replay(StaticHelper.class);
+	...
+} 
 ```
 
 #### 4. Writing the rest
@@ -77,30 +82,32 @@ Ok let’s put everything together and write the rest of the test
 @PrepareForTest(StaticHelper.class)
 public class MyTest {
 
-@ObjectFactory
-public IObjectFactory getObjectFactory() {
-	return new org.powermock.modules.testng.PowerMockObjectFactory();
-}
+	@ObjectFactory
+	public IObjectFactory getObjectFactory() {
+		return new org.powermock.modules.testng.PowerMockObjectFactory();
+	}
 
-@Test
-public void test() throws Exception {
-	// mocking static method
-	PowerMock.mockStatic(StaticHelper.class);
-	EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello  world”)).anyTimes();
-	PowerMock.replay(StaticHelper.class);
+	@Test
+	public void test() throws Exception {
+		// mocking static method
+		PowerMock.mockStatic(StaticHelper.class);
+		EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello world”)).anyTimes();
+		PowerMock.replay(StaticHelper.class);
 	
-	// test
-	Assert.assertEquals(“hello world” ” StaticHelper.doSomething());
-}
+		// test
+		Assert.assertEquals(“hello world” ” StaticHelper.doSomething());
+	}
 
 }
 ```
+
+Of course this is an oversimplified example. The cool thing about mocking static methods is that **the static call you may need to mock may be hidden under several layers of abstraction**. Using this approach you are able to mock the static call and test your classes without changing a single line of production code.
   
 ## Some things to watch out for
 There are a few things to keep in mind when initializing the mock:
 
-1. You cannot create mocks during field initialization.
-2. You cannot create mocks inside before static methods.
+1. You cannot create mocks during **field initialization**.
+2. You cannot create mocks inside **before static methods**.
 
 Finally I also run into the following error when running my test: 
 
@@ -108,15 +115,16 @@ Finally I also run into the following error when running my test:
 java.lang.VerifyError: Expecting a stackmap frame at branch target 71 in method com.abc.domain.myPackage.MyClass$JaxbAccessorM_getDescription_setDescription_java_lang_String.get(Ljava/lang/Object;)Ljava/lang/Object; at offset 20_
 ```
 
-Turns out that, as explained [here][7] Java 7 introduced a stricter verification and changed the class format. The byte code generation library PowerMock uses is generating code. But worry not, **this validation can be disabled** by passing `-noverify` as argument to the JVM. 
+Turns out that, as explained [here][7] Java 7 introduced a stricter verification and changed the class format. The byte code generation library PowerMock uses is generating code that does not comply with the new verification. But worry not, **this validation can be disabled** by passing `-noverify` as argument to the JVM. 
 
+If you're running you're using Maven to run your tests remember to add the argument to your plugin configuration.
 
 
 [^1]:	This guide uses **EasyMock** but you can also use **Mockito**
 
 [1]:	https://github.com/jayway/powermock "PowerMock"
-[2]:	easymock.org "EasyMock"
-[3]:	http://testng.org/ "http://testng.org"
+[2]:	http://easymock.org/
+[3]:	https://github.com/jayway/powermock
 [4]:	http://testng.org/
 [5]:	https://github.com/jayway/powermock/wiki/TestNG_usage
 [6]:	https://github.com/jayway/powermock/wiki/GettingStarted
