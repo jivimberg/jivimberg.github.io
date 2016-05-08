@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>How I Stumbled With Knockout's Computed Observables - What I learned today</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="How I Stumbled With Knockout's Computed Observables written May 1, 2016 in Knockout, javascript The first thing you learn about Knockout is about &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2016/05/01/how-i-stumbled-with-knockouts-computed-observables">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="What I learned today" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49016076-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>How I Stumbled With Knockout's Computed Observables</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2016-05-01T15:01:16-07:00" pubdate data-updated="true">May 1, 2016</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/knockout/'>Knockout</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>
+  
+</span>
+
+
+        </div>
+        <p>The first thing you learn about Knockout is about <a href="http://knockoutjs.com/documentation/observables.html">observables</a>. The second thing is <a href="http://knockoutjs.com/documentation/computedObservables.html">computed observables</a>. They are dead simple. They even form part of the <a href="http://knockoutjs.com/examples/helloWorld.html">Hello World example</a>. But then, the magic was not working for me. Here&rsquo;s why:</p>
+
+<!--more-->
+
+
+<p>In a nutshell <strong>computed observables</strong> are functions that are dependent on one or more other observables, and that will automatically update whenever any of these dependencies change.</p>
+
+<script async src="http://jsfiddle.net/rniemeyer/LkqTU/embed/js,html,css,result/dark/"></script>
+
+
+<p>On my usecase I wanted the computed to updated only if certain condition was met. So I used a variable and a good old if.</p>
+
+<script async src="http://jsfiddle.net/jivimberg/uza8ds21/embed/js,html,css,result/dark/"></script>
+
+
+<p>I also added a toggle function to be able to change the value of the <code>bindingActive</code> variable from the UI. So the <code>fullName</code> should get updated once I toggle the boolean variable. <strong>Guess what? it doesn&rsquo;t!</strong></p>
+
+<p>Go ahead, give it a try. Turn on the toggle using the link and you&rsquo;ll notice that the message does not appear as it did on the Hello World example.</p>
+
+<p>I spent half a day looking for an answer of what I was doing wrong. Until I decided to do what I should&rsquo;ve done in the first place. Instead of regarding some new technology as magic, I went ahead and read the documentation to actually understand how it works.</p>
+
+<p>So here&rsquo;s how the <a href="http://knockoutjs.com/documentation/computed-dependency-tracking.html">dependency tracking algorithm</a> works according to KO documentation:</p>
+
+<blockquote><ol>
+<li>Whenever you declare a computed observable, KO immediately invokes its evaluator function to get its initial value.</li>
+<li>While the evaluator function is running, KO sets up a subscription to any observables (including other computed observables) that the evaluator reads. The subscription callback is set to cause the evaluator to run again, looping the whole process back to step 1 (disposing of any old subscriptions that no longer apply).</li>
+<li>KO notifies any subscribers about the new value of your computed observable.</li>
+</ol>
+</blockquote>
+
+<p>Notice what&rsquo;s going on? Since <code>bindingActive</code> initial value is <em>false</em> the tracking algorithm does not see the observables on it&rsquo;s first past. Therefore the <strong>computed observable is not suscribed to update when any of the observables change!</strong></p>
+
+<h3>How can we fix this?</h3>
+
+<p>Well a simple solution would be to define the toggle as an observable too. That way the computed observable suscribes to the toggle var observable and it gets recomputed when the variable changes.</p>
+
+<p>Note that afterwards the step 2 of the tracking algorithm is designed to recognized the new observables that it missed the first time. That&rsquo;s quite nice! Only in our case since no observable was seen at all the computed observable was never updated.</p>
+
+<p>Here&rsquo;s how such solution would look like:</p>
+
+<script async src="http://jsfiddle.net/jivimberg/ymucehk2/embed/js,html,css,result/dark/"></script>
+
+
+<p>Another way of solving this issue would be to call the observables for <code>firstName</code> and <code>lastName</code> outside the if. That works too, but I like the other approach better.</p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.github.io/blog/2016/05/01/how-i-stumbled-with-knockouts-computed-observables/';
+        var disqus_url = 'http://jivimberg.github.io/blog/2016/05/01/how-i-stumbled-with-knockouts-computed-observables/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class/" title="Previous Post: Using PowerMock + TestNG to mock a static class">&laquo; Previous: Using PowerMock + TestNG to mock a static class</a>
+        
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a href="https://twitter.com/jivimberg"><img src="/images/glyphicons_social_31_twitter.png"/></a>
+    <a href="mailto:jivimberg+wilt@gmail.com"><img src="/images/glyphicons_social_39_e-mail.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>
