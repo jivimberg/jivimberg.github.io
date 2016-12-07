@@ -125,11 +125,42 @@
 
 <p>8 &ndash; Give it a go and run it once to see if it worked.</p>
 
-<p>9 &ndash; Finally go to <em>Resources > Current project triggers&#8217;</em>  and create a time driven trigger to run it daily (or weekly, or whatever suits your needs)</p>
+<p>9 &ndash; Finally go to <em>Resources > Current project triggers&#8217;</em>  and create a time driven trigger to run it daily (or weekly, or whatever suits your needs)<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
 
 <p><img class="center" src="/images/posts/2014-08-21/Triggers.png" width="700" title="'Triggers'" ></p>
 
+<p>9 (option B) &ndash; As <strong>an alternative</strong> you can define the triggers in the script itself using code as suggested by <a href="https://disqus.com/by/johannesschwaninger/">Johannes Schwaninger</a> in the comments. You can do so like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">createTimeDrivenTriggers</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'> <span class="c1">// Trigger every day at 6 pm.</span>
+</span><span class='line'>    <span class="nx">ScriptApp</span><span class="p">.</span><span class="nx">newTrigger</span><span class="p">(</span><span class="s1">&#39;sendFormEmail&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">timeBased</span><span class="p">()</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">atHour</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">everyDays</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1">// Frequency is required if you are using atHour() or nearMinute()</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">create</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
 <p>10 &ndash; Relax and enjoy!</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>If you’re not seeing the <em>time driven</em> option check that you’re accessing the script editor from a Spreadsheet and not from a Form. Or else just use the code alternative.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
 
 
         

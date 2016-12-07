@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Productivity | What I learned today]]></title>
   <link href="http://jivimberg.github.io/blog/categories/productivity/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2016-05-08T16:13:53-07:00</updated>
+  <updated>2016-12-07T10:24:26-08:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -60,11 +60,35 @@ MailApp.sendEmail(toEmailAddress, subject, message, {
 
 <p>8 &ndash; Give it a go and run it once to see if it worked.</p>
 
-<p>9 &ndash; Finally go to <em>Resources > Current project triggers'</em>  and create a time driven trigger to run it daily (or weekly, or whatever suits your needs)</p>
+<p>9 &ndash; Finally go to <em>Resources > Current project triggers'</em>  and create a time driven trigger to run it daily (or weekly, or whatever suits your needs)<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
 
 <p><img class="center" src="/images/posts/2014-08-21/Triggers.png" width="700" title="&lsquo;Triggers&rsquo;" ></p>
 
+<p>9 (option B) &ndash; As <strong>an alternative</strong> you can define the triggers in the script itself using code as suggested by <a href="https://disqus.com/by/johannesschwaninger/">Johannes Schwaninger</a> in the comments. You can do so like this:</p>
+
+<p>``` javascript
+function createTimeDrivenTriggers() {
+ // Trigger every day at 6 pm.</p>
+
+<pre><code>  ScriptApp.newTrigger('sendFormEmail')
+  .timeBased()
+  .atHour(18)
+  .everyDays(1) // Frequency is required if you are using atHour() or nearMinute()
+  .create();
+</code></pre>
+
+<p>}
+```</p>
+
 <p>10 &ndash; Relax and enjoy!</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>If you’re not seeing the <em>time driven</em> option check that you’re accessing the script editor from a Spreadsheet and not from a Form. Or else just use the code alternative.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
 ]]></content>
   </entry>
   
