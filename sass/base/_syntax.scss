@@ -37,7 +37,7 @@ $mono: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace 
     padding: .8em !important;
     @include border-radius(0);
   }
-  border: 1px solid $pre-border !important;
+  //border: 1px solid $pre-border !important;
 }
 figure.code, .gist-file, pre {
   @include box-shadow(rgba(#000, .06) 0 0 10px);
@@ -61,7 +61,7 @@ html .gist .gist-file {
   }
   .gist-meta {
    padding: .6em 0.8em;
-   border: 1px solid lighten($base02, 2) !important;
+   //border: 1px solid lighten($base02, 2) !important;
    color: $base01;
    font-size: .7em !important;
    @if $solarized == light {
@@ -69,7 +69,7 @@ html .gist .gist-file {
      border: 1px solid $pre-border !important;
      border-top: 1px solid lighten($base03, 2) !important;
    } @else {
-     background: $base02 $noise-bg;
+     //background: $base02 $noise-bg;
    }
    @extend .sans !optional;
    line-height: 1.5em;
@@ -79,7 +79,7 @@ html .gist .gist-file {
       &:hover { color: $base1 !important; }
     }
     a[href*='#file'] {
-      position: absolute; top: 0; left:0; right:-10px;
+      position: absolute; top: 0; left:0; right:0px;
       color: #474747 !important;
       @extend .code-title;
       &:hover { color: $link-color !important; }
