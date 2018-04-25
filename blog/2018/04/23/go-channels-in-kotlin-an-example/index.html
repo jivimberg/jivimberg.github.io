@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Go Channels in Kotlin - an Example - What I learned today</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Go Channels in Kotlin - an Example written April 23, 2018 in channels, coroutines, go, kotlin This is the story of a real use case that was solved &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2018/04/23/go-channels-in-kotlin-an-example">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="What I learned today" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49016076-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Go Channels in Kotlin - an Example</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2018-04-23T08:37:13-07:00" pubdate data-updated="true">April 23, 2018</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/channels/'>channels</a>, <a class='category' href='/blog/categories/coroutines/'>coroutines</a>, <a class='category' href='/blog/categories/go/'>go</a>, <a class='category' href='/blog/categories/kotlin/'>kotlin</a>
+  
+</span>
+
+
+        </div>
+        <p>This is the story of a real use case that was solved by using <a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/coroutines-guide.md#channels">Go style channels in Kotlin</a>.</p>
+
+<!--more-->
+
+
+<h2>The use case</h2>
+
+<p>At work we have this CI/CD pipeline to get our code into production, and we needed a way of visualizing the Merge Requests that currently in the pipeline.</p>
+
+<p>To make this happen we have 2 things:</p>
+
+<ul>
+<li>The GitLab service, accessible through <a href="https://docs.gitlab.com/ee/api">REST</a></li>
+<li>The commit SHA of the last Merge Request that went into production</li>
+</ul>
+
+
+<p><img class="center" src="/images/posts/2018-04-24/useCase.png" title="‘Use Case’" ></p>
+
+<p>Now the problem is that <a href="https://docs.gitlab.com/ee/api/merge_requests.html">Merge Request endpoint</a> doesn’t allow for this kind of query. You can only search Merge Requests by <em>title</em> or <em>description</em> which is not what we want. So our only option is to get the latest Merge Requests up until we see the one that is in production.</p>
+
+<p>The REST endpoint is paginated, and by default each response will contain 20 items. But what happens if the Merge Request we are looking for is not in those first 20 elements? <strong>We’ll need to keep making requests for new pages until we find the item we’re interested in</strong>. It’s not the most elegant solution but we’ll have to make do with what we have.</p>
+
+<h2>Our first approach: imperative</h2>
+
+<p>Our first try of putting that last paragraph into code looked something like this:</p>
+
+<div><script src='https://gist.github.com/862c4ee1c72603a224d57b30eedf74fc.js?file=ImperativeApproach.kt'></script>
+<noscript><pre><code>fun fetchMergeRequests(gitLabService: GitLabService, lastProductionSha: String): List&lt;MergeRequest&gt; {
+    var page = 1
+    var mergeRequests = emptyList&lt;MergeRequest&gt;()
+    
+    // Fetch pages until we have the one that contains the commit we are looking for 
+    while (mergeRequests.none { it.commitSha == lastProductionSha }) {
+        mergeRequests += gitLabService.fetchMergeRequests(page++)
+    }
+
+    // Trim the Merge Requests that are already in production
+    val indexOfLastMergeRequestInProduction = mergeRequests.indexOfLast { it.commitSha == lastProductionSha }
+    return mergeRequests.subList(0, indexOfLastMergeRequestInProduction)
+}</code></pre></noscript></div>
+
+
+<p>Not pretty, but it does the job.</p>
+
+<p>The next attempt we made was implementing it as an <code>Iterable</code>. And it was even uglier! Believe me, you don’t even want to see that one. Your retina might burn just from looking at the <a href="https://gist.github.com/jivimberg/862c4ee1c72603a224d57b30eedf74fc#file-iterableapproach-kt">code…</a></p>
+
+<h2>Using <em>buildSequence</em></h2>
+
+<p>We kept looking for a way of making the code cleaner, so we decide to try using <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines.experimental/build-sequence.html"><code>buildSequence</code></a>. It seemed like a good idea because a sequence can be thought as an <code>Iterator</code> where the values are evaluated lazily. So potentially <code>Sequences</code> can be infinite.</p>
+
+<p>To make use of this feature we needed to add the <a href="https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core">kotlinx-coroutines-core</a>
+ to our project. Anyway, this is how the code looked like:</p>
+
+<div><script src='https://gist.github.com/862c4ee1c72603a224d57b30eedf74fc.js?file=SequenceApproach.kt'></script>
+<noscript><pre><code>fun fetchMergeRequestsSequence(gitLabService: GitLabService, lastProductionSha: String): List&lt;MergeRequest&gt; {
+    val mrSequence = buildSequence {
+        var page = 1
+        while (true) yieldAll(gitLabService.fetchMergeRequests(page++))
+    }
+
+    return mrSequence
+            .takeWhile { it.commitSha != lastProductionSha }
+            .toList()
+}</code></pre></noscript></div>
+
+
+<p>Let’s unpack it:</p>
+
+<ol>
+<li>First we have the sequence declaration. We call the build sequence function which receives a <em>lambda with receiver</em>: <code>SequenceBuilder&lt;T&gt;.() -&gt; Unit</code>. This allows us to call the methods <code>yield</code> and <code>yieldAll</code> once we have calculated the values to be produced on this sequence. We use <code>yieldAll</code> in this case because we receive a Collection of values from the REST call, otherwise the type of the sequence would be: <code>Sequence&lt;List&lt;MergeReques&gt;&gt;</code> whereas we only need <code>Sequence&lt;MergeRequest&gt;</code></li>
+<li>We use <code>takeWhile { ... }</code> to only get the Merge Requests that are <strong>not</strong> in production.</li>
+<li>We convert the sequence to a List and return</li>
+</ol>
+
+
+<p>You might be thinking <strong>”Ok but, why is this better than the imperative approach?”</strong></p>
+
+<p>For starters this code is easier to read. This alone is reason enough in my book, as the quote goes:</p>
+
+<blockquote><p><em>”Any fool can write code that a computer can understand. <strong>Good programmers write code that humans can understand.</strong>”</em></p>
+
+<p>Martin Fowler</p></blockquote>
+
+<p>As a bonus by using a <code>Sequence</code> we get some extra flexibility. In the imperative approach the condition is right in the middle of the function. Using sequences we could easily have a function that generates the sequence and then write other functions that use it, leveraging all the awesome collection functions (<code>filter</code>, <code>find</code>, <code>take</code>, <code>drop</code>, etc).</p>
+
+<p>It is important to note that when using sequences the evaluation is lazy (just like Java streams). In our case that means that <code>takeWhile</code> will only start once we call the <code>toList</code> function, because <code>toList</code> is a <em>terminal</em> operation.</p>
+
+<p>So are we using coroutines now? <strong>YES!</strong> But… <code>buildSequence</code> is coroutine builder that creates a <em>synchronous coroutine</em>. This means that even thought it uses coroutines everything is executed sequentially.</p>
+
+<h2>Using channels</h2>
+
+<p>Finally we decided to go all in on coroutines by using channels. This is the result:</p>
+
+<div><script src='https://gist.github.com/862c4ee1c72603a224d57b30eedf74fc.js?file=ChannelApproach.kt'></script>
+<noscript><pre><code>fun fetchMergeRequestsChannel(gitLabService: GitLabService, lastProductionSha: String): ReceiveChannel&lt;MergeRequest&gt; {
+    return produce {
+        var page = 1
+        while (true) {
+            gitLabService.delayedFetchMergeRequests(page++).forEach { send(it) }
+        }
+    }.takeWhile { it.commitSha != lastProductionSha }
+}
+
+fun main(args: Array&lt;String&gt;) {
+    val mrs = fetchMergeRequestsChannel(GitLabService(), &quot;04d78f5c7cd51c52d0482d08224ff6a214da12c1&quot;)
+
+    runBlocking {
+        delay(10, TimeUnit.SECONDS)
+        mrs.consumeEach {
+            println(&quot;consuming $it&quot;)
+        }
+    }
+}</code></pre></noscript></div>
+
+
+<p>Now we have a function that creates a channel, and we are using <code>consumeEach</code>  to receive each of the elements the channel sends. Since <code>consumeEach</code> is a suspending function <strong>we have to call it from a coroutine context</strong>, <code>runBlocking</code> helps us bridge the gap between blocking execution and the coroutines world.</p>
+
+<p>With <code>ReceiveChannel</code> we have the flexibility of <code>Sequences</code>, but we also get one more thing: <strong>concurrency!</strong>. You can see that I’ve added an artificial <code>delay</code> call before beginning to consume the Merge Requests. This is to show that <strong>even before the receiver is ready to consume the channel, the producer has already started to fetch elements</strong>. In this case since we’re using an <a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/coroutines-guide.md#buffered-channels"><em>unbuffered channel</em></a> only one send will be called before suspending the coroutine. But that’s all we need since in our case sending 1 element means that we’ve already fetched the whole first page!</p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.github.io/blog/2018/04/23/go-channels-in-kotlin-an-example/';
+        var disqus_url = 'http://jivimberg.github.io/blog/2018/04/23/go-channels-in-kotlin-an-example/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2016/05/01/how-i-stumbled-with-knockouts-computed-observables/" title="Previous Post: How I stumbled with Knockout's computed observables">&laquo; Previous: How I stumbled with Knockout's computed observables</a>
+        
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a href="https://twitter.com/jivimberg"><img src="/images/glyphicons_social_31_twitter.png"/></a>
+    <a href="mailto:jivimberg+wilt@gmail.com"><img src="/images/glyphicons_social_39_e-mail.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Libs | What I learned today]]></title>
   <link href="http://jivimberg.github.io/blog/categories/libs/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2016-12-07T10:24:26-08:00</updated>
+  <updated>2018-04-24T17:15:47-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -39,42 +39,27 @@
 
 <p>Then we would do something like:</p>
 
-<p>``` java
-Callable<Boolean> yourTask = new Callable<Boolean>() {</p>
+<pre><code class="java">Callable&lt;Boolean&gt; yourTask = new Callable&lt;Boolean&gt;() {
+    public Boolean call() throws Exception {
+        return true; // do something interesting here
+    }
+};
 
-<pre><code>public Boolean call() throws Exception {
-    return true; // do something interesting here
+Retryer&lt;Boolean&gt; retryer = RetryerBuilder.&lt;Boolean&gt;newBuilder()
+        .retryIfResult(Predicates.&lt;Boolean&gt;isNull())
+        .retryIfExceptionOfType(IOException.class)
+        .withWaitStrategy(WaitStrategies.fixedWait(300,                                                                             TimeUnit.MILLISECONDS))
+        .withStopStrategy(StopStrategies.stopAfterAttempt(5))
+        .build();
+
+try {
+    retryer.call(yourTask);
+} catch (RetryException e) {
+    e.printStackTrace();
+} catch (ExecutionException e) {
+    e.printStackTrace();
 }
 </code></pre>
-
-<p>};</p>
-
-<p>Retryer<Boolean> retryer = RetryerBuilder.<Boolean>newBuilder()</p>
-
-<pre><code>    .retryIfResult(Predicates.&lt;Boolean&gt;isNull())
-    .retryIfExceptionOfType(IOException.class)
-    .withWaitStrategy(WaitStrategies.fixedWait(300,                                                                             TimeUnit.MILLISECONDS))
-    .withStopStrategy(StopStrategies.stopAfterAttempt(5))
-    .build();
-</code></pre>
-
-<p>try {</p>
-
-<pre><code>retryer.call(yourTask);
-</code></pre>
-
-<p>} catch (RetryException e) {</p>
-
-<pre><code>e.printStackTrace();
-</code></pre>
-
-<p>} catch (ExecutionException e) {</p>
-
-<pre><code>e.printStackTrace();
-</code></pre>
-
-<p>}
-```</p>
 
 <p>After attempting 5 times it will throw a <code>RetryException</code> with information about the last attempt. Any other exception thrown by your task will be wrapped and rethrown in a <code>ExecutionException</code></p>
 
@@ -118,56 +103,53 @@ Callable<Boolean> yourTask = new Callable<Boolean>() {</p>
 
 <p>Let&rsquo;s say you want to model an Employee, with name and age. If you were to write it following all of <a href="http://www.amazon.com/Effective-Java-Edition-Joshua-Bloch/dp/0321356683">Effective Java&rsquo;s</a> advices (which is how you always roll, right?) you would get something like this:</p>
 
-<p>``` java
-public class EmployeeTheOldFashionedWay {</p>
+<pre><code class="java">public class EmployeeTheOldFashionedWay {
 
-<pre><code>private final String name;
-private final int age;
+    private final String name;
+    private final int age;
 
-public EmployeeTheOldFashionedWay(String name, int age) {
-    this.name = name;
-    this.age = age;
-}
+    public EmployeeTheOldFashionedWay(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
 
-public String getName() {
-    return name;
-}
+    public String getName() {
+        return name;
+    }
 
-public int getAge() {
-    return age;
-}
+    public int getAge() {
+        return age;
+    }
 
-@Override
-public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-    EmployeeTheOldFashionedWay that = (EmployeeTheOldFashionedWay) o;
+        EmployeeTheOldFashionedWay that = (EmployeeTheOldFashionedWay) o;
 
-    if (age != that.age) return false;
-    if (!name.equals(that.name)) return false;
+        if (age != that.age) return false;
+        if (!name.equals(that.name)) return false;
 
-    return true;
-}
+        return true;
+    }
 
-@Override
-public int hashCode() {
-    int result = name.hashCode();
-    result = 31 * result + age;
-    return result;
-}
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + age;
+        return result;
+    }
 
-@Override
-public String toString() {
-    return "EmployeeTheOldFashionedWay{" +
-            "name='" + name + '\'' +
-            ", age=" + age +
-            '}';
+    @Override
+    public String toString() {
+        return "EmployeeTheOldFashionedWay{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }
 </code></pre>
-
-<p>}
-```</p>
 
 <p>This is wrong for many reasons:</p>
 
@@ -187,21 +169,17 @@ public String toString() {
 
 <p>What I&rsquo;m presenting today is Google&rsquo;s solution to the value types issue. With <a href="https://github.com/google/auto/tree/master/value">AutoValue</a> you could write the same Employee class in approximately 10 lines of code like this:</p>
 
-<p>``` java
-@AutoValue
-public abstract class EmployeeWithAutoValue {</p>
+<pre><code class="java">@AutoValue
+public abstract class EmployeeWithAutoValue {
+    public static EmployeeWithAutoValue create(String name, int age) {
+        return new AutoValue_EmployeeWithAutoValue(name, age);
+    }
 
-<pre><code>public static EmployeeWithAutoValue create(String name, int age) {
-    return new AutoValue_EmployeeWithAutoValue(name, age);
+    public abstract String getName();
+
+    public abstract int getAge();
 }
-
-public abstract String getName();
-
-public abstract int getAge();
 </code></pre>
-
-<p>}
-```</p>
 
 <h4>What the heck just happened there?</h4>
 
@@ -213,16 +191,12 @@ public abstract int getAge();
 
 <p>This is how you use your Employee class:</p>
 
-<p>```java
-public static void main(String[] args) {</p>
-
-<pre><code>    EmployeeWithAutoValue employee = EmployeeWithAutoValue.create("Juan", 33);
-    System.out.println("employee.getName() = " + employee.getName());
-    System.out.println("employee.getAge() = " + employee.getAge());
-}
+<pre><code class="java">public static void main(String[] args) {
+        EmployeeWithAutoValue employee = EmployeeWithAutoValue.create("Juan", 33);
+        System.out.println("employee.getName() = " + employee.getName());
+        System.out.println("employee.getAge() = " + employee.getAge());
+    }
 </code></pre>
-
-<p>```</p>
 
 <p>Pretty regular stuff over here. That&rsquo;s one of the good things of AutoValue: consumers don&rsquo;t need to know what&rsquo;s going on behind the scenes.</p>
 
@@ -258,77 +232,66 @@ Just know that once it has been added as a src folder you&rsquo;ll have to compi
 
 <p>So let&rsquo;s say we have the class <code>Person</code>:</p>
 
-<p>``` java
-private class Person {</p>
+<pre><code class="java">private class Person {
+        private String name;
+        private int zipCode;
+        private Age age;
+}
 
-<pre><code>    private String name;
-    private int zipCode;
-    private Age age;
+private enum Age { YOUNG, OLD }
 </code></pre>
-
-<p>}</p>
-
-<p>private enum Age { YOUNG, OLD }
-```</p>
 
 <p>And we want to sort it by name, then by zipcode and finally, if they are still matched, by age (having <code>Age.YOUNG</code> first) but making <code>null</code> values greater than non <code>null</code> values.</p>
 
 <p>Such comparator could look something like this:</p>
 
-<p>``` java
-public class VerboseComparator</p>
+<pre><code class="java">public class VerboseComparator
+            implements Comparator&lt;Person&gt;
+    {
 
-<pre><code>        implements Comparator&lt;Person&gt;
-{
+        @Override
+        public int compare(Person o1, Person o2) {
+            int cmp = o1.name.compareTo(o2.name);
+            if (cmp != 0) {
+                return cmp;
+            }
 
-    @Override
-    public int compare(Person o1, Person o2) {
-        int cmp = o1.name.compareTo(o2.name);
-        if (cmp != 0) {
-            return cmp;
-        }
+            cmp = Integer.compare(o1.zipCode, o2.zipCode);
+            if (cmp != 0) {
+                return cmp;
+            }
 
-        cmp = Integer.compare(o1.zipCode, o2.zipCode);
-        if (cmp != 0) {
-            return cmp;
-        }
-
-        if(o1.age == null &amp;&amp; o2.age != null){
-            return -1;
-        } else if (o1.age != null &amp;&amp; o2.age == null) {
-            return 1;
-        } else if (o1.age == null &amp;&amp; o2.age == null) {
-            return 0;
-        } else {
-            return o1.age.compareTo(o2.age);
+            if(o1.age == null &amp;&amp; o2.age != null){
+                return -1;
+            } else if (o1.age != null &amp;&amp; o2.age == null) {
+                return 1;
+            } else if (o1.age == null &amp;&amp; o2.age == null) {
+                return 0;
+            } else {
+                return o1.age.compareTo(o2.age);
+            }
         }
     }
-}
 </code></pre>
 
-<p>```<br/>
-Yeah I know, it&rsquo;s hard to read, prone to errors and it has a way too many if statements.</p>
+<p>Yeah I know, it&rsquo;s hard to read, prone to errors and it has a way too many if statements.</p>
 
 <p>But <em>Don&rsquo;t Panic!</em> with Guava we can write this same comparator like this:</p>
 
-<p>``` java
-private static class GuavaComparator</p>
+<pre><code class="java">private static class GuavaComparator
+            implements Comparator&lt;Person&gt;
+    {
 
-<pre><code>        implements Comparator&lt;Person&gt;
-{
-
-    @Override
-    public int compare(Person o1, Person o2) {
-        return ComparisonChain.start()
-                .compare(o1.name, o2.name)
-                .compare(o1.zipCode, o2.zipCode)
-                .compare(o1.age, o2.age, Ordering.natural().nullsFirst())
-                .result();
+        @Override
+        public int compare(Person o1, Person o2) {
+            return ComparisonChain.start()
+                    .compare(o1.name, o2.name)
+                    .compare(o1.zipCode, o2.zipCode)
+                    .compare(o1.age, o2.age, Ordering.natural().nullsFirst())
+                    .result();
+        }
     }
-}
 </code></pre>
-
-<p>```</p>
 
 <p>That looks way better and it&rsquo;s easier to understand.</p>
 
@@ -357,10 +320,9 @@ Sir C. A. R. Hoare, on his invention of the null reference</p></blockquote>
 
 <p>That&rsquo;s why most of Guava &ldquo;New Collections&rdquo; and utilities will fail fast with a NPE when you try to add null to them. And they provide the <strong>Optional</strong> utilty for those cases where we need to indicate absence of some kind, without using null.</p>
 
-<p><code>java
-//This will fail with java.lang.NullPointerException: at index 2
+<pre><code class="java">//This will fail with java.lang.NullPointerException: at index 2
 ImmutableList.of("one", "two", null);
-</code></p>
+</code></pre>
 
 <h3>Optional</h3>
 
@@ -368,45 +330,37 @@ ImmutableList.of("one", "two", null);
 
 <p>Here is how you create an optional:</p>
 
-<p>``` java
-Optional<String> creatingAnOptional(){</p>
+<pre><code class="java">Optional&lt;String&gt; creatingAnOptional(){
+        Optional&lt;String&gt; result;
 
-<pre><code>    Optional&lt;String&gt; result;
+        String value = findString(); //may return null
+        result = Optional.fromNullable(value);
 
-    String value = findString(); //may return null
-    result = Optional.fromNullable(value);
+        // which is the same as doing:
+        if(value != null){
+            result = Optional.of(value);
+        } else {
+            result = Optional.absent();
+        }
 
-    // which is the same as doing:
-    if(value != null){
-        result = Optional.of(value);
-    } else {
-        result = Optional.absent();
+        return result;
     }
-
-    return result;
-}
 </code></pre>
-
-<p>```</p>
 
 <p>And here is how you query for the value:</p>
 
-<p>``` java
-void queryingOptionals(){</p>
+<pre><code class="java">void queryingOptionals(){
+        Optional&lt;String&gt; optional = creatingAnOptional();
 
-<pre><code>    Optional&lt;String&gt; optional = creatingAnOptional();
+        if(optional.isPresent()){
+            String value = optional.get(); //We are sure is the value is there
+            System.out.println("The string is: " + value);
+        }
 
-    if(optional.isPresent()){
-        String value = optional.get(); //We are sure is the value is there
-        System.out.println("The string is: " + value);
+        //or
+        System.out.println("Value or default: " + optional.or("Default value"));
     }
-
-    //or
-    System.out.println("Value or default: " + optional.or("Default value"));
-}
 </code></pre>
-
-<p>```</p>
 
 <p>The next time you are writing a method that return a values which may or may not be present, remember to use Optional. It will make your API much clearer and force the caller to consider the absent value case.</p>
 ]]></content>

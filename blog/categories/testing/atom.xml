@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Testing | What I learned today]]></title>
   <link href="http://jivimberg.github.io/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2016-12-07T10:24:26-08:00</updated>
+  <updated>2018-04-24T17:15:47-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -64,15 +64,11 @@ This week I needed to test a class that depended on a method from an static clas
 </ul>
 
 
-<p>```java
-@ObjectFactory
-public IObjectFactory getObjectFactory() {</p>
-
-<pre><code>return new org.powermock.modules.testng.PowerMockObjectFactory();
+<pre><code class="java">@ObjectFactory
+public IObjectFactory getObjectFactory() {
+    return new org.powermock.modules.testng.PowerMockObjectFactory();
+}
 </code></pre>
-
-<p>}
-```</p>
 
 <p>I choose to go with the latter because I don’t use the <code>suite.xml</code> file and adding an annotated method is less restrictive than extending a class. But feel free to use whatever works for you.</p>
 
@@ -80,15 +76,11 @@ public IObjectFactory getObjectFactory() {</p>
 
 <p>You’ll need to prepare your static class for mocking. You can do so with the <code>@PrepareForTest</code> annotation like this:</p>
 
-<p>``` java
-@PrepareForTest(StaticHelper.class)
-public class MyTest {</p>
-
-<pre><code>...
+<pre><code class="java">@PrepareForTest(StaticHelper.class)
+public class MyTest {
+    ...
+}
 </code></pre>
-
-<p>}
-```</p>
 
 <p>Note that you can pass an array of classes to the annotation if you need to prepare multiple classes.</p>
 
@@ -96,47 +88,41 @@ public class MyTest {</p>
 
 <p>Now you’re ready to mock the static method like this:</p>
 
-<p>``` java
-@Test
-public void test() throws Exception {</p>
-
-<pre><code>// mocking static method
-PowerMock.mockStatic(StaticHelper.class);
-EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello world”)).anyTimes();
-PowerMock.replay(StaticHelper.class);
-...
-</code></pre>
-
-<p>}
-```</p>
-
-<h4>4. Writing the rest</h4>
-
-<p>Ok let’s put everything together and write the rest of the test</p>
-
-<p>``` java
-@PrepareForTest(StaticHelper.class)
-public class MyTest {</p>
-
-<pre><code>@ObjectFactory
-public IObjectFactory getObjectFactory() {
-    return new org.powermock.modules.testng.PowerMockObjectFactory();
-}
-
-@Test
+<pre><code class="java">@Test
 public void test() throws Exception {
     // mocking static method
     PowerMock.mockStatic(StaticHelper.class);
     EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello world”)).anyTimes();
     PowerMock.replay(StaticHelper.class);
-
-    // test
-    Assert.assertEquals(“hello world” ” StaticHelper.doSomething());
-}
+    ...
+} 
 </code></pre>
 
-<p>}
-```</p>
+<h4>4. Writing the rest</h4>
+
+<p>Ok let’s put everything together and write the rest of the test</p>
+
+<pre><code class="java">@PrepareForTest(StaticHelper.class)
+public class MyTest {
+
+    @ObjectFactory
+    public IObjectFactory getObjectFactory() {
+        return new org.powermock.modules.testng.PowerMockObjectFactory();
+    }
+
+    @Test
+    public void test() throws Exception {
+        // mocking static method
+        PowerMock.mockStatic(StaticHelper.class);
+        EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello world”)).anyTimes();
+        PowerMock.replay(StaticHelper.class);
+
+        // test
+        Assert.assertEquals(“hello world” ” StaticHelper.doSomething());
+    }
+
+}
+</code></pre>
 
 <p>Of course this is an oversimplified example. The cool thing about mocking static methods is that <strong>the static call you may need to mock may be hidden under several layers of abstraction</strong>. Using this approach you are able to mock the static call and test your classes without changing a single line of production code.</p>
 
@@ -152,9 +138,8 @@ public void test() throws Exception {
 
 <p>Finally I also run into the following error when running my test:</p>
 
-<p><code>
-java.lang.VerifyError: Expecting a stackmap frame at branch target 71 in method com.abc.domain.myPackage.MyClass$JaxbAccessorM_getDescription_setDescription_java_lang_String.get(Ljava/lang/Object;)Ljava/lang/Object; at offset 20_
-</code></p>
+<pre><code>java.lang.VerifyError: Expecting a stackmap frame at branch target 71 in method com.abc.domain.myPackage.MyClass$JaxbAccessorM_getDescription_setDescription_java_lang_String.get(Ljava/lang/Object;)Ljava/lang/Object; at offset 20_
+</code></pre>
 
 <p>Turns out that, as explained <a href="http://stackoverflow.com/questions/15122890/java-lang-verifyerror-expecting-a-stackmap-frame-at-branch-target-jdk-1-7">here</a> Java 7 introduced a stricter verification and changed the class format. The byte code generation library PowerMock uses is generating code that does not comply with the new verification. But worry not, <strong>this validation can be disabled</strong> by passing <code>-noverify</code> as argument to the JVM.</p>
 

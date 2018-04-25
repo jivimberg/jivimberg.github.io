@@ -1,95 +1,143 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
-    <url>
-        <loc>http://jivimberg.github.io/blog/2014/03/17/why-was-this-blog-created/</loc>
-        <lastmod>2014-10-14T23:11:55-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null/</loc>
-        <lastmod>2014-10-14T23:07:13-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons/</loc>
-        <lastmod>2014-10-14T23:07:13-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way/</loc>
-        <lastmod>2014-11-02T14:49:27-08:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/blog/2014/04/20/autovalue-for-android/</loc>
-        <lastmod>2015-04-17T08:01:16-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying/</loc>
-        <lastmod>2014-11-02T14:49:42-08:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/blog/2014/08/10/android-animations-are-just-a-trick/</loc>
-        <lastmod>2014-10-14T23:07:13-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/blog/2014/08/21/email-google-form-daily/</loc>
-        <lastmod>2016-12-07T10:21:35-08:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/blog/2014/09/20/feature-flags/</loc>
-        <lastmod>2014-11-02T14:52:32-08:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/blog/2014/10/12/notes-on-api-design/</loc>
-        <lastmod>2014-11-02T14:52:14-08:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/blog/2014/11/02/handling-people-htwfaip-part-1/</loc>
-        <lastmod>2014-11-15T19:10:34-08:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://jivimberg.github.io/blog/2014/11/15/how-to-make-people-like-you-htwfaip-part-2/
-        </loc>
-        <lastmod>2014-11-15T19:10:34-08:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://jivimberg.github.io/blog/2014/12/21/win-people-to-your-way-of-thinking-htwfaip-part-3/
-        </loc>
-        <lastmod>2014-12-22T22:48:54-08:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/blog/2015/06/15/be-a-leader-htwfaip-part-4/</loc>
-        <lastmod>2015-06-15T20:09:25-07:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class/
-        </loc>
-        <lastmod>2016-04-06T08:01:41-07:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://jivimberg.github.io/blog/2016/05/01/how-i-stumbled-with-knockouts-computed-observables/
-        </loc>
-        <lastmod>2016-05-08T16:12:33-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/blog/archives/</loc>
-        <lastmod>2016-12-07T10:21:35-08:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/blog/categories/</loc>
-        <lastmod>2014-11-02T14:48:18-08:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/</loc>
-        <lastmod>2016-12-07T10:21:35-08:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/posts/</loc>
-        <lastmod>2016-12-07T10:21:35-08:00</lastmod>
-    </url>
-    <url>
-        <loc>http://jivimberg.github.io/robots.txt</loc>
-        <lastmod>2014-03-15T09:48:06-07:00</lastmod>
-    </url>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>http://jivimberg.github.io/blog/2018/04/23/go-channels-in-kotlin-an-example/</loc>
+<lastmod>2018-04-23T08:37:13-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2016/05/01/how-i-stumbled-with-knockouts-computed-observables/</loc>
+<lastmod>2016-05-01T15:01:16-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class/</loc>
+<lastmod>2016-04-03T08:38:47-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2015/06/15/be-a-leader-htwfaip-part-4/</loc>
+<lastmod>2015-06-15T07:37:31-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2014/12/21/win-people-to-your-way-of-thinking-htwfaip-part-3/</loc>
+<lastmod>2014-12-21T18:53:16-08:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2014/11/15/how-to-make-people-like-you-htwfaip-part-2/</loc>
+<lastmod>2014-11-15T18:57:40-08:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2014/11/02/handling-people-htwfaip-part-1/</loc>
+<lastmod>2014-11-02T18:50:13-03:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2014/10/12/notes-on-api-design/</loc>
+<lastmod>2014-10-12T15:34:29-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2014/09/20/feature-flags/</loc>
+<lastmod>2014-09-20T14:53:01-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2014/08/21/email-google-form-daily/</loc>
+<lastmod>2014-08-21T23:18:14-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2014/08/10/android-animations-are-just-a-trick/</loc>
+<lastmod>2014-08-10T12:44:27-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying/</loc>
+<lastmod>2014-07-17T14:22:07-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2014/04/20/autovalue-for-android/</loc>
+<lastmod>2014-04-20T17:14:00-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way/</loc>
+<lastmod>2014-04-07T20:54:07-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons/</loc>
+<lastmod>2014-03-28T17:26:47-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null/</loc>
+<lastmod>2014-03-19T00:34:41-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/2014/03/17/why-was-this-blog-created/</loc>
+<lastmod>2014-03-17T22:48:56-07:00</lastmod>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/archives/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/posts/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/offtopic/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/java/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/guava/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/libs/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/android/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/google/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/productivity/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/release-management/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/software-design/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/soft-skills/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/htwfaip/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/testing/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/mocking/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/knockout/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/javascript/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/kotlin/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/coroutines/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/go/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/channels/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/posts/2/</loc>
+</url>
 </urlset>

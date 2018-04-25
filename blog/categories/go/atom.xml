@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Go | What I learned today]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/go/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2018-04-24T17:15:47-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Go Channels in Kotlin - an Example]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/04/23/go-channels-in-kotlin-an-example/"/>
+    <updated>2018-04-23T08:37:13-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/04/23/go-channels-in-kotlin-an-example</id>
+    <content type="html"><![CDATA[<p>This is the story of a real use case that was solved by using <a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/coroutines-guide.md#channels">Go style channels in Kotlin</a>.</p>
+
+<!--more-->
+
+
+<h2>The use case</h2>
+
+<p>At work we have this CI/CD pipeline to get our code into production, and we needed a way of visualizing the Merge Requests that currently in the pipeline.</p>
+
+<p>To make this happen we have 2 things:</p>
+
+<ul>
+<li>The GitLab service, accessible through <a href="https://docs.gitlab.com/ee/api">REST</a></li>
+<li>The commit SHA of the last Merge Request that went into production</li>
+</ul>
+
+
+<p><img class="center" src="/images/posts/2018-04-24/useCase.png" title="‘Use Case’" ></p>
+
+<p>Now the problem is that <a href="https://docs.gitlab.com/ee/api/merge_requests.html">Merge Request endpoint</a> doesn’t allow for this kind of query. You can only search Merge Requests by <em>title</em> or <em>description</em> which is not what we want. So our only option is to get the latest Merge Requests up until we see the one that is in production.</p>
+
+<p>The REST endpoint is paginated, and by default each response will contain 20 items. But what happens if the Merge Request we are looking for is not in those first 20 elements? <strong>We’ll need to keep making requests for new pages until we find the item we’re interested in</strong>. It’s not the most elegant solution but we’ll have to make do with what we have.</p>
+
+<h2>Our first approach: imperative</h2>
+
+<p>Our first try of putting that last paragraph into code looked something like this:</p>
+
+<p><div><script src='https://gist.github.com/862c4ee1c72603a224d57b30eedf74fc.js?file=ImperativeApproach.kt'></script>
+<noscript><pre><code>fun fetchMergeRequests(gitLabService: GitLabService, lastProductionSha: String): List&lt;MergeRequest&gt; {
+    var page = 1
+    var mergeRequests = emptyList&lt;MergeRequest&gt;()
+    
+    // Fetch pages until we have the one that contains the commit we are looking for 
+    while (mergeRequests.none { it.commitSha == lastProductionSha }) {
+        mergeRequests += gitLabService.fetchMergeRequests(page++)
+    }
+
+    // Trim the Merge Requests that are already in production
+    val indexOfLastMergeRequestInProduction = mergeRequests.indexOfLast { it.commitSha == lastProductionSha }
+    return mergeRequests.subList(0, indexOfLastMergeRequestInProduction)
+}</code></pre></noscript></div>
+</p>
+
+<p>Not pretty, but it does the job.</p>
+
+<p>The next attempt we made was implementing it as an <code>Iterable</code>. And it was even uglier! Believe me, you don’t even want to see that one. Your retina might burn just from looking at the <a href="https://gist.github.com/jivimberg/862c4ee1c72603a224d57b30eedf74fc#file-iterableapproach-kt">code…</a></p>
+
+<h2>Using <em>buildSequence</em></h2>
+
+<p>We kept looking for a way of making the code cleaner, so we decide to try using <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.coroutines.experimental/build-sequence.html"><code>buildSequence</code></a>. It seemed like a good idea because a sequence can be thought as an <code>Iterator</code> where the values are evaluated lazily. So potentially <code>Sequences</code> can be infinite.</p>
+
+<p>To make use of this feature we needed to add the <a href="https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core">kotlinx-coroutines-core</a>
+ to our project. Anyway, this is how the code looked like:</p>
+
+<p><div><script src='https://gist.github.com/862c4ee1c72603a224d57b30eedf74fc.js?file=SequenceApproach.kt'></script>
+<noscript><pre><code>fun fetchMergeRequestsSequence(gitLabService: GitLabService, lastProductionSha: String): List&lt;MergeRequest&gt; {
+    val mrSequence = buildSequence {
+        var page = 1
+        while (true) yieldAll(gitLabService.fetchMergeRequests(page++))
+    }
+
+    return mrSequence
+            .takeWhile { it.commitSha != lastProductionSha }
+            .toList()
+}</code></pre></noscript></div>
+</p>
+
+<p>Let’s unpack it:</p>
+
+<ol>
+<li>First we have the sequence declaration. We call the build sequence function which receives a <em>lambda with receiver</em>: <code>SequenceBuilder&lt;T&gt;.() -&gt; Unit</code>. This allows us to call the methods <code>yield</code> and <code>yieldAll</code> once we have calculated the values to be produced on this sequence. We use <code>yieldAll</code> in this case because we receive a Collection of values from the REST call, otherwise the type of the sequence would be: <code>Sequence&lt;List&lt;MergeReques&gt;&gt;</code> whereas we only need <code>Sequence&lt;MergeRequest&gt;</code></li>
+<li>We use <code>takeWhile { ... }</code> to only get the Merge Requests that are <strong>not</strong> in production.</li>
+<li>We convert the sequence to a List and return</li>
+</ol>
+
+
+<p>You might be thinking <strong>”Ok but, why is this better than the imperative approach?”</strong></p>
+
+<p>For starters this code is easier to read. This alone is reason enough in my book, as the quote goes:</p>
+
+<blockquote><p><em>”Any fool can write code that a computer can understand. <strong>Good programmers write code that humans can understand.</strong>”</em></p>
+
+<p>Martin Fowler</p></blockquote>
+
+<p>As a bonus by using a <code>Sequence</code> we get some extra flexibility. In the imperative approach the condition is right in the middle of the function. Using sequences we could easily have a function that generates the sequence and then write other functions that use it, leveraging all the awesome collection functions (<code>filter</code>, <code>find</code>, <code>take</code>, <code>drop</code>, etc).</p>
+
+<p>It is important to note that when using sequences the evaluation is lazy (just like Java streams). In our case that means that <code>takeWhile</code> will only start once we call the <code>toList</code> function, because <code>toList</code> is a <em>terminal</em> operation.</p>
+
+<p>So are we using coroutines now? <strong>YES!</strong> But… <code>buildSequence</code> is coroutine builder that creates a <em>synchronous coroutine</em>. This means that even thought it uses coroutines everything is executed sequentially.</p>
+
+<h2>Using channels</h2>
+
+<p>Finally we decided to go all in on coroutines by using channels. This is the result:</p>
+
+<p><div><script src='https://gist.github.com/862c4ee1c72603a224d57b30eedf74fc.js?file=ChannelApproach.kt'></script>
+<noscript><pre><code>fun fetchMergeRequestsChannel(gitLabService: GitLabService, lastProductionSha: String): ReceiveChannel&lt;MergeRequest&gt; {
+    return produce {
+        var page = 1
+        while (true) {
+            gitLabService.delayedFetchMergeRequests(page++).forEach { send(it) }
+        }
+    }.takeWhile { it.commitSha != lastProductionSha }
+}
+
+fun main(args: Array&lt;String&gt;) {
+    val mrs = fetchMergeRequestsChannel(GitLabService(), &quot;04d78f5c7cd51c52d0482d08224ff6a214da12c1&quot;)
+
+    runBlocking {
+        delay(10, TimeUnit.SECONDS)
+        mrs.consumeEach {
+            println(&quot;consuming $it&quot;)
+        }
+    }
+}</code></pre></noscript></div>
+</p>
+
+<p>Now we have a function that creates a channel, and we are using <code>consumeEach</code>  to receive each of the elements the channel sends. Since <code>consumeEach</code> is a suspending function <strong>we have to call it from a coroutine context</strong>, <code>runBlocking</code> helps us bridge the gap between blocking execution and the coroutines world.</p>
+
+<p>With <code>ReceiveChannel</code> we have the flexibility of <code>Sequences</code>, but we also get one more thing: <strong>concurrency!</strong>. You can see that I’ve added an artificial <code>delay</code> call before beginning to consume the Merge Requests. This is to show that <strong>even before the receiver is ready to consume the channel, the producer has already started to fetch elements</strong>. In this case since we’re using an <a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/coroutines-guide.md#buffered-channels"><em>unbuffered channel</em></a> only one send will be called before suspending the coroutine. But that’s all we need since in our case sending 1 element means that we’ve already fetched the whole first page!</p>
+]]></content>
+  </entry>
+  
+</feed>
