@@ -5,11 +5,11 @@ date: 2014-10-12 15:34:29 -0700
 comments: true
 categories: ["Software Design"]
 ---
-This is from a presentation I gave at work about how to design APIs that don't suck. You can download the whole presentation from [here]
+This is from a presentation I gave at work about how to design APIs that don't suck. You can download the whole presentation from [here][1]
 
 <!-- more -->
 
-##3 aspects of a good API##
+## 3 aspects of a good API
 
 {% img left /images/posts/2014-10-12/Discoverability.jpg 250 'Discoverability' %} 
 
@@ -27,7 +27,7 @@ This is from a presentation I gave at work about how to design APIs that don't s
 1. **Backward compatibility:** Your changes you introduce in your new version of your API must not break the apps of your users written against a previous version. To achieve this one of the best tools you have is testing. Investing time in writing tests early will result in the ability to change your API confidently, knowing that if the tests are passing then you have achieved backward compatibility
 2. **Conceptual Stability:** The user has build a conceptual model of how the API works. If possible we should avoid changing the concepts he has already learned. This one is even trickier to achieve because there is no exact way of testing it. 
 
-##4 Principles to avoid complex APIs##
+## 4 Principles to avoid complex APIs
 
 {% img left /images/posts/2014-10-12/EconomyOfConcepts.jpg 250 'EconomyOfConcepts' %} 
 
@@ -35,7 +35,7 @@ This is from a presentation I gave at work about how to design APIs that don't s
 
 {% img right /images/posts/2014-10-12/Symmetry.jpg 250 'Symmetry' %} 
 
-**Simetry:** Once more a simmetric API is easier to learn because it is more predictable. For example: if the user sees a method called `open()` he proabably will know that there is another called `close()` that he should call at the end, and so on and so forth.
+**Simetry:** Once more a simmetric API is easier to learn because it is more predictable. For example: if the user sees a method called `open()` he probably will know that there is another called `close()` that he should call at the end, and so on and so forth.
 
 {% img left /images/posts/2014-10-12/Naming.jpg 250 'Naming' %} 
 
@@ -45,7 +45,7 @@ This is from a presentation I gave at work about how to design APIs that don't s
 
 **Minimize Accessibility:** Similar to encapsulation in Object Oriented Design, we should hide all the details the user doesn't need to know about. This way we are able to change those things under the hood without loosing backward compatibility. This maximizes information hiding and simplifies the use of the API, avoiding confusion by eliminating unnecessary choices.
 
-##6 Helpful tips##
+## 6 Helpful tips
 
 {% img left /images/posts/2014-10-12/UseCaseDriven.jpg 250 'Use case driven' %} 
 
@@ -75,4 +75,4 @@ An advantage of using use cases is that since we intereract with the API through
 
 **Implementation != Interface** It is important to be clear on what it's an implementation detail and what is essential to the API. Exposing implementation details confuse the user and limits our freedom to change the API later on. For example: Avoid describing specific algorithms, avoid including tuning parameters, avoid specifying hashing functions. Focus on results, not means.
 
-[here]:/downloads/ApiDesignKeynote.zip
+[1]:	/downloads/ApiDesignKeynote.zip
