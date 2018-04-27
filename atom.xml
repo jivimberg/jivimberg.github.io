@@ -4,7 +4,7 @@
   <title><![CDATA[What I learned today]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-04-24T17:15:47-07:00</updated>
+  <updated>2018-04-26T22:53:46-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,87 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Jacoco & Gradle - How to Verify Coverage With Exclusions]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/04/26/gradle-verify-coverage-with-exclusions/"/>
+    <updated>2018-04-26T08:49:52-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/04/26/gradle-verify-coverage-with-exclusions</id>
+    <content type="html"><![CDATA[<p>A post about how to add exclusions to your Jacoco test coverage verification in Gradle.</p>
+
+<!--more-->
+
+
+<p>This is how you setup Jacoco to fail when the code doesn’t meet the expected coverage threshold:</p>
+
+<div><script src='https://gist.github.com/ea79614ce9b80c29b03be8326586f238.js'></script>
+<noscript><pre><code>apply plugin: &quot;jacoco”
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.79
+            }
+        }
+    }
+}
+
+
+// to run coverage verification during the build (and fail when appropriate)
+check.dependsOn jacocoTestCoverageVerification  </code></pre></noscript></div>
+
+
+<p>See that <code>rule</code>?  I’m not setting any particular <code>element</code> so <a href="https://docs.gradle.org/current/javadoc/org/gradle/testing/jacoco/tasks/rules/JacocoViolationRule.html#getElement--">by default it’ll set <em>BUNDLE</em></a>. <strong>This is just what I want as I’d like to set a threshold for the coverage of the entire module.</strong></p>
+
+<p>So if I need to exclude certain <strong>packages</strong> or <strong>files</strong> from the count this is what I do:</p>
+
+<div><script src='https://gist.github.com/3ee0beaa9ab8b20b48e4273378dcd30e.js'></script>
+<noscript><pre><code>jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude:  [
+                    &#39;com/example/my/package/*&#39;,
+                    &#39;com/example/service/MyApplication.kt&#39;,
+                    &#39;com/google/protobuf/*&#39;
+            ])
+        })
+    }
+
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.79
+            }
+        }
+    }
+}</code></pre></noscript></div>
+
+
+<h3>Why <em>exclude</em> doesn’t work</h3>
+
+<p>My first approach was setting the <code>excludes</code> property on the rule like this:</p>
+
+<div><script src='https://gist.github.com/0962942885d4db41a9dad890aba5d225.js'></script>
+<noscript><pre><code>jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            excludes = [
+                    &#39;com/example/my/package/*&#39;,
+                    &#39;com/example/service/MyApplication.kt&#39;,
+                    &#39;com/google/protobuf/*&#39;
+            ]
+            limit {
+                minimum = 0.79
+            }
+        }
+    }
+}</code></pre></noscript></div>
+
+
+<p>The reason this doesn’t work is that <code>excludes</code> works on objects of the type defined with the <code>element</code> property. In this case the type is <em>BUNDLE</em> whereas the thing we want to exclude are <strong>packages</strong> and <strong>files</strong>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Go Channels in Kotlin - an Example]]></title>
@@ -358,7 +439,7 @@ This week I needed to test a class that depended on a method from an static clas
 <p>Finally I also run into the following error when running my test:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">VerifyError</span><span class="o">:</span> <span class="n">Expecting</span> <span class="n">a</span> <span class="n">stackmap</span> <span class="n">frame</span> <span class="n">at</span> <span class="n">branch</span> <span class="n">target</span> <span class="mi">71</span> <span class="n">in</span> <span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="na">abc</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">myPackage</span><span class="o">.</span><span class="na">MyClass</span><span class="n">$JaxbAccessorM_getDescription_setDescription_java_lang_String</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="n">Object</span><span class="o">;)</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="n">Object</span><span class="o">;</span> <span class="n">at</span> <span class="n">offset</span> <span class="mi">20</span><span class="n">_</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">VerifyError</span><span class="o">:</span> <span class="n">Expecting</span> <span class="n">a</span> <span class="n">stackmap</span> <span class="n">frame</span> <span class="n">at</span> <span class="n">branch</span> <span class="n">target</span> <span class="mi">71</span> <span class="n">in</span> <span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="na">abc</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">myPackage</span><span class="o">.</span><span class="na">MyClass$JaxbAccessorM_getDescription_setDescription_java_lang_String</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="n">Object</span><span class="o">;)</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="n">Object</span><span class="o">;</span> <span class="n">at</span> <span class="n">offset</span> <span class="mi">20</span><span class="n">_</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1174,9 +1255,9 @@ Just know that once it has been added as a src folder you&rsquo;ll have to compi
 </span><span class='line'>
 </span><span class='line'>            <span class="k">if</span><span class="o">(</span><span class="n">o1</span><span class="o">.</span><span class="na">age</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">o2</span><span class="o">.</span><span class="na">age</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
 </span><span class='line'>                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">o1</span><span class="o">.</span><span class="na">age</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">o2</span><span class="o">.</span><span class="na">age</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">o1</span><span class="o">.</span><span class="na">age</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">o2</span><span class="o">.</span><span class="na">age</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
 </span><span class='line'>                <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
-</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">o1</span><span class="o">.</span><span class="na">age</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">o2</span><span class="o">.</span><span class="na">age</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">o1</span><span class="o">.</span><span class="na">age</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">o2</span><span class="o">.</span><span class="na">age</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
 </span><span class='line'>                <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
 </span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
 </span><span class='line'>                <span class="k">return</span> <span class="n">o1</span><span class="o">.</span><span class="na">age</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">o2</span><span class="o">.</span><span class="na">age</span><span class="o">);</span>

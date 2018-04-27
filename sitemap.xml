@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2018/04/26/gradle-verify-coverage-with-exclusions/</loc>
+<lastmod>2018-04-26T08:49:52-07:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2018/04/23/go-channels-in-kotlin-an-example/</loc>
 <lastmod>2018-04-23T08:37:13-07:00</lastmod>
 </url>
@@ -136,6 +140,27 @@
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/categories/channels/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/gradle/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/jacoco/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/verify/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/test/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/coverage/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/exclusions/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/jacocotestcoverageverification/</loc>
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/posts/2/</loc>
