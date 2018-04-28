@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Go | What I learned today]]></title>
+  <title><![CDATA[Category: Go | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/go/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-04-26T23:16:51-07:00</updated>
+  <updated>2018-04-28T00:12:24-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
