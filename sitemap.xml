@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2018/04/30/book-recommendations-isomorphic-javascript-web-development/</loc>
+<lastmod>2018-04-30T07:15:04-07:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2018/04/26/gradle-verify-coverage-with-exclusions/</loc>
 <lastmod>2018-04-26T08:49:52-07:00</lastmod>
 </url>
@@ -161,5 +165,20 @@
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/categories/jacocotestcoverageverification/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/book/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/react/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/graphql/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/web/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/isomorphic/</loc>
 </url>
 </urlset>
