@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Google, | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/google/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-05-03T20:37:37-07:00</updated>
+  <updated>2018-05-04T12:02:33-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -56,7 +56,7 @@
 
 <p>8 - Give it a go and run it once to see if it worked.</p>
 
-<p>9 - Finally go to <em>Resources > Current project triggers'</em>  and create a time driven trigger to run it daily (or weekly, or whatever suits your needs)<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
+<p>9 - Finally go to <em>Edit > Current project triggers</em>  and create a time driven trigger to run it daily (or weekly, or whatever suits your needs)<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
 
 <p><img class="center" src="/images/posts/2014-08-21/Triggers.png" width="700" title="&lsquo;Triggers&rsquo;" ></p>
 
