@@ -6,6 +6,18 @@ em {
     font-style: italic;
 }
 
+.social-icon {
+  margin-right: 10px;
+}
+
+.social-icon-list a {
+  opacity: 0.5;
+}
+
+.social-icon-list a:hover {
+  opacity: 1;
+}
+
 @mixin fontStyle() {
    margin-left: 15px;
    font-weight: 300;
