@@ -43,7 +43,7 @@ Make sure your replace all the fields with the actual values!
 
 8 - Give it a go and run it once to see if it worked.
 
-9 - Finally go to _Resources \> Current project triggers'_  and create a time driven trigger to run it daily (or weekly, or whatever suits your needs)[^1]
+9 - Finally go to _Edit \> Current project triggers_  and create a time driven trigger to run it daily (or weekly, or whatever suits your needs)[^1]
 
 {% img center /images/posts/2014-08-21/Triggers.png 700 'Triggers' %}
 
@@ -52,11 +52,11 @@ Make sure your replace all the fields with the actual values!
 ``` javascript
 function createTimeDrivenTriggers() {
  // Trigger every day at 6 pm.
-	  ScriptApp.newTrigger('sendFormEmail')
-	  .timeBased()
-	  .atHour(18)
-	  .everyDays(1) // Frequency is required if you are using atHour() or nearMinute()
-	  .create();
+      ScriptApp.newTrigger('sendFormEmail')
+      .timeBased()
+      .atHour(18)
+      .everyDays(1) // Frequency is required if you are using atHour() or nearMinute()
+      .create();
 }
 ``` 
 
