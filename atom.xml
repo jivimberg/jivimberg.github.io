@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-05-04T12:02:33-07:00</updated>
+  <updated>2018-05-06T08:49:51-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,108 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Parallel Map in Kotlin]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/05/04/parallel-map-in-kotlin/"/>
+    <updated>2018-05-04T16:32:00-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/05/04/parallel-map-in-kotlin</id>
+    <content type="html"><![CDATA[<p>Ever wonder how to run <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html"><code>map</code></a>  in parallel using coroutines? This is how you do it.</p>
+
+<!--more-->
+
+
+
+
+<xmp class="kotlin-code" data-highlight-only>
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
+
+//sampleStart
+fun <A, B>Iterable<A>.pmap(f: suspend (A) -> B): List<B> = runBlocking {
+    map { async { f(it) } }.map { it.await() }
+}
+//sampleEnd
+</xmp>
+
+
+<p><em>Confused?</em> Let’s unpack it.</p>
+
+<p>First we have the <strong>function signature</strong> which is pretty similar to the actual <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html"><code>map</code></a> extension function signature on <code>Iterable</code>. The only thing we added was the <code>suspend</code> keyword on the parameter, which let’s us use <code>suspend</code> functions in <code>f</code> (as we’re going to see in a moment).</p>
+
+<p>Then we have the <code>runBlocking</code> which let’s us bridge the blocking code with the coroutine world. As the name suggests <strong>this will block the current thread until everything inside the block finishes executing</strong>. Which is exactly what we want.</p>
+
+<p>Finally we have the actual execution which is divided in 2 steps. The <em>first step</em> <strong>launches a new coroutine for each function application</strong> using <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/async.html"><code>async</code></a>. This effectively wraps the type of each element with  <code>Deferred</code>. In the <em>second step</em> we wait for all function applications to complete and unwrap the result with <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/-deferred/await.html"><code>await</code></a>.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
+
+<h2>How to use it</h2>
+
+<p>Easy! <strong>Just like you use <code>map</code></strong>:</p>
+
+<xmp class="kotlin-code">
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
+
+fun <A, B>Iterable<A>.pmap(f: suspend (A) -> B): List<B> = runBlocking {
+    map { async { f(it) } }.map { it.await() }
+}
+//sampleStart
+fun main(args: Array<String>) {
+    println((1..100).pmap { it * 2 })
+}
+//sampleEnd
+</xmp>
+
+
+<p>(Psst! I’m using <a href="https://blog.jetbrains.com/kotlin/2018/04/embedding-kotlin-playground/">Kotlin Playground</a> so you can actually run this code!)</p>
+
+<h2>Prove that it’s running in parallel</h2>
+
+<p>Ok so let’s resort to the good old <code>delay</code> to prove that this is actually running in parallel. We are going to add a <strong>delay of 1 second</strong> on each multiplication and measure the time it takes to run.</p>
+
+<p>Running over <em>100 elements</em> the result should be: <strong>close to 1,000 milliseconds if it’s running in parallel</strong> and close to <em>100,000 milliseconds if it’s running sequentially</em>.</p>
+
+<xmp class="kotlin-code">
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
+import kotlin.system.measureTimeMillis
+import kotlinx.coroutines.experimental.delay
+
+fun <A, B>Iterable<A>.pmap(f: suspend (A) -> B): List<B> = runBlocking {
+    map { async { f(it) } }.map { it.await() }
+}
+//sampleStart
+fun main(args: Array<String>) {
+    val time = measureTimeMillis {
+        val output = (1..100).pmap {
+            delay(1000)
+            it * 2
+        }
+
+        println(output)
+    }
+
+    println("Total time: $time")
+}
+//sampleEnd
+</xmp>
+
+
+
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Since I’m not explicitly passing any  <code>CoroutineContext</code> the <code>DefaultDispatcher</code> will be used. <a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Book Recommendations: Isomorphic JavaScript Web Development]]></title>
