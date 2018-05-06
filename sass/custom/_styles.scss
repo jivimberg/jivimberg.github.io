@@ -1,6 +1,12 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
 
+pre.CodeMirror-line {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
 // Added by jivi: fixing italic style on em
 em {
     font-style: italic;
