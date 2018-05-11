@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-05-06T08:49:51-07:00</updated>
+  <updated>2018-05-10T17:43:36-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,115 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Parallel Map in Java (From Kotlin)]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/05/07/parallel-map-in-java/"/>
+    <updated>2018-05-07T13:19:58-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/05/07/parallel-map-in-java</id>
+    <content type="html"><![CDATA[<p>Following up of my <a href="http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin/">previous post</a>, I was curious how a parallel map operation would look like using Java’s <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#parallelStream--"><code>parallelStream</code></a>. Here’s what I find out.</p>
+
+<!--more-->
+
+
+<p>In Java to use <code>map</code> you do:</p>
+
+<xmp class="kotlin-code">
+import java.util.stream.Collectors
+
+//sampleStart
+fun main(args: Array<String>) {
+    val output = (1..100).toList()
+            .stream()
+            .map { it * 2 }
+            .collect(Collectors.toList())
+    println(output)
+}
+//sampleEnd
+</xmp>
+
+
+<p><em>(In case you’re wondering I’m using Java collections from Kotlin)</em></p>
+
+<p>And to do a <em>parallel</em> <code>map</code> you can simply do:</p>
+
+<xmp class="kotlin-code">
+import java.util.stream.Collectors
+
+//sampleStart
+fun main(args: Array<String>) {
+    val output = (1..100).toList()
+            .parallelStream()
+            .map { it * 2 }
+            .collect(Collectors.toList())
+    println(output)
+}
+//sampleEnd
+</xmp>
+
+
+<p>No need to write a special <code>pmap</code> operation like we did for Kotlin. Just call <code>parallelStream</code> and that’s it. <em>Pretty cool, right?</em></p>
+
+<p>I was curious about how this solution <strong>compared to the one on <a href="http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin/">my previous post</a></strong>,  so I decided to time it too.</p>
+
+<xmp class="kotlin-code">
+import java.util.stream.Collectors
+import kotlin.system.measureTimeMillis
+
+//sampleStart
+fun main(args: Array<String>) {
+    val time = measureTimeMillis {
+        val output = (1..100).toList()
+                .parallelStream()
+                .map {
+                    Thread.sleep(100)
+                    it * 2
+                }
+                .collect(Collectors.toList())
+
+        println(output)
+    }
+
+    println("Total time: $time")
+}
+//sampleEnd
+</xmp>
+
+
+<p>In this case instead I’m actually setting a delay of <strong>100 milliseconds</strong> (instead of <em>1,000</em> like I did on my previous post)<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. I was expecting the total time to be something close to <em>100 milliseconds</em>, just like it was for the Kotlin <code>pmap</code>, <strong>instead I got something close to 5,000</strong>.</p>
+
+<p>Turns out <code>parallelStream</code> uses the default <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ForkJoinPool.html"><em>ForkJoinPool.commonPool</em></a> which by default has a parallelism level <strong>equal to the number of available processors.</strong> In this case 2 processors: <em>100 operations * 100 milliseconds / 2 processors = 5000 milliseconds</em>. You can check the number of available processors simply by adding this line to the script:</p>
+
+<p><code>println(Runtime.getRuntime().availableProcessors())</code></p>
+
+<h2>But, I want more parallelism!</h2>
+
+<p>What if we want to increase the parallelism level? There are <em>2 ways to achieve this.</em></p>
+
+<p><em>The first one</em> is to make our code <strong>run in a custom thread pool</strong> of our choice. Unfortunately Java doesn’t make it easy to provide a custom thread pool, but <a href="http://www.baeldung.com/java-8-parallel-streams-custom-threadpool">the workaround is not so bad either</a>.</p>
+
+<p><em>The other option</em> is to change the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ForkJoinPool.html"><em>ForkJoinPool.commonPool</em></a> parallelism level by system property like this:</p>
+
+<p><code>System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "10")</code></p>
+
+<p>Unfortunately this doesn’t work on Kotlin Playground so you’ll have to try it on your own machine or take my word that it works.</p>
+
+<p>It’s worth noting that with the second approach you’d still be using the same default thread pool <strong>shared globally across the app</strong>. As you can imagine this can be <strong>EXTREMELY BAD</strong> as you’d be basically depleting resources for the whole application. Some would even argue <a href="https://zeroturnaround.com/rebellabs/java-parallel-streams-are-bad-for-your-health/">this is reason enough not to use <code>parallelStream</code> at all</a>. Although that seems a little extreme if you ask me.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Otherwise the execution takes too long and doesn’t complete. Probably a limitation of Kotlin Playground<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using PowerMock + TestNG to Mock a Static Class]]></title>
@@ -359,87 +468,6 @@ public abstract class EmployeeWithAutoValue {
 
 <p>I used Intellij Idea to try this and I must say it took me some time to get the generated class folder to be marked as src. In the end what did the trick was to reimport the mvn project.
 Just know that once it has been added as a src folder you&rsquo;ll have to compile the code one time before the IDE can tell there is a generated class named <em>Autovalue_XXX.</em> You can add this to the list of minor annoyances of using AutoValue if you like.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Guava - Fun With Comparisons]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons/"/>
-    <updated>2014-03-28T17:26:47-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons</id>
-    <content type="html"><![CDATA[<p>Implementing <code>compare()</code> and <code>compareTo()</code> methods was never fun. Luckily <a href="https://code.google.com/p/guava-libraries/">Guava</a> provides an utility that makes comparison methods easier to write and more pleasing to the eye.</p>
-
-<!--more-->
-
-
-<p>So let&rsquo;s say we have the class <code>Person</code>:</p>
-
-<pre><code class="java">private class Person {
-        private String name;
-        private int zipCode;
-        private Age age;
-}
-
-private enum Age { YOUNG, OLD }
-</code></pre>
-
-<p>And we want to sort it by name, then by zipcode and finally, if they are still matched, by age (having <code>Age.YOUNG</code> first) but making <code>null</code> values greater than non <code>null</code> values.</p>
-
-<p>Such comparator could look something like this:</p>
-
-<pre><code class="java">public class VerboseComparator
-            implements Comparator&lt;Person&gt;
-    {
-
-        @Override
-        public int compare(Person o1, Person o2) {
-            int cmp = o1.name.compareTo(o2.name);
-            if (cmp != 0) {
-                return cmp;
-            }
-
-            cmp = Integer.compare(o1.zipCode, o2.zipCode);
-            if (cmp != 0) {
-                return cmp;
-            }
-
-            if(o1.age == null &amp;&amp; o2.age != null){
-                return -1;
-            } else if (o1.age != null &amp;&amp; o2.age == null) {
-                return 1;
-            } else if (o1.age == null &amp;&amp; o2.age == null) {
-                return 0;
-            } else {
-                return o1.age.compareTo(o2.age);
-            }
-        }
-    }
-</code></pre>
-
-<p>Yeah I know, it&rsquo;s hard to read, prone to errors and it has a way too many if statements.</p>
-
-<p>But <em>Don&rsquo;t Panic!</em> with Guava we can write this same comparator like this:</p>
-
-<pre><code class="java">private static class GuavaComparator
-            implements Comparator&lt;Person&gt;
-    {
-
-        @Override
-        public int compare(Person o1, Person o2) {
-            return ComparisonChain.start()
-                    .compare(o1.name, o2.name)
-                    .compare(o1.zipCode, o2.zipCode)
-                    .compare(o1.age, o2.age, Ordering.natural().nullsFirst())
-                    .result();
-        }
-    }
-</code></pre>
-
-<p>That looks way better and it&rsquo;s easier to understand.</p>
-
-<p>Furthermore ComparisonChain stops calling the next <code>compare()</code> method as soon as one returns a value different than 0. So if you have an expensive calculation for comparison to untide similar objects you can rest assured it will only be called when absolutely necessary.</p>
-
-<p>If you find this useful you&rsquo;ll probably want to check out other <a href="https://code.google.com/p/guava-libraries/wiki/OrderingExplained">guava&rsquo;s Ordering Utilities</a>.</p>
 ]]></content>
   </entry>
   
