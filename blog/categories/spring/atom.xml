@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Spring | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/spring/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2018-05-20T10:40:50-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Spring Functional Routing]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/05/20/spring-functional-router/"/>
+    <updated>2018-05-20T00:16:22-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/05/20/spring-functional-router</id>
+    <content type="html"><![CDATA[<p>This post is about the clever tricks you can pull with Spring new <strong>functional routing</strong> and it’s Kotlin DSL.</p>
+
+<!--more-->
+
+
+<p><img class="center" src="/images/posts/2018-05-19/trainSwitch.jpg" title="’Train switch’" ></p>
+
+<p>Spring 5 introduced the <a href="https://spring.io/blog/2016/09/22/new-in-spring-5-functional-web-framework">Functional Web Framework</a> and with it the ability to do functional routing. Basically instead of annotating your methods with the good old <code>@RequestMapping</code> you can now write functions that go from a <code>Request</code> to a <code>Response&lt;T&gt;</code> (called <code>HandlerFunction&lt;T&gt;</code>). And then use a <code>RouterFunction&lt;T&gt;</code> to map which path will end up in which handler.</p>
+
+<p>Now, for the sake of brevity, I won’t talk about all the benefits of this new functional paradigm. Instead I’d like to focus on <strong>some things that can be done with functional routing that were not possible before</strong>.</p>
+
+<p>I have to admit that <strong>at first</strong> I wasn’t sold on the functional routing thing. Why would I want to replace <code>@RequestMapping</code> with 2 different functions? Isn’t that more code to achieve the same goal? For comparison this is how a <em>simple</em> RoutingFunction could look like<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+    fun router() = router {
+        accept(TEXT_HTML).nest {
+            GET("/") { permanentRedirect(URI("index.html")).build() }
+        }
+        "/api".nest {
+            accept(APPLICATION_JSON).nest {
+                GET("/users", userHandler::findAll)
+                POST("/users", userHandler::create)
+            }
+        }
+        resources("/**", ClassPathResource("static/"))
+    } 
+</xmp>
+
+
+<p>It’s readable but certainly not as succinct as <code>@GetMapping("/api/users")</code>. But <strong>this terseness comes at the price of expressiveness</strong>. Or as <a href="https://spring.io/blog/2016/09/22/new-in-spring-5-functional-web-framework">this article on Spring.io</a> puts it:</p>
+
+<blockquote><p>The <code>RouterFunction</code> has a similar purpose as a <code>@RequestMapping</code> annotation. However, there is an important distinction: with the annotation <strong>your route is limited to what can be expressed through the annotation values</strong>.</p></blockquote>
+
+<h2>Complex routing</h2>
+
+<p>I’ll use an example to illustrate some of the things that can be achieved with complex routing. Say I have some data modeling a <em>résumé</em> that contains multiple <em>sections</em>. <strong>I want to expose each of this sections as a different REST endpoint</strong>. Underneath we need to handle each call the same way, the only difference is that we’d be processing a different <em>section</em> of data. We could do the routing like this:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.core.io.ClassPathResource
+import org.springframework.http.MediaType
+import org.springframework.web.reactive.function.server.RouterFunctions.resources
+import org.springframework.web.reactive.function.server.router
+
+//sampleStart
+    enum class Section(val fieldName: String) {
+    PERSONAL_INFO("personalInfo"),
+    EXPERIENCE("experience"),
+    SIDE_PROJECTS("sideProject"),
+    EDUCATION("education"),
+}
+
+@Configuration
+class Routing {
+    @Bean
+    fun resumeRouter(handler: ResumeHandler) = router {
+        accept(MediaType.APPLICATION_JSON).nest {
+            Section.values().forEach {
+                GET("/${it.fieldName}", handler.getSectionHandler(it))
+            }
+        }
+    }
+}
+//sampleEnd
+
+@Component
+class ResumeHandler {
+fun getSectionHandler(section: Section): (ServerRequest) -\> Mono<ServerResponse> =
+            { // get section from data and return response }
+}
+</xmp>
+
+
+<p>We can iterate through the enum and create a new mapping for each of the sections with the <code>GET</code> function. Furthermore the function <code>getSectionHandler</code> can receive the enum as parameter and use it for handling the response instead of having to rely only on the <code>ServerRequest</code> context.</p>
+
+<p>Now this is only one of the <em>tricks</em> that can be done with functional routing. Having a <a href="https://spring.io/blog/2017/08/01/spring-framework-5-kotlin-apis-the-functional-way#functional-routing-with-the-kotlin-dsl-for-spring-webflux">Kotlin DSL</a> means we can do <strong>any kind of scripting we can think of</strong> when defining the routes. As always:</p>
+
+<p><img class="center" src="/images/posts/2018-05-19/withGreatPower.png" title="’With great power comes great responsibility’" ></p>
+
+<p>Abusing this feature would make your routing logic a <strong>tangled mess</strong>, too hard to understand and maintain. So be smart about it.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Source: [kotlin-swagger-spring-functional-template][2]<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

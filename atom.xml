@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-05-10T17:43:36-07:00</updated>
+  <updated>2018-05-20T10:40:50-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,108 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Spring Functional Routing]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/05/20/spring-functional-router/"/>
+    <updated>2018-05-20T00:16:22-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/05/20/spring-functional-router</id>
+    <content type="html"><![CDATA[<p>This post is about the clever tricks you can pull with Spring new <strong>functional routing</strong> and it’s Kotlin DSL.</p>
+
+<!--more-->
+
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-05-19/trainSwitch.jpg" title="’Train switch’" ></p>
+
+<p>Spring 5 introduced the <a href="https://spring.io/blog/2016/09/22/new-in-spring-5-functional-web-framework">Functional Web Framework</a> and with it the ability to do functional routing. Basically instead of annotating your methods with the good old <code>@RequestMapping</code> you can now write functions that go from a <code>Request</code> to a <code>Response&lt;T&gt;</code> (called <code>HandlerFunction&lt;T&gt;</code>). And then use a <code>RouterFunction&lt;T&gt;</code> to map which path will end up in which handler.</p>
+
+<p>Now, for the sake of brevity, I won’t talk about all the benefits of this new functional paradigm. Instead I’d like to focus on <strong>some things that can be done with functional routing that were not possible before</strong>.</p>
+
+<p>I have to admit that <strong>at first</strong> I wasn’t sold on the functional routing thing. Why would I want to replace <code>@RequestMapping</code> with 2 different functions? Isn’t that more code to achieve the same goal? For comparison this is how a <em>simple</em> RoutingFunction could look like<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+    fun router() = router {
+        accept(TEXT_HTML).nest {
+            GET("/") { permanentRedirect(URI("index.html")).build() }
+        }
+        "/api".nest {
+            accept(APPLICATION_JSON).nest {
+                GET("/users", userHandler::findAll)
+                POST("/users", userHandler::create)
+            }
+        }
+        resources("/**", ClassPathResource("static/"))
+    } 
+</xmp>
+
+
+<p>It’s readable but certainly not as succinct as <code>@GetMapping("/api/users")</code>. But <strong>this terseness comes at the price of expressiveness</strong>. Or as <a href="https://spring.io/blog/2016/09/22/new-in-spring-5-functional-web-framework">this article on Spring.io</a> puts it:</p>
+
+<blockquote><p>The <code>RouterFunction</code> has a similar purpose as a <code>@RequestMapping</code> annotation. However, there is an important distinction: with the annotation <strong>your route is limited to what can be expressed through the annotation values</strong>.</p></blockquote>
+
+<h2>Complex routing</h2>
+
+<p>I’ll use an example to illustrate some of the things that can be achieved with complex routing. Say I have some data modeling a <em>résumé</em> that contains multiple <em>sections</em>. <strong>I want to expose each of this sections as a different REST endpoint</strong>. Underneath we need to handle each call the same way, the only difference is that we’d be processing a different <em>section</em> of data. We could do the routing like this:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.core.io.ClassPathResource
+import org.springframework.http.MediaType
+import org.springframework.web.reactive.function.server.RouterFunctions.resources
+import org.springframework.web.reactive.function.server.router
+
+//sampleStart
+    enum class Section(val fieldName: String) {
+    PERSONAL_INFO("personalInfo"),
+    EXPERIENCE("experience"),
+    SIDE_PROJECTS("sideProject"),
+    EDUCATION("education"),
+}
+
+@Configuration
+class Routing {
+    @Bean
+    fun resumeRouter(handler: ResumeHandler) = router {
+        accept(MediaType.APPLICATION_JSON).nest {
+            Section.values().forEach {
+                GET("/${it.fieldName}", handler.getSectionHandler(it))
+            }
+        }
+    }
+}
+//sampleEnd
+
+@Component
+class ResumeHandler {
+fun getSectionHandler(section: Section): (ServerRequest) -\> Mono<ServerResponse> =
+            { // get section from data and return response }
+}
+</xmp>
+
+
+<p>We can iterate through the enum and create a new mapping for each of the sections with the <code>GET</code> function. Furthermore the function <code>getSectionHandler</code> can receive the enum as parameter and use it for handling the response instead of having to rely only on the <code>ServerRequest</code> context.</p>
+
+<p>Now this is only one of the <em>tricks</em> that can be done with functional routing. Having a <a href="https://spring.io/blog/2017/08/01/spring-framework-5-kotlin-apis-the-functional-way#functional-routing-with-the-kotlin-dsl-for-spring-webflux">Kotlin DSL</a> means we can do <strong>any kind of scripting we can think of</strong> when defining the routes. As always:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-05-19/withGreatPower.png" title="’With great power comes great responsibility’" ></p>
+
+<p>Abusing this feature would make your routing logic a <strong>tangled mess</strong>, too hard to understand and maintain. So be smart about it.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Source: [kotlin-swagger-spring-functional-template][2]<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Parallel Map in Java (From Kotlin)]]></title>
@@ -1556,104 +1658,6 @@ Yeah I know, it&rsquo;s hard to read, prone to errors and it has a way too many 
 <p>Furthermore ComparisonChain stops calling the next <code>compare()</code> method as soon as one returns a value different than 0. So if you have an expensive calculation for comparison to untide similar objects you can rest assured it will only be called when absolutely necessary.</p>
 
 <p>If you find this useful you&rsquo;ll probably want to check out other <a href="https://code.google.com/p/guava-libraries/wiki/OrderingExplained">guava&rsquo;s Ordering Utilities</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Guava - Using and Avoiding Null]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null/"/>
-    <updated>2014-03-19T00:34:41-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null</id>
-    <content type="html"><![CDATA[<p>I&rsquo;m starting a series of posts on <a href="https://code.google.com/p/guava-libraries/">Guava</a> (Google&rsquo;s core libraries). Today I am going to start with <strong>null</strong>, how to use it, and how to avoid it when necessary.</p>
-
-<!--more-->
-
-
-<blockquote><p><strong>&ldquo;I call it my billion-dollar mistake.&rdquo;</strong><br/>
-Sir C. A. R. Hoare, on his invention of the null reference</p></blockquote>
-
-<h3>Null in Guava Collections</h3>
-
-<p>How many times have you expected null values on your collections? And how many times have you <em>actually</em> check to prevent null values on them?</p>
-
-<p>That&rsquo;s why most of Guava &ldquo;New Collections&rdquo; and utilities will fail fast with a NPE when you try to add null to them. And they provide the <strong>Optional</strong> utilty for those cases where we need to indicate absence of some kind, without using null.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">//This will fail with java.lang.NullPointerException: at index 2</span>
-</span><span class='line'><span class="n">ImmutableList</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">&quot;one&quot;</span><span class="o">,</span> <span class="s">&quot;two&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Optional</h3>
-
-<p>Optional is a way of representing a reference which may be present or not. The whole point of using Optional instead of null, is that there is no way the client can miss the case where the reference is absent. It forces him to actively unwrap the value or else the program won&rsquo;t compile.</p>
-
-<p>Here is how you create an optional:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">creatingAnOptional</span><span class="o">(){</span>
-</span><span class='line'>        <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">result</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">findString</span><span class="o">();</span> <span class="c1">//may return null</span>
-</span><span class='line'>        <span class="n">result</span> <span class="o">=</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// which is the same as doing:</span>
-</span><span class='line'>        <span class="k">if</span><span class="o">(</span><span class="n">value</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
-</span><span class='line'>            <span class="n">result</span> <span class="o">=</span> <span class="n">Optional</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
-</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">result</span> <span class="o">=</span> <span class="n">Optional</span><span class="o">.</span><span class="na">absent</span><span class="o">();</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
-
-<p>And here is how you query for the value:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kt">void</span> <span class="nf">queryingOptionals</span><span class="o">(){</span>
-</span><span class='line'>        <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">optional</span> <span class="o">=</span> <span class="n">creatingAnOptional</span><span class="o">();</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">if</span><span class="o">(</span><span class="n">optional</span><span class="o">.</span><span class="na">isPresent</span><span class="o">()){</span>
-</span><span class='line'>            <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">optional</span><span class="o">.</span><span class="na">get</span><span class="o">();</span> <span class="c1">//We are sure is the value is there</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;The string is: &quot;</span> <span class="o">+</span> <span class="n">value</span><span class="o">);</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">//or</span>
-</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Value or default: &quot;</span> <span class="o">+</span> <span class="n">optional</span><span class="o">.</span><span class="na">or</span><span class="o">(</span><span class="s">&quot;Default value&quot;</span><span class="o">));</span>
-</span><span class='line'>    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The next time you are writing a method that return a values which may or may not be present, remember to use Optional. It will make your API much clearer and force the caller to consider the absent value case.</p>
 ]]></content>
   </entry>
   
