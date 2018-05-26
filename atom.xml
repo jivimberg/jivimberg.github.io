@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-05-20T10:40:50-07:00</updated>
+  <updated>2018-05-26T09:44:57-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,40 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Book Recomendations: Migrating to Microservices Databases]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/05/25/book-recomendations-migrating-to-microservices-databases/"/>
+    <updated>2018-05-25T07:32:00-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/05/25/book-recomendations-migrating-to-microservices-databases</id>
+    <content type="html"><![CDATA[<p>Just finished reading <em> Migrating to microservices databases</em> by <a href="https://twitter.com/yanaga">Edson Yanaga</a>. If you can relate to the 3 nouns in the title then you’ll want to check it out.</p>
+
+<!--more-->
+
+
+<blockquote><p>Code is easy; state is hard.</p>
+
+<p>— <em>Edson Yanaga</em></p></blockquote>
+
+<p>If you are on the journey of <strong>migrating your monolith to a micro-service architecture</strong> (like every other developer this days) then, at some point, you probably found yourself staring at a whiteboard full of rectangles and hexagons thinking: <em>where does the data fit in this mess?</em></p>
+
+<p>Maybe you’ve read about the <a href="http://microservices.io/patterns/data/database-per-service.html">“Database per service”</a> pattern and now you’re wondering what your requirements are on <a href="https://en.wikipedia.org/wiki/Consistency_(database_systems)">data consistency</a>. Or somebody told you about <a href="https://martinfowler.com/bliki/CQRS.html">CQRS</a> but you don’t know it’s advantages and disadvantages.</p>
+
+<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="http://jivimberg.github.io/images/posts/2018-05-26/MigratingToMicroservicesDatabases.png" title="’Migrating to Micro-services databases book cover’" ></a></p>
+
+<p>Edson’s book opens with a brief recap of the micro-service world. Going from <em>“Why microservices”</em> to <a href="https://en.wikipedia.org/wiki/A/B_testing">A/B testing</a> and <a href="https://martinfowler.com/bliki/CanaryRelease.html">Canary deployment</a>, the book provides a <strong>super-quick explanation of each concept without going into many details.</strong></p>
+
+<p>By contrast the second part of the book deeps dive into <strong>how to handle the data</strong> of your micro-services. <em>Chapter 3</em> explains how to do <strong>Zero downtime migration</strong> of your relational DB and which tools to use.</p>
+
+<p>On <em>Chapter 4</em> Edson introduces the different <strong>consistency models</strong> and compares <strong>CRUD Vs. CQRS</strong> (explaining also <em>Event sourcing</em>)</p>
+
+<p><strong>The last chapter is, to me, the best.</strong> <em>Chapter 5</em>  contains a recount and description of some of the different <strong>Integration Strategies</strong> we might want to consider when <em>migrating the monolith</em>. Each strategy is briefly described, and we are also provided with an assessment of <strong>applicability</strong> and section of <strong>considerations</strong> to keep in mind if using this strategy.</p>
+
+<h2>Conclusion</h2>
+
+<p>The hardest part of design is not knowing the architectural patterns or the different techniques to solve a problem, but <strong>knowing which solution is a good fit to which problem.</strong> Yanaga’s book serves as a good <strong>catalog of possible solutions</strong> to consider, when working with data on micro-services. It provides a concise analysis of each <strong>strategy</strong> and helps us avoid those  <em>”I wish I’ve thought this better before writing the code”</em> moments.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Spring Functional Routing]]></title>
@@ -1526,138 +1560,6 @@ I had fallen victim to the great misunderstanding everyone makes about Android a
 
 <p>I used Intellij Idea to try this and I must say it took me some time to get the generated class folder to be marked as src. In the end what did the trick was to reimport the mvn project.
 Just know that once it has been added as a src folder you&rsquo;ll have to compile the code one time before the IDE can tell there is a generated class named <em>Autovalue_XXX.</em> You can add this to the list of minor annoyances of using AutoValue if you like.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Guava - Fun With Comparisons]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons/"/>
-    <updated>2014-03-28T17:26:47-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons</id>
-    <content type="html"><![CDATA[<p>Implementing <code>compare()</code> and <code>compareTo()</code> methods was never fun. Luckily <a href="https://code.google.com/p/guava-libraries/">Guava</a> provides an utility that makes comparison methods easier to write and more pleasing to the eye.</p>
-
-<!--more-->
-
-
-<p>So let&rsquo;s say we have the class <code>Person</code>:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
-</span><span class='line'>        <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
-</span><span class='line'>        <span class="kd">private</span> <span class="kt">int</span> <span class="n">zipCode</span><span class="o">;</span>
-</span><span class='line'>        <span class="kd">private</span> <span class="n">Age</span> <span class="n">age</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">private</span> <span class="kd">enum</span> <span class="n">Age</span> <span class="o">{</span> <span class="n">YOUNG</span><span class="o">,</span> <span class="n">OLD</span> <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And we want to sort it by name, then by zipcode and finally, if they are still matched, by age (having <code>Age.YOUNG</code> first) but making <code>null</code> values greater than non <code>null</code> values.</p>
-
-<p>Such comparator could look something like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">VerboseComparator</span>
-</span><span class='line'>            <span class="kd">implements</span> <span class="n">Comparator</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="nd">@Override</span>
-</span><span class='line'>        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compare</span><span class="o">(</span><span class="n">Person</span> <span class="n">o1</span><span class="o">,</span> <span class="n">Person</span> <span class="n">o2</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="kt">int</span> <span class="n">cmp</span> <span class="o">=</span> <span class="n">o1</span><span class="o">.</span><span class="na">name</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">o2</span><span class="o">.</span><span class="na">name</span><span class="o">);</span>
-</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="n">cmp</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>                <span class="k">return</span> <span class="n">cmp</span><span class="o">;</span>
-</span><span class='line'>            <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>            <span class="n">cmp</span> <span class="o">=</span> <span class="n">Integer</span><span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">o1</span><span class="o">.</span><span class="na">zipCode</span><span class="o">,</span> <span class="n">o2</span><span class="o">.</span><span class="na">zipCode</span><span class="o">);</span>
-</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="n">cmp</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>                <span class="k">return</span> <span class="n">cmp</span><span class="o">;</span>
-</span><span class='line'>            <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>            <span class="k">if</span><span class="o">(</span><span class="n">o1</span><span class="o">.</span><span class="na">age</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">o2</span><span class="o">.</span><span class="na">age</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
-</span><span class='line'>                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">;</span>
-</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">o1</span><span class="o">.</span><span class="na">age</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">o2</span><span class="o">.</span><span class="na">age</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>                <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
-</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">o1</span><span class="o">.</span><span class="na">age</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">o2</span><span class="o">.</span><span class="na">age</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>                <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
-</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-</span><span class='line'>                <span class="k">return</span> <span class="n">o1</span><span class="o">.</span><span class="na">age</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">o2</span><span class="o">.</span><span class="na">age</span><span class="o">);</span>
-</span><span class='line'>            <span class="o">}</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>
-Yeah I know, it&rsquo;s hard to read, prone to errors and it has a way too many if statements.</p>
-
-<p>But <em>Don&rsquo;t Panic!</em> with Guava we can write this same comparator like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">GuavaComparator</span>
-</span><span class='line'>            <span class="kd">implements</span> <span class="n">Comparator</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="nd">@Override</span>
-</span><span class='line'>        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compare</span><span class="o">(</span><span class="n">Person</span> <span class="n">o1</span><span class="o">,</span> <span class="n">Person</span> <span class="n">o2</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="k">return</span> <span class="n">ComparisonChain</span><span class="o">.</span><span class="na">start</span><span class="o">()</span>
-</span><span class='line'>                    <span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">o1</span><span class="o">.</span><span class="na">name</span><span class="o">,</span> <span class="n">o2</span><span class="o">.</span><span class="na">name</span><span class="o">)</span>
-</span><span class='line'>                    <span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">o1</span><span class="o">.</span><span class="na">zipCode</span><span class="o">,</span> <span class="n">o2</span><span class="o">.</span><span class="na">zipCode</span><span class="o">)</span>
-</span><span class='line'>                    <span class="o">.</span><span class="na">compare</span><span class="o">(</span><span class="n">o1</span><span class="o">.</span><span class="na">age</span><span class="o">,</span> <span class="n">o2</span><span class="o">.</span><span class="na">age</span><span class="o">,</span> <span class="n">Ordering</span><span class="o">.</span><span class="na">natural</span><span class="o">().</span><span class="na">nullsFirst</span><span class="o">())</span>
-</span><span class='line'>                    <span class="o">.</span><span class="na">result</span><span class="o">();</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>That looks way better and it&rsquo;s easier to understand.</p>
-
-<p>Furthermore ComparisonChain stops calling the next <code>compare()</code> method as soon as one returns a value different than 0. So if you have an expensive calculation for comparison to untide similar objects you can rest assured it will only be called when absolutely necessary.</p>
-
-<p>If you find this useful you&rsquo;ll probably want to check out other <a href="https://code.google.com/p/guava-libraries/wiki/OrderingExplained">guava&rsquo;s Ordering Utilities</a>.</p>
 ]]></content>
   </entry>
   

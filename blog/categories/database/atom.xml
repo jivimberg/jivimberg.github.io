@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Book | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/book/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Database | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/database/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
   <updated>2018-05-26T09:44:57-07:00</updated>
   <id>http://jivimberg.github.io/</id>
@@ -44,45 +44,6 @@
 <h2>Conclusion</h2>
 
 <p>The hardest part of design is not knowing the architectural patterns or the different techniques to solve a problem, but <strong>knowing which solution is a good fit to which problem.</strong> Yanaga’s book serves as a good <strong>catalog of possible solutions</strong> to consider, when working with data on micro-services. It provides a concise analysis of each <strong>strategy</strong> and helps us avoid those  <em>”I wish I’ve thought this better before writing the code”</em> moments.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Book Recommendations: Isomorphic JavaScript Web Development]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/04/30/book-recommendations-isomorphic-javascript-web-development/"/>
-    <updated>2018-04-30T07:15:04-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/04/30/book-recommendations-isomorphic-javascript-web-development</id>
-    <content type="html"><![CDATA[<p>I finally got around to finish the new book my friend and colleague <a href="http://tomasalabes.me/">@talabes</a> wrote and I think it’s great. Here’s why.</p>
-
-<!--more-->
-
-
-<p><img class="center" src="/images/posts/2018-04-30/ketchup2.png" width="250" title="’Mr Burns ketchup catsup’" ></p>
-
-<p>☝That’s me every single time I try to start a <em>simple</em> web project. If you are like me, not a full-time front-end developer, you probably know what I’m talking about (if not check <strong><a href="https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f">this article</a></strong> and try not to choke on your cereal laughing).</p>
-
-<p>I found <a href="https://read.amazon.com/kp/embed?asin=B01DWFRFVG&amp;preview=newtab&amp;linkCode=kpe&amp;ref_=cm_sw_r_kb_dp_atY5Ab9H5Y5ZH">Tomas’ book</a> to be the perfect cure against <a href="https://xkcd.com/1801/">decision paralysis</a> in the world of JavaScript web development. His approach is practical and concise:</p>
-
-<blockquote><p><em>“Here’s the <strong>stack</strong> we are using. This is how you <strong>set it up</strong> and this is a <strong>basic example</strong> of what we’re trying to achieve. If you want to go deeper go and read this.”<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></em></p></blockquote>
-
-<p>From <strong>testing</strong> and <strong>bundling</strong> to <strong>routing</strong> and <strong>security</strong> this book goes through all the topics a developer needs to know, with easy-to-follow examples and useful tips <em>”from-the trenches”</em>. It serves as a <strong>comprehensive guide</strong>, covering all the things we need to consider to get our application up and running.</p>
-
-<p>Finally, I love that the book answers <strong>common questions</strong> that sometimes other introductory material gloss over. Things like: <em>”how do I structure my project?”</em> or <em>”how can I troubleshoot and debug this thing?”</em>.</p>
-
-<p>Curious? Take a quick look:</p>
-
-<iframe type="text/html" width="336" height="550" frameborder="0" allowfullscreen style="margin: auto; display: block; max-width:100%" src="https://read.amazon.com/kp/card?asin=B01DWFRFVG&preview=inline&linkCode=kpe&ref_=cm_sw_r_kb_dp_atY5Ab9H5Y5ZH" ></iframe>
-
-
-
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>I’m not actually quoting Tomas, of course<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
 ]]></content>
   </entry>
   
