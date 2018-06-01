@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-05-26T09:44:57-07:00</updated>
+  <updated>2018-06-01T12:33:49-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -619,12 +619,12 @@ fun main(args: Array&lt;String&gt;) {
 
 <p>In a nutshell <strong>computed observables</strong> are functions that are dependent on one or more other observables, and that will automatically update whenever any of these dependencies change.</p>
 
-<script async src="http://jsfiddle.net/rniemeyer/LkqTU/embed/js,html,css,result/dark/"></script>
+<script async src="//jsfiddle.net/rniemeyer/LkqTU/embed/js,html,css,result/dark/"></script>
 
 
 <p>On my usecase I wanted the computed to updated only if certain condition was met. So I used a variable and a good old if.</p>
 
-<script async src="http://jsfiddle.net/jivimberg/uza8ds21/embed/js,html,css,result/dark/"></script>
+<script async src="//jsfiddle.net/jivimberg/uza8ds21/embed/js,html,css,result/dark/"></script>
 
 
 <p>I also added a toggle function to be able to change the value of the <code>bindingActive</code> variable from the UI. So the <code>fullName</code> should get updated once I toggle the boolean variable. <strong>Guess what? it doesn&rsquo;t!</strong></p>
@@ -652,7 +652,7 @@ fun main(args: Array&lt;String&gt;) {
 
 <p>Here&rsquo;s how such solution would look like:</p>
 
-<script async src="http://jsfiddle.net/jivimberg/ymucehk2/embed/js,html,css,result/dark/"></script>
+<script async src="//jsfiddle.net/jivimberg/ymucehk2/embed/js,html,css,result/dark/"></script>
 
 
 <p>Another way of solving this issue would be to call the observables for <code>firstName</code> and <code>lastName</code> outside the if. That works too, but I like the other approach better.</p>
