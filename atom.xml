@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-06-01T12:33:49-07:00</updated>
+  <updated>2018-06-02T18:03:48-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,251 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Implementing takeWhileInclusive in Kotlin]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin/"/>
+    <updated>2018-06-02T13:33:38-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin</id>
+    <content type="html"><![CDATA[<p>Implementing <code>takeWhileInclusive</code> extension function in Kotlin.</p>
+
+<!--more-->
+
+
+<blockquote><p>TL,DR (aka <em>“just show me the code”</em> ): <a href="https://gist.github.com/jivimberg/ff5aad3f5c6315deb420fd508a145c61">https://gist.github.com/jivimberg/ff5aad3f5c6315deb420fd508a145c61</a></p></blockquote>
+
+<p>You probably know about <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/take-while.html"><code>takeWhile</code></a> operation that <strong>returns a List containing the first elements satisfying the given predicate.</strong></p>
+
+<xmp class="kotlin-code">
+fun main(args: Array<String>) {
+//sampleStart
+    val someNumbers = listOf(1, 5, 3, 22, 4, 8, 14, 23, 49, 77, 2, 49)
+    println(someNumbers.takeWhile { it % 7 != 0 })
+//sampleEnd
+}
+</xmp>
+
+
+<p>I was in need of an <strong>inclusive</strong> version of the <code>takeWhile</code>. In other words I needed a function that returned the first elements satisfying the given predicate, <strong>plus the first element that didn’t satisfy it</strong>.</p>
+
+<p>So in the provided example <code>takeWhile</code> returns <code>[1, 5, 3, 22, 4, 8]</code> whereas <code>takeWhileInclusive</code> would return <code>[1, 5, 3, 22, 4, 8, 14] </code> .</p>
+
+<p>A quick search showed me I was not alone. <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/take-while.html"><em>matklad</em></a> already had a simple implementation working for <code>Sequence</code>:</p>
+
+<div><script src='https://gist.github.com/54776705250e3b375618f59a8247a237.js'></script>
+<noscript><pre><code>fun &lt;T&gt; Sequence&lt;T&gt;.takeWhileInclusive(pred: (T) -&gt; Boolean): Sequence&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = pred(it)
+        result
+    }
+}
+</code></pre></noscript></div>
+
+
+<p>Using <strong>extension functions</strong> we are able to add a new function to the standard library type <code>Sequence</code>. If this is your first encounter with an extension function I’d encourage you to read more about them <a href="https://kotlinlang.org/docs/reference/extensions.html#extension-functions">here</a> and then play with them <a href="https://try.kotlinlang.org/#/Kotlin%20Koans/Introduction/Extension%20functions/Task.kt">here</a>.</p>
+
+<p>I found this implementation of <code>takeWhileInclusive</code> quite <strong>elegant</strong>. It uses the original <code>takeWhile</code> with the given predicated, but keeps a <code>shouldContinue</code> variable to delay the predicate evaluation by one step. In other words the evaluation of the predicate passed to <code>takeWhile</code> on element <em>i</em> will actually be the result of applying the predicate function on <em>i - 1</em>. Which if you think about it <em>is exactly what we need</em>. Let’s give it a try:</p>
+
+<xmp class="kotlin-code">
+fun <T> Sequence<T>.takeWhileInclusive(
+        predicate: (T) -> Boolean
+): Sequence<T> {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+fun main(args: Array<String>) {
+//sampleStart
+   val someNumbers = listOf(1, 5, 3, 22, 4, 8, 14, 23, 49, 77, 2, 49).asSequence()
+   println(someNumbers.takeWhileInclusive { it % 7 != 0 }.toList())
+//sampleEnd
+}
+</xmp>
+
+
+<p>This was good! Only <a href="https://gist.github.com/matklad/54776705250e3b375618f59a8247a237#gistcomment-2093675">this comment</a> posted on the original gist made me doubt about the <em>safety</em> of this approach:</p>
+
+<blockquote><p><em>“I love this. If Sequence were parallel, though, wouldn&rsquo;t there be worries about using out-of-closure state?”</em></p></blockquote>
+
+<p>That send me down the rabbit hole and I spent some days reading about <code>parallelStreams</code> and <code>coroutines</code> until I convinced my self the approach was ok.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
+
+<p>With that out of the way I decided to port this solution to be supported in all the places where the <code>takeWhile</code> exists (including <code>String</code> and <code>CharArray</code>). So that <strong>we don’t have to convert to a from a Sequence just to use this function</strong>.</p>
+
+<p>Here’s the end result, ready to be dropped on your project:</p>
+
+<div><script src='https://gist.github.com/ff5aad3f5c6315deb420fd508a145c61.js'></script>
+<noscript><pre><code>// kotlin.collections
+
+inline fun &lt;T&gt; Array&lt;out T&gt;.takeWhileInclusive(
+        predicate: (T) -&gt; Boolean
+): List&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun ByteArray.takeWhileInclusive(
+        predicate: (Byte) -&gt; Boolean
+): List&lt;Byte&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun ShortArray.takeWhileInclusive(
+        predicate: (Short) -&gt; Boolean
+): List&lt;Short&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun IntArray.takeWhileInclusive(
+        predicate: (Int) -&gt; Boolean
+): List&lt;Int&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun LongArray.takeWhileInclusive(
+        predicate: (Long) -&gt; Boolean
+): List&lt;Long&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun FloatArray.takeWhileInclusive(
+        predicate: (Float) -&gt; Boolean
+): List&lt;Float&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun DoubleArray.takeWhileInclusive(
+        predicate: (Double) -&gt; Boolean
+): List&lt;Double&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun BooleanArray.takeWhileInclusive(
+        predicate: (Boolean) -&gt; Boolean
+): List&lt;Boolean&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun CharArray.takeWhileInclusive(
+        predicate: (Char) -&gt; Boolean
+): List&lt;Char&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun &lt;T&gt; Iterable&lt;T&gt;.takeWhileInclusive(
+        predicate: (T) -&gt; Boolean
+): List&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+// kotlin.sequences
+
+fun &lt;T&gt; Sequence&lt;T&gt;.takeWhileInclusive(
+        predicate: (T) -&gt; Boolean
+): Sequence&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+// kotlin.text
+
+inline fun CharSequence.takeWhileInclusive(
+        predicate: (Char) -&gt; Boolean
+): CharSequence {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun String.takeWhileInclusive(
+        predicate: (Char) -&gt; Boolean
+): String {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}</code></pre></noscript></div>
+
+
+<p>Hope you find this useful!</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>If you want to read more about my discoveries, check this question at [StackOverflow][6]<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Book Recomendations: Migrating to Microservices Databases]]></title>
@@ -1367,199 +1612,6 @@ I had fallen victim to the great misunderstanding everyone makes about Android a
 
 
 <p>That&rsquo;s pretty much all. Head to the <a href="https://github.com/frankiesardo/android-auto-value">Android Autovalue github repo</a> to see how to use it in your project.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Value Types the Easy Way]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way/"/>
-    <updated>2014-04-07T20:54:07-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way</id>
-    <content type="html"><![CDATA[<p>Value types is a fancy name for those classes where you have to implement <code>equals()</code> and <code>hashCode()</code>, and usually <code>toString()</code>. You&rsquo;ve probably wrote thounsands of those classes, but have you ever wonder why do you have write almost 50 lines of code to express such a common concept?</p>
-
-<!-- more -->
-
-
-<p>Let&rsquo;s say you want to model an Employee, with name and age. If you were to write it following all of <a href="http://www.amazon.com/Effective-Java-Edition-Joshua-Bloch/dp/0321356683">Effective Java&rsquo;s</a> advices (which is how you always roll, right?) you would get something like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmployeeTheOldFashionedWay</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">public</span> <span class="nf">EmployeeTheOldFashionedWay</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-</span><span class='line'>        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">age</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nd">@Override</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Object</span> <span class="n">o</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="k">this</span> <span class="o">==</span> <span class="n">o</span><span class="o">)</span> <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">o</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">getClass</span><span class="o">()</span> <span class="o">!=</span> <span class="n">o</span><span class="o">.</span><span class="na">getClass</span><span class="o">())</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">EmployeeTheOldFashionedWay</span> <span class="n">that</span> <span class="o">=</span> <span class="o">(</span><span class="n">EmployeeTheOldFashionedWay</span><span class="o">)</span> <span class="n">o</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">age</span> <span class="o">!=</span> <span class="n">that</span><span class="o">.</span><span class="na">age</span><span class="o">)</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-</span><span class='line'>        <span class="k">if</span> <span class="o">(!</span><span class="n">name</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">that</span><span class="o">.</span><span class="na">name</span><span class="o">))</span> <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nd">@Override</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="na">hashCode</span><span class="o">();</span>
-</span><span class='line'>        <span class="n">result</span> <span class="o">=</span> <span class="mi">31</span> <span class="o">*</span> <span class="n">result</span> <span class="o">+</span> <span class="n">age</span><span class="o">;</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nd">@Override</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="s">&quot;EmployeeTheOldFashionedWay{&quot;</span> <span class="o">+</span>
-</span><span class='line'>                <span class="s">&quot;name=&#39;&quot;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="sc">&#39;\&#39;&#39;</span> <span class="o">+</span>
-</span><span class='line'>                <span class="s">&quot;, age=&quot;</span> <span class="o">+</span> <span class="n">age</span> <span class="o">+</span>
-</span><span class='line'>                <span class="sc">&#39;}&#39;</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is wrong for many reasons:</p>
-
-<ul>
-<li>Way too long</li>
-<li>Obvious violation of the <a href="http://en.wikipedia.org/wiki/Don't_repeat_yourself">DRY</a> principle</li>
-<li>You won&rsquo;t tests this methods</li>
-<li>They won&rsquo;t be closely reviewed</li>
-<li>This classes <strong>will</strong> change and that&rsquo;s when bugs are introduced</li>
-<li>Bad signal-to-noise in your code (i.e. too much code to express such an easy concept)</li>
-</ul>
-
-
-<p>Perhaps you are aware that this code can be easily written using IDE Templates. Your favorite IDE can generate constructor based on fields, getters, <code>equals()</code>, <code>hashCode()</code> and <code>toString()</code> methods letting you write value types classes in a breeze. But then all the things we said are wrong with the value type still hold. The only thing we achieve is to write them faster.</p>
-
-<h3>Google AutoValue</h3>
-
-<p>What I&rsquo;m presenting today is Google&rsquo;s solution to the value types issue. With <a href="https://github.com/google/auto/tree/master/value">AutoValue</a> you could write the same Employee class in approximately 10 lines of code like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@AutoValue</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">EmployeeWithAutoValue</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">EmployeeWithAutoValue</span> <span class="nf">create</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nf">AutoValue_EmployeeWithAutoValue</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">public</span> <span class="kd">abstract</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">();</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">public</span> <span class="kd">abstract</span> <span class="kt">int</span> <span class="nf">getAge</span><span class="o">();</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>What the heck just happened there?</h4>
-
-<p>That <code>@AutoValue</code> annotation you see on the class is just a standard annotation that generates a package private implementation for your abstract class called: <em>AutoValue_EmployeeWithAutoValue</em>. In case you were wondering <a href="https://gist.github.com/jivimberg/ca86f975e3945e30978f">this is how that implementation looks like</a>.</p>
-
-<p>Is this the best alternative? I don&rsquo;t really know&hellip; but in <a href="https://docs.google.com/presentation/d/14u_h-lMn7f1rXE1nDiLX0azS3IkgjGl5uxp5jGJ75RE/edit">this presentation</a> the authors of AutoValue compare it to other solutions and explain why they think theirs is better.</p>
-
-<h4>Usage</h4>
-
-<p>This is how you use your Employee class:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">EmployeeWithAutoValue</span> <span class="n">employee</span> <span class="o">=</span> <span class="n">EmployeeWithAutoValue</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">&quot;Juan&quot;</span><span class="o">,</span> <span class="mi">33</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;employee.getName() = &quot;</span> <span class="o">+</span> <span class="n">employee</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
-</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;employee.getAge() = &quot;</span> <span class="o">+</span> <span class="n">employee</span><span class="o">.</span><span class="na">getAge</span><span class="o">());</span>
-</span><span class='line'>    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Pretty regular stuff over here. That&rsquo;s one of the good things of AutoValue: consumers don&rsquo;t need to know what&rsquo;s going on behind the scenes.</p>
-
-<h4>Features and drawbacks</h4>
-
-<ul>
-<li>You can&rsquo;t use constructors but you can use any number of static factory methods you like. Which if you have read <a href="http://my.safaribooksonline.com/book/programming/java/9780137150021/creating-and-destroying-objects/ch02lev1sec1">Effective Java Item 1</a> you know is a good idea anyway.</li>
-<li>No support for <em>mutable</em> value types. Again you are better off using immutables anyway.</li>
-<li>If you want to provide your own implementation of <code>equals()</code>, <code>hashCode()</code> or <code>toString()</code> you can! Just add your own method to the class and autovalue won&rsquo;t generate it in the implementation.</li>
-<li>AutoValue assumes all your non-primitive fields are not nullable and add checks in the generated code. You can modify this behaviour applying the annotation <code>@Nullable</code> to the corresponding accessor method and factory parameter.</li>
-<li>You <em>can</em> add behaviour to your class</li>
-<li>You <em>can</em> implement interfaces</li>
-<li><strong>WARNING!</strong> The big disadvantage. The generator has to choose an order for the constructor parameters, so it uses the order in which they appear in the file. That means that a simple refactor moving the accessors can break the abstract class or worse silently mix the parameters. <strong>You&rsquo;ve been warned!</strong></li>
-</ul>
-
-
-<h4>Making it work in IntelliJ Idea</h4>
-
-<p>I used Intellij Idea to try this and I must say it took me some time to get the generated class folder to be marked as src. In the end what did the trick was to reimport the mvn project.
-Just know that once it has been added as a src folder you&rsquo;ll have to compile the code one time before the IDE can tell there is a generated class named <em>Autovalue_XXX.</em> You can add this to the list of minor annoyances of using AutoValue if you like.</p>
 ]]></content>
   </entry>
   

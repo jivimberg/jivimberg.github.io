@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Collections | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/collections/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-06-01T12:33:49-07:00</updated>
+  <updated>2018-06-02T18:03:48-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,251 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Implementing takeWhileInclusive in Kotlin]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin/"/>
+    <updated>2018-06-02T13:33:38-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin</id>
+    <content type="html"><![CDATA[<p>Implementing <code>takeWhileInclusive</code> extension function in Kotlin.</p>
+
+<!--more-->
+
+
+<blockquote><p>TL,DR (aka <em>“just show me the code”</em> ): <a href="https://gist.github.com/jivimberg/ff5aad3f5c6315deb420fd508a145c61">https://gist.github.com/jivimberg/ff5aad3f5c6315deb420fd508a145c61</a></p></blockquote>
+
+<p>You probably know about <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/take-while.html"><code>takeWhile</code></a> operation that <strong>returns a List containing the first elements satisfying the given predicate.</strong></p>
+
+<xmp class="kotlin-code">
+fun main(args: Array<String>) {
+//sampleStart
+    val someNumbers = listOf(1, 5, 3, 22, 4, 8, 14, 23, 49, 77, 2, 49)
+    println(someNumbers.takeWhile { it % 7 != 0 })
+//sampleEnd
+}
+</xmp>
+
+
+<p>I was in need of an <strong>inclusive</strong> version of the <code>takeWhile</code>. In other words I needed a function that returned the first elements satisfying the given predicate, <strong>plus the first element that didn’t satisfy it</strong>.</p>
+
+<p>So in the provided example <code>takeWhile</code> returns <code>[1, 5, 3, 22, 4, 8]</code> whereas <code>takeWhileInclusive</code> would return <code>[1, 5, 3, 22, 4, 8, 14] </code> .</p>
+
+<p>A quick search showed me I was not alone. <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/take-while.html"><em>matklad</em></a> already had a simple implementation working for <code>Sequence</code>:</p>
+
+<p><div><script src='https://gist.github.com/54776705250e3b375618f59a8247a237.js'></script>
+<noscript><pre><code>fun &lt;T&gt; Sequence&lt;T&gt;.takeWhileInclusive(pred: (T) -&gt; Boolean): Sequence&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = pred(it)
+        result
+    }
+}
+</code></pre></noscript></div>
+</p>
+
+<p>Using <strong>extension functions</strong> we are able to add a new function to the standard library type <code>Sequence</code>. If this is your first encounter with an extension function I’d encourage you to read more about them <a href="https://kotlinlang.org/docs/reference/extensions.html#extension-functions">here</a> and then play with them <a href="https://try.kotlinlang.org/#/Kotlin%20Koans/Introduction/Extension%20functions/Task.kt">here</a>.</p>
+
+<p>I found this implementation of <code>takeWhileInclusive</code> quite <strong>elegant</strong>. It uses the original <code>takeWhile</code> with the given predicated, but keeps a <code>shouldContinue</code> variable to delay the predicate evaluation by one step. In other words the evaluation of the predicate passed to <code>takeWhile</code> on element <em>i</em> will actually be the result of applying the predicate function on <em>i - 1</em>. Which if you think about it <em>is exactly what we need</em>. Let’s give it a try:</p>
+
+<xmp class="kotlin-code">
+fun <T> Sequence<T>.takeWhileInclusive(
+        predicate: (T) -> Boolean
+): Sequence<T> {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+fun main(args: Array<String>) {
+//sampleStart
+   val someNumbers = listOf(1, 5, 3, 22, 4, 8, 14, 23, 49, 77, 2, 49).asSequence()
+   println(someNumbers.takeWhileInclusive { it % 7 != 0 }.toList())
+//sampleEnd
+}
+</xmp>
+
+
+<p>This was good! Only <a href="https://gist.github.com/matklad/54776705250e3b375618f59a8247a237#gistcomment-2093675">this comment</a> posted on the original gist made me doubt about the <em>safety</em> of this approach:</p>
+
+<blockquote><p><em>“I love this. If Sequence were parallel, though, wouldn&rsquo;t there be worries about using out-of-closure state?”</em></p></blockquote>
+
+<p>That send me down the rabbit hole and I spent some days reading about <code>parallelStreams</code> and <code>coroutines</code> until I convinced my self the approach was ok.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
+
+<p>With that out of the way I decided to port this solution to be supported in all the places where the <code>takeWhile</code> exists (including <code>String</code> and <code>CharArray</code>). So that <strong>we don’t have to convert to a from a Sequence just to use this function</strong>.</p>
+
+<p>Here’s the end result, ready to be dropped on your project:</p>
+
+<p><div><script src='https://gist.github.com/ff5aad3f5c6315deb420fd508a145c61.js'></script>
+<noscript><pre><code>// kotlin.collections
+
+inline fun &lt;T&gt; Array&lt;out T&gt;.takeWhileInclusive(
+        predicate: (T) -&gt; Boolean
+): List&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun ByteArray.takeWhileInclusive(
+        predicate: (Byte) -&gt; Boolean
+): List&lt;Byte&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun ShortArray.takeWhileInclusive(
+        predicate: (Short) -&gt; Boolean
+): List&lt;Short&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun IntArray.takeWhileInclusive(
+        predicate: (Int) -&gt; Boolean
+): List&lt;Int&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun LongArray.takeWhileInclusive(
+        predicate: (Long) -&gt; Boolean
+): List&lt;Long&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun FloatArray.takeWhileInclusive(
+        predicate: (Float) -&gt; Boolean
+): List&lt;Float&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun DoubleArray.takeWhileInclusive(
+        predicate: (Double) -&gt; Boolean
+): List&lt;Double&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun BooleanArray.takeWhileInclusive(
+        predicate: (Boolean) -&gt; Boolean
+): List&lt;Boolean&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun CharArray.takeWhileInclusive(
+        predicate: (Char) -&gt; Boolean
+): List&lt;Char&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun &lt;T&gt; Iterable&lt;T&gt;.takeWhileInclusive(
+        predicate: (T) -&gt; Boolean
+): List&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+// kotlin.sequences
+
+fun &lt;T&gt; Sequence&lt;T&gt;.takeWhileInclusive(
+        predicate: (T) -&gt; Boolean
+): Sequence&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+// kotlin.text
+
+inline fun CharSequence.takeWhileInclusive(
+        predicate: (Char) -&gt; Boolean
+): CharSequence {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun String.takeWhileInclusive(
+        predicate: (Char) -&gt; Boolean
+): String {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}</code></pre></noscript></div>
+</p>
+
+<p>Hope you find this useful!</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>If you want to read more about my discoveries, check this question at [StackOverflow][6]<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Parallel Map in Java (From Kotlin)]]></title>
