@@ -11,11 +11,11 @@ The first thing you learn about Knockout is about [observables][1]. The second t
 
 In a nutshell **computed observables** are functions that are dependent on one or more other observables, and that will automatically update whenever any of these dependencies change.
 
-<script async src="http://jsfiddle.net/rniemeyer/LkqTU/embed/js,html,css,result/dark/"></script>
+<script async src="//jsfiddle.net/rniemeyer/LkqTU/embed/js,html,css,result/dark/"></script>
 
 On my usecase I wanted the computed to updated only if certain condition was met. So I used a variable and a good old if. 
 
-<script async src="http://jsfiddle.net/jivimberg/uza8ds21/embed/js,html,css,result/dark/"></script>
+<script async src="//jsfiddle.net/jivimberg/uza8ds21/embed/js,html,css,result/dark/"></script>
 
 I also added a toggle function to be able to change the value of the `bindingActive` variable from the UI. So the `fullName` should get updated once I toggle the boolean variable. **Guess what? it doesn't!**
 
@@ -31,7 +31,7 @@ So here's how the [dependency tracking algorithm][4] works according to KO docum
 
 Notice what's going on? Since `bindingActive` initial value is _false_ the tracking algorithm does not see the observables on it's first past. Therefore the **computed observable is not suscribed to update when any of the observables change!**
 
-### How can we fix this? 
+### How can we fix this?
 
 Well a simple solution would be to define the toggle as an observable too. That way the computed observable suscribes to the toggle var observable and it gets recomputed when the variable changes.
 
@@ -39,12 +39,12 @@ Note that afterwards the step 2 of the tracking algorithm is designed to recogni
 
 Here's how such solution would look like:
 
-<script async src="http://jsfiddle.net/jivimberg/ymucehk2/embed/js,html,css,result/dark/"></script>
+<script async src="//jsfiddle.net/jivimberg/ymucehk2/embed/js,html,css,result/dark/"></script>
 
 Another way of solving this issue would be to call the observables for `firstName` and `lastName` outside the if. That works too, but I like the other approach better. 
 
 
-[1]: http://knockoutjs.com/documentation/observables.html
-[2]: http://knockoutjs.com/documentation/computedObservables.html
-[3]: http://knockoutjs.com/examples/helloWorld.html
-[4]: http://knockoutjs.com/documentation/computed-dependency-tracking.html
+[1]:	http://knockoutjs.com/documentation/observables.html
+[2]:	http://knockoutjs.com/documentation/computedObservables.html
+[3]:	http://knockoutjs.com/examples/helloWorld.html
+[4]:	http://knockoutjs.com/documentation/computed-dependency-tracking.html
