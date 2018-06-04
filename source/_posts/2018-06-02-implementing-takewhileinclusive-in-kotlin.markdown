@@ -71,11 +71,10 @@ Hope you find this useful!
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
-[^1]:	If you want to read more about my discoveries, check this question at [StackOverflow][6]
+[^1]:	If you want to read more about my discoveries, check this question at [StackOverflow](https://stackoverflow.com/q/50373754/1499171)
 
 [1]:	https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/take-while.html
 [2]:	https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/take-while.html
 [3]:	https://kotlinlang.org/docs/reference/extensions.html#extension-functions
 [4]:	https://try.kotlinlang.org/#/Kotlin%20Koans/Introduction/Extension%20functions/Task.kt
 [5]:	https://gist.github.com/matklad/54776705250e3b375618f59a8247a237#gistcomment-2093675
-[6]:	https://stackoverflow.com/q/50373754/1499171
