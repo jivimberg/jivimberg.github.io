@@ -52,6 +52,8 @@ Here you can see it in action:
 
 Just mentioning this one because it was new to me at the time and nowadays I find myself using it **all the time!**
 
+## Have any IntelliJ tip to share? I’d love to know about it! **Post a comment** down here 👇
+
 [^1]:	Had to update the key mappings in the quote because they were old in the original blog post.
 
 [1]:	https://developers.redhat.com/promotions/migrating-to-microservice-databases/
