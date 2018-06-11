@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Kotlin | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/kotlin/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-06-02T18:03:48-07:00</updated>
+  <updated>2018-06-10T19:13:28-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -251,7 +251,7 @@ inline fun String.takeWhileInclusive(
 <hr/>
 <ol>
 <li id="fn:1">
-<p>If you want to read more about my discoveries, check this question at [StackOverflow][6]<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<p>If you want to read more about my discoveries, check this question at <a href="https://stackoverflow.com/q/50373754/1499171">StackOverflow</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
