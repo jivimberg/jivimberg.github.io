@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-06-10T19:26:12-07:00</updated>
+  <updated>2018-06-24T15:40:37-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,151 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Oracle, JPA and the Mystery of the String That Was Null]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null/"/>
+    <updated>2018-06-23T10:34:26-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null</id>
+    <content type="html"><![CDATA[<p>This is the story of how Oracle DB was messing up Kotlin’s type system, and what I did to fix it.</p>
+
+<!--more-->
+
+
+<h2>The setup</h2>
+
+<p>Let’s start by <em>setting the stage</em>, for this particular project I was working with the following stack:</p>
+
+<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-23/Stack.png" width="720" title="’Spring + Data + Kotlin + Oracle’" ></a></p>
+
+<h2>The problem</h2>
+
+<p>So I had modeled the following <strong>Entity</strong> leveraging Kotlin’s <a href="https://kotlinlang.org/docs/reference/data-classes.html">data classes</a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+import javax.persistence.Entity
+import javax.persistence.Id
+
+//sampleStart
+@Entity
+data class Person(
+    val name: String,
+    @Id val id: Long? = null
+)
+//sampleEnd
+</xmp>
+
+
+<p>Tests where passing with flying colors, but for some reason we were noticing that <strong>the <em>name</em> would sometimes come back as <code>null</code></strong> even thought it was typed as <code>String</code> and not <code>String?</code>.</p>
+
+<h2>The analysis</h2>
+
+<p>To make things more difficult there where other failures in the communication layer masking the real issue. But we finally figured out what was happening when we notice <strong>it was only reproducible under the following conditions</strong>:</p>
+
+<ul>
+<li>The property <code>name</code> was empty</li>
+<li>Not reproducible on tests</li>
+<li>Persisting to <em>OracleDB</em> (instead of embedded H2)</li>
+</ul>
+
+
+<p>That’s when I discovered:</p>
+
+<blockquote><p>This is because Oracle internally changes empty string to NULL values. Oracle simply won't let insert an empty string.</p><footer><strong>Some guy on Stack Overflow</strong> <cite><a href='https://stackoverflow.com/a/13278879/1499171'>stackoverflow.com/a/13278879/&hellip;</a></cite></footer></blockquote>
+
+
+<p>So when the data was mapped back to my <code>Person</code> object I ended up with a <code>null</code> value for <em>name</em>. This is probably only possible because <strong>Hibernate is using reflection to set the field value</strong> in runtime, thus breaking Kotlin’s <a href="https://kotlinlang.org/docs/reference/null-safety.html">null safety</a>.</p>
+
+<h2>What I did about it</h2>
+
+<p>The funny thing about this one is that <strong>there is not much you can do about it</strong>. <em>There is no magic configuration to tell Oracle how you want to handle empty strings.</em> Yes there are some hacks like changing <code>""</code> to <code>" "</code> but I’d rather invent a random <em>name</em> for the guy than persisting a whitespace.</p>
+
+<p>The silver lining is that most of the time <strong>if you’re not allowing null values you probably don’t want an empty string either</strong>. Now YMMV but I know this was true for a person’s name.</p>
+
+<p>In fact you might even want to <strong>implement a more strict validation</strong> so people can’t be named: “💩”.</p>
+
+<h3>Testing</h3>
+
+<p>First thing I did was to try to reproduce this using a test. But since I was using <code>@DataJpaTest</code> with H2 embedded DB empty strings where empty strings an nulls where nulls. So the issue was <strong>not reproducible</strong>.</p>
+
+<p>That’s when I learned that you <strong>can tell H2 to behave like an Oracle DB</strong> using <a href="http://www.h2database.com/html/features.html">Oracle Compatibility mode</a>. To achieve this I added the following configuration to my <code>application.yml</code> under <code>test/resources</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>spring:
+</span><span class='line'>  datasource:
+</span><span class='line'>    url: jdbc:h2:mem:testdb;Mode=Oracle</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And annotated my test class with:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@RunWith</span><span class="o">(</span><span class="nl">SpringRunner:</span><span class="o">:</span><span class="n">class</span><span class="o">)</span>
+</span><span class='line'><span class="nd">@DataJpaTest</span>
+</span><span class='line'><span class="nd">@AutoConfigureTestDatabase</span><span class="o">(</span><span class="n">replace</span> <span class="o">=</span> <span class="n">AutoConfigureTestDatabase</span><span class="o">.</span><span class="na">Replace</span><span class="o">.</span><span class="na">NONE</span><span class="o">)</span>
+</span><span class='line'><span class="kd">class</span> <span class="nc">FormRepositoryTest</span> <span class="o">{</span><span class="err">…</span><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And <em>voilà</em>, now you have an <strong>H2 in memory DB dressed up as Oracle</strong>.</p>
+
+<h3>Changing the schema</h3>
+
+<p>The other thing I realized is that <strong>the schema allowed for <code>null</code> values</strong> on the <em>name</em> column. I’d been using <code>javax.persistence.schema-generation</code> as a starting point for my schema and <strong>I wrongly assumed</strong> it would take the hint from the Kotlin type system to prevent null values<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>.</p>
+
+<p>Instead I had to explicitly annotate my Entity:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+import javax.persistence.Entity
+import javax.persistence.Id
+
+//sampleStart
+@Entity
+data class Person(
+    @Column(nullable = false) val name: String,
+    @Id val id: Long? = null
+)
+//sampleEnd
+</xmp>
+
+
+<p>and manually change my existing schema</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="nf">Person</span> <span class="o">(</span>
+</span><span class='line'>  <span class="n">id</span> <span class="nf">NUMBER</span><span class="o">(</span><span class="mi">19</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="n">NOT</span> <span class="n">NULL</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">name</span> <span class="nf">VARCHAR2</span><span class="o">(</span><span class="mi">255</span> <span class="n">CHAR</span><span class="o">)</span> <span class="n">NOT</span> <span class="n">NULL</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">PRIMARY</span> <span class="nf">KEY</span> <span class="o">(</span><span class="n">id</span><span class="o">)</span>
+</span><span class='line'><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The result is that now if somebody tries to persist a Person with an empty name a <strong>big fat Exception is thrown</strong>. Or at least until I implement proper name validation.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>If I had a dollar for every time I modeled a Person…<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>It would be nice right?<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[IntelliJ IDEA Tips]]></title>
@@ -1580,83 +1725,6 @@ I had fallen victim to the great misunderstanding everyone makes about Android a
 <li>Use an <a href="http://developer.android.com/reference/android/animation/ObjectAnimator.html">ObjectAnimator</a> which updates the underlying property while performing the animation. Or use <a href="http://nineoldandroids.com/">NineOldAndroids</a> if your target sdk is &lt;11.</li>
 </ol>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Keep Trying With Guava Retrying]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying/"/>
-    <updated>2014-07-17T14:22:07-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying</id>
-    <content type="html"><![CDATA[<p>We were having a <a href="http://en.wikipedia.org/wiki/Race_condition#Software">race condition</a> on a server which was &ldquo;fixed&rdquo; by adding an sleep to the thread to check again later. Yes, it sucked, so I decided to make something more sophisticated and went looking for a library to handle retryies with multiple strategies. That&rsquo;s when I first read about <a href="https://github.com/rholder/guava-retrying">Guava Retrying</a></p>
-
-<!--more-->
-
-
-<p>In the words of it&rsquo;s creator (<a href="https://github.com/rholder">rholder</a>):</p>
-
-<blockquote><p>Guava-Retrying is a small extension to Google&rsquo;s Guava library to allow for the creation of configurable retrying strategies for an arbitrary function call, such as something that talks to a remote service with flaky uptime.</p></blockquote>
-
-<p>Simply put give it a taks and it will retry it until success&hellip; or until a given condition is met, or after X attempts, or until it does not throw exception, or&hellip; well you get the point: <strong>flexibility</strong>.</p>
-
-<h3>Quick example</h3>
-
-<p>Let&rsquo;s say we want to execute a task that will:
-* Retry if the result is null
-* Retry if an exception of type IOException is thrown
-* Wait 300 miliseconds to try again.
-* Stop after 5 attempts</p>
-
-<p>Then we would do something like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Callable</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span> <span class="n">yourTask</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;()</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="n">Boolean</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span> <span class="c1">// do something interesting here</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">Retryer</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span> <span class="n">retryer</span> <span class="o">=</span> <span class="n">RetryerBuilder</span><span class="o">.&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="n">newBuilder</span><span class="o">()</span>
-</span><span class='line'>        <span class="o">.</span><span class="na">retryIfResult</span><span class="o">(</span><span class="n">Predicates</span><span class="o">.&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="n">isNull</span><span class="o">())</span>
-</span><span class='line'>        <span class="o">.</span><span class="na">retryIfExceptionOfType</span><span class="o">(</span><span class="n">IOException</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
-</span><span class='line'>        <span class="o">.</span><span class="na">withWaitStrategy</span><span class="o">(</span><span class="n">WaitStrategies</span><span class="o">.</span><span class="na">fixedWait</span><span class="o">(</span><span class="mi">300</span><span class="o">,</span>                                                                             <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">))</span>
-</span><span class='line'>        <span class="o">.</span><span class="na">withStopStrategy</span><span class="o">(</span><span class="n">StopStrategies</span><span class="o">.</span><span class="na">stopAfterAttempt</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
-</span><span class='line'>        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">retryer</span><span class="o">.</span><span class="na">call</span><span class="o">(</span><span class="n">yourTask</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">RetryException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-</span><span class='line'><span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ExecutionException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After attempting 5 times it will throw a <code>RetryException</code> with information about the last attempt. Any other exception thrown by your task will be wrapped and rethrown in a <code>ExecutionException</code></p>
-
-<p>Other <strong>wait strategies</strong> supported: Random backoff, Incremental backoff, Exponential backoff, Fibonacci backoff</p>
-
-<p>Other <strong>stop strategies</strong> supported: never stop, stop after delay.</p>
 ]]></content>
   </entry>
   
