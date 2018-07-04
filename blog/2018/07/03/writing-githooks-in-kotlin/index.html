@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Writing Githooks in Kotlin - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Writing Githooks in Kotlin written July 3, 2018 in git, githook, gradle, kotlin, quality You’re already using Kotlin on your codebase. Maybe, you’ve &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2018/07/03/writing-githooks-in-kotlin">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49016076-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Writing Githooks in Kotlin</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2018-07-03T19:45:28-07:00" pubdate data-updated="true">July 3, 2018</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/git/'>git</a>, <a class='category' href='/blog/categories/githook/'>githook</a>, <a class='category' href='/blog/categories/gradle/'>gradle</a>, <a class='category' href='/blog/categories/kotlin/'>kotlin</a>, <a class='category' href='/blog/categories/quality/'>quality</a>
+  
+</span>
+
+
+        </div>
+        <p>You’re already using Kotlin on your codebase. Maybe, you’ve even migrated to the new <a href="https://github.com/gradle/kotlin-dsl">Kotlin DSL for Gradle</a>. Wouldn’t it be nice if you could use Kotlin for your <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">git hooks</a> too?</p>
+
+<!--more-->
+
+
+<p><strong>Well, turns out you can!</strong> Here’s how you do it…</p>
+
+<p><img class="center" src="/images/posts/2018-07-04/captain-hook.png" title="’Captain githook’" ></p>
+
+<h2>What do I need?</h2>
+
+<p>Git will basically run whatever script you drop on the <code>.git/hooks</code> directory. In their words:</p>
+
+<blockquote><p>To enable a hook script, put a file in the hooks subdirectory of your <code>.git</code> directory that is named appropriately (without any extension) and is executable</p></blockquote>
+
+<p>So all we need is to be able to execute Kotlin files as scripts. There is a <a href="https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md">Kotlin Scripting Support KEEP</a> under definition. But for the time being <strong>we’ll stick with the awesome <a href="https://github.com/holgerbrandl/kscript">KScript library</a> (by <a href="https://github.com/holgerbrandl">@holgerbrandl</a>)</strong> that enables Kotlin scripting on <em>*nix-based</em> systems.</p>
+
+<p>You can find the details for installing KScript <a href="https://github.com/holgerbrandl/kscript#installation">here</a>. On MacOS if you’re using <a href="https://brew.sh/">Homebrew</a> all you have to do is run: <code>brew install holgerbrandl/tap/kscript</code>.</p>
+
+<p>I’ll also be using <strong>Gradle</strong> to automatically install the githook and run the proper validation, but the same can be done with <strong>Maven</strong>.</p>
+
+<h2>The script</h2>
+
+<p>As an example I’m going to show how to do a <strong>pre-push client hook</strong> that aborts the push if <code>grade check</code> task is not successful. For this I’ve created a file named <code>Pre-Push.kts</code>:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+//sampleStart
+#!/usr/bin/env kscript
+
+import java.io.File
+
+println("${Constants.SCRIPT_LOG_TAG} Running oic-form-service pre-push hook")
+val hasStashed = stash()
+if (hasStashed) {
+    println("${Constants.SCRIPT_LOG_TAG} Stashing uncommited changes")
+}
+
+val checkExistStatus = runCheck()
+
+if (hasStashed) {
+    println("${Constants.SCRIPT_LOG_TAG} Unstashing your changes")
+    unstash()
+}
+
+val exitValue = when {
+    checkExistStatus != Constants.SUCCESS_EXIT_VALUE -> {
+        println("${Constants.SCRIPT_LOG_TAG} Gradle check failed. I'm sorry but you can't continue with your push")
+        Constants.ERROR_EXIT_VALUE
+    }
+    else -> {
+        println("${Constants.SCRIPT_LOG_TAG} Everything went fine. You can continue with your push")
+        Constants.SUCCESS_EXIT_VALUE
+    }
+}
+
+kotlin.system.exitProcess(exitValue)
+//sampleEnd
+
+fun runCheck(): ExitStatus {
+    println("${Constants.SCRIPT_LOG_TAG} Running gradle check")
+    return "gradle check".runCommandWithRedirect()
+}
+
+fun stash(): Boolean {
+    val stashOutput = """git stash push --include-untracked -m "stash created by pre-push hook"""".runCommand()
+    return stashOutput.firstOrNull() != Constants.NOTHING_TO_STASH_MSG
+}
+
+fun unstash() = "git stash pop -q".runCommand()
+
+fun String.runCommand(dir: File? = null): Sequence<String> =
+    ProcessBuilder("/bin/sh", "-c", this)
+        .redirectErrorStream(true)
+        .directory(dir)
+        .start()
+        .inputStream.bufferedReader().lineSequence()
+
+// Redirecting output and error to stdout
+fun String.runCommandWithRedirect(dir: File? = null): ExitStatus =
+    ProcessBuilder("/bin/sh", "-c", this)
+        .redirectErrorStream(true)
+        .inheritIO()
+        .directory(dir)
+        .start()
+        .waitFor()
+
+object Constants {
+    const val SCRIPT_LOG_TAG = "Pre-push -"
+    const val NOTHING_TO_STASH_MSG = "No local changes to save"
+    const val SUCCESS_EXIT_VALUE = 0
+    const val ERROR_EXIT_VALUE = -1
+}
+
+typealias ExitStatus = Int
+</xmp>
+
+
+<p>The first line is all the <em>magic incantation</em> we need to execute the script. By setting the shebang to <code>#!/usr/bin/env kscript</code> we get to use <code>kscript</code> as <a href="https://github.com/holgerbrandl/kscript#interpreter-usage">interpreter for the script</a>.</p>
+
+<p>The code after the import is <strong>the actual script</strong>. Those are the lines that are going to be executed as soon as somebody calls the script. <em>Just as you’d expect with any regular shell script.</em></p>
+
+<p>In a nutshell this is what the script does:</p>
+
+<ol>
+<li>Stash uncommitted changes <em>if any</em><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></li>
+<li>Run code validation (in this case <code>gradle check</code>)</li>
+<li>Unstash possible changes stashed on <em>step 1</em></li>
+<li>Log outcome and set the proper exit value</li>
+</ol>
+
+
+<p>The last step is important because <strong>if the script exits to anything other than 0 then git aborts the action</strong> (in this case the push).</p>
+
+<h3>How do I call things from a script?</h3>
+
+<p>To do anything useful on your script you’ll probably have to <strong>call some external tool</strong> at some point. In this particular case for example a mix of <em>git commands</em> and <em>gradle tasks</em>.</p>
+
+<p>There are 2 ways you can go about this:</p>
+
+<ol>
+<li>Either <strong>use a Kotlin/Java library</strong> for the task you’re trying to accomplish (in this example we could use <a href="https://www.eclipse.org/jgit/">JGit</a> and <a href="https://docs.gradle.org/current/userguide/embedding.html">Gradle tooling API</a>)</li>
+<li>Or <strong>call a shell command</strong> directly</li>
+</ol>
+
+
+<p>While the first approach is more <strong>portable</strong>, it will introduce some dependencies to your script (which fortunately <a href="https://github.com/holgerbrandl/kscript#declare-dependencies-with-deps">KScript has great support for</a>). On the other hand the second option is probably <strong>easier to implement</strong> because it’s just using the same commands we use everyday on our workflow.</p>
+
+<p>Since I can assume everybody in my team has <code>git</code> and <code>gradle</code> installed and in their path <strong>I went for option 2</strong>.</p>
+
+<h3>Running shell commands from Kotlin</h3>
+
+<p>We can run shell commands on Kotlin using <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html"><code>ProcessBuilder</code></a>, just like we’d do from Java.</p>
+
+<p>In this case I’ve created a <code>runCommandWithRedirect</code> extension function that looks like this:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+import java.io.File
+
+//sampleStart
+fun String.runCommandWithRedirect(dir: File? = null): ExitStatus {
+        return ProcessBuilder("/bin/sh", "-c", this)
+            .redirectErrorStream(true)
+            .inheritIO()
+            .directory(dir)
+            .start()
+            .waitFor()
+}
+
+//sampleEnd
+typealias ExitStatus = Int
+</xmp>
+
+
+<p>This function can be called on any String like this:</p>
+
+<p><code>"gradle check".runCommandWithRedirect()</code></p>
+
+<p>This function will:</p>
+
+<ol>
+<li>Redirect the standard and error output to the one for the current process, in our case that means <strong>the output of the command will be visible on the terminal when the githook is executed</strong>.</li>
+<li>Set the directory to the passed <code>dir</code> parameter, or use the current directory if no parameter is provided.</li>
+<li>Execute the command, wait for it to finish and return the <code>ExitStatus</code></li>
+</ol>
+
+
+<p>You can play around with the different <code>ProcessBuilder</code> options. In my script above for example I’ve another version of this function called <code>runCommand</code> that  <strong>executes the command and returns it’s output as a <code>Sequence&lt;String&gt;</code></strong>.</p>
+
+<h2>Automatic installation</h2>
+
+<p>Githooks are great to enforce code quality practices (i.e. <em>”You can’t push if your coverage is less than 80% “</em> 👮). But for the client-side githook to be execute it needs to be in the <code>.git/hooks</code> folder which is not versioned. That means that <strong>each developer on your team has to manually install the hook</strong>, which means that you are again, relying on the good memory of your teammates to enforce code quality.</p>
+
+<p>Instead we could use <a href="https://gist.github.com/KenVanHoeylandt/c7a928426bce83ffab400ab1fd99054a">this trick</a>. We can create a <em>gradle task</em> called <em>“copy”</em> that copies the githook from the <code>src</code> folder to the <code>git/hooks</code> and removes the file extension in the process.</p>
+
+<p>Then we can make the <em>“build”</em> task depend on this new <em>”copy”</em> task. <strong>The next time the developer runs <code>gradle build</code> the githook will be installed</strong>. And as a bonus:  the githook script is now versioned too! <sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></p>
+
+<p>Here’s how this would look like (using <a href="https://github.com/gradle/kotlin-dsl">Kotlin DSL for Gradle</a>)</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+tasks {
+    "copy"(Copy::class) {
+        from("src/main/kotlin/io/jivimberg/githook/pre-push.kts") {
+            rename { it.removeSuffix(".kts") }
+        }
+        into(".git/hooks")
+    }
+
+    "build" {
+        dependsOn("copy")
+    }
+}
+</xmp>
+
+
+<p>⚠️ Don’t forget to do <code>chmod u+x Pre-Push.kts</code> to make the script runnable, otherwise it won’t work.</p>
+
+<h2>What about performance?</h2>
+
+<p>Kotlin is a compiled language, so at some point your script will have to be compiled. Fortunately thanks to KScript <strong>this only happens the first time you run the script</strong> and it’s only compiled again if the script changes.</p>
+
+<p>Other than that there’s the JVM startup time which adds <strong>around 200ms of overhead</strong>. Maybe in the future we’ll be able to use <a href="https://kotlinlang.org/docs/reference/native-overview.html">Kotlin Native</a> to compile to native binaries directly and avoid this overhead.</p>
+
+<p>If you want to read more about performance comparison between <em>Python</em> and <em>Kotlin</em> scripts check the <a href="https://github.com/holgerbrandl/kscript#what-are-performance-and-resource-usage-difference-between-scripting-with-kotlin-and-python">KScript documentation</a>.</p>
+
+<h2>Bonus track: testing</h2>
+
+<p>Testing Kotlin scripts turned out <strong>not to be so straight forward.</strong></p>
+
+<p><a href="https://proandroiddev.com/testing-kotlin-scripts-42bbbbe09ae5">This article</a> suggests using a <code>runCommand</code> method similar to the one described above to execute the script and check it’s outputs. Whereas <a href="https://github.com/holgerbrandl/kscript/blob/master/test/TestsReadme.md">KScript own tests</a> are written using <a href="https://github.com/lehmannro/assert.sh">assert.sh</a>.</p>
+
+<p>Neither approach convinced me. I was just looking for a way of <strong>individually test the functions</strong> in my script <strong>using the same tools I use to test the other parts of my code</strong>.</p>
+
+<p>So what I ended up doing was moving all the <em>Pre-Push</em> logic to a regular <code>*.kt</code> file. And then simply creating a <code>*kts</code> Kotlin script that calls my class using the <a href="https://github.com/holgerbrandl/kscript#ease-prototyping-with-include"><code>//INCLUDE</code> KScript directive</a>.</p>
+
+<p><img class="center" src="/images/posts/2018-07-04/testing-githook-kotlin.png" title="’Testing githook’" ></p>
+
+<p>The downside is that I know have 2 files for my githook (a <code>*.kt</code> and a <code>*.kts</code>) but that seems <strong>a small price to pay for being able to easily test my code</strong>.</p>
+
+<h1>Conclusion</h1>
+
+<p>Writing githooks in Kotlin is possible and not that hard thanks to <a href="https://github.com/holgerbrandl/kscript">KScript</a>. <strong>You’ll be glad you have tried it out</strong> the next time you have to refactor that <em>pre-push</em> hook.</p>
+
+<p>You can find an <strong>example repository</strong> containing all the code for this blogpost here: <a href="https://github.com/jivimberg/kotlin-githook">https://github.com/jivimberg/kotlin-githook</a></p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>because you want to verify only on the changes that are going to be pushed<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>And it can even be subject to the same quality standards enforced by the githook itself. INCEPTION!<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.github.io/blog/2018/07/03/writing-githooks-in-kotlin/';
+        var disqus_url = 'http://jivimberg.github.io/blog/2018/07/03/writing-githooks-in-kotlin/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null/" title="Previous Post: Oracle, JPA and the mystery of the String that was null">&laquo; Previous: Oracle, JPA and the mystery of the String that was null</a>
+        
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>
