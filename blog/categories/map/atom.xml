@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Collections, | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/collections/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Map | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/map/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
   <updated>2018-07-20T16:24:46-07:00</updated>
   <id>http://jivimberg.github.io/</id>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Java | Coding Forest]]></title>
+  <title><![CDATA[Category: Java, | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-07-05T08:24:43-07:00</updated>
+  <updated>2018-07-20T16:24:46-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -14,460 +14,105 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Parallel Map in Java (From Kotlin)]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/05/07/parallel-map-in-java/"/>
-    <updated>2018-05-07T13:19:58-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/05/07/parallel-map-in-java</id>
-    <content type="html"><![CDATA[<p>Following up of my <a href="http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin/">previous post</a>, I was curious how a parallel map operation would look like using Java’s <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#parallelStream--"><code>parallelStream</code></a>. Here’s what I find out.</p>
+    <title type="html"><![CDATA[Map.merge]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/07/20/map-dot-merge/"/>
+    <updated>2018-07-20T07:32:49-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/07/20/map-dot-merge</id>
+    <content type="html"><![CDATA[<p>Sometimes is the small things… Like finding a new method that does exactly what you were needing.</p>
 
 <!--more-->
 
 
-<p>In Java to use <code>map</code> you do:</p>
+<p>Let’s say I’m trying to build a book index. In case you haven’t touch an actual, physical, <em>dead-tree</em> book in a while here’s what an index looks like<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
 
-<xmp class="kotlin-code">
-import java.util.stream.Collectors
+<p><img class="center" src="/images/posts/2018-07-20/index.gif" title="&lsquo;Discoverability&rsquo;" ></p>
 
-//sampleStart
-fun main(args: Array<String>) {
-    val output = (1..100).toList()
-            .stream()
-            .map { it * 2 }
-            .collect(Collectors.toList())
-    println(output)
-}
-//sampleEnd
-</xmp>
+<p>One way of doing this would be to <strong>build a map of: <em>terms</em> to <em>a list of comma separated pages</em></strong>. This is, by no means, the best way of modeling an index, but it’ll serve our purpose of illustrating the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#merge-K-V-java.util.function.BiFunction-"><code>Map.merge</code></a> method.</p>
 
+<p>Up until yesterday I’d have written such code like this:</p>
 
-<p><em>(In case you’re wondering I’m using Java collections from Kotlin)</em></p>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Index</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">termToPagesMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&gt;();&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kt">void</span> <span class="nf">addWord</span><span class="o">(</span><span class="n">String</span> <span class="n">term</span><span class="o">,</span> <span class="kt">int</span> <span class="n">page</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">final</span> <span class="n">String</span> <span class="n">newPage</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">page</span><span class="o">);</span>
+</span><span class='line'>    <span class="kd">final</span> <span class="n">String</span> <span class="n">pages</span> <span class="o">=</span> <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">term</span><span class="o">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">pages</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">term</span><span class="o">,</span> <span class="n">newPage</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">term</span><span class="o">,</span> <span class="n">pages</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="n">newPage</span><span class="o">));</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
-<p>And to do a <em>parallel</em> <code>map</code> you can simply do:</p>
+<p><strong>But today I know better!</strong> With <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#merge-K-V-java.util.function.BiFunction-"><code>Map.merge</code></a> I can achieve the same result in just 1 line:</p>
 
-<xmp class="kotlin-code">
-import java.util.stream.Collectors
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Index</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">termToPagesMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&gt;();&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kt">void</span> <span class="nf">addWord</span><span class="o">(</span><span class="n">String</span> <span class="n">term</span><span class="o">,</span> <span class="kt">int</span> <span class="n">page</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">term</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">page</span><span class="o">),</span> <span class="o">(</span><span class="n">pages</span><span class="o">,</span> <span class="n">newPage</span><span class="o">)</span> <span class="o">-&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">pages</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="n">newPage</span><span class="o">));</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
-//sampleStart
-fun main(args: Array<String>) {
-    val output = (1..100).toList()
-            .parallelStream()
-            .map { it * 2 }
-            .collect(Collectors.toList())
-    println(output)
-}
-//sampleEnd
-</xmp>
+<p>Basically we provide:</p>
 
-
-<p>No need to write a special <code>pmap</code> operation like we did for Kotlin. Just call <code>parallelStream</code> and that’s it. <em>Pretty cool, right?</em></p>
-
-<p>I was curious about how this solution <strong>compared to the one on <a href="http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin/">my previous post</a></strong>,  so I decided to time it too.</p>
-
-<xmp class="kotlin-code">
-import java.util.stream.Collectors
-import kotlin.system.measureTimeMillis
-
-//sampleStart
-fun main(args: Array<String>) {
-    val time = measureTimeMillis {
-        val output = (1..100).toList()
-                .parallelStream()
-                .map {
-                    Thread.sleep(100)
-                    it * 2
-                }
-                .collect(Collectors.toList())
-
-        println(output)
-    }
-
-    println("Total time: $time")
-}
-//sampleEnd
-</xmp>
-
-
-<p>In this case instead I’m actually setting a delay of <strong>100 milliseconds</strong> (instead of <em>1,000</em> like I did on my previous post)<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. I was expecting the total time to be something close to <em>100 milliseconds</em>, just like it was for the Kotlin <code>pmap</code>, <strong>instead I got something close to 5,000</strong>.</p>
-
-<p>Turns out <code>parallelStream</code> uses the default <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ForkJoinPool.html"><em>ForkJoinPool.commonPool</em></a> which by default has a parallelism level <strong>equal to the number of available processors.</strong> In this case 2 processors: <em>100 operations * 100 milliseconds / 2 processors = 5000 milliseconds</em>. You can check the number of available processors simply by adding this line to the script:</p>
-
-<p><code>println(Runtime.getRuntime().availableProcessors())</code></p>
-
-<h2>But, I want more parallelism!</h2>
-
-<p>What if we want to increase the parallelism level? There are <em>2 ways to achieve this.</em></p>
-
-<p><em>The first one</em> is to make our code <strong>run in a custom thread pool</strong> of our choice. Unfortunately Java doesn’t make it easy to provide a custom thread pool, but <a href="http://www.baeldung.com/java-8-parallel-streams-custom-threadpool">the workaround is not so bad either</a>.</p>
-
-<p><em>The other option</em> is to change the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ForkJoinPool.html"><em>ForkJoinPool.commonPool</em></a> parallelism level by system property like this:</p>
-
-<p><code>System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "10")</code></p>
-
-<p>Unfortunately this doesn’t work on Kotlin Playground so you’ll have to try it on your own machine or take my word that it works.</p>
-
-<p>It’s worth noting that with the second approach you’d still be using the same default thread pool <strong>shared globally across the app</strong>. As you can imagine this can be <strong>EXTREMELY BAD</strong> as you’d be basically depleting resources for the whole application. Some would even argue <a href="https://zeroturnaround.com/rebellabs/java-parallel-streams-are-bad-for-your-health/">this is reason enough not to use <code>parallelStream</code> at all</a>. Although that seems a little extreme if you ask me.</p>
-
-<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+<ul>
+<li>The entry <strong>key</strong></li>
+<li>A <strong>value</strong> to be used if there was no associated value to the key (or it was <code>null</code>)</li>
+<li>A <strong> remapping function</strong> that takes the <strong>old value</strong>, the <strong>new value</strong> and calculates the new value for the map</li>
+</ul>
 
 
+<h2>Bonus track: Removal</h2>
 
+<p>There’s one more trick you can do with <code>Map.merge</code>. Citing the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#merge-K-V-java.util.function.BiFunction-">documentation</a>:</p>
+
+<blockquote><p>If the function returns <code>null</code> the mapping is removed</p></blockquote>
+
+<p>Something to keep in mind in case it comes in handy in the future. Or if you find yourself debugging an issue of <em>”vanishing entries on a Map”</em>, then maybe you should check your <strong> remapping function</strong> 😉</p>
 <div class="footnotes">
 <hr/>
 <ol>
 <li id="fn:1">
-<p>Otherwise the execution takes too long and doesn’t complete. Probably a limitation of Kotlin Playground<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<p>I’m aware that ebooks have indexes too, but who the fuck uses them when you can do a full blown text search<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using PowerMock + TestNG to Mock a Static Class]]></title>
-    <link href="http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class/"/>
-    <updated>2016-04-03T08:38:47-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class</id>
-    <content type="html"><![CDATA[<p>￼
-This week I needed to test a class that depended on a method from an static class. I saw we were using <a href="https://github.com/jayway/powermock" title="PowerMock">PowerMock</a> and thought to myself: <em>“Well this sounds pretty common, I bet it’s easy to accomplish”</em>. But of course I ran into half a dozen issues before I was able to make it work. Here’s my two cents to make your experience easier than mine.</p>
-
-<!--more-->
-
-
-<h2>Setup</h2>
-
-<p>Let’s start with the ingredients. To mock static methods you’ll need a couple of libraries:</p>
-
-<ul>
-<li><a href="http://easymock.org/">EasyMock</a> for the mocking<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></li>
-<li><a href="https://github.com/jayway/powermock">PowerMock</a></li>
-<li><a href="http://testng.org/">TestNG</a> for the test</li>
-</ul>
-
-
-<p>When choosing your library version you’ll need to make sure <strong>PowerMock</strong> and <strong>TestNG</strong> versions are compatible. You can do so by comparing your versions with the ones specified <a href="https://github.com/jayway/powermock/wiki/TestNG_usage">here</a>.</p>
-
-<p>Also, if you’re not using <strong>Maven</strong> to include PowerMock in your project make sure you also add it’s dependencies. You’ll find a zip file containing everything you need <a href="https://github.com/jayway/powermock/wiki/GettingStarted">here</a>.</p>
-
-<h2>Writing the test</h2>
-
-<p>To have the test working you’ll need to do 3 things:</p>
-
-<ol>
-<li>Configure <strong>TestNG</strong> to use the PowerMock object factory</li>
-<li>Use <code>@PrepareForTest</code> annotation to prepare the static class</li>
-<li><strong>Mock</strong> the static class method</li>
-<li><strong>Write the rest</strong> of the test</li>
-</ol>
-
-
-<p>Let’s go one by one:</p>
-
-<h4>1. Configure TestNG to use the PowerMock object factory</h4>
-
-<p>There are a bunch of ways of doing this, namely:</p>
-
-<ul>
-<li>Configure it on the <code>suite.xml</code> file</li>
-<li>Extending your test class with <code>PowerMockTestCase</code></li>
-<li>Or by adding a method like this to your test</li>
-</ul>
-
-
-<pre><code class="java">@ObjectFactory
-public IObjectFactory getObjectFactory() {
-    return new org.powermock.modules.testng.PowerMockObjectFactory();
-}
-</code></pre>
-
-<p>I choose to go with the latter because I don’t use the <code>suite.xml</code> file and adding an annotated method is less restrictive than extending a class. But feel free to use whatever works for you.</p>
-
-<h4>2. @PrepareForTest</h4>
-
-<p>You’ll need to prepare your static class for mocking. You can do so with the <code>@PrepareForTest</code> annotation like this:</p>
-
-<pre><code class="java">@PrepareForTest(StaticHelper.class)
-public class MyTest {
-    ...
-}
-</code></pre>
-
-<p>Note that you can pass an array of classes to the annotation if you need to prepare multiple classes.</p>
-
-<h4>3. Mocking</h4>
-
-<p>Now you’re ready to mock the static method like this:</p>
-
-<pre><code class="java">@Test
-public void test() throws Exception {
-    // mocking static method
-    PowerMock.mockStatic(StaticHelper.class);
-    EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello world”)).anyTimes();
-    PowerMock.replay(StaticHelper.class);
-    ...
-} 
-</code></pre>
-
-<h4>4. Writing the rest</h4>
-
-<p>Ok let’s put everything together and write the rest of the test</p>
-
-<pre><code class="java">@PrepareForTest(StaticHelper.class)
-public class MyTest {
-
-    @ObjectFactory
-    public IObjectFactory getObjectFactory() {
-        return new org.powermock.modules.testng.PowerMockObjectFactory();
-    }
-
-    @Test
-    public void test() throws Exception {
-        // mocking static method
-        PowerMock.mockStatic(StaticHelper.class);
-        EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello world”)).anyTimes();
-        PowerMock.replay(StaticHelper.class);
-
-        // test
-        Assert.assertEquals(“hello world” ” StaticHelper.doSomething());
-    }
-
-}
-</code></pre>
-
-<p>Of course this is an oversimplified example. The cool thing about mocking static methods is that <strong>the static call you may need to mock may be hidden under several layers of abstraction</strong>. Using this approach you are able to mock the static call and test your classes without changing a single line of production code.</p>
-
-<h2>Some things to watch out for</h2>
-
-<p>There are a few things to keep in mind when initializing the mock:</p>
-
-<ol>
-<li>You cannot create mocks during <strong>field initialization</strong>.</li>
-<li>You cannot create mocks inside <strong>before static methods</strong>.</li>
-</ol>
-
-
-<p>Finally I also run into the following error when running my test:</p>
-
-<pre><code>java.lang.VerifyError: Expecting a stackmap frame at branch target 71 in method com.abc.domain.myPackage.MyClass$JaxbAccessorM_getDescription_setDescription_java_lang_String.get(Ljava/lang/Object;)Ljava/lang/Object; at offset 20_
-</code></pre>
-
-<p>Turns out that, as explained <a href="http://stackoverflow.com/questions/15122890/java-lang-verifyerror-expecting-a-stackmap-frame-at-branch-target-jdk-1-7">here</a> Java 7 introduced a stricter verification and changed the class format. The byte code generation library PowerMock uses is generating code that does not comply with the new verification. But worry not, <strong>this validation can be disabled</strong> by passing <code>-noverify</code> as argument to the JVM.</p>
-
-<p>If you&rsquo;re running you&rsquo;re using Maven to run your tests remember to add the argument to your plugin configuration.</p>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>This guide uses <strong>EasyMock</strong> but you can also use <strong>Mockito</strong><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Keep Trying With Guava Retrying]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying/"/>
-    <updated>2014-07-17T14:22:07-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying</id>
-    <content type="html"><![CDATA[<p>We were having a <a href="http://en.wikipedia.org/wiki/Race_condition#Software">race condition</a> on a server which was &ldquo;fixed&rdquo; by adding an sleep to the thread to check again later. Yes, it sucked, so I decided to make something more sophisticated and went looking for a library to handle retryies with multiple strategies. That&rsquo;s when I first read about <a href="https://github.com/rholder/guava-retrying">Guava Retrying</a></p>
-
-<!--more-->
-
-
-<p>In the words of it&rsquo;s creator (<a href="https://github.com/rholder">rholder</a>):</p>
-
-<blockquote><p>Guava-Retrying is a small extension to Google&rsquo;s Guava library to allow for the creation of configurable retrying strategies for an arbitrary function call, such as something that talks to a remote service with flaky uptime.</p></blockquote>
-
-<p>Simply put give it a taks and it will retry it until success&hellip; or until a given condition is met, or after X attempts, or until it does not throw exception, or&hellip; well you get the point: <strong>flexibility</strong>.</p>
-
-<h3>Quick example</h3>
-
-<p>Let&rsquo;s say we want to execute a task that will:
-* Retry if the result is null
-* Retry if an exception of type IOException is thrown
-* Wait 300 miliseconds to try again.
-* Stop after 5 attempts</p>
-
-<p>Then we would do something like:</p>
-
-<pre><code class="java">Callable&lt;Boolean&gt; yourTask = new Callable&lt;Boolean&gt;() {
-    public Boolean call() throws Exception {
-        return true; // do something interesting here
-    }
-};
-
-Retryer&lt;Boolean&gt; retryer = RetryerBuilder.&lt;Boolean&gt;newBuilder()
-        .retryIfResult(Predicates.&lt;Boolean&gt;isNull())
-        .retryIfExceptionOfType(IOException.class)
-        .withWaitStrategy(WaitStrategies.fixedWait(300,                                                                             TimeUnit.MILLISECONDS))
-        .withStopStrategy(StopStrategies.stopAfterAttempt(5))
-        .build();
-
-try {
-    retryer.call(yourTask);
-} catch (RetryException e) {
-    e.printStackTrace();
-} catch (ExecutionException e) {
-    e.printStackTrace();
-}
-</code></pre>
-
-<p>After attempting 5 times it will throw a <code>RetryException</code> with information about the last attempt. Any other exception thrown by your task will be wrapped and rethrown in a <code>ExecutionException</code></p>
-
-<p>Other <strong>wait strategies</strong> supported: Random backoff, Incremental backoff, Exponential backoff, Fibonacci backoff</p>
-
-<p>Other <strong>stop strategies</strong> supported: never stop, stop after delay.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[AutoValue for Android]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/04/20/autovalue-for-android/"/>
-    <updated>2014-04-20T17:14:00-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/04/20/autovalue-for-android</id>
-    <content type="html"><![CDATA[<p>Remember <a href="http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way/">my last post</a> on value types using <a href="https://github.com/google/auto/tree/master/value">Google&rsquo;s AutoValue</a>? Today while doing some work on a new Android project I&rsquo;m starting I thought: <em>&lsquo;Great chance to use AutoValue!&rsquo;</em>. Guess what, there is a port of Google AutoValue for the Android platform.</p>
-
-<!-- More -->
-
-
-<p>So the first thing I thought was: <em>&lsquo;Why do I need an special port of the AutoValue in the first place?&rsquo;</em>. Even though you could use the original <a href="https://github.com/google/auto/tree/master/value">Google&rsquo;s AutoValue</a> and it will work just find, there are 2 reasons why you should consider the Android port:</p>
-
-<ol>
-<li>Android AutoValue splits the project in 2 libraries. Only one is included in your apk (which just contains the interface) and the other is only used during compile time</li>
-<li>Apart from all the things you get using the original lib the Android AutoValue also includes Parceable generation just adding <code>implements Parcelable</code> to your classes.</li>
-</ol>
-
-
-<p>That&rsquo;s pretty much all. Head to the <a href="https://github.com/frankiesardo/android-auto-value">Android Autovalue github repo</a> to see how to use it in your project.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Value Types the Easy Way]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way/"/>
-    <updated>2014-04-07T20:54:07-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way</id>
-    <content type="html"><![CDATA[<p>Value types is a fancy name for those classes where you have to implement <code>equals()</code> and <code>hashCode()</code>, and usually <code>toString()</code>. You&rsquo;ve probably wrote thounsands of those classes, but have you ever wonder why do you have write almost 50 lines of code to express such a common concept?</p>
-
-<!-- more -->
-
-
-<p>Let&rsquo;s say you want to model an Employee, with name and age. If you were to write it following all of <a href="http://www.amazon.com/Effective-Java-Edition-Joshua-Bloch/dp/0321356683">Effective Java&rsquo;s</a> advices (which is how you always roll, right?) you would get something like this:</p>
-
-<pre><code class="java">public class EmployeeTheOldFashionedWay {
-
-    private final String name;
-    private final int age;
-
-    public EmployeeTheOldFashionedWay(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        EmployeeTheOldFashionedWay that = (EmployeeTheOldFashionedWay) o;
-
-        if (age != that.age) return false;
-        if (!name.equals(that.name)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + age;
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "EmployeeTheOldFashionedWay{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                '}';
-    }
-}
-</code></pre>
-
-<p>This is wrong for many reasons:</p>
-
-<ul>
-<li>Way too long</li>
-<li>Obvious violation of the <a href="http://en.wikipedia.org/wiki/Don't_repeat_yourself">DRY</a> principle</li>
-<li>You won&rsquo;t tests this methods</li>
-<li>They won&rsquo;t be closely reviewed</li>
-<li>This classes <strong>will</strong> change and that&rsquo;s when bugs are introduced</li>
-<li>Bad signal-to-noise in your code (i.e. too much code to express such an easy concept)</li>
-</ul>
-
-
-<p>Perhaps you are aware that this code can be easily written using IDE Templates. Your favorite IDE can generate constructor based on fields, getters, <code>equals()</code>, <code>hashCode()</code> and <code>toString()</code> methods letting you write value types classes in a breeze. But then all the things we said are wrong with the value type still hold. The only thing we achieve is to write them faster.</p>
-
-<h3>Google AutoValue</h3>
-
-<p>What I&rsquo;m presenting today is Google&rsquo;s solution to the value types issue. With <a href="https://github.com/google/auto/tree/master/value">AutoValue</a> you could write the same Employee class in approximately 10 lines of code like this:</p>
-
-<pre><code class="java">@AutoValue
-public abstract class EmployeeWithAutoValue {
-    public static EmployeeWithAutoValue create(String name, int age) {
-        return new AutoValue_EmployeeWithAutoValue(name, age);
-    }
-
-    public abstract String getName();
-
-    public abstract int getAge();
-}
-</code></pre>
-
-<h4>What the heck just happened there?</h4>
-
-<p>That <code>@AutoValue</code> annotation you see on the class is just a standard annotation that generates a package private implementation for your abstract class called: <em>AutoValue_EmployeeWithAutoValue</em>. In case you were wondering <a href="https://gist.github.com/jivimberg/ca86f975e3945e30978f">this is how that implementation looks like</a>.</p>
-
-<p>Is this the best alternative? I don&rsquo;t really know&hellip; but in <a href="https://docs.google.com/presentation/d/14u_h-lMn7f1rXE1nDiLX0azS3IkgjGl5uxp5jGJ75RE/edit">this presentation</a> the authors of AutoValue compare it to other solutions and explain why they think theirs is better.</p>
-
-<h4>Usage</h4>
-
-<p>This is how you use your Employee class:</p>
-
-<pre><code class="java">public static void main(String[] args) {
-        EmployeeWithAutoValue employee = EmployeeWithAutoValue.create("Juan", 33);
-        System.out.println("employee.getName() = " + employee.getName());
-        System.out.println("employee.getAge() = " + employee.getAge());
-    }
-</code></pre>
-
-<p>Pretty regular stuff over here. That&rsquo;s one of the good things of AutoValue: consumers don&rsquo;t need to know what&rsquo;s going on behind the scenes.</p>
-
-<h4>Features and drawbacks</h4>
-
-<ul>
-<li>You can&rsquo;t use constructors but you can use any number of static factory methods you like. Which if you have read <a href="http://my.safaribooksonline.com/book/programming/java/9780137150021/creating-and-destroying-objects/ch02lev1sec1">Effective Java Item 1</a> you know is a good idea anyway.</li>
-<li>No support for <em>mutable</em> value types. Again you are better off using immutables anyway.</li>
-<li>If you want to provide your own implementation of <code>equals()</code>, <code>hashCode()</code> or <code>toString()</code> you can! Just add your own method to the class and autovalue won&rsquo;t generate it in the implementation.</li>
-<li>AutoValue assumes all your non-primitive fields are not nullable and add checks in the generated code. You can modify this behaviour applying the annotation <code>@Nullable</code> to the corresponding accessor method and factory parameter.</li>
-<li>You <em>can</em> add behaviour to your class</li>
-<li>You <em>can</em> implement interfaces</li>
-<li><strong>WARNING!</strong> The big disadvantage. The generator has to choose an order for the constructor parameters, so it uses the order in which they appear in the file. That means that a simple refactor moving the accessors can break the abstract class or worse silently mix the parameters. <strong>You&rsquo;ve been warned!</strong></li>
-</ul>
-
-
-<h4>Making it work in IntelliJ Idea</h4>
-
-<p>I used Intellij Idea to try this and I must say it took me some time to get the generated class folder to be marked as src. In the end what did the trick was to reimport the mvn project.
-Just know that once it has been added as a src folder you&rsquo;ll have to compile the code one time before the IDE can tell there is a generated class named <em>Autovalue_XXX.</em> You can add this to the list of minor annoyances of using AutoValue if you like.</p>
 ]]></content>
   </entry>
   

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2018/07/20/map-dot-merge/</loc>
+<lastmod>2018-07-20T07:32:49-07:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2018/07/03/writing-githooks-in-kotlin/</loc>
 <lastmod>2018-07-03T19:45:28-07:00</lastmod>
 </url>
@@ -293,6 +297,21 @@
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/categories/quality/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/java/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/java8/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/jdk8/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/collections/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/map/</loc>
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/posts/2/</loc>
