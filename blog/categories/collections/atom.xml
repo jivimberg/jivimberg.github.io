@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Collections, | Coding Forest]]></title>
+  <title><![CDATA[Category: Collections | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/collections/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-07-20T16:24:46-07:00</updated>
+  <updated>2018-07-28T14:13:32-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -110,6 +110,462 @@
 <ol>
 <li id="fn:1">
 <p>I’m aware that ebooks have indexes too, but who the fuck uses them when you can do a full blown text search<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Implementing takeWhileInclusive in Kotlin]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin/"/>
+    <updated>2018-06-02T13:33:38-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin</id>
+    <content type="html"><![CDATA[<p>Implementing <code>takeWhileInclusive</code> extension function in Kotlin.</p>
+
+<!--more-->
+
+
+<blockquote><p>TL,DR (aka <em>“just show me the code”</em> ): <a href="https://gist.github.com/jivimberg/ff5aad3f5c6315deb420fd508a145c61">https://gist.github.com/jivimberg/ff5aad3f5c6315deb420fd508a145c61</a></p></blockquote>
+
+<p>You probably know about <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/take-while.html"><code>takeWhile</code></a> operation that <strong>returns a List containing the first elements satisfying the given predicate.</strong></p>
+
+<xmp class="kotlin-code">
+fun main(args: Array<String>) {
+//sampleStart
+    val someNumbers = listOf(1, 5, 3, 22, 4, 8, 14, 23, 49, 77, 2, 49)
+    println(someNumbers.takeWhile { it % 7 != 0 })
+//sampleEnd
+}
+</xmp>
+
+
+<p>I was in need of an <strong>inclusive</strong> version of the <code>takeWhile</code>. In other words I needed a function that returned the first elements satisfying the given predicate, <strong>plus the first element that didn’t satisfy it</strong>.</p>
+
+<p>So in the provided example <code>takeWhile</code> returns <code>[1, 5, 3, 22, 4, 8]</code> whereas <code>takeWhileInclusive</code> would return <code>[1, 5, 3, 22, 4, 8, 14] </code> .</p>
+
+<p>A quick search showed me I was not alone. <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/take-while.html"><em>matklad</em></a> already had a simple implementation working for <code>Sequence</code>:</p>
+
+<p><div><script src='https://gist.github.com/54776705250e3b375618f59a8247a237.js'></script>
+<noscript><pre><code>fun &lt;T&gt; Sequence&lt;T&gt;.takeWhileInclusive(pred: (T) -&gt; Boolean): Sequence&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = pred(it)
+        result
+    }
+}
+</code></pre></noscript></div>
+</p>
+
+<p>Using <strong>extension functions</strong> we are able to add a new function to the standard library type <code>Sequence</code>. If this is your first encounter with an extension function I’d encourage you to read more about them <a href="https://kotlinlang.org/docs/reference/extensions.html#extension-functions">here</a> and then play with them <a href="https://try.kotlinlang.org/#/Kotlin%20Koans/Introduction/Extension%20functions/Task.kt">here</a>.</p>
+
+<p>I found this implementation of <code>takeWhileInclusive</code> quite <strong>elegant</strong>. It uses the original <code>takeWhile</code> with the given predicated, but keeps a <code>shouldContinue</code> variable to delay the predicate evaluation by one step. In other words the evaluation of the predicate passed to <code>takeWhile</code> on element <em>i</em> will actually be the result of applying the predicate function on <em>i - 1</em>. Which if you think about it <em>is exactly what we need</em>. Let’s give it a try:</p>
+
+<xmp class="kotlin-code">
+fun <T> Sequence<T>.takeWhileInclusive(
+        predicate: (T) -> Boolean
+): Sequence<T> {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+fun main(args: Array<String>) {
+//sampleStart
+   val someNumbers = listOf(1, 5, 3, 22, 4, 8, 14, 23, 49, 77, 2, 49).asSequence()
+   println(someNumbers.takeWhileInclusive { it % 7 != 0 }.toList())
+//sampleEnd
+}
+</xmp>
+
+
+<p>This was good! Only <a href="https://gist.github.com/matklad/54776705250e3b375618f59a8247a237#gistcomment-2093675">this comment</a> posted on the original gist made me doubt about the <em>safety</em> of this approach:</p>
+
+<blockquote><p><em>“I love this. If Sequence were parallel, though, wouldn&rsquo;t there be worries about using out-of-closure state?”</em></p></blockquote>
+
+<p>That send me down the rabbit hole and I spent some days reading about <code>parallelStreams</code> and <code>coroutines</code> until I convinced my self the approach was ok.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
+
+<p>With that out of the way I decided to port this solution to be supported in all the places where the <code>takeWhile</code> exists (including <code>String</code> and <code>CharArray</code>). So that <strong>we don’t have to convert to a from a Sequence just to use this function</strong>.</p>
+
+<p>Here’s the end result, ready to be dropped on your project:</p>
+
+<p><div><script src='https://gist.github.com/ff5aad3f5c6315deb420fd508a145c61.js'></script>
+<noscript><pre><code>// kotlin.collections
+
+inline fun &lt;T&gt; Array&lt;out T&gt;.takeWhileInclusive(
+        predicate: (T) -&gt; Boolean
+): List&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun ByteArray.takeWhileInclusive(
+        predicate: (Byte) -&gt; Boolean
+): List&lt;Byte&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun ShortArray.takeWhileInclusive(
+        predicate: (Short) -&gt; Boolean
+): List&lt;Short&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun IntArray.takeWhileInclusive(
+        predicate: (Int) -&gt; Boolean
+): List&lt;Int&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun LongArray.takeWhileInclusive(
+        predicate: (Long) -&gt; Boolean
+): List&lt;Long&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun FloatArray.takeWhileInclusive(
+        predicate: (Float) -&gt; Boolean
+): List&lt;Float&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun DoubleArray.takeWhileInclusive(
+        predicate: (Double) -&gt; Boolean
+): List&lt;Double&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun BooleanArray.takeWhileInclusive(
+        predicate: (Boolean) -&gt; Boolean
+): List&lt;Boolean&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun CharArray.takeWhileInclusive(
+        predicate: (Char) -&gt; Boolean
+): List&lt;Char&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun &lt;T&gt; Iterable&lt;T&gt;.takeWhileInclusive(
+        predicate: (T) -&gt; Boolean
+): List&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+// kotlin.sequences
+
+fun &lt;T&gt; Sequence&lt;T&gt;.takeWhileInclusive(
+        predicate: (T) -&gt; Boolean
+): Sequence&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+// kotlin.text
+
+inline fun CharSequence.takeWhileInclusive(
+        predicate: (Char) -&gt; Boolean
+): CharSequence {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun String.takeWhileInclusive(
+        predicate: (Char) -&gt; Boolean
+): String {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}</code></pre></noscript></div>
+</p>
+
+<p>Hope you find this useful!</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>If you want to read more about my discoveries, check this question at <a href="https://stackoverflow.com/q/50373754/1499171">StackOverflow</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Parallel Map in Java (From Kotlin)]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/05/07/parallel-map-in-java/"/>
+    <updated>2018-05-07T13:19:58-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/05/07/parallel-map-in-java</id>
+    <content type="html"><![CDATA[<p>Following up of my <a href="http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin/">previous post</a>, I was curious how a parallel map operation would look like using Java’s <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#parallelStream--"><code>parallelStream</code></a>. Here’s what I find out.</p>
+
+<!--more-->
+
+
+<p>In Java to use <code>map</code> you do:</p>
+
+<xmp class="kotlin-code">
+import java.util.stream.Collectors
+
+//sampleStart
+fun main(args: Array<String>) {
+    val output = (1..100).toList()
+            .stream()
+            .map { it * 2 }
+            .collect(Collectors.toList())
+    println(output)
+}
+//sampleEnd
+</xmp>
+
+
+<p><em>(In case you’re wondering I’m using Java collections from Kotlin)</em></p>
+
+<p>And to do a <em>parallel</em> <code>map</code> you can simply do:</p>
+
+<xmp class="kotlin-code">
+import java.util.stream.Collectors
+
+//sampleStart
+fun main(args: Array<String>) {
+    val output = (1..100).toList()
+            .parallelStream()
+            .map { it * 2 }
+            .collect(Collectors.toList())
+    println(output)
+}
+//sampleEnd
+</xmp>
+
+
+<p>No need to write a special <code>pmap</code> operation like we did for Kotlin. Just call <code>parallelStream</code> and that’s it. <em>Pretty cool, right?</em></p>
+
+<p>I was curious about how this solution <strong>compared to the one on <a href="http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin/">my previous post</a></strong>,  so I decided to time it too.</p>
+
+<xmp class="kotlin-code">
+import java.util.stream.Collectors
+import kotlin.system.measureTimeMillis
+
+//sampleStart
+fun main(args: Array<String>) {
+    val time = measureTimeMillis {
+        val output = (1..100).toList()
+                .parallelStream()
+                .map {
+                    Thread.sleep(100)
+                    it * 2
+                }
+                .collect(Collectors.toList())
+
+        println(output)
+    }
+
+    println("Total time: $time")
+}
+//sampleEnd
+</xmp>
+
+
+<p>In this case instead I’m actually setting a delay of <strong>100 milliseconds</strong> (instead of <em>1,000</em> like I did on my previous post)<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. I was expecting the total time to be something close to <em>100 milliseconds</em>, just like it was for the Kotlin <code>pmap</code>, <strong>instead I got something close to 5,000</strong>.</p>
+
+<p>Turns out <code>parallelStream</code> uses the default <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ForkJoinPool.html"><em>ForkJoinPool.commonPool</em></a> which by default has a parallelism level <strong>equal to the number of available processors.</strong> In this case 2 processors: <em>100 operations * 100 milliseconds / 2 processors = 5000 milliseconds</em>. You can check the number of available processors simply by adding this line to the script:</p>
+
+<p><code>println(Runtime.getRuntime().availableProcessors())</code></p>
+
+<h2>But, I want more parallelism!</h2>
+
+<p>What if we want to increase the parallelism level? There are <em>2 ways to achieve this.</em></p>
+
+<p><em>The first one</em> is to make our code <strong>run in a custom thread pool</strong> of our choice. Unfortunately Java doesn’t make it easy to provide a custom thread pool, but <a href="http://www.baeldung.com/java-8-parallel-streams-custom-threadpool">the workaround is not so bad either</a>.</p>
+
+<p><em>The other option</em> is to change the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ForkJoinPool.html"><em>ForkJoinPool.commonPool</em></a> parallelism level by system property like this:</p>
+
+<p><code>System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "10")</code></p>
+
+<p>Unfortunately this doesn’t work on Kotlin Playground so you’ll have to try it on your own machine or take my word that it works.</p>
+
+<p>It’s worth noting that with the second approach you’d still be using the same default thread pool <strong>shared globally across the app</strong>. As you can imagine this can be <strong>EXTREMELY BAD</strong> as you’d be basically depleting resources for the whole application. Some would even argue <a href="https://zeroturnaround.com/rebellabs/java-parallel-streams-are-bad-for-your-health/">this is reason enough not to use <code>parallelStream</code> at all</a>. Although that seems a little extreme if you ask me.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Otherwise the execution takes too long and doesn’t complete. Probably a limitation of Kotlin Playground<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Parallel Map in Kotlin]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/05/04/parallel-map-in-kotlin/"/>
+    <updated>2018-05-04T16:32:00-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/05/04/parallel-map-in-kotlin</id>
+    <content type="html"><![CDATA[<p>Ever wonder how to run <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html"><code>map</code></a>  in parallel using coroutines? This is how you do it.</p>
+
+<!--more-->
+
+
+
+
+<xmp class="kotlin-code" data-highlight-only>
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
+
+//sampleStart
+fun <A, B>Iterable<A>.pmap(f: suspend (A) -> B): List<B> = runBlocking {
+    map { async { f(it) } }.map { it.await() }
+}
+//sampleEnd
+</xmp>
+
+
+<p><em>Confused?</em> Let’s unpack it.</p>
+
+<p>First we have the <strong>function signature</strong> which is pretty similar to the actual <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html"><code>map</code></a> extension function signature on <code>Iterable</code>. The only thing we added was the <code>suspend</code> keyword on the parameter, which let’s us use <code>suspend</code> functions in <code>f</code> (as we’re going to see in a moment).</p>
+
+<p>Then we have the <code>runBlocking</code> which let’s us bridge the blocking code with the coroutine world. As the name suggests <strong>this will block the current thread until everything inside the block finishes executing</strong>. Which is exactly what we want.</p>
+
+<p>Finally we have the actual execution which is divided in 2 steps. The <em>first step</em> <strong>launches a new coroutine for each function application</strong> using <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/async.html"><code>async</code></a>. This effectively wraps the type of each element with  <code>Deferred</code>. In the <em>second step</em> we wait for all function applications to complete and unwrap the result with <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/-deferred/await.html"><code>await</code></a>.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
+
+<h2>How to use it</h2>
+
+<p>Easy! <strong>Just like you use <code>map</code></strong>:</p>
+
+<xmp class="kotlin-code">
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
+
+fun <A, B>Iterable<A>.pmap(f: suspend (A) -> B): List<B> = runBlocking {
+    map { async { f(it) } }.map { it.await() }
+}
+//sampleStart
+fun main(args: Array<String>) {
+    println((1..100).pmap { it * 2 })
+}
+//sampleEnd
+</xmp>
+
+
+<p>(Psst! I’m using <a href="https://blog.jetbrains.com/kotlin/2018/04/embedding-kotlin-playground/">Kotlin Playground</a> so you can actually run this code!)</p>
+
+<h2>Prove that it’s running in parallel</h2>
+
+<p>Ok so let’s resort to the good old <code>delay</code> to prove that this is actually running in parallel. We are going to add a <strong>delay of 1 second</strong> on each multiplication and measure the time it takes to run.</p>
+
+<p>Running over <em>100 elements</em> the result should be: <strong>close to 1,000 milliseconds if it’s running in parallel</strong> and close to <em>100,000 milliseconds if it’s running sequentially</em>.</p>
+
+<xmp class="kotlin-code">
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
+import kotlin.system.measureTimeMillis
+import kotlinx.coroutines.experimental.delay
+
+fun <A, B>Iterable<A>.pmap(f: suspend (A) -> B): List<B> = runBlocking {
+    map { async { f(it) } }.map { it.await() }
+}
+//sampleStart
+fun main(args: Array<String>) {
+    val time = measureTimeMillis {
+        val output = (1..100).pmap {
+            delay(1000)
+            it * 2
+        }
+
+        println(output)
+    }
+
+    println("Total time: $time")
+}
+//sampleEnd
+</xmp>
+
+
+
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Since I’m not explicitly passing any  <code>CoroutineContext</code> the <code>DefaultDispatcher</code> will be used. <a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 

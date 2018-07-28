@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Book | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/book/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-07-20T16:24:46-07:00</updated>
+  <updated>2018-07-28T14:13:32-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,32 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Book Recommendations: Migrating to Cloud-Native Application Architectures]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/07/24/book-recommendations-migrating-to-cloud-native-application-architectures/"/>
+    <updated>2018-07-24T16:18:45-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/07/24/book-recommendations-migrating-to-cloud-native-application-architectures</id>
+    <content type="html"><![CDATA[<p>Complementing <a href="https://jivimberg.io/blog/2018/05/25/book-recomendations-migrating-to-microservices-databases/">my last book recommendation</a> on <em> Migrating to microservices databases</em> by <a href="https://twitter.com/yanaga">Edson Yanaga</a> now I present <a href="https://content.pivotal.io/ebooks/migrating-to-cloud-native-application-architectures"><em>Migrating to Cloud-Native Application Architectures</em></a> by <a href="@mstine">Matt Stine</a>.</p>
+
+<!--more-->
+
+
+<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="/images/posts/2018-07-28/cover.jpg" title="’Migrating to Cloud-Native Application book cover’" ></a></p>
+
+<p>I’m really digging this O’Reilly booklet style! They <strong>condense a good overview of a specific topic in one-sitting books</strong>. While at the same time provide enough links and resources to keep you digging for a few afternoons if interested.</p>
+
+<p>Matt’s book is divided in 3 parts. The first bit <strong>”The rise of cloud service”</strong> serves as an introduction to the topic. It defines <em>cloud native architectures </em> key characteristics and <strong>why you might consider using one</strong>.  If you are already familiar with the subject you may want to skim through this first section.</p>
+
+<p>The second part is the one I enjoyed the most. It talks about <strong>the changes needed to go cloud native</strong>. It covers areas that are sometimes forgotten or considered as an afterthought such as <em>team collaboration</em>, <em>organizational changes</em> (the <a href="https://www.thoughtworks.com/radar/techniques/inverse-conway-maneuver">Inverse Conway Maneuver</a>) and the <em>decentralization of decision making</em>. The rest of the chapter touches on the <strong>technical challenges</strong> required. It was really nice to see a bit on how to <strong>use <a href="https://en.wikipedia.org/wiki/Domain-driven_design">DDD</a> to identify service boundaries</strong> when decomposing data models.</p>
+
+<p>On the last chapter, called <strong>Migration Cookbook</strong>, Matt explores different strategies for decomposing the monolith (such as <em>”strangling the monolith”</em>, <em>”new features as Micro-services”</em>, <em>”anti-corruption layer”</em>, etc.) and provides links to articles by companies that applied this strategies on their own systems. The book finishes with a section called <strong>Distributed system recipes</strong>  where some of the more common <em>“challenges”</em> of a cloud-native architecture are explored and particular solutions are presented using <a href="http://projects.spring.io/spring-cloud/">Spring Cloud</a> and <a href="https://netflix.github.io/">Netflix OSS</a>. Here you’ll find things like <em>service discovery</em>, <em>versioned configuration</em>, <em>load balancing</em>, etc. Each topic is presented with a brief description of the problem, a mention of the Netflix OSS solution (and it’s features) and a code snippet showing how to integrate it with Spring.</p>
+
+<h2>Bottom line</h2>
+
+<p><strong>GO READ IT!</strong> It won’t take you more than an afternoon and chances are you’ll learn something new. You’ll walk away with <strong>a better understanding of the cloud-native landscape.</strong></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Book Recomendations: Migrating to Microservices Databases]]></title>
