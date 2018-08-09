@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2018/08/04/recursive-queries-on-rdbms-with-jpa/</loc>
+<lastmod>2018-08-04T11:29:52-07:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2018/07/24/book-recommendations-migrating-to-cloud-native-application-architectures/</loc>
 <lastmod>2018-07-24T16:18:45-07:00</lastmod>
 </url>
@@ -313,6 +317,24 @@
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/categories/cloud-native/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/sql/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/recursive/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/query/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/rdbms/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/hierarchical/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/graph/</loc>
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/posts/2/</loc>
