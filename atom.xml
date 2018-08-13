@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-08-08T11:24:44-07:00</updated>
+  <updated>2018-08-12T21:54:44-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,52 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[JaCoCo &amp; Kotlin: Coverage on Generated Code]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code/"/>
+    <updated>2018-08-12T21:26:43-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code</id>
+    <content type="html"><![CDATA[<p>JaCoCo works <em>flawlessly</em> with Kotlin. Except when it reports lines not covered on generated code 😡. Fortunately there’s a fix already in place.</p>
+
+<!--more-->
+
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-08-12/JaCoCo-before.png" width="720" title="’JaCoCo before’" ></p>
+
+<blockquote><p>What!? I didn’t even write those functions! There’s no way I’m writing tests for them. I’m pretty sure the compiler knows what it’s doing…</p><footer><strong>Me</strong> <cite>Every Time I Saw the Coverage Report</cite></footer></blockquote>
+
+
+<p>Good news is that this <a href="https://github.com/goodwinnk">has been fixed</a> in the latest JaCoCo release (thanks to <a href="https://github.com/goodwinnk">goodwink</a>). Bad news is that <strong>0.8.2 is not out yet</strong> 😞</p>
+
+<p>If you are like me, and can’t wait to get this working, you can <strong>use the SNAPSHOT version of JaCoCo</strong> making this changes on your <code>build.gradle</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='kotlin'><span class='line'><span class="n">repositories</span> <span class="p">{</span>
+</span><span class='line'>  <span class="err">…</span>
+</span><span class='line'>  <span class="n">maven</span><span class="p">(</span><span class="s">&quot;https://oss.sonatype.org/content/repositories/snapshots&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">jacoco</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">toolVersion</span> <span class="p">=</span> <span class="s">&quot;0.8.2-SNAPSHOT&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>(I’m using <a href="https://github.com/gradle/kotlin-dsl">Gradle with Kotlin DSL</a> in this example)</em></p>
+
+<p>Now you can finally take your Kotlin coverage to 100% without having to write tests for <code>component1()</code> and <code>component2()</code>.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-08-12/JaCoCo-after.png" width="720" title="’JaCoCo after’" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hierarchical Queries on RDBMS With JPA]]></title>
@@ -67,15 +113,15 @@ data class Woman (
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>| Id | Name   |       | Woman_Id |  Daughters_Id | 
+</pre></td><td class='code'><pre><code class=''><span class='line'>| Id | Name   |       | Woman\_Id |  Daughters\_Id | 
 </span><span class='line'>|----|--------|       |----------|---------------| 
 </span><span class='line'>| 1  | Wendy  |       | 1        | 2             | 
 </span><span class='line'>| 1  | Wendy  |       | 1        | 3             | 
 </span><span class='line'>| 2  | Brenda |       | 2        | 4             | 
 </span><span class='line'>| 2  | Brenda |       | 2        | 5             | 
 </span><span class='line'>| 3  | Carol  |       | 3        | 6             | 
-</span><span class='line'>| 4  | Linda  |   
-</span><span class='line'>| 5  | Betty  |   
+</span><span class='line'>| 4  | Linda  |  
+</span><span class='line'>| 5  | Betty  |  
 </span><span class='line'>| 6  | Lisa   |</span></code></pre></td></tr></table></div></figure>
 
 
@@ -119,7 +165,8 @@ data class Woman (
 
 <p>Great, it works! But wait, <em>why do I see so many SELECT calls to the database?</em> As you’ve probably figured out the issue with this approach is that it falls in the <a href="https://stackoverflow.com/questions/97197/what-is-the-n1-select-query-issue">N + 1 SELECT problem</a>.</p>
 
-<p>Some authors even go as far as considering <a href="https://vladmihalcea.com/eager-fetching-is-a-code-smell/">eager fetching a <strong>code smell</strong></a>. In the words of <a href="https://vladmihalcea.com/about/">Vlad Mihalcea</a> (emphasis mine):</p>
+<p>Some authors even go as far as considering <a href="https://vladmihalcea.com/eager-fetching-is-a-code-smell/">eager fetching a <strong>code smell</strong></a>. In the words of <a href="https://vladmihalcea.com/about/">Vlad Mihalcea</a> (emphasis mine):
+s</p>
 
 <blockquote><p>The EAGER fetching strategy is a code smell. Most often it’s used for simplicity sake without considering the long-term performance penalties. The fetching strategy <strong>should never be the entity mapping responsibility</strong>. Each business use case has different entity load requirements and therefore the fetching strategy should be delegated to each individual query.</p></blockquote>
 
@@ -241,11 +288,11 @@ data class Woman(
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span><span class="p">,</span> <span class="n">w</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">wd</span><span class="p">.</span><span class="n">daughters_id</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span><span class="p">,</span> <span class="n">w</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">wd</span><span class="p">.</span><span class="n">daughters</span><span class="err">\</span><span class="n">_id</span>
 </span><span class='line'><span class="k">FROM</span> <span class="n">woman</span> <span class="n">w</span>
-</span><span class='line'><span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">woman_daughters</span> <span class="n">wd</span> <span class="k">ON</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">woman_id</span>
+</span><span class='line'><span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">woman</span><span class="err">\</span><span class="n">_daughters</span> <span class="n">wd</span> <span class="k">ON</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">woman</span><span class="err">\</span><span class="n">_id</span>
 </span><span class='line'><span class="k">START</span> <span class="k">WITH</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="o">?</span><span class="mi">1</span>
-</span><span class='line'><span class="k">CONNECT</span> <span class="k">BY</span> <span class="k">PRIOR</span> <span class="n">wd</span><span class="p">.</span><span class="n">daughters_id</span> <span class="o">=</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span>
+</span><span class='line'><span class="k">CONNECT</span> <span class="k">BY</span> <span class="k">PRIOR</span> <span class="n">wd</span><span class="p">.</span><span class="n">daughters</span><span class="err">\</span><span class="n">_id</span> <span class="o">=</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -263,7 +310,7 @@ data class Woman(
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>| Id | Name   | Daughters_id | 
+</pre></td><td class='code'><pre><code class=''><span class='line'>| Id | Name   | Daughters\_id | 
 </span><span class='line'>|----|--------|--------------| 
 </span><span class='line'>| 1  | Wendy  | 2            | 
 </span><span class='line'>| 1  | Wendy  | 3            | 
@@ -342,7 +389,7 @@ fun findTypeWithConnectBy(id: Long): Woman {
 fun buildGraph(queryResult: List<WomanWithRef>, id: Long): Woman {
     val rows = queryResult { it.id == id }
     val firstRow = rows.first()
-
+    
     val fields = if (rows.size == 1 && firstRow.daughterId == null) {
         mutableSetOf()
     } else {
@@ -350,7 +397,7 @@ fun buildGraph(queryResult: List<WomanWithRef>, id: Long): Woman {
             .map { buildGraph(queryResult, it) }
             .toMutableSet()
     }
-
+    
     return Woman(firstRow.name, fields, id)
 }
 
@@ -2179,30 +2226,6 @@ This week I needed to test a class that depended on a method from an static clas
 <h3>6. Make the other person feel important—and do it sincerely</h3>
 
 <p>Little phrases such as ‘I’m sorry to trouble you,’ ‘Would you be so kind as to – ?’ ‘Won’t you please?’ ‘Would you mind?’ ‘Thank you’ – little courtesies like these oil the cogs of the monotonous grind of everyday life – and incidentally, they are the hallmark of good breeding. The unvarnished truth is that almost all the people you meet feel themselves superior to you in some way, and a sure way to their hearts is to let them realise in some subtle way that you realise their importance, and recognise it sincerely. ‘Talk to people about themselves and they will listen for hours.’</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Handling People (HTWFAIP - Part 1)]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/11/02/handling-people-htwfaip-part-1/"/>
-    <updated>2014-11-02T18:50:13-03:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/11/02/handling-people-htwfaip-part-1</id>
-    <content type="html"><![CDATA[<p>This is the first of a <a href="http://localhost:4000/blog/categories/htwfaip/">series of posts</a> on the book <a href="http://www.amazon.com/How-Win-Friends-Influence-People/dp/0671027034">&ldquo;How to Win Friends and Influence People&rdquo;</a> by <a href="http://en.wikipedia.org/wiki/Dale_Carnegie">Dale Carnegie</a>. Today: <strong>Handling People</strong>.</p>
-
-<!-- more -->
-
-
-<h3>1. Don&rsquo;t criticize condemn or complain</h3>
-
-<p>Criticism is futile because it puts a person on the defensive and usually makes him strive to justify himself. Criticism is dangerous, because it wounds a person’s precious pride, hurts his sense of importance, and arouses resentment.</p>
-
-<h3>2. Give sincere and honest appreciation</h3>
-
-<p>Everyone wants to feel important. We usually spend about 95 percent of our time thinking about ourselves. Be hearty in your approbation and lavish in your praise. Think of the other person’s good points, so you won’t have to resort to flattery. Try leaving a friendly trail of little sparks of gratitude on your daily trips.</p>
-
-<h3>3. Arouse in the other person an eager want</h3>
-
-<p> Talk about what they want and show them how to get it. Henry Ford: “If there is any one secret of success, it lies in the ability to get the other person’s point of view and see things from that person’s angle as well as from your own.”</p>
 ]]></content>
   </entry>
   

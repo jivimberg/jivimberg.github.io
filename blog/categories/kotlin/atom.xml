@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Kotlin | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/kotlin/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-08-08T11:24:44-07:00</updated>
+  <updated>2018-08-12T21:54:44-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[JaCoCo &amp; Kotlin: Coverage on Generated Code]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code/"/>
+    <updated>2018-08-12T21:26:43-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code</id>
+    <content type="html"><![CDATA[<p>JaCoCo works <em>flawlessly</em> with Kotlin. Except when it reports lines not covered on generated code 😡. Fortunately there’s a fix already in place.</p>
+
+<!--more-->
+
+
+<p><img class="center" src="/images/posts/2018-08-12/JaCoCo-before.png" width="720" title="’JaCoCo before’" ></p>
+
+<p><blockquote><p>What!? I didn’t even write those functions! There’s no way I’m writing tests for them. I’m pretty sure the compiler knows what it’s doing…</p><footer><strong>Me</strong> <cite>Every Time I Saw the Coverage Report</cite></footer></blockquote></p>
+
+<p>Good news is that this <a href="https://github.com/goodwinnk">has been fixed</a> in the latest JaCoCo release (thanks to <a href="https://github.com/goodwinnk">goodwink</a>). Bad news is that <strong>0.8.2 is not out yet</strong> 😞</p>
+
+<p>If you are like me, and can’t wait to get this working, you can <strong>use the SNAPSHOT version of JaCoCo</strong> making this changes on your <code>build.gradle</code>:</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='kotlin'><span class='line'><span class="n">repositories</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">…</span>
+</span><span class='line'>    <span class="n">maven</span><span class="p">(&amp;</span><span class="n">ldquo</span><span class="p">;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="p">=</span><span class="s">&quot;https://oss.sonatype.org/content/repositories/snapshots&quot;</span><span class="p">&gt;</span><span class="n">https</span><span class="p">:</span><span class="c1">//oss.sonatype.org/content/repositories/snapshots&lt;/a&gt;&amp;rdquo;)</span>
+</span><span class='line'><span class="p">}&lt;/</span><span class="n">p</span><span class="p">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">&lt;</span><span class="n">p</span><span class="p">&gt;</span><span class="n">jacoco</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">toolVersion</span> <span class="p">=</span> <span class="p">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="m">0.8</span><span class="p">.</span><span class="m">2</span><span class="p">-</span><span class="n">SNAPSHOT</span><span class="p">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
+</span><span class='line'><span class="p">}&lt;/</span><span class="n">p</span><span class="p">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">&lt;</span><span class="n">p</span><span class="p">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><em>(I’m using <a href="https://github.com/gradle/kotlin-dsl">Gradle with Kotlin DSL</a> in this example)</em></p>
+
+<p>Now you can finally take your Kotlin coverage to 100% without having to write tests for <code>component1()</code> and <code>component2()</code>.</p>
+
+<p><img class="center" src="/images/posts/2018-08-12/JaCoCo-after.png" width="720" title="’JaCoCo after’" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hierarchical Queries on RDBMS With JPA]]></title>
@@ -246,7 +294,8 @@ data class Woman (
 
 <p>Great, it works! But wait, <em>why do I see so many SELECT calls to the database?</em> As you’ve probably figured out the issue with this approach is that it falls in the <a href="https://stackoverflow.com/questions/97197/what-is-the-n1-select-query-issue">N + 1 SELECT problem</a>.</p>
 
-<p>Some authors even go as far as considering <a href="https://vladmihalcea.com/eager-fetching-is-a-code-smell/">eager fetching a <strong>code smell</strong></a>. In the words of <a href="https://vladmihalcea.com/about/">Vlad Mihalcea</a> (emphasis mine):</p>
+<p>Some authors even go as far as considering <a href="https://vladmihalcea.com/eager-fetching-is-a-code-smell/">eager fetching a <strong>code smell</strong></a>. In the words of <a href="https://vladmihalcea.com/about/">Vlad Mihalcea</a> (emphasis mine):
+s</p>
 
 <blockquote><p>The EAGER fetching strategy is a code smell. Most often it’s used for simplicity sake without considering the long-term performance penalties. The fetching strategy <strong>should never be the entity mapping responsibility</strong>. Each business use case has different entity load requirements and therefore the fetching strategy should be delegated to each individual query.</p></blockquote>
 
@@ -567,7 +616,7 @@ fun findTypeWithConnectBy(id: Long): Woman {
 fun buildGraph(queryResult: List<WomanWithRef>, id: Long): Woman {
     val rows = queryResult { it.id == id }
     val firstRow = rows.first()
-
+    
     val fields = if (rows.size == 1 && firstRow.daughterId == null) {
         mutableSetOf()
     } else {
@@ -575,7 +624,7 @@ fun buildGraph(queryResult: List<WomanWithRef>, id: Long): Woman {
             .map { buildGraph(queryResult, it) }
             .toMutableSet()
     }
-
+    
     return Woman(firstRow.name, fields, id)
 }
 
@@ -1223,108 +1272,6 @@ inline fun String.takeWhileInclusive(
 <ol>
 <li id="fn:1">
 <p>If you want to read more about my discoveries, check this question at <a href="https://stackoverflow.com/q/50373754/1499171">StackOverflow</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Spring Functional Routing]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/05/20/spring-functional-router/"/>
-    <updated>2018-05-20T00:16:22-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/05/20/spring-functional-router</id>
-    <content type="html"><![CDATA[<p>This post is about the clever tricks you can pull with Spring new <strong>functional routing</strong> and it’s Kotlin DSL.</p>
-
-<!--more-->
-
-
-<p><img class="center" src="/images/posts/2018-05-19/trainSwitch.jpg" title="’Train switch’" ></p>
-
-<p>Spring 5 introduced the <a href="https://spring.io/blog/2016/09/22/new-in-spring-5-functional-web-framework">Functional Web Framework</a> and with it the ability to do functional routing. Basically instead of annotating your methods with the good old <code>@RequestMapping</code> you can now write functions that go from a <code>Request</code> to a <code>Response&lt;T&gt;</code> (called <code>HandlerFunction&lt;T&gt;</code>). And then use a <code>RouterFunction&lt;T&gt;</code> to map which path will end up in which handler.</p>
-
-<p>Now, for the sake of brevity, I won’t talk about all the benefits of this new functional paradigm. Instead I’d like to focus on <strong>some things that can be done with functional routing that were not possible before</strong>.</p>
-
-<p>I have to admit that <strong>at first</strong> I wasn’t sold on the functional routing thing. Why would I want to replace <code>@RequestMapping</code> with 2 different functions? Isn’t that more code to achieve the same goal? For comparison this is how a <em>simple</em> RoutingFunction could look like<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
-
-<xmp class="kotlin-code" data-highlight-only>
-    fun router() = router {
-        accept(TEXT_HTML).nest {
-            GET("/") { permanentRedirect(URI("index.html")).build() }
-        }
-        "/api".nest {
-            accept(APPLICATION_JSON).nest {
-                GET("/users", userHandler::findAll)
-                POST("/users", userHandler::create)
-            }
-        }
-        resources("/**", ClassPathResource("static/"))
-    } 
-</xmp>
-
-
-<p>It’s readable but certainly not as succinct as <code>@GetMapping("/api/users")</code>. But <strong>this terseness comes at the price of expressiveness</strong>. Or as <a href="https://spring.io/blog/2016/09/22/new-in-spring-5-functional-web-framework">this article on Spring.io</a> puts it:</p>
-
-<blockquote><p>The <code>RouterFunction</code> has a similar purpose as a <code>@RequestMapping</code> annotation. However, there is an important distinction: with the annotation <strong>your route is limited to what can be expressed through the annotation values</strong>.</p></blockquote>
-
-<h2>Complex routing</h2>
-
-<p>I’ll use an example to illustrate some of the things that can be achieved with complex routing. Say I have some data modeling a <em>résumé</em> that contains multiple <em>sections</em>. <strong>I want to expose each of this sections as a different REST endpoint</strong>. Underneath we need to handle each call the same way, the only difference is that we’d be processing a different <em>section</em> of data. We could do the routing like this:</p>
-
-<xmp class="kotlin-code" data-highlight-only>
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
-import org.springframework.core.io.ClassPathResource
-import org.springframework.http.MediaType
-import org.springframework.web.reactive.function.server.RouterFunctions.resources
-import org.springframework.web.reactive.function.server.router
-
-//sampleStart
-    enum class Section(val fieldName: String) {
-    PERSONAL_INFO("personalInfo"),
-    EXPERIENCE("experience"),
-    SIDE_PROJECTS("sideProject"),
-    EDUCATION("education"),
-}
-
-@Configuration
-class Routing {
-    @Bean
-    fun resumeRouter(handler: ResumeHandler) = router {
-        accept(MediaType.APPLICATION_JSON).nest {
-            Section.values().forEach {
-                GET("/${it.fieldName}", handler.getSectionHandler(it))
-            }
-        }
-    }
-}
-//sampleEnd
-
-@Component
-class ResumeHandler {
-fun getSectionHandler(section: Section): (ServerRequest) -\> Mono<ServerResponse> =
-            { // get section from data and return response }
-}
-</xmp>
-
-
-<p>We can iterate through the enum and create a new mapping for each of the sections with the <code>GET</code> function. Furthermore the function <code>getSectionHandler</code> can receive the enum as parameter and use it for handling the response instead of having to rely only on the <code>ServerRequest</code> context.</p>
-
-<p>Now this is only one of the <em>tricks</em> that can be done with functional routing. Having a <a href="https://spring.io/blog/2017/08/01/spring-framework-5-kotlin-apis-the-functional-way#functional-routing-with-the-kotlin-dsl-for-spring-webflux">Kotlin DSL</a> means we can do <strong>any kind of scripting we can think of</strong> when defining the routes. As always:</p>
-
-<p><img class="center" src="/images/posts/2018-05-19/withGreatPower.png" title="’With great power comes great responsibility’" ></p>
-
-<p>Abusing this feature would make your routing logic a <strong>tangled mess</strong>, too hard to understand and maintain. So be smart about it.</p>
-
-<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
-
-
-
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>Source: [kotlin-swagger-spring-functional-template][2]<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
