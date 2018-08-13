@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-08-12T22:01:57-07:00</updated>
+  <updated>2018-08-12T22:12:20-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -440,7 +440,7 @@ fun buildGraph(queryResult: List<WomanWithRef>, id: Long): Woman {
 <!--more-->
 
 
-<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="http://jivimberg.github.io/images/posts/2018-07-28/cover.jpg" title="’Migrating to Cloud-Native Application book cover’" ></a></p>
+<p><a href="https://content.pivotal.io/ebooks/migrating-to-cloud-native-application-architectures"><img class="center" src="http://jivimberg.github.io/images/posts/2018-07-28/cover.jpg" title="’Migrating to Cloud-Native Application book cover’" ></a></p>
 
 <p>I’m really digging this O’Reilly booklet style! They <strong>condense a good overview of a specific topic in one-sitting books</strong>. While at the same time provide enough links and resources to keep you digging for a few afternoons if interested.</p>
 
@@ -809,7 +809,7 @@ tasks {
 
 <p>Let’s start by <em>setting the stage</em>, for this particular project I was working with the following stack:</p>
 
-<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-23/Stack.png" width="720" title="’Spring + Data + Kotlin + Oracle’" ></a></p>
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-23/Stack.png" width="720" title="’Spring + Data + Kotlin + Oracle’" ></p>
 
 <h2>The problem</h2>
 
@@ -954,15 +954,15 @@ data class Person(
 
 <p>The <strong>first</strong> thing I do every time I have to configure a new installation of IntelliJ is setting the theme to <em>Darcula</em>.</p>
 
-<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-10/Darcula.png" width="720" title="’Darcula theme’" ></a></p>
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-10/Darcula.png" width="720" title="’Darcula theme’" ></p>
 
 <p>The <strong>second</strong> thing I do is <strong>changing the font</strong> to <a href="https://github.com/tonsky/FiraCode">Fira Code</a>, and <strong>enabling font ligatures.</strong> Here’s how it looks like:</p>
 
-<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-10/FiraCodeExample.png" width="720" title="’Fira code example’" ></a></p>
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-10/FiraCodeExample.png" width="720" title="’Fira code example’" ></p>
 
 <p>You can enable this from <code>Settings</code> > <code>Editor</code> > <code>Font</code>. Make sure to check <code>Enable font ligatures</code> if you like that <code>≠</code> symbol.</p>
 
-<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-10/FiraCode.png" width="720" title="’Fira code setting’" ></a></p>
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-10/FiraCode.png" width="720" title="’Fira code setting’" ></p>
 
 <h2>2. Auto-reformat</h2>
 
@@ -977,7 +977,7 @@ data class Person(
 </ul>
 
 
-<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-10/saveActions.png" width="720" title="’Save actions settings’" ></a></p>
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-10/saveActions.png" width="720" title="’Save actions settings’" ></p>
 
 <p>Now your can just spit your <em>ugly</em> code and <strong>it’ll get perfectly formatted on each save</strong>. <em>Nice uh?</em></p>
 
@@ -991,7 +991,7 @@ data class Person(
 
 <p>Here you can see it in action:</p>
 
-<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-10/expandSelection.gif" title="’Expand and shrink selection animation’" ></a></p>
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-10/expandSelection.gif" title="’Expand and shrink selection animation’" ></p>
 
 <p>Just mentioning this one because it was new to me at the time and nowadays I find myself using it <strong>all the time!</strong></p>
 
