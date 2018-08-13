@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Jpa | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/jpa/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-08-12T21:54:44-07:00</updated>
+  <updated>2018-08-12T22:01:57-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -49,11 +49,11 @@ data class Woman (
 
 <p>In OO-talk that’s just one Type with a reference to itself like this:</p>
 
-<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="/images/posts/2018-08-04/UML.jpg" width="240" title="’UML’" ></a></p>
+<p><img class="center" src="/images/posts/2018-08-04/UML.jpg" width="240" title="’UML’" ></p>
 
 <p>And once we start creating a bunch of mothers, we’ll get a <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graph</a>. Although for this example, and to keep things simple, <strong>we’ll just model the offspring of just one single person</strong> so we get a nice tree like this:</p>
 
-<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="/images/posts/2018-08-04/tree.jpg" width="480" title="’Tree’" ></a></p>
+<p><img class="center" src="/images/posts/2018-08-04/tree.jpg" width="480" title="’Tree’" ></p>
 
 <p>But in DB this is stored in <strong>2 tables</strong>. One contains the Woman data and the other one the relationships.</p>
 
@@ -246,8 +246,7 @@ data class Woman (
 
 <p>Great, it works! But wait, <em>why do I see so many SELECT calls to the database?</em> As you’ve probably figured out the issue with this approach is that it falls in the <a href="https://stackoverflow.com/questions/97197/what-is-the-n1-select-query-issue">N + 1 SELECT problem</a>.</p>
 
-<p>Some authors even go as far as considering <a href="https://vladmihalcea.com/eager-fetching-is-a-code-smell/">eager fetching a <strong>code smell</strong></a>. In the words of <a href="https://vladmihalcea.com/about/">Vlad Mihalcea</a> (emphasis mine):
-s</p>
+<p>Some authors even go as far as considering <a href="https://vladmihalcea.com/eager-fetching-is-a-code-smell/">eager fetching a <strong>code smell</strong></a>. In the words of <a href="https://vladmihalcea.com/about/">Vlad Mihalcea</a> (emphasis mine):</p>
 
 <blockquote><p>The EAGER fetching strategy is a code smell. Most often it’s used for simplicity sake without considering the long-term performance penalties. The fetching strategy <strong>should never be the entity mapping responsibility</strong>. Each business use case has different entity load requirements and therefore the fetching strategy should be delegated to each individual query.</p></blockquote>
 
@@ -360,7 +359,7 @@ data class Woman(
 
 <p>If you’re using Oracle then we can solve this using a native query with <a href="https://docs.oracle.com/cd/B19306_01/server.102/b14200/queries003.htm"><code>CONNECT BY</code></a>. Turns out this clause was created specifically for <strong>selecting rows in hierarchical order</strong>.</p>
 
-<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="/images/posts/2018-08-04/connectby.gif" title="’Connect by syntax’" ></a></p>
+<p><img class="center" src="/images/posts/2018-08-04/connectby.gif" title="’Connect by syntax’" ></p>
 
 <p>We use <code>START WITH</code> to specify the root node of the hierarchy, and then <code>CONNECT BY</code> to specify the relationship between rows. Our query would look like this:</p>
 
@@ -568,7 +567,7 @@ fun findTypeWithConnectBy(id: Long): Woman {
 fun buildGraph(queryResult: List<WomanWithRef>, id: Long): Woman {
     val rows = queryResult { it.id == id }
     val firstRow = rows.first()
-    
+
     val fields = if (rows.size == 1 && firstRow.daughterId == null) {
         mutableSetOf()
     } else {
@@ -576,7 +575,7 @@ fun buildGraph(queryResult: List<WomanWithRef>, id: Long): Woman {
             .map { buildGraph(queryResult, it) }
             .toMutableSet()
     }
-    
+
     return Woman(firstRow.name, fields, id)
 }
 
