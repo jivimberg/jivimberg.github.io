@@ -35,11 +35,11 @@ data class Woman (
 
 In OO-talk that’s just one Type with a reference to itself like this:
 
-[{% img center /images/posts/2018-08-04/UML.jpg 240 ’UML’ %}][2]
+{% img center /images/posts/2018-08-04/UML.jpg 240 ’UML’ %}
 
 And once we start creating a bunch of mothers, we’ll get a [directed acyclic graph][3]. Although for this example, and to keep things simple, **we’ll just model the offspring of just one single person** so we get a nice tree like this:
 
-[{% img center /images/posts/2018-08-04/tree.jpg 480 ’Tree’ %}][4]
+{% img center /images/posts/2018-08-04/tree.jpg 480 ’Tree’ %}
 
 But in DB this is stored in **2 tables**. One contains the Woman data and the other one the relationships.
 
@@ -203,7 +203,7 @@ By setting the batch size to 10 we’re basically saying: _“Since you’re goi
 
 If you’re using Oracle then we can solve this using a native query with [`CONNECT BY`][19]. Turns out this clause was created specifically for **selecting rows in hierarchical order**.
 
-[{% img center /images/posts/2018-08-04/connectby.gif  ’Connect by syntax’ %}][20]
+{% img center /images/posts/2018-08-04/connectby.gif  ’Connect by syntax’ %}
 
 We use `START WITH` to specify the root node of the hierarchy, and then `CONNECT BY` to specify the relationship between rows. Our query would look like this:
 

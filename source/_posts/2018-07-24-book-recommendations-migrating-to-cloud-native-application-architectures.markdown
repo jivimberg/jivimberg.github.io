@@ -27,7 +27,7 @@ On the last chapter, called **Migration Cookbook**, Matt explores different stra
 [2]:	https://twitter.com/yanaga
 [3]:	https://content.pivotal.io/ebooks/migrating-to-cloud-native-application-architectures
 [4]:	@mstine
-[5]:	https://developers.redhat.com/promotions/migrating-to-microservice-databases/
+[5]:	https://content.pivotal.io/ebooks/migrating-to-cloud-native-application-architectures
 [6]:	https://www.thoughtworks.com/radar/techniques/inverse-conway-maneuver
 [7]:	https://en.wikipedia.org/wiki/Domain-driven_design
 [8]:	http://projects.spring.io/spring-cloud/

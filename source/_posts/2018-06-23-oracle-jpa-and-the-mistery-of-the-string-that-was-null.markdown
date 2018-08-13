@@ -14,11 +14,11 @@ This is the story of how Oracle DB was messing up Kotlin’s type system, and wh
 
 Let’s start by _setting the stage_, for this particular project I was working with the following stack:
 
-[{% img center /images/posts/2018-06-23/Stack.png 720 ’Spring + Data + Kotlin + Oracle’ %}][1]
+{% img center /images/posts/2018-06-23/Stack.png 720 ’Spring + Data + Kotlin + Oracle’ %}
 
-## The problem 
+## The problem
 
-So I had modeled the following **Entity** leveraging Kotlin’s [data classes][2][^1]:
+So I had modeled the following **Entity** leveraging Kotlin’s [data classes][1][^1]:
 
 <xmp class="kotlin-code" data-highlight-only>
 import javax.persistence.Entity
@@ -48,7 +48,7 @@ That’s when I discovered:
 This is because Oracle internally changes empty string to NULL values. Oracle simply won't let insert an empty string.
 {% endblockquote %}
 
-So when the data was mapped back to my `Person` object I ended up with a `null` value for _name_. This is probably only possible because **Hibernate is using reflection to set the field value** in runtime, thus breaking Kotlin’s [null safety][3].
+So when the data was mapped back to my `Person` object I ended up with a `null` value for _name_. This is probably only possible because **Hibernate is using reflection to set the field value** in runtime, thus breaking Kotlin’s [null safety][2].
 
 ## What I did about it
 
@@ -62,7 +62,7 @@ In fact you might even want to **implement a more strict validation** so people 
 
 First thing I did was to try to reproduce this using a test. But since I was using `@DataJpaTest` with H2 embedded DB empty strings where empty strings an nulls where nulls. So the issue was **not reproducible**.
 
-That’s when I learned that you **can tell H2 to behave like an Oracle DB** using [Oracle Compatibility mode][4]. To achieve this I added the following configuration to my `application.yml` under `test/resources`:
+That’s when I learned that you **can tell H2 to behave like an Oracle DB** using [Oracle Compatibility mode][3]. To achieve this I added the following configuration to my `application.yml` under `test/resources`:
 
 ```
 spring:
@@ -118,7 +118,6 @@ The result is that now if somebody tries to persist a Person with an empty name 
 
 [^2]:	It would be nice right?
 
-[1]:	https://developers.redhat.com/promotions/migrating-to-microservice-databases/
-[2]:	https://kotlinlang.org/docs/reference/data-classes.html
-[3]:	https://kotlinlang.org/docs/reference/null-safety.html
-[4]:	http://www.h2database.com/html/features.html
+[1]:	https://kotlinlang.org/docs/reference/data-classes.html
+[2]:	https://kotlinlang.org/docs/reference/null-safety.html
+[3]:	http://www.h2database.com/html/features.html
