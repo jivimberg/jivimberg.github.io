@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Kotlin | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/kotlin/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-08-12T22:12:20-07:00</updated>
+  <updated>2018-08-26T22:20:44-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -22,6 +22,12 @@
 
 <!--more-->
 
+
+<hr />
+
+<h3><em>Update 08/26:</em> <strong>JaCoCo 0.8.2 has now officially been released</strong> 👏 No need to use the <em>0.8.2-SNAPSHOT</em> anymore.</h3>
+
+<hr />
 
 <p><img class="center" src="/images/posts/2018-08-12/JaCoCo-before.png" width="720" title="’JaCoCo before’" ></p>
 
