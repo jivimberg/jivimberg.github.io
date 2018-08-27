@@ -10,6 +10,12 @@ JaCoCo works _flawlessly_ with Kotlin. Except when it reports lines not covered 
 
 <!--more-->
 
+---- 
+
+### _Update 08/26:_ **JaCoCo 0.8.2 has now officially been released** 👏 No need to use the _0.8.2-SNAPSHOT_ anymore. 
+
+---- 
+
 {% img center /images/posts/2018-08-12/JaCoCo-before.png 720 ’JaCoCo before’ %}
 
 {% blockquote Me, Every time I saw the coverage report %}
