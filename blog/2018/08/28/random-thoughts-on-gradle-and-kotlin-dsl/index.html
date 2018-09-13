@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Random Thoughts on Using Gradle With Kotlin DSL - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Random Thoughts on Using Gradle With Kotlin DSL written August 28, 2018 in gradle, kotlin, kotlin-dsl, multi-module, spring Since Gradle 3.0 you can &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49016076-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Random Thoughts on Using Gradle With Kotlin DSL</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2018-08-28T08:36:57-07:00" pubdate data-updated="true">August 28, 2018</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/gradle/'>gradle</a>, <a class='category' href='/blog/categories/kotlin/'>kotlin</a>, <a class='category' href='/blog/categories/kotlin-dsl/'>kotlin-dsl</a>, <a class='category' href='/blog/categories/multi-module/'>multi-module</a>, <a class='category' href='/blog/categories/spring/'>spring</a>
+  
+</span>
+
+
+        </div>
+        <p>Since Gradle 3.0 you can <a href="https://blog.gradle.org/kotlin-meets-gradle"><strong>write your build scripts using Kotlin instead of Groovy</strong></a>. I was curious, so I decided to give it a try. Here are my thoughts on the process.</p>
+
+<!--more-->
+
+
+<h1>Why?</h1>
+
+<p>Ok, we can write our build scripts in Kotlin, but you might be wondering: <em>”why would I want to do that?”</em> Here are my reasons:</p>
+
+<h2>1. All things Kotlin</h2>
+
+<p>Our backend codebase is <em>mostly written in Kotlin</em>. We even wrote our <a href="https://jivimberg.io/blog/2018/07/03/writing-githooks-in-kotlin/">githooks using Kotlin scripts!</a> So it was only natural to use Kotlin on our build tools too.</p>
+
+<p>Being able to use the same language across the stack means that your learning efforts pays double. This way <strong>the team doesn’t have to learn a new language just to write a simple Gradle task.</strong> And as an added bonus you can apply <em>the same testing, coverage and code inspection tools</em> that you use in production to your tooling code.</p>
+
+<h2>2. IDE support</h2>
+
+<p>The second reason for making the transition was IDE support. Groovy is a dynamically typed language, which makes it harder for the IDE to provide accurate code completion and script validity through type checks. Kotlin being statically typed doesn’t suffer from the same problems</p>
+
+<p><img class="center" src="/images/posts/2018-09-11/kotlin-code-completion.png" title="‘Kotlin code completion’" ></p>
+
+<h2>3. Interoperability</h2>
+
+<p>As you probably know <a href="https://kotlinlang.org/docs/reference/java-interop.html">Kotlin was designed with Java interoperability in mind</a>. And the same interoperability <a href="">extends to Groovy code</a>.</p>
+
+<p>This interoperability let us <strong><a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy_2">call Groovy code from Kotlin</a> and <a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy">viceversa</a></strong>. Which effectively means that you can have <strong>a mix of both Groovy and Kotlin scripts working together in the same project</strong>. So no need to migrate all your build scripts at once, or to push stubborn <em>“Wally”</em> to learn Kotlin DSL.</p>
+
+<p><img class="center" src="/images/posts/2018-09-11/wally2.png" title="‘Wally’" ></p>
+
+<h1>The exodus</h1>
+
+<p><em>”So how painful was the migration?”</em> It wasn’t that bad really. Kotlin DSL was designed to be pretty similar to the classic <code>build.gradle</code> files.</p>
+
+<p>You’ll just have to <strong>push through that first moment</strong> when nothing seems to be working, your project doesn’t compile at all, and you know you’re a <code>⌘ + Z</code> away from a pristine working copy. <em>But you can&rsquo;t make an omelet without breaking a few eggs, can you?</em></p>
+
+<p><img class="center" src="/images/posts/2018-09-11/panic.png" title="‘Panic!’" ></p>
+
+<p><strong>I just wish there was some kind of automatic migration action in IntelliJ.</strong> Even if it’s a best effort that leaves you half way there, I’d greatly appreciate it. Ideally it should work just like when you paste some Java code into a Kotlin file: <code>⌘ + V</code> + ✨<em>fairy dust</em>✨ and you have your <code>build.gradle.kts</code> ready to go.</p>
+
+<h3>Resources</h3>
+
+<p>This are the resources that help me complete the migration. Hopefully you’ll find them helpful too.</p>
+
+<ul>
+<li><a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/"><strong>Official Gradle migration guide</strong></a> <strong>Start here!</strong> You don’t have to cover the whole thing but you can skim through it and later go back to the section you need.</li>
+<li><a href="https://github.com/gradle/kotlin-dsl/tree/master/samples/"><strong>Samples in the Kotlin DSL repo</strong></a> This is <strong>the go-to place for Kotlin DSL samples</strong>. You’ll find yourself coming back to this repo over and over. Be sure to search the <em>Issues</em> section too.</li>
+<li>For the times when the <a href="https://github.com/gradle/kotlin-dsl/tree/master/samples/">Kotlin DSL repo</a> doesn’t have what you’re looking for, I find it useful to use <a href="https://github.com/search/advanced"><strong>Github Search</strong></a> looking for code in files with <code>*.kts</code> extension.</li>
+<li><a href="https://github.com/jnizet/gradle-kotlin-dsl-migration-guide"><strong>jnizet/gradle-kotlin-dsl-migration-guide</strong></a> this is another migration guide that has proven useful in the past.</li>
+<li>Finally I followed <a href="https://handstandsam.com/2018/02/11/kotlin-buildsrc-for-better-gradle-dependency-management/"><strong>this article</strong></a> by <a href="https://handstandsam.com/about-me/">Handstand Sam</a> to do <em>dependency management</em> on out multi-module project.</li>
+</ul>
+
+
+<h1>The not so good</h1>
+
+<h2>1. <em>“I can’t just copy-past things from Stack Overflow”</em></h2>
+
+<p><img class="center" src="/images/posts/2018-09-11/copy-paste.jpg" width="250" title="‘Copy paste from Stack Overflow’" ></p>
+
+<p>This is <strong>by far the biggest drawback</strong>. In my experience most teams have one or two <em>”build tool experts”</em>. The rest of the team just use a few tasks and maybe add a dependency every now and then. This casual user might have a harder time using Kotlin DSL because <strong>copy-pasting pieces of code from the web will not work out of the box</strong>. Converting this snippets to Kotlin DSL is not rocket-science, but in some cases it might require some basic level of understanding of how Kotlin DSL works.</p>
+
+<p>This is specially true when using plugins that were not designed with Kotlin DSL in mind (I’m looking at you <a href="https://github.com/google/protobuf-gradle-plugin/issues/219">protobuf Gradle plugin</a>).</p>
+
+<h2>2. IDE support could be better</h2>
+
+<p>Remember all the nice things I said about IDE auto-completion on the build scripts? Well let me clarify: <em>“IDE support is awesome… most of the time”</em>.</p>
+
+<p>Once you have your script fully migrated and IntelliJ has finished indexing then everything should work just fine. But to get there you’ll have to have your full <code>build.gradle</code> script fully migrated. That’s why my advice is to <strong>comment everything out and start migrating piece by piece</strong>. For example you can start with configuring the <em>repositories</em>, and <em>plugins</em> and only then move to <em>dependencies</em>.</p>
+
+<p>This gets intensified if you are working on a <a href="https://guides.gradle.org/creating-multi-project-builds/">multi-module project</a> and/or you’re using <a href="https://docs.gradle.org/current/userguide/custom_plugins.html"><code>buildSrc</code> for custom plugins</a>.</p>
+
+<p>The silver lining is that IDE support is getting better with each release, and once you’ve migrated everything it mostly works.</p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl/';
+        var disqus_url = 'http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code/" title="Previous Post: JaCoCo &amp; Kotlin: coverage on generated code">&laquo; Previous: JaCoCo &amp; Kotlin: coverage on generated code</a>
+        
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

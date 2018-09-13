@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Kotlin | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/kotlin/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-08-26T22:20:44-07:00</updated>
+  <updated>2018-09-12T21:14:57-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,85 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Random Thoughts on Using Gradle With Kotlin DSL]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl/"/>
+    <updated>2018-08-28T08:36:57-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl</id>
+    <content type="html"><![CDATA[<p>Since Gradle 3.0 you can <a href="https://blog.gradle.org/kotlin-meets-gradle"><strong>write your build scripts using Kotlin instead of Groovy</strong></a>. I was curious, so I decided to give it a try. Here are my thoughts on the process.</p>
+
+<!--more-->
+
+
+<h1>Why?</h1>
+
+<p>Ok, we can write our build scripts in Kotlin, but you might be wondering: <em>”why would I want to do that?”</em> Here are my reasons:</p>
+
+<h2>1. All things Kotlin</h2>
+
+<p>Our backend codebase is <em>mostly written in Kotlin</em>. We even wrote our <a href="https://jivimberg.io/blog/2018/07/03/writing-githooks-in-kotlin/">githooks using Kotlin scripts!</a> So it was only natural to use Kotlin on our build tools too.</p>
+
+<p>Being able to use the same language across the stack means that your learning efforts pays double. This way <strong>the team doesn’t have to learn a new language just to write a simple Gradle task.</strong> And as an added bonus you can apply <em>the same testing, coverage and code inspection tools</em> that you use in production to your tooling code.</p>
+
+<h2>2. IDE support</h2>
+
+<p>The second reason for making the transition was IDE support. Groovy is a dynamically typed language, which makes it harder for the IDE to provide accurate code completion and script validity through type checks. Kotlin being statically typed doesn’t suffer from the same problems</p>
+
+<p><img class="center" src="/images/posts/2018-09-11/kotlin-code-completion.png" title="‘Kotlin code completion’" ></p>
+
+<h2>3. Interoperability</h2>
+
+<p>As you probably know <a href="https://kotlinlang.org/docs/reference/java-interop.html">Kotlin was designed with Java interoperability in mind</a>. And the same interoperability <a href="">extends to Groovy code</a>.</p>
+
+<p>This interoperability let us <strong><a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy_2">call Groovy code from Kotlin</a> and <a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy">viceversa</a></strong>. Which effectively means that you can have <strong>a mix of both Groovy and Kotlin scripts working together in the same project</strong>. So no need to migrate all your build scripts at once, or to push stubborn <em>“Wally”</em> to learn Kotlin DSL.</p>
+
+<p><img class="center" src="/images/posts/2018-09-11/wally2.png" title="‘Wally’" ></p>
+
+<h1>The exodus</h1>
+
+<p><em>”So how painful was the migration?”</em> It wasn’t that bad really. Kotlin DSL was designed to be pretty similar to the classic <code>build.gradle</code> files.</p>
+
+<p>You’ll just have to <strong>push through that first moment</strong> when nothing seems to be working, your project doesn’t compile at all, and you know you’re a <code>⌘ + Z</code> away from a pristine working copy. <em>But you can&rsquo;t make an omelet without breaking a few eggs, can you?</em></p>
+
+<p><img class="center" src="/images/posts/2018-09-11/panic.png" title="‘Panic!’" ></p>
+
+<p><strong>I just wish there was some kind of automatic migration action in IntelliJ.</strong> Even if it’s a best effort that leaves you half way there, I’d greatly appreciate it. Ideally it should work just like when you paste some Java code into a Kotlin file: <code>⌘ + V</code> + ✨<em>fairy dust</em>✨ and you have your <code>build.gradle.kts</code> ready to go.</p>
+
+<h3>Resources</h3>
+
+<p>This are the resources that help me complete the migration. Hopefully you’ll find them helpful too.</p>
+
+<ul>
+<li><a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/"><strong>Official Gradle migration guide</strong></a> <strong>Start here!</strong> You don’t have to cover the whole thing but you can skim through it and later go back to the section you need.</li>
+<li><a href="https://github.com/gradle/kotlin-dsl/tree/master/samples/"><strong>Samples in the Kotlin DSL repo</strong></a> This is <strong>the go-to place for Kotlin DSL samples</strong>. You’ll find yourself coming back to this repo over and over. Be sure to search the <em>Issues</em> section too.</li>
+<li>For the times when the <a href="https://github.com/gradle/kotlin-dsl/tree/master/samples/">Kotlin DSL repo</a> doesn’t have what you’re looking for, I find it useful to use <a href="https://github.com/search/advanced"><strong>Github Search</strong></a> looking for code in files with <code>*.kts</code> extension.</li>
+<li><a href="https://github.com/jnizet/gradle-kotlin-dsl-migration-guide"><strong>jnizet/gradle-kotlin-dsl-migration-guide</strong></a> this is another migration guide that has proven useful in the past.</li>
+<li>Finally I followed <a href="https://handstandsam.com/2018/02/11/kotlin-buildsrc-for-better-gradle-dependency-management/"><strong>this article</strong></a> by <a href="https://handstandsam.com/about-me/">Handstand Sam</a> to do <em>dependency management</em> on out multi-module project.</li>
+</ul>
+
+
+<h1>The not so good</h1>
+
+<h2>1. <em>“I can’t just copy-past things from Stack Overflow”</em></h2>
+
+<p><img class="center" src="/images/posts/2018-09-11/copy-paste.jpg" width="250" title="‘Copy paste from Stack Overflow’" ></p>
+
+<p>This is <strong>by far the biggest drawback</strong>. In my experience most teams have one or two <em>”build tool experts”</em>. The rest of the team just use a few tasks and maybe add a dependency every now and then. This casual user might have a harder time using Kotlin DSL because <strong>copy-pasting pieces of code from the web will not work out of the box</strong>. Converting this snippets to Kotlin DSL is not rocket-science, but in some cases it might require some basic level of understanding of how Kotlin DSL works.</p>
+
+<p>This is specially true when using plugins that were not designed with Kotlin DSL in mind (I’m looking at you <a href="https://github.com/google/protobuf-gradle-plugin/issues/219">protobuf Gradle plugin</a>).</p>
+
+<h2>2. IDE support could be better</h2>
+
+<p>Remember all the nice things I said about IDE auto-completion on the build scripts? Well let me clarify: <em>“IDE support is awesome… most of the time”</em>.</p>
+
+<p>Once you have your script fully migrated and IntelliJ has finished indexing then everything should work just fine. But to get there you’ll have to have your full <code>build.gradle</code> script fully migrated. That’s why my advice is to <strong>comment everything out and start migrating piece by piece</strong>. For example you can start with configuring the <em>repositories</em>, and <em>plugins</em> and only then move to <em>dependencies</em>.</p>
+
+<p>This gets intensified if you are working on a <a href="https://guides.gradle.org/creating-multi-project-builds/">multi-module project</a> and/or you’re using <a href="https://docs.gradle.org/current/userguide/custom_plugins.html"><code>buildSrc</code> for custom plugins</a>.</p>
+
+<p>The silver lining is that IDE support is getting better with each release, and once you’ve migrated everything it mostly works.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[JaCoCo &amp; Kotlin: Coverage on Generated Code]]></title>
@@ -1032,251 +1111,6 @@ data class Person(
 <p>If I had a dollar for every time I modeled a Person…<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 <li id="fn:2">
 <p>It would be nice right?<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Implementing takeWhileInclusive in Kotlin]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin/"/>
-    <updated>2018-06-02T13:33:38-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin</id>
-    <content type="html"><![CDATA[<p>Implementing <code>takeWhileInclusive</code> extension function in Kotlin.</p>
-
-<!--more-->
-
-
-<blockquote><p>TL,DR (aka <em>“just show me the code”</em> ): <a href="https://gist.github.com/jivimberg/ff5aad3f5c6315deb420fd508a145c61">https://gist.github.com/jivimberg/ff5aad3f5c6315deb420fd508a145c61</a></p></blockquote>
-
-<p>You probably know about <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/take-while.html"><code>takeWhile</code></a> operation that <strong>returns a List containing the first elements satisfying the given predicate.</strong></p>
-
-<xmp class="kotlin-code">
-fun main(args: Array<String>) {
-//sampleStart
-    val someNumbers = listOf(1, 5, 3, 22, 4, 8, 14, 23, 49, 77, 2, 49)
-    println(someNumbers.takeWhile { it % 7 != 0 })
-//sampleEnd
-}
-</xmp>
-
-
-<p>I was in need of an <strong>inclusive</strong> version of the <code>takeWhile</code>. In other words I needed a function that returned the first elements satisfying the given predicate, <strong>plus the first element that didn’t satisfy it</strong>.</p>
-
-<p>So in the provided example <code>takeWhile</code> returns <code>[1, 5, 3, 22, 4, 8]</code> whereas <code>takeWhileInclusive</code> would return <code>[1, 5, 3, 22, 4, 8, 14] </code> .</p>
-
-<p>A quick search showed me I was not alone. <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/take-while.html"><em>matklad</em></a> already had a simple implementation working for <code>Sequence</code>:</p>
-
-<p><div><script src='https://gist.github.com/54776705250e3b375618f59a8247a237.js'></script>
-<noscript><pre><code>fun &lt;T&gt; Sequence&lt;T&gt;.takeWhileInclusive(pred: (T) -&gt; Boolean): Sequence&lt;T&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = pred(it)
-        result
-    }
-}
-</code></pre></noscript></div>
-</p>
-
-<p>Using <strong>extension functions</strong> we are able to add a new function to the standard library type <code>Sequence</code>. If this is your first encounter with an extension function I’d encourage you to read more about them <a href="https://kotlinlang.org/docs/reference/extensions.html#extension-functions">here</a> and then play with them <a href="https://try.kotlinlang.org/#/Kotlin%20Koans/Introduction/Extension%20functions/Task.kt">here</a>.</p>
-
-<p>I found this implementation of <code>takeWhileInclusive</code> quite <strong>elegant</strong>. It uses the original <code>takeWhile</code> with the given predicated, but keeps a <code>shouldContinue</code> variable to delay the predicate evaluation by one step. In other words the evaluation of the predicate passed to <code>takeWhile</code> on element <em>i</em> will actually be the result of applying the predicate function on <em>i - 1</em>. Which if you think about it <em>is exactly what we need</em>. Let’s give it a try:</p>
-
-<xmp class="kotlin-code">
-fun <T> Sequence<T>.takeWhileInclusive(
-        predicate: (T) -> Boolean
-): Sequence<T> {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-fun main(args: Array<String>) {
-//sampleStart
-   val someNumbers = listOf(1, 5, 3, 22, 4, 8, 14, 23, 49, 77, 2, 49).asSequence()
-   println(someNumbers.takeWhileInclusive { it % 7 != 0 }.toList())
-//sampleEnd
-}
-</xmp>
-
-
-<p>This was good! Only <a href="https://gist.github.com/matklad/54776705250e3b375618f59a8247a237#gistcomment-2093675">this comment</a> posted on the original gist made me doubt about the <em>safety</em> of this approach:</p>
-
-<blockquote><p><em>“I love this. If Sequence were parallel, though, wouldn&rsquo;t there be worries about using out-of-closure state?”</em></p></blockquote>
-
-<p>That send me down the rabbit hole and I spent some days reading about <code>parallelStreams</code> and <code>coroutines</code> until I convinced my self the approach was ok.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
-
-<p>With that out of the way I decided to port this solution to be supported in all the places where the <code>takeWhile</code> exists (including <code>String</code> and <code>CharArray</code>). So that <strong>we don’t have to convert to a from a Sequence just to use this function</strong>.</p>
-
-<p>Here’s the end result, ready to be dropped on your project:</p>
-
-<p><div><script src='https://gist.github.com/ff5aad3f5c6315deb420fd508a145c61.js'></script>
-<noscript><pre><code>// kotlin.collections
-
-inline fun &lt;T&gt; Array&lt;out T&gt;.takeWhileInclusive(
-        predicate: (T) -&gt; Boolean
-): List&lt;T&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun ByteArray.takeWhileInclusive(
-        predicate: (Byte) -&gt; Boolean
-): List&lt;Byte&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun ShortArray.takeWhileInclusive(
-        predicate: (Short) -&gt; Boolean
-): List&lt;Short&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun IntArray.takeWhileInclusive(
-        predicate: (Int) -&gt; Boolean
-): List&lt;Int&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun LongArray.takeWhileInclusive(
-        predicate: (Long) -&gt; Boolean
-): List&lt;Long&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun FloatArray.takeWhileInclusive(
-        predicate: (Float) -&gt; Boolean
-): List&lt;Float&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun DoubleArray.takeWhileInclusive(
-        predicate: (Double) -&gt; Boolean
-): List&lt;Double&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun BooleanArray.takeWhileInclusive(
-        predicate: (Boolean) -&gt; Boolean
-): List&lt;Boolean&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun CharArray.takeWhileInclusive(
-        predicate: (Char) -&gt; Boolean
-): List&lt;Char&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun &lt;T&gt; Iterable&lt;T&gt;.takeWhileInclusive(
-        predicate: (T) -&gt; Boolean
-): List&lt;T&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-// kotlin.sequences
-
-fun &lt;T&gt; Sequence&lt;T&gt;.takeWhileInclusive(
-        predicate: (T) -&gt; Boolean
-): Sequence&lt;T&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-// kotlin.text
-
-inline fun CharSequence.takeWhileInclusive(
-        predicate: (Char) -&gt; Boolean
-): CharSequence {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun String.takeWhileInclusive(
-        predicate: (Char) -&gt; Boolean
-): String {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}</code></pre></noscript></div>
-</p>
-
-<p>Hope you find this useful!</p>
-
-<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
-
-
-
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>If you want to read more about my discoveries, check this question at <a href="https://stackoverflow.com/q/50373754/1499171">StackOverflow</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
