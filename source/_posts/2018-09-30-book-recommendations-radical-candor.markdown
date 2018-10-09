@@ -20,7 +20,7 @@ Last week I finished [Radical Candor][1] a book by [Kim Scott][2] about _how to 
 
 {% endblockquote %}
 
-If somebody’s work is subpar and you let it pass and pretend is good **you’re doing everybody a disservice**. You’re hurting the team because you or somebody will have to cover up for the guy and redo the work. And at the same time you’re setting the precedent that it is ok to deliver poor work. 
+If somebody’s work is subpar and you let it pass and pretend is good, **you’re doing everybody a disservice**. You’re hurting the team because either you or somebody else, will have to cover up for the guy and redo the work. And at the same time you’re setting a precedent that it is OK to deliver poor work. 
 
 But even more importantly **you’re not giving that person the chance to improve by pointing out what he/she needs to work on!** So if you care about your team, speak up! Be _honest_, be _direct_ and be _specific_.
 
@@ -35,7 +35,7 @@ So, how to put this in practice? The book has a ton of useful **tips on how to c
 1. **Start by asking for feedback before giving it**. Show that you’re open to criticism and make sure you reward people that takes the time and effort to correct you. This is the only way you can build of culture of radical candor.
 2. **Don’t make it personal**. When pointing out things that can be improved make it clear that it’s not about the person but about the work done. Be specific! And present it as an opportunity for improvement and _offering help and guidance to fix the problem_.
 
-# 3. Not everybody is looking for  a promotion 
+# 3. Not everybody is looking for  a promotion
 
 This one is about how we value and judge ambition. As the book points out **not everybody on your team is eager to jump to a new position or wants to be a manager**. You’ll probably have some team members that are content with their current position and, for whatever reason, are not looking for a change. And that’s ok! 
 
