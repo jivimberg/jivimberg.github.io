@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2018/09/30/book-recommendations-radical-candor/</loc>
+<lastmod>2018-09-30T11:28:59-07:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl/</loc>
 <lastmod>2018-08-28T08:36:57-07:00</lastmod>
 </url>
@@ -352,5 +356,11 @@
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/categories/multi-module/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/soft-skill/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/manager/</loc>
 </url>
 </urlset>
