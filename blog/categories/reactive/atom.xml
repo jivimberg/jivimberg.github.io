@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Reactive | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/reactive/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2018-10-24T23:22:37-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Reactive GraphQL Subscriptions From Kafka]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka/"/>
+    <updated>2018-10-23T07:58:14-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka</id>
+    <content type="html"><![CDATA[<p>In this post I’ll be exploring how to implement <a href="https://github.com/facebook/graphql/blob/master/rfcs/Subscriptions.md">GraphQL subscriptions</a> <em>reactively</em> on a Spring Boot application using <a href="https://kafka.apache.org/">Kafka</a>.</p>
+
+<!--more-->
+
+
+<h1>The use case</h1>
+
+<p>So, <em>what are we trying to achieve?</em> We want to provide <strong>a way for clients to get notified</strong> whenever an event occurs in the application.</p>
+
+<p>The GraphQL way of doing this is through a <a href="https://github.com/facebook/graphql/blob/master/rfcs/Subscriptions.md">Subscription</a>. For the application events we’re using Kafka. So all we are trying to do is to tie those 2 things so that <strong>whenever an event pops up in Kafka all clients with an active subscription get notified</strong>.</p>
+
+<p><img class="center" src="/images/posts/2018-10-24/SubscriptionFlow.png" width="700" title="‘Subscription flow diagram’" ></p>
+
+<h1>The setup</h1>
+
+<p>Let’s introduce the different pieces of the puzzle:</p>
+
+<ol>
+<li>I have a <a href="https://spring.io/guides/gs/spring-boot/">Spring Boot application</a> that has some business logic.</li>
+<li>Using <a href="https://github.com/graphql-java-kickstart/graphql-spring-boot"><code>graphql-spring-boot-starter</code></a> I’m exposing my service through a GraphQL API. <strong>One of those endpoints it’s going to be a Subscription endpoint.</strong> It’s schema definition looks something like this:</li>
+</ol>
+
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">type</span> <span class="n">Subscription</span> <span class="o">{</span>
+</span><span class='line'> <span class="nl">event:</span> <span class="n">EventMessage</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<ol>
+<li>On the other end I have a <a href="https://kafka.apache.org/documentation/#intro_topics">Kafka topic</a> with events that a user might be interested in. We plan to use <a href="https://github.com/reactor/reactor-kafka">Reactor Kafka</a> to <strong>consume the events through a reactive stream</strong>.</li>
+</ol>
+
+
+<p><img class="center" src="/images/posts/2018-10-24/Setup.png" width="800" title="’Setup diagram’" ></p>
+
+<p>So the challenge is: <em>how do we connect all this pieces together?</em></p>
+
+<h1>Reactive all the way</h1>
+
+<p>To implement the resolver <a href="https://github.com/graphql-java-kickstart/graphql-java-tools">GraphQL Java Tools</a> <strong>requires that we implement a function that returns a <code>Publisher&lt;T&gt;</code></strong>. Where <em>T</em> is the type of event to be pushed to the subscriber. From <a href="https://github.com/graphql-java/graphql-java">GraphQL Java</a> documentation:</p>
+
+<blockquote><p>What is special is that the initial result of a subscription query is a <strong>reactive-streams Publisher object</strong> which you need to use to get the future values.</p></blockquote>
+
+<p>On the other end <strong>we can use <a href="https://github.com/reactor/reactor-kafka">Reactor Kafka</a> to create a reactive Receiver</strong> to consume the events from the topic. Then all that’s left is <strong>obtaining a <code>Publisher</code> from this receiver so that clients can subscribe to it</strong>. This is all the code we need:</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import graphql.schema.DataFetchingEnvironment
+import org.reactivestreams.Publisher
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
+import reactor.core.publisher.Flux
+import reactor.kafka.receiver.KafkaReceiver
+import reactor.kafka.receiver.ReceiverOptions
+
+@Component
+class SubscriptionsResolverImpl(
+    receiverOptions: ReceiverOptions<String, EntityUpdated>                 // Receiver configuration. Injected by Spring
+) : SubscriptionsResolver {
+
+    private val logger = LoggerFactory.getLogger(javaClass)
+
+    private val kafkaReceiver: Flux<GraphqlEvents.Update> by lazy {         // Use lazy to delay KafkaReceiver initialization
+        KafkaReceiver.create(receiverOptions).receive()                     // Create Kafka reactive receiver
+            .map { GraphqlEvents.Update.fromEvent(it.value()) }             // Map from Kafka event to Graphql Event
+            .doFinally { logger.info("Closing with signal: ${it.name}") }   // Log message on stream closure
+            .publish()                                                      // Get a ConnectableFlux. Turns stream to hot
+            .autoConnect()                                                  // Connect to upstream on first subscription
+    }
+
+    override fun event(env: DataFetchingEnvironment): Publisher<GraphqlEvents.Update> {
+        logger.info("GraphQL 'event' subscription called")              // Log message on each new subscription
+        return kafkaReceiver                                                // Returns kafkaReceiver for GraphQL to subscribe to it
+    }
+}
+</xmp>
+
+
+<p>Just to recap. We are <strong>creating a Kafka Receiver</strong> for the topic we care about (the topic configuration is part of the <code>receiverOptions</code> object, not shown in the snippet).</p>
+
+<p>We are <strong>mapping the event</strong> from the <em>Kafka model</em> to the <em>GraphQL model</em> through the <code>map()</code> method.</p>
+
+<p>Then we are turning the receiver into a hot stream by calling <code>publish()</code>. We are doing this because <strong>we want new subscribers to only see events that happened after they subscribed to the <code>Publisher</code></strong>. And that’s exactly what <code>publish()</code> does. In fact if you pay close attention to the marble diagram of the <a href="https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html#publish--">method documentation</a> you’ll notice how <strong>it looks pretty similar to our use case flow diagram.</strong></p>
+
+<p><img class="center" src="/images/posts/2018-10-24/publish.png" width="500" title="‘Publish marble diagram’" ></p>
+
+<p>We’re calling <code>autoConnect()</code> so that it connects to the upstream source as soon as the first <code>Subscriber</code> subscribes.</p>
+
+<p>Finally we’re implementing the <code>event</code> function <strong>by simply returning the reference to our hot stream of events</strong>. Whenever a new client calls the Subscription endpoint <strong>GraphQL Java will subscribe to this stream</strong> and send a message for every new event that shows up in the configured Kafka topic.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+]]></content>
+  </entry>
+  
+</feed>
