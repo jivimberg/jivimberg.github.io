@@ -67,7 +67,7 @@ class SubscriptionsResolverImpl(
     }
 
     override fun event(env: DataFetchingEnvironment): Publisher<GraphqlEvents.Update> {
-        logger.info("GraphQL 'event' subscription called")              // Log message on each new subscription
+        logger.info("GraphQL 'event' subscription called")                  // Log message on each new subscription
         return kafkaReceiver                                                // Returns kafkaReceiver for GraphQL to subscribe to it
     }
 }
