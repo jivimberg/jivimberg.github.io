@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Hibernate | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/hibernate/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2018-11-08T09:06:42-08:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using UUID on Spring Data JPA Entities]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities/"/>
+    <updated>2018-11-05T07:25:37-08:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities</id>
+    <content type="html"><![CDATA[<p>In this article I’ll explore <strong>how to model a <a href="https://stackoverflow.com/questions/6033905/create-the-perfect-jpa-entity">JPA Entity</a> using an <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a></strong> as Primary Keys working with <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA.</a></p>
+
+<!--more-->
+
+
+<h1>Why UUIDs?</h1>
+
+<p>In general we use numerical keys on our models and let the DB generate that for us on persistence. But there are <strong>some reasons why you might prefer to use UUID</strong> as your Primary Key instead. Namely:</p>
+
+<ul>
+<li><strong>UUIDs are globally unique.</strong> This means that we don’t need a centralized component to generate unique ids, <strong>we can generate the ids on the application itself</strong> instead of relying on <a href="https://vladmihalcea.com/hibernate-and-uuid-identifiers/">some UUID generator</a> that populates the <code>id</code> field on persist.</li>
+<li>Having globally unique ids also means that <strong>your ids are unique across databases.</strong> This allows us to move data across databases without having to check for conflicting ids.</li>
+<li>Having application generated ids means the id is know even before the entity is persisted. This let’s us <strong>model our entities as <a href="https://proandroiddev.com/kotlin-for-beginners-immutability-and-the-value-of-val-78ab45b60b57">immutable objects</a></strong> and we avoid having to handle null values on the id.</li>
+</ul>
+
+
+<p>But as you probably already know: <a href="https://en.wikipedia.org/wiki/There_ain%27t_no_such_thing_as_a_free_lunch">🚫🆓🍽</a>. So here are some of the downsides of using UUID for you to consider:</p>
+
+<ul>
+<li><strong>Storage space.</strong> As you can imagine storing an UUID takes a lot more space than storying an Int. Specially if you make the mistake of storing it as a <code>String</code>. You might think Id space is not a big deal, but consider that <strong>Primary Keys are often used in indexes and as Foreign Keys on other tables</strong>. So the number starts to add up.</li>
+<li>Thy are <strong>not human friendly</strong>. What’s easier to remember: <code>223492</code> or <code>453bd9d7-83c0-47fb-b42e-0ab045b29f83 </code>? This is specially true if you happen to be exposing your ids on your public APIs. Think: <code>/albums/2311445/photo/7426321</code> vs <code>/albums/b3480d79-e458-4675-a7ba-61ac5957cb7c/photo/19b24967-1741-4405-a746-d2b081ee45f2 </code>.</li>
+</ul>
+
+
+<p><strong>If you’re still on the fence</strong> here’s a great article talking about the pros and cons of using UUIDs as primary keys: <a href="https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439">https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439</a>.</p>
+
+<h1>How to do it</h1>
+
+<p>Now let’s talk about how we can implement this. I’ll go step by step explaining why we add each piece of code.</p>
+
+<p>The first we need to do is <strong>generate the UUID</strong>. As mentioned above we’d like to do this on the application code so we can have <em>immutable entities</em>. Generating the UUID is easy, all we need to do is: <code>UUID.randomUUID()</code>. So our entity would look like this:</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import java.util.*
+import javax.persistence.Id
+import javax.persistence.Entity
+
+//sampleStart
+@Entity
+class Artist(
+        @Id val id: UUID = UUID.randomUUID(),
+        val name: String
+)
+//sampleEnd
+</xmp>
+
+
+<p>You probably noticed how we’re making the id part of the <a href="https://kotlinlang.org/docs/reference/classes.html#constructors">primary constructor</a>, this is required to <strong>allow clients to construct entities with known ids for updating it’s value</strong>. We’ll talk more about updates later on.</p>
+
+<h2>isNew?</h2>
+
+<p>As mentioned we’re using <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA</a> for our Repository layer. Now there’s a small detail we have to take into account when <strong>using application provided ids with Spring Data</strong>. If you do a <code>artistRepository.save(Artist(name = "David Bowie"))</code> you might get an output like this:</p>
+
+<p><img class="center" src="/images/posts/2018-11-07/2sql.png" title="‘persist logs’" ></p>
+
+<p>If you pay close attention to the log you’ll notice that <strong>Hibernate is actually executing 2 SQL queries</strong>: one <code>select</code> followed by one <code>insert</code>. Not quite what we were expecting.</p>
+
+<p>The reason for this behavior is the implementation of Spring Data’s <a href="https://github.com/spring-projects/spring-data-jpa/blob/master/src/main/java/org/springframework/data/jpa/repository/support/SimpleJpaRepository.java"><code>SimpleJpaRepository.java</code></a>. In particular the <a href="https://github.com/spring-projects/spring-data-jpa/blob/01e36dbb44d6bc87f7deb3b6d6dacc955ea6c8bd/src/main/java/org/springframework/data/jpa/repository/support/SimpleJpaRepository.java#L506"><code>save()</code></a> method:</p>
+
+<pre><code class="java">@Transactional
+public &lt;S extends T&gt; S save(S entity) {
+    if (entityInformation.isNew(entity)) {
+        em.persist(entity);
+        return entity;
+    } else {
+        return em.merge(entity);
+    }
+}
+</code></pre>
+
+<p><strong>The double SQL statement is caused by the call to <code>merge()</code></strong>. By default the way this class decides wether to do a <code>persist()</code> or a <code>merge()</code> <strong>is simply by checking if the id is null</strong>. Which works fine for DB assigned ids, but <em>not</em> for application assigned ones. 😕</p>
+
+<p><strong>The best way to control this is by implementing the <a href="https://github.com/spring-projects/spring-data-commons/blob/master/src/main/java/org/springframework/data/domain/Persistable.java"><code>Persistable&lt;ID&gt;</code></a> interface</strong> providing a <code>isNew()</code> method. Since this is something we’ll want to do every time we use application generated UUIDs <strong>I’ll extract this into an abstract class</strong> and making use of the <code>@MappedSuperClass</code> annotation.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import org.springframework.data.domain.Persistable
+import java.util.*
+import javax.persistence.*
+
+//sampleStart
+@MappedSuperclass
+abstract class AbstractBaseEntity(givenId: UUID? = null) : Persistable<UUID> {
+
+    @Id
+    @Column(name = "id", length = 16, unique = true, nullable = false)
+    private val id: UUID = givenId ?: UUID.randomUUID()
+
+    @Transient
+    private var persisted: Boolean = givenId != null
+    
+    override fun getId(): UUID = id
+
+    override fun isNew(): Boolean = !persisted
+
+    override fun hashCode(): Int = id.hashCode()
+
+    override fun equals(other: Any?): Boolean {
+        return when {
+            this === other -> true
+            other == null -> false
+            other !is AbstractBaseEntity -> false
+            else -> getId() == other.getId()
+        }
+    }
+
+    @PostPersist
+    @PostLoad
+    private fun setPersisted() {
+        persisted = true
+    }
+}
+//sampleEnd
+
+</xmp>
+
+
+<blockquote><p>This design was <strong>suggested to me by <a href="https://twitter.com/PabloHernanS">@paschmid</a> and <a href="https://twitter.com/rcruzjo">@rcruzjo</a></strong>, this code would be quite ugly if it weren’t for them!</p></blockquote>
+
+<p>You can see how the <code>persisted</code> state is decided based on whether an id is provided on creation or not, to account for updates. Also notice how <strong>it’s value gets automatically updated upon <em>persist</em> and <em>load</em></strong> thanks to <code>@PostPersist</code> and <code>@PostLoad</code> annotations.</p>
+
+<p>Also since <code>id</code> is now <em>unique</em> and <em>non-nullable</em> <strong>we can use it to implement <code>equals()</code> and <code>hashcode()</code></strong> and avoid falling in some of the common pitfalls of implementing this methods (to learn more about this check: <a href="https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/">this article</a> by <a href="https://twitter.com/vlad_mihalcea">@vlad_mihalcea</a> and <a href="https://kotlinexpertise.com/hibernate-with-kotlin-spring-boot/">this one</a> by <a href="https://twitter.com/s1m0nw1">@s1m0nw1</a>).</p>
+
+<p>And in case you’re wondering <strong>why do we need an explicit <code>getId()</code> function</strong>, it is because of this issue: <a href="https://youtrack.jetbrains.com/issue/KT-6653">Kotlin properties do not override Java-style getters and setters</a>.</p>
+
+<h1>Putting it all together</h1>
+
+<p>Finally let’s see how a concrete entity would use this.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import org.springframework.data.repository.CrudRepository
+import java.util.*
+import javax.persistence.Entity
+
+//sampleStart
+@Entity
+class Artist(
+        id: UUID? = null,
+        val name: String
+) : AssignedIdBaseEntity(id)
+//sampleEnd
+</xmp>
+
+
+<p>Pretty similar to our original approach right? Thanks to the abstract class all the <code>isNew()</code> <strong>implementation details are hidden</strong> from concrete entities.</p>
+
+<p>And now if we do a <code>save()</code> on a new entity <strong>we get one single SQL statement</strong> as we were expecting.</p>
+
+<p><img class="center" src="/images/posts/2018-11-07/1sql.png" width="600" title="‘persist logs with abstractEntity’" ></p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+]]></content>
+  </entry>
+  
+</feed>

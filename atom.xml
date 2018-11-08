@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-10-24T23:27:21-07:00</updated>
+  <updated>2018-11-08T09:06:42-08:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,177 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Using UUID on Spring Data JPA Entities]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities/"/>
+    <updated>2018-11-05T07:25:37-08:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities</id>
+    <content type="html"><![CDATA[<p>In this article I’ll explore <strong>how to model a <a href="https://stackoverflow.com/questions/6033905/create-the-perfect-jpa-entity">JPA Entity</a> using an <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a></strong> as Primary Keys working with <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA.</a></p>
+
+<!--more-->
+
+
+<h1>Why UUIDs?</h1>
+
+<p>In general we use numerical keys on our models and let the DB generate that for us on persistence. But there are <strong>some reasons why you might prefer to use UUID</strong> as your Primary Key instead. Namely:</p>
+
+<ul>
+<li><strong>UUIDs are globally unique.</strong> This means that we don’t need a centralized component to generate unique ids, <strong>we can generate the ids on the application itself</strong> instead of relying on <a href="https://vladmihalcea.com/hibernate-and-uuid-identifiers/">some UUID generator</a> that populates the <code>id</code> field on persist.</li>
+<li>Having globally unique ids also means that <strong>your ids are unique across databases.</strong> This allows us to move data across databases without having to check for conflicting ids.</li>
+<li>Having application generated ids means the id is know even before the entity is persisted. This let’s us <strong>model our entities as <a href="https://proandroiddev.com/kotlin-for-beginners-immutability-and-the-value-of-val-78ab45b60b57">immutable objects</a></strong> and we avoid having to handle null values on the id.</li>
+</ul>
+
+
+<p>But as you probably already know: <a href="https://en.wikipedia.org/wiki/There_ain%27t_no_such_thing_as_a_free_lunch">🚫🆓🍽</a>. So here are some of the downsides of using UUID for you to consider:</p>
+
+<ul>
+<li><strong>Storage space.</strong> As you can imagine storing an UUID takes a lot more space than storying an Int. Specially if you make the mistake of storing it as a <code>String</code>. You might think Id space is not a big deal, but consider that <strong>Primary Keys are often used in indexes and as Foreign Keys on other tables</strong>. So the number starts to add up.</li>
+<li>Thy are <strong>not human friendly</strong>. What’s easier to remember: <code>223492</code> or <code>453bd9d7-83c0-47fb-b42e-0ab045b29f83 </code>? This is specially true if you happen to be exposing your ids on your public APIs. Think: <code>/albums/2311445/photo/7426321</code> vs <code>/albums/b3480d79-e458-4675-a7ba-61ac5957cb7c/photo/19b24967-1741-4405-a746-d2b081ee45f2 </code>.</li>
+</ul>
+
+
+<p><strong>If you’re still on the fence</strong> here’s a great article talking about the pros and cons of using UUIDs as primary keys: <a href="https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439">https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439</a>.</p>
+
+<h1>How to do it</h1>
+
+<p>Now let’s talk about how we can implement this. I’ll go step by step explaining why we add each piece of code.</p>
+
+<p>The first we need to do is <strong>generate the UUID</strong>. As mentioned above we’d like to do this on the application code so we can have <em>immutable entities</em>. Generating the UUID is easy, all we need to do is: <code>UUID.randomUUID()</code>. So our entity would look like this:</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import java.util.*
+import javax.persistence.Id
+import javax.persistence.Entity
+
+//sampleStart
+@Entity
+class Artist(
+        @Id val id: UUID = UUID.randomUUID(),
+        val name: String
+)
+//sampleEnd
+</xmp>
+
+
+<p>You probably noticed how we’re making the id part of the <a href="https://kotlinlang.org/docs/reference/classes.html#constructors">primary constructor</a>, this is required to <strong>allow clients to construct entities with known ids for updating it’s value</strong>. We’ll talk more about updates later on.</p>
+
+<h2>isNew?</h2>
+
+<p>As mentioned we’re using <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA</a> for our Repository layer. Now there’s a small detail we have to take into account when <strong>using application provided ids with Spring Data</strong>. If you do a <code>artistRepository.save(Artist(name = "David Bowie"))</code> you might get an output like this:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-11-07/2sql.png" title="‘persist logs’" ></p>
+
+<p>If you pay close attention to the log you’ll notice that <strong>Hibernate is actually executing 2 SQL queries</strong>: one <code>select</code> followed by one <code>insert</code>. Not quite what we were expecting.</p>
+
+<p>The reason for this behavior is the implementation of Spring Data’s <a href="https://github.com/spring-projects/spring-data-jpa/blob/master/src/main/java/org/springframework/data/jpa/repository/support/SimpleJpaRepository.java"><code>SimpleJpaRepository.java</code></a>. In particular the <a href="https://github.com/spring-projects/spring-data-jpa/blob/01e36dbb44d6bc87f7deb3b6d6dacc955ea6c8bd/src/main/java/org/springframework/data/jpa/repository/support/SimpleJpaRepository.java#L506"><code>save()</code></a> method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Transactional</span>
+</span><span class='line'><span class="kd">public</span> <span class="o">&lt;</span><span class="n">S</span> <span class="kd">extends</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">S</span> <span class="nf">save</span><span class="o">(</span><span class="n">S</span> <span class="n">entity</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="o">(</span><span class="n">entityInformation</span><span class="o">.</span><span class="na">isNew</span><span class="o">(</span><span class="n">entity</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">em</span><span class="o">.</span><span class="na">persist</span><span class="o">(</span><span class="n">entity</span><span class="o">);</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">entity</span><span class="o">;</span>
+</span><span class='line'>  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="n">em</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">entity</span><span class="o">);</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>The double SQL statement is caused by the call to <code>merge()</code></strong>. By default the way this class decides wether to do a <code>persist()</code> or a <code>merge()</code> <strong>is simply by checking if the id is null</strong>. Which works fine for DB assigned ids, but <em>not</em> for application assigned ones. 😕</p>
+
+<p><strong>The best way to control this is by implementing the <a href="https://github.com/spring-projects/spring-data-commons/blob/master/src/main/java/org/springframework/data/domain/Persistable.java"><code>Persistable&lt;ID&gt;</code></a> interface</strong> providing a <code>isNew()</code> method. Since this is something we’ll want to do every time we use application generated UUIDs <strong>I’ll extract this into an abstract class</strong> and making use of the <code>@MappedSuperClass</code> annotation.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import org.springframework.data.domain.Persistable
+import java.util.*
+import javax.persistence.*
+
+//sampleStart
+@MappedSuperclass
+abstract class AbstractBaseEntity(givenId: UUID? = null) : Persistable<UUID> {
+
+    @Id
+    @Column(name = "id", length = 16, unique = true, nullable = false)
+    private val id: UUID = givenId ?: UUID.randomUUID()
+
+    @Transient
+    private var persisted: Boolean = givenId != null
+    
+    override fun getId(): UUID = id
+
+    override fun isNew(): Boolean = !persisted
+
+    override fun hashCode(): Int = id.hashCode()
+
+    override fun equals(other: Any?): Boolean {
+        return when {
+            this === other -> true
+            other == null -> false
+            other !is AbstractBaseEntity -> false
+            else -> getId() == other.getId()
+        }
+    }
+
+    @PostPersist
+    @PostLoad
+    private fun setPersisted() {
+        persisted = true
+    }
+}
+//sampleEnd
+
+</xmp>
+
+
+<blockquote><p>This design was <strong>suggested to me by <a href="https://twitter.com/PabloHernanS">@paschmid</a> and <a href="https://twitter.com/rcruzjo">@rcruzjo</a></strong>, this code would be quite ugly if it weren’t for them!</p></blockquote>
+
+<p>You can see how the <code>persisted</code> state is decided based on whether an id is provided on creation or not, to account for updates. Also notice how <strong>it’s value gets automatically updated upon <em>persist</em> and <em>load</em></strong> thanks to <code>@PostPersist</code> and <code>@PostLoad</code> annotations.</p>
+
+<p>Also since <code>id</code> is now <em>unique</em> and <em>non-nullable</em> <strong>we can use it to implement <code>equals()</code> and <code>hashcode()</code></strong> and avoid falling in some of the common pitfalls of implementing this methods (to learn more about this check: <a href="https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/">this article</a> by <a href="https://twitter.com/vlad_mihalcea">@vlad_mihalcea</a> and <a href="https://kotlinexpertise.com/hibernate-with-kotlin-spring-boot/">this one</a> by <a href="https://twitter.com/s1m0nw1">@s1m0nw1</a>).</p>
+
+<p>And in case you’re wondering <strong>why do we need an explicit <code>getId()</code> function</strong>, it is because of this issue: <a href="https://youtrack.jetbrains.com/issue/KT-6653">Kotlin properties do not override Java-style getters and setters</a>.</p>
+
+<h1>Putting it all together</h1>
+
+<p>Finally let’s see how a concrete entity would use this.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import org.springframework.data.repository.CrudRepository
+import java.util.*
+import javax.persistence.Entity
+
+//sampleStart
+@Entity
+class Artist(
+        id: UUID? = null,
+        val name: String
+) : AssignedIdBaseEntity(id)
+//sampleEnd
+</xmp>
+
+
+<p>Pretty similar to our original approach right? Thanks to the abstract class all the <code>isNew()</code> <strong>implementation details are hidden</strong> from concrete entities.</p>
+
+<p>And now if we do a <code>save()</code> on a new entity <strong>we get one single SQL statement</strong> as we were expecting.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-11-07/1sql.png" width="600" title="‘persist logs with abstractEntity’" ></p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Reactive GraphQL Subscriptions From Kafka]]></title>
@@ -2147,190 +2318,6 @@ fun main(args: Array&lt;String&gt;) {
 
 
 <p>Another way of solving this issue would be to call the observables for <code>firstName</code> and <code>lastName</code> outside the if. That works too, but I like the other approach better.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using PowerMock + TestNG to Mock a Static Class]]></title>
-    <link href="http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class/"/>
-    <updated>2016-04-03T08:38:47-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class</id>
-    <content type="html"><![CDATA[<p>￼
-This week I needed to test a class that depended on a method from an static class. I saw we were using <a href="https://github.com/jayway/powermock" title="PowerMock">PowerMock</a> and thought to myself: <em>“Well this sounds pretty common, I bet it’s easy to accomplish”</em>. But of course I ran into half a dozen issues before I was able to make it work. Here’s my two cents to make your experience easier than mine.</p>
-
-<!--more-->
-
-
-<h2>Setup</h2>
-
-<p>Let’s start with the ingredients. To mock static methods you’ll need a couple of libraries:</p>
-
-<ul>
-<li><a href="http://easymock.org/">EasyMock</a> for the mocking<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></li>
-<li><a href="https://github.com/jayway/powermock">PowerMock</a></li>
-<li><a href="http://testng.org/">TestNG</a> for the test</li>
-</ul>
-
-
-<p>When choosing your library version you’ll need to make sure <strong>PowerMock</strong> and <strong>TestNG</strong> versions are compatible. You can do so by comparing your versions with the ones specified <a href="https://github.com/jayway/powermock/wiki/TestNG_usage">here</a>.</p>
-
-<p>Also, if you’re not using <strong>Maven</strong> to include PowerMock in your project make sure you also add it’s dependencies. You’ll find a zip file containing everything you need <a href="https://github.com/jayway/powermock/wiki/GettingStarted">here</a>.</p>
-
-<h2>Writing the test</h2>
-
-<p>To have the test working you’ll need to do 3 things:</p>
-
-<ol>
-<li>Configure <strong>TestNG</strong> to use the PowerMock object factory</li>
-<li>Use <code>@PrepareForTest</code> annotation to prepare the static class</li>
-<li><strong>Mock</strong> the static class method</li>
-<li><strong>Write the rest</strong> of the test</li>
-</ol>
-
-
-<p>Let’s go one by one:</p>
-
-<h4>1. Configure TestNG to use the PowerMock object factory</h4>
-
-<p>There are a bunch of ways of doing this, namely:</p>
-
-<ul>
-<li>Configure it on the <code>suite.xml</code> file</li>
-<li>Extending your test class with <code>PowerMockTestCase</code></li>
-<li>Or by adding a method like this to your test</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@ObjectFactory</span>
-</span><span class='line'><span class="kd">public</span> <span class="n">IObjectFactory</span> <span class="nf">getObjectFactory</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="na">powermock</span><span class="o">.</span><span class="na">modules</span><span class="o">.</span><span class="na">testng</span><span class="o">.</span><span class="na">PowerMockObjectFactory</span><span class="o">();</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I choose to go with the latter because I don’t use the <code>suite.xml</code> file and adding an annotated method is less restrictive than extending a class. But feel free to use whatever works for you.</p>
-
-<h4>2. @PrepareForTest</h4>
-
-<p>You’ll need to prepare your static class for mocking. You can do so with the <code>@PrepareForTest</code> annotation like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@PrepareForTest</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyTest</span> <span class="o">{</span>
-</span><span class='line'>  <span class="o">...</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Note that you can pass an array of classes to the annotation if you need to prepare multiple classes.</p>
-
-<h4>3. Mocking</h4>
-
-<p>Now you’re ready to mock the static method like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Test</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">test</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>  <span class="c1">// mocking static method</span>
-</span><span class='line'>  <span class="n">PowerMock</span><span class="o">.</span><span class="na">mockStatic</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-</span><span class='line'>  <span class="n">EasyMock</span><span class="o">.</span><span class="na">expect</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">doSomething</span><span class="o">()).</span><span class="na">andReturn</span><span class="o">(</span><span class="err">“</span><span class="n">hello</span> <span class="n">world</span><span class="err">”</span><span class="o">)).</span><span class="na">anyTimes</span><span class="o">();</span>
-</span><span class='line'>  <span class="n">PowerMock</span><span class="o">.</span><span class="na">replay</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">...</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>4. Writing the rest</h4>
-
-<p>Ok let’s put everything together and write the rest of the test</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@PrepareForTest</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyTest</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nd">@ObjectFactory</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="n">IObjectFactory</span> <span class="nf">getObjectFactory</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="k">new</span> <span class="n">org</span><span class="o">.</span><span class="na">powermock</span><span class="o">.</span><span class="na">modules</span><span class="o">.</span><span class="na">testng</span><span class="o">.</span><span class="na">PowerMockObjectFactory</span><span class="o">();</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nd">@Test</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">test</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>      <span class="c1">// mocking static method</span>
-</span><span class='line'>      <span class="n">PowerMock</span><span class="o">.</span><span class="na">mockStatic</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-</span><span class='line'>      <span class="n">EasyMock</span><span class="o">.</span><span class="na">expect</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">doSomething</span><span class="o">()).</span><span class="na">andReturn</span><span class="o">(</span><span class="err">“</span><span class="n">hello</span> <span class="n">world</span><span class="err">”</span><span class="o">)).</span><span class="na">anyTimes</span><span class="o">();</span>
-</span><span class='line'>      <span class="n">PowerMock</span><span class="o">.</span><span class="na">replay</span><span class="o">(</span><span class="n">StaticHelper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-</span><span class='line'>  
-</span><span class='line'>      <span class="c1">// test</span>
-</span><span class='line'>      <span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="err">“</span><span class="n">hello</span> <span class="n">world</span><span class="err">”</span> <span class="err">”</span> <span class="n">StaticHelper</span><span class="o">.</span><span class="na">doSomething</span><span class="o">());</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Of course this is an oversimplified example. The cool thing about mocking static methods is that <strong>the static call you may need to mock may be hidden under several layers of abstraction</strong>. Using this approach you are able to mock the static call and test your classes without changing a single line of production code.</p>
-
-<h2>Some things to watch out for</h2>
-
-<p>There are a few things to keep in mind when initializing the mock:</p>
-
-<ol>
-<li>You cannot create mocks during <strong>field initialization</strong>.</li>
-<li>You cannot create mocks inside <strong>before static methods</strong>.</li>
-</ol>
-
-
-<p>Finally I also run into the following error when running my test:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">VerifyError</span><span class="o">:</span> <span class="n">Expecting</span> <span class="n">a</span> <span class="n">stackmap</span> <span class="n">frame</span> <span class="n">at</span> <span class="n">branch</span> <span class="n">target</span> <span class="mi">71</span> <span class="n">in</span> <span class="n">method</span> <span class="n">com</span><span class="o">.</span><span class="na">abc</span><span class="o">.</span><span class="na">domain</span><span class="o">.</span><span class="na">myPackage</span><span class="o">.</span><span class="na">MyClass$JaxbAccessorM_getDescription_setDescription_java_lang_String</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="n">Object</span><span class="o">;)</span><span class="n">Ljava</span><span class="o">/</span><span class="n">lang</span><span class="o">/</span><span class="n">Object</span><span class="o">;</span> <span class="n">at</span> <span class="n">offset</span> <span class="mi">20</span><span class="n">_</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Turns out that, as explained <a href="http://stackoverflow.com/questions/15122890/java-lang-verifyerror-expecting-a-stackmap-frame-at-branch-target-jdk-1-7">here</a> Java 7 introduced a stricter verification and changed the class format. The byte code generation library PowerMock uses is generating code that does not comply with the new verification. But worry not, <strong>this validation can be disabled</strong> by passing <code>-noverify</code> as argument to the JVM.</p>
-
-<p>If you&rsquo;re running you&rsquo;re using Maven to run your tests remember to add the argument to your plugin configuration.</p>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>This guide uses <strong>EasyMock</strong> but you can also use <strong>Mockito</strong><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
 ]]></content>
   </entry>
   
