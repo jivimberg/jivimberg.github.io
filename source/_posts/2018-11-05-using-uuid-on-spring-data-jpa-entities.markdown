@@ -10,6 +10,8 @@ In this article I’ll explore **how to model a [JPA Entity][1] using an [UUID][
 
 <!--more-->
 
+{% img center /images/posts/2018-11-07/uuid.png ‘uuid key’ %} 
+
 # Why UUIDs?
 
 Usually we use numerical keys on our models and let the DB generate that for us on persistence. But there are **some reasons why you might prefer to use UUIDs** as your Primary Key instead. Namely:
@@ -146,6 +148,9 @@ And now if we do a `save()` on a new entity **we get one single SQL statement** 
 
 {% img center /images/posts/2018-11-07/1sql.png 600 ‘persist logs with abstractEntity’ %} 
 
+---- 
+
+You can find all the **code samples** for this post on **[this GitHub repo][20]**.
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
@@ -168,3 +173,4 @@ And now if we do a `save()` on a new entity **we get one single SQL statement** 
 [17]:	https://kotlinexpertise.com/hibernate-with-kotlin-spring-boot/
 [18]:	https://twitter.com/s1m0nw1
 [19]:	https://youtrack.jetbrains.com/issue/KT-6653
+[20]:	https://github.com/jivimberg/spring-data-uuid-example
