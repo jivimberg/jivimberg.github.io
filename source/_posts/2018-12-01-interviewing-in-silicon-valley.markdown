@@ -4,9 +4,10 @@ title: "Interviewing in Silicon Valley"
 date: 2018-12-01 21:27:38 -0800
 comments: true
 categories: interviewing job silicon valley interview hiring tips
+published: true
 ---
 
-For the last few months, I’ve been interviewing with different companies on the valley, from some of the well-known giants to promising startups. This is a distilled guide made of things I learned in the journey.
+For the past few months, I’ve been interviewing with different companies on the Valley, from some of the well-known giants to promising startups. This is a distilled guide of the things I've learned in the journey.
 
 <!--more-->
 
@@ -16,12 +17,12 @@ This is an overview of what the whole process ended up looking in my case:
 
 {% img center /images/posts/2018-12-22/processTimeline.png 750 ‘Process timeline’ %} 
 
-_How much time do you need to go through all of this?_ **Well, it depends**, for me it took a couple of months but YMMV. If you search online you’ll find [plenty of][30] [study plans][1] [to follow][2]. But I think the best thing you can do is to **take it at your own pace**. 
+_How much time do you need to go through all of this?_ **Well, it depends**. For me it took a couple of months but YMMV. If you search online you’ll find [plenty of][30] [study plans][1] [to follow][2]. But I think the best thing you can do is to **take it at your own pace**. 
 
 Here are some tips I used to set up my schedule:
 
 * ** Divide the preparation in phases** just like I did on my timeline. Then [Create a new calendar on Google Calendar][3] and use it to **set reminders and deadlines for each of the phases** of the preparation.
-* I also used **[Trello][4]** to create a list of tasks to complete. I'd sort them by priority and grab a few to complete each day. The trick is to try to __break them down small enough so that you can complete each of them in one sit__.
+* I also used **[Trello][4]** to create a list of tasks to complete. I'd sort them by priority and grab a few to complete each day. The trick is to try to __break them down small enough so you can complete each of them in one sit__.
 
 {% img center /images/posts/2018-12-22/trello.png 750 ‘Trello screenshot’ %} 
 
@@ -31,15 +32,15 @@ So you’re ready to move on to greener pastures, _where do you start looking?_
 
 The first obvious answer is **LinkedIn**. Just make your profile as sexy as possible (make sure you [disable notifications if you want to be discrete][5]) and wait for recruiters to start pinging you. 
 
-If you’re looking **for a job at a startup** **[Angel List][6]** is a great place to start. **To learn specifics** about a particular startup head to **[Crunchbase][7]** where you’ll find information about the _funding rounds_ the company has been through, _the investors_, _the team_, etc. 
+If you’re looking **for a job at a startup, [Angel List][6]** is a great place to start. **To learn specifics** about a particular startup head to **[Crunchbase][7]** where you’ll find information about the _funding rounds_ the company has been through, _the investors_, _the team_, etc. 
 
-**If you already have a good sense of what you’re looking for** I can recommend using **[Woo.io][8]**. You'll need to create a profile (you can import most of it from _LinkedIn_) and set your job expectations (role, technologies, company size, location, etc.). **The site will magically find jobs that match your search** and send them to you on a daily basis. You can then review the openings, and if they’re not of your liking, you can reject them (optionally) including a _reason_ of why it’s not a good fit. **Woo will learn from your feedback and refine the search for future approaches.**
+**If you already have a good sense of what you’re looking for,** I can recommend using **[Woo.io][8]**. You'll need to create a profile (you can import most of it from _LinkedIn_) and set your job expectations (role, technologies, company size, location, etc.). The site will magically find jobs that match your search and send them to you on a daily basis. You can then review the openings, and if they’re not of your liking, you can reject them (optionally) including a _reason_ why it’s not a good fit. **Woo will learn from your feedback and refine the search for future approaches.**
 
-On the other hand, **if you’re unsure about what you want to do next** you can try this trick suggested to me by a friend: Pick a hiring site and skim through the job postings. **Play it by gut**, when something catches your eye **try to reflect on why**. _Was it the technology stack?_ _the company values?_ _maybe the location?_ Don’t worry if you can put your finger on it, **just keep going**. Repeat this enough times and you’ll start getting a sense of what makes you tick.
+On the other hand, **if you’re unsure about what you want to do next** you can try this trick suggested to me by a friend: Pick a hiring site and skim through the job postings. **Play it by gut;** when something catches your eye, try to reflect on why. _Was it the technology stack?_ _The company values?_ _Maybe the location?_ **Don’t worry if you can't put your finger on it, just keep going**. Repeat this enough times and you’ll start getting a sense of what makes you tick.
 
 {% img center /images/posts/2018-12-22/JobSearchFlowDiagram.png ‘Process timeline’ %} 
 
-Trying to learn about **the culture of a company** might probe to be a challenge. While most companies include something about culture and values along with their job postings, __more often than not is just some generic marketing _lorem ipsum___. Your best alternative is to talk with someone currently working there. **Tech conferences[^1] and Meetups** provide an excellent opportunity to **talk to engineers and get a first-hand impression of what the culture is like**. Finally, you can fall back to sites like **[Glassdoor][9][^2]** and **[Blind][10]**, just take comments with a grain of salt.
+**Trying to learn about the culture of a company might prove to be a challenge**. While most companies include something about culture and values along with their job postings, more often than not it's just some generic marketing _lorem ipsum_. Your best alternative is to talk with someone currently working there. **Tech conferences[^1] and Meetups** provide an excellent opportunity to talk to engineers and get a first-hand impression of what the culture is like. Finally, you can fall back to sites like **[Glassdoor][9][^2]** and **[Blind][10]**; just take comments with a grain of salt.
 
 # Updating your resume
 
@@ -49,7 +50,7 @@ There’s a ton of advice online on how to write a good resume. Instead of tryin
 
 1. **Show your accomplishments.** Your bullet points for each role should focus on your achievements. For example: _"Improved project loading performance on web-app by 5x by introducing hints on the 
 persistence layer to handle transactions more efficiently"_
-2. **Don’t include everything.** You’re not writing your autobiography, there’s _no need to include every single task you ever worked on_. Adding extra information only increases the [signal to noise ratio][11]. Trim down your resume to only keep the best of the best. **One or two pages max!**.
+2. **Don’t include everything.** You’re not writing your autobiography, there’s _no need to include every single task you've ever worked on_. Adding extra information only decreases the [signal to noise ratio][11]. Trim down your resume to only keep the best of the best. **One or two pages max!**.
 3. **Make it look awesome**. _You don’t get a free pass on style just because you’re a developer and not a designer_. Making a pretty resume is going to take you longer, but believe me: recruiters do notice it and appreciate the effort. Going the extra mile will set you apart. For an easy to use graphic-design tool try **[Canva][12]**, __I can’t recommend it enough__.
 
 As an example this is what my resume currently looks like:
@@ -62,13 +63,13 @@ As with any piece of good writing **it’ll take many iterations to get there**.
 
 As with most things in life **you have to try and fail in order to get better**. There is no other way around it.
 
-I have to confess, at first, I was terrified about doing interviews. It had been almost 5 years since the last time I interviewed back in Argentina. Fortunately, my friend [Luketua][Luketua][^3] was there to give me a great piece of advice: _do low-risk interviews_. 
+I have to confess; at first I was terrified about doing interviews. It had been almost 5 years since the last time I interviewed back in Argentina. Fortunately, my friend [Luketua][Luketua][^3] was there to give me a great piece of advice: _do low-risk interviews_. 
 
-__One of the fastest ways of conquering fear is by JUST DOING the thing you fear__ (the second ride on a rollercoaster is not as scary right?). So take that first step! Pick a company you find interesting, but _it's not your first choice_ and schedule an interview. Even if you _completely_ screw up you will at least have the experience of having gone through it, so the second time won't be as scary. Maybe you'll even learn which topics you need to focus your practice. Just go for it, __you've got nothing to lose__.
+__One of the fastest ways of conquering fear is by JUST DOING the thing you fear__ (the second ride on a rollercoaster is not as scary, right?). So take that first step! Pick a company you find interesting, but _it's not your first choice_ and schedule an interview. Even if you _completely_ screw up you will at least have the experience of having gone through it, so the second time won't be as scary. Maybe you'll even learn which topics you need to focus your practice. Just go for it, __you've got nothing to lose__.
 
 # Programming questions
 
-Programming questions are the heart of the technical interview and thus what you’ll spend more time preparing. Some people believe that [_the technical interview model is completely broken_][15]. I don’t really know if [they work or not][16], I just know that **they're part of the game, so you better prepare for it**. Having said that, if you are really against _"whiteboard interviews"_ **[check this list][17]** of companies that **don’t rely on this kind of questions**. Just keep in mind that _you might be limiting your options_.
+Programming questions are the heart of the technical interview and thus what you’ll spend more time preparing. Some people believe that [_the technical interview model is completely broken_][15]. I don’t really know if [they work or not][16], I just know that **they're part of the game, so you'd better prepare for it**. Having said that, if you are really against _"whiteboard interviews"_ **[check this list][17]** of companies that **don’t rely on these kind of questions**. Just keep in mind that _you might be limiting your options_.
 
 ## Cracking the coding interview (6th edition)
 
@@ -78,7 +79,7 @@ Programming questions are the heart of the technical interview and thus what you
 
 I like it because **it is remarkably complete**. It includes a description of the different interview processes at some of the big companies (Apple, Google, Facebook, etc.), it provides tips on how to set up a good resume, it covers the basics on Big O notation and _[much, much more…][20]_
 
-The technical exercises are **organized by topic**. Each chapter includes a **brief introduction** the topic at hand (~3 pages) and a **list of problems** sorted from easy to hard. This organization is nice because if you don’t have much time or don’t want to focus on a particular area **you can simply skip that chapter altogether**. I, for example, glossed over the _”Java”_ and _”Databases”_ chapters (Chapters 13 and 14 respectively) and skipped the _“C and C++”_ chapter (Chapter 12).
+The technical exercises are **organized by topic**. Each chapter includes a **brief introduction** of the topic at hand (~3 pages) and a **list of problems** sorted from easy to hard. This organization is nice because if you don’t have much time or don’t want to focus on a particular area **you can simply skip that chapter altogether**. I, for example, glossed over the _”Java”_ and _”Databases”_ chapters (Chapters 13 and 14 respectively) and skipped the _“C and C++”_ chapter (Chapter 12).
 
 One of the best things about this book is that **each exercise comes with a series of hints you can use in case you get stuck**. I love this because **it mimics what would happen in a real interview**, where the interviewer nudges you in the right direction to unblock you. Also in some of the more complex problems **the book presents multiple solutions and compares the different approaches**. Again, something that would probably come up in a real interview.
 
@@ -86,13 +87,13 @@ One of the best things about this book is that **each exercise comes with a seri
 
 ## LeetCode
 
-The other thing I used to practice daily was **[LeetCode][22]**. There are a number of sites you can use to practice (here’s a [video comparing the most well-known][23]), I went with LeetCode because it was **explicitly designed for technical interviews** and **it has support for [Kotlin][24]**. 
+The other thing I used to practice daily was **[LeetCode][22]**. There are a number of sites you can use to practice (here’s a [video comparing the most well-known][23]); I went with LeetCode because it was **explicitly designed for technical interviews** and **it has support for [Kotlin][24]**. 
 
 One thing I like about LeetCode is that it **provides tests results after submission** so you can figure out what you did wrong. Another useful feature is that it ranks your submission based on performance so you can see how well you did, compared to other solutions.
 
 {% img center /images/posts/2018-12-22/leetcode-submission.png 750 ‘Leetcode submission comparison’ %} 
 
-Where it falls short is in the solution explanation. **Only a small fraction of the problems have [official articles covering the solution][25] and the different approaches it can be solved.** For the rest of them, you’ll have to resort to the discussion forum, in the hopes that somebody there posted their answer, and his code is readable.
+Where it falls short is in the solution explanation. **Only a small fraction of the problems have [official articles covering the solution][25] and the different alternative implementations.** For the rest of them, you’ll have to resort to the discussion forum, in the hopes that somebody there posted his/her answer, and the code is readable.
 
 I **didn’t pay for the premium account** and **didn’t try the _System Design_ questions**, so can’t comment on that.
 
@@ -100,18 +101,18 @@ I **didn’t pay for the premium account** and **didn’t try the _System Design
 
 ### Use a whiteboard
 
-You want your practice to be as close to the real thing as possible. That means you’ll have to **resist the temptation of using your favorite IDE and go full whiteboard**. It will be weird at first. Everything will take more time, you’ll run out of space and _end up using \* and arrows all over the place to add extra variables_. But guess what? **That's is going to happen in the real interview too**. So you better get some practice on whiteboard coding before going in.
+You want your practice to be as close to the real thing as possible. That means you’ll have to **resist the temptation of using your favorite IDE and go full whiteboard**. It will be weird at first. Everything will take more time, you’ll run out of space and _end up using \* and arrows all over the place to add extra variables_. But guess what? **That's is going to happen in the real interview too**. So you'd better get some practice on whiteboard coding before going in.
 
 Don’t worry, nobody expects you to memorize all [Java Collectors][26]. **It’s OK to ask the interviewer for the details of a particular method signature**.
 
-Having no IDE also **prevents you from writing automated tests for your problems**. Which (_for once_) is a good thing! You won’t have the luxury of unit testing your code during the interview either. Having said that **you should still THINK about the tests you’d write**, and even **whiteboard-debug  some of then** (see below 👇).
+Having no IDE also **prevents you from writing automated tests for your problems**. Which (_for once_) is a good thing! You won’t have the luxury of unit testing your code during the interview either. Having said that **you should still THINK about the tests you’d write**, and even **whiteboard-debug  some of them** (see below 👇).
 
 ### Build the habit
 
 Sometimes you’ll find it hard to sit down and practice. Here are some things that helped me:
 
 1. **Find a time of the day that works for you and stick to it**. For example, I’m a morning person. I’d **wake up one hour earlier** each day and practice before breakfast.
-2. **Avoid distractions**. Apart from waking up before everyone else **I made sure my phone stayed in airplane mode** at least until I finish one full problem.
+2. **Avoid distractions**. Apart from waking up before everyone else **I made sure my phone stayed in airplane mode** at least until I'd finished one full problem.
 3. **Prepare things beforehand**. Before going to bed **I’d set things up so that everything was ready in the morning**. Waking up to a clean whiteboard, the computer charged and [CTCI][19] opened in the right page gives you **fewer chances to slack or make excuses**.
 4. **Set yourself achievable goals**. I found that not finishing my morning practice goal made me anxious during the day. So I figured it was best to set realistic goals, so that **after completing the morning exercise I could feel good about myself for the rest of the day**.
 5. **Know when to stop**. Don’t get too caught up on one problem. If you get stuck, just drop it for the time being, or move to another exercise. [_”The best debugger ever made is a good night's sleep.”_][27]
@@ -120,7 +121,7 @@ Sometimes you’ll find it hard to sit down and practice. Here are some things t
 
 ### CTCI Cheatsheet
 
-The best advice I could found on how to tackle a problem is from [Cracking the coding interview][28]. Luckily they’ve put together this amazing cheat-sheet with a step by step guide:
+The best advice I could find on how to tackle a problem is from [Cracking the coding interview][28]. Luckily they’ve put together this amazing cheat-sheet with a step by step guide:
 
 [{% img center /images/posts/2018-12-22/ctci-cheatsheet-1.png 750 ‘CTCI cheatsheet’ %}][ctci-resources] 
 
@@ -128,7 +129,7 @@ _(It’s also a great example on how  **NOT** to lay out an ordered list of item
 
 ### Talk through the problem
 
-The whole point of having you solving an exercise during an interview is **to provide the chance for the interviewer to evaluate how you approach a problem**. So the best thing you can do to help your interviewer's job is to **speak through your thought process**.
+The whole point of having you solve an exercise during an interview is **to provide the chance for the interviewer to evaluate how you approach a problem**. So the best thing you can do to help your interviewer's job is to **speak through your thought process**.
 
 It'll probably feel odd at first because usually, this happens as an internal monologue in your head, so make sure you **practice this even when you’re solving problems on your own**.
 
@@ -149,12 +150,12 @@ There are a number of things you should consider on every problem you face:
 * Can a better solution be found or have you achieved the best possible runtime?
 * Can you trade space for time?
 * Can you precalculate something to speed things up? 
-* Is your solution thread safe? If not how can you make it?
+* Is your solution thread safe? If not, how can you make it?
 * Is there any state you can save to make future runs faster?
 
 ### Whiteboard debugging
 
-On [CTCI cheat-sheet][CtciCheat-sheet] step #7 is _Test_. What I like to do for testing my solutions is what I call _"whiteboard-debugging"_ this is how it goes: 
+On [CTCI cheat-sheet][CtciCheat-sheet] step #7 is _Test_. What I like to do for testing my solutions is what I call _"whiteboard-debugging"_. This is how it goes: 
 
 1. Choose a good input example to work with (not too big, not trivial, not a corner case, etc.). 
 2. **Now step through the code step by step** as if you were debugging it.
@@ -170,21 +171,21 @@ And of course pay extra attention to hot spots like __arithmetic expressions__, 
 
 ### Stick to one language
 
-It's no secret that I'm super hooked with [Kotlin][24] (some of my friends would even say I'm a fanboy), so I figured I'd practice the programming questions in Kotlin too. The problem was that Kotlin is not that widespread ([yet][kotlinAdoption]), so __most of my interviews required me to write code in Java__. Kotlin and Java are fairly similar languages and yet I was noticing that writing solutions in Java was taking me longer because of small things like having to look up the exact method I wanted to use. In one of my on-sites, for example, I mixed up the Java `switch` syntax with Kotlin's `when`. And while this isn't a huge mistake, it did raise a valid flag for the interviewer.
+It's no secret that I'm super hooked with [Kotlin][24] (some of my friends would even say I'm a fanboy), so I figured I'd practice the programming questions in Kotlin too. The problem was that Kotlin is not that widespread ([yet][kotlinAdoption]), so __most of my interviews required me to write code in Java__. Kotlin and Java are fairly similar languages and yet I noticed that writing solutions in Java was taking me longer because of small things like having to look up the exact method I wanted to use. In one of my on-sites, for example, I mixed up the Java `switch` syntax with Kotlin's `when`. And while this isn't a huge mistake, it did raise a valid flag for the interviewer.
 
 __That's why my advice is to pick one mainstream language and stick with it for both: practice and interviews.__
 
 # Open problems
 
-In my experience, open problems __are not that common__. When you're presented with one of these questions your main focus should be on clarifying the goal. __Ask as many followup questions as you can and don't make assumptions__ (or if you do validate them with the interviewer). __Don't just jump to the answer!__ Usually, this kind of exercises is more about seeing how the candidate approaches the problem rather than getting to the actual solution.
+In my experience, open problems __are not that common__. When you're presented with one of these questions your main focus should be on clarifying the goal. __Ask as many followup questions as you can and don't make any assumptions__ (or if you do validate them with the interviewer). __Don't just jump to the answer!__ Usually, this kind of exercises are more about seeing how the candidate approaches the problem rather than getting an actual solution.
 
 # Language trivia
 
 To my surprise, I _did_ find a fair share of language trivia questions. Things like [removing an item while iterating a collection][RemovingAnItemWhileIteratingACollection] or [when to use `AtomicInteger`][WhenToUse`atomicinteger`].
 
-As you can tell this are knowledge-based questions, so either you know the answer or you don't. __If you don't just be frank about it__, trying to guess the answer might backfire and make you look like a fraud.
+As you can tell, these are knowledge-based questions, so either you know the answer or you don't. __If you don't just be frank about it__, trying to guess the answer might backfire and make you look like a fraud.
 
-If you're proficient with the language you'll have no problems answering this kind questions. If you want some practice CTCI has one chapter on _Java_ and another one on _C_ and _C++_. 
+If you're proficient with the language you'll have no problems answering these kind questions. If you want some practice CTCI has one chapter on _Java_ and another one on _C_ and _C++_. 
 
 # System design questions
 
@@ -192,7 +193,7 @@ If you're proficient with the language you'll have no problems answering this ki
 The system design interview is an <b>open-ended conversation</b>. You are expected to lead it.
 {% endblockquote %}
 
-__The best resource I know to prepare for the System Design interview is [The System Design Primer][TheSystemDesignPrimer]__ (thanks _Pablius_ for the tip!). Additionally, you should __regularly read companies engineering blogs to learn how different challenges are solved in different companies.__ Some of the best ones are: [Netflix Tech Blog][NetflixTechBlog], [highscalability.com][highscalability.com] and [Github engineering][GithubEngineering]. You can find a [full list of company blogs here][FullListOfCompanyBlogsHere].
+__The best resource I know to prepare for the System Design interview is [The System Design Primer][TheSystemDesignPrimer]__ (thanks _Pablius_ for the tip!). Additionally, you should __you should regularly read engineering blogs to learn how different challenges are solved in different companies.__ Some of the best ones are: [Netflix Tech Blog][NetflixTechBlog], [highscalability.com][highscalability.com] and [Github engineering][GithubEngineering]. You can find a [full list of company blogs here][FullListOfCompanyBlogsHere].
 
 # Behavioral questions
 
@@ -200,15 +201,15 @@ There are 3 parts to the behavioral questions preparation:
 
 The first thing you should prepare is a __two-minute introduction of yourself.__ __This is your resume condensed to an elevator pitch__. Cover a little bit about _your background_, _your current job responsibilities_ and _any side-project worth mentioning_. If you're curious [this is what my introduction looked like][ThisIsWhatMyIntroductionLookedLike].
 
-The second thing is to prepare the typical interview questions such as _"Why are you leaving your current job?"_ or _"What are your strengths and weaknesses?"_. 
+The second thing is to prepare for the typical interview questions such as _"Why are you leaving your current job?"_ or _"What are your strengths and weaknesses?"_. 
 
 Finally, you should prepare a couple of stories for questions like: _"Tell me about a time you made a mistake"_ or _"Tell me about a time when you had conflicts interacting with one of your coworkers and how you handled it"_. Following the advice in [CTCI][19] I created a table like this:
 
 {% img center /images/posts/2018-12-22/storiesTable.png 750 ‘The on-site routine’ %}
 
-__Pro-tip:__ You can create a document with all of this stuff and use it as a cheat-sheet during your phone call interviews. Believe me, after a few calls you'll not even need it.
+__Pro-tip:__ You can create a document with all this stuff and use it as a cheat-sheet during your phone call interviews. Believe me, after a few calls you'll not even need it.
 
-Once again the best advice I came across for Behavioural questions was from [CTCI][19] and her other book [Cracking the tech career][CrackingTheTechCareer]. You can check Gayle's [Soft Skills Cheatsheet][SoftSkillsCheatsheet] here.
+Once again the best advice I came across for Behavioral questions was from [CTCI][19] and her other book [Cracking the tech career][CrackingTheTechCareer]. You can check Gayle's [Soft Skills Cheatsheet][SoftSkillsCheatsheet] here.
 
 # The on-site routine
 
@@ -220,7 +221,7 @@ Mindfulness is something I’ve just recently discovered, and it’s helping me 
 
 # Your perception is __not__ predictive of performance
 
-This is something I heard first at this [Slilicon Valley Code Camp talk][SliliconValleyCodeCampTalk]. If you start to feel the interview is going south, don't panic! __Just keep going.__ It might be that you were given a hard question, in which case you might not be expected to arrive an optimal solution in the given time (and in any case, all other candidates probably struggle through the same question). Or maybe you sense your interviewer is impatient or annoyed. Don't assume it's because of your performance, maybe he's having a bad day, or that's just his personality. The point is, __you just don't know__. Here's in Gayle's own words (the whole talk is really worth it):
+This is something I heard first at this [Silicon Valley Code Camp talk][SliliconValleyCodeCampTalk]. If you start to feel the interview is going south, don't panic! __Just keep going.__ It might be that you were given a hard question, in which case you might not be expected to arrive at an optimal solution in the given time (and in any case, all other candidates will probably struggle through the same question). Or maybe you sense your interviewer is impatient or annoyed. Don't assume it's because of your performance, maybe he's having a bad day, or that's just his personality. The point is, __you just don't know__. Here it is in Gayle's own words (the whole talk is really worth it):
 
 <div style="text-align: center;">
     <iframe width="560" height="315" src="https://www.youtube.com/embed/8T7a09V1KZo?start=3454" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -232,20 +233,20 @@ Of course, I learned this _the hard way_. On one of my on-sites I was struggling
 
 One thing to always keep in mind is that interviews are a two-way street: __you're evaluating the company as much as they're evaluating you__. This is your best chance to learn about _the company_, _the role_, _the culture_ and _your future teammates_, so don't miss it! 
 
-This are some of the questions I like to ask: 
+Here are some of the questions I like to ask: 
 
 * How do you __prioritize__ tasks? How do you __make decisions__? How do you __handle interruptions__? (Ask about hot bugs, devops, CI/CD, etc.)
 * What do you __like the most__ about working for this company?
 * What's one thing __the team should improve on__?
 * What's on the __roadmap__ for the team?
 
-And don't play it safe. __If there's something that is a red flag for your just be direct and ask about it__. After all, you're better of knowing things in advance, and you give the interviewer a chance to clarify on the issue. For example __I asked one company why they were using an outdated stack and another one about the recent articles regarding its toxic culture__. As long as you're polite about it nobody is going to get pissed off.
+And don't play it safe. __If there's something that is a red flag for your just be direct and ask about it__. After all, you're better off knowing things in advance, and you give the interviewer a chance to clarify on the issue. For example __I asked one company why they were using an outdated stack and another one about the recent articles regarding its toxic culture__. As long as you're polite about it nobody is going to get pissed off.
 
 # Rejections
 
 Rejections are just part of the interview process. If you're not being rejected, you're probably _not interviewing enough_. The golden rule to handle rejections is: __don't take it personally__. 
 
-The second rule is: __always ask for feedback__. Once I was applying for this startup that made me do a take-home exercise. I spent the best part of my weekend working on it. First I _solved_ the problem, then I _tested_ the code, then I _refactored_ everything nicely into easy to read functions, then I added some more tests and even _documented_ them using [ASCII graphs][AsciiGraphs] (for real). When I sent my submission on Sunday __I was honestly hoping the company would be so impressed they would realize there was no need for an on-site__. Two days later I got an email: _"...we have decided to move forward with another candidate..."_ 😢. So with my ego hurt, I decided to answer back asking what did I do wrong. __Turns out my code performance sucked!__ In an effort for making the code super readable I had utterly destroyed performance. __Needless to say I never made the same mistake again.__
+The second rule is: __always ask for feedback__. Once I was applying for this startup that made me do a take-home exercise. I spent the best part of my weekend working on it. First I _solved_ the problem, then I _tested_ the code, then I _refactored_ everything nicely into easy to read functions, then I added some more tests and even _documented_ them using [ASCII graphs][AsciiGraphs] (for real). When I sent my submission on Sunday __I was honestly hoping the company would be so impressed they would realize there was no need for an on-site__. Two days later I got an email: _"...we have decided to move forward with another candidate..."_ 😢. So with my ego hurt, I decided to answer back asking what I did wrong. __Turns out my code performance sucked!__ In an effort to make the code super readable I had utterly destroyed performance. __Needless to say I never made the same mistake again.__
 
 # The follow-up
 
@@ -267,16 +268,16 @@ If you want to be thorough, you should also consider the __vesting period__ as w
 
 Startup offers are trickier to evaluate because of the _risk factor_ involved. __If you're applying for a startup, and your offer includes equity I suggest you read [this guide][ThisGuide].__
 
-Finally here's a list of thing you should take into account (other than compensation) when evaluating an offer:
+Finally here's a list of things you should take into account (other than compensation) when evaluating an offer:
 
 * Who are you going to be working with?
 * Do you find the problems challenging and exciting?
-* What kinds of things you'll learn at this role?
+* What kind of things you'll learn at this role?
 * What's the company's culture?
 * How is the company doing and what's its growth projection?
 * How this role will look on your resume?
-* How are the offices? And how much is the commute?
-* What kinds of benefits and perks does the company offer?
+* How are the offices? And how long is the commute?
+* What kind of benefits and perks does the company offer?
 
 ---
 
@@ -286,7 +287,7 @@ Finally here's a list of thing you should take into account (other than compensa
 * The interview is not over until the interviewer says so. Until then, keep solving, improving and testing your solution.
 * Try to schedule the final round of interviews as close to each other as possible. Some people like to take a week off and do all the on-sites that week.
 * You don't have to answer how much you're making in your current job. In some states (CA included) [it's even illegal to ask][It'sEvenIlegalToAsk].
-* __Don't give up after rejection!__ Companies are always let you re-apply after some time. I know a guy that got accepted at Google on his 4th attempt.
+* __Don't give up after rejection!__ Companies always let you re-apply after some time. I know a guy that got accepted at Google on his 4th attempt.
 
 ---
 
@@ -294,7 +295,7 @@ That's all I have. If you made it down here you deserve a cookie 🍪. Hope you 
 
 [^1]:	You don’t have to pay full price for the conference if you’re only going to network. Many big conferences offer some kind of _Discovery pass_ that will grant you access to the _Exhibition halls_ where the companies set up their booths.
 
-[^2]:	Pro-tip: If the company is big filter reviews by job title to get a more accurate sense of the culture.
+[^2]:	Pro-tip: If the company is big, filter reviews by job title to get a more accurate sense of the culture.
 
 [^3]:   Check his blog: [Codex Transforma](https://www.codextransforma.com/en/decoding-the-inner-truth/decoding-the-inner-truth/)
 
