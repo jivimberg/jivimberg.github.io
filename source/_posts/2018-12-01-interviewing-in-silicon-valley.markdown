@@ -4,7 +4,7 @@ title: "Interviewing in Silicon Valley"
 date: 2018-12-01 21:27:38 -0800
 comments: true
 categories: interviewing job silicon valley interview hiring tips
-published: true
+published: false
 ---
 
 For the past few months, I’ve been interviewing with different companies on the Valley, from some of the well-known giants to promising startups. This is a distilled guide of the things I've learned in the journey.
