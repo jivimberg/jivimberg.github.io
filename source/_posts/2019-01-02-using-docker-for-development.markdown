@@ -16,7 +16,7 @@ Stop me if you've heard this one before: _You get a new computer. As you're sett
 
 ## Docker to the rescue
 
-That's right, you can use Docker to containerize your development environment! This way you avoid installing all that tooling on your host machine, making Docker your only dependency. __Now you can develop from any computer, regardless of the OS as long as it has Docker installed__. As an extra benefit, all collaborators of the project get consistent environments, so, no more: _"works on my machine"_.
+That's right, you can use Docker to containerize your development environment! This way you avoid installing all that tooling on your host machine, making Docker your only dependency. __Now you can develop from any computer, regardless of the OS, as long as it has Docker installed__. As an extra benefit, all collaborators of the project get consistent environments, so, no more: _"works on my machine"_.
 
 I discovered this fighting to setup the env to write this blog on a new machine. After playing _"google the exception"_ for a few hours I though: _there has to be a better way of doing this_. Using [this repo][ThisRepo] as inspiration I added a `Dockerfile` to my project, that creates a Docker image containing all the dependencies needed to run [Octopress][Octopress]. Then simply by mounting the project directory on the `/octopress` folder I can run all the [usual `rake` tasks][Usual`rake`Tasks], just as I'd do locally, but on the container.
 
