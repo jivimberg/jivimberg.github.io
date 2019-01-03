@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Verify | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/verify/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2018-11-09T10:04:53-08:00</updated>
+  <updated>2019-01-03T00:25:33-08:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -29,15 +29,14 @@
 <noscript><pre><code>apply plugin: &quot;jacoco”
 
 jacocoTestCoverageVerification {
-	violationRules {
-		rule {
-			limit {
-				minimum = 0.79
-			}
-		}
-	}
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.79
+            }
+        }
+    }
 }
-
 
 // to run coverage verification during the build (and fail when appropriate)
 check.dependsOn jacocoTestCoverageVerification	</code></pre></noscript></div>

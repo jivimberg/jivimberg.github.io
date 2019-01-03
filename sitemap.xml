@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2019/01/02/using-docker-for-development/</loc>
+<lastmod>2019-01-02T17:27:34-08:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities/</loc>
 <lastmod>2018-11-05T07:25:37-08:00</lastmod>
 </url>
@@ -391,5 +395,14 @@
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/categories/hibernate/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/docker/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/development/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/dependencies/</loc>
 </url>
 </urlset>

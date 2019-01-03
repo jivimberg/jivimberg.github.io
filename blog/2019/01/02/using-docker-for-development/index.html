@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Using Docker for Development - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Using Docker for Development written January 2, 2019 in dependencies, development, docker Docker has transformed the way we package and ship &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2019/01/02/using-docker-for-development">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49016076-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Using Docker for Development</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2019-01-02T17:27:34-08:00" pubdate data-updated="true">January 2, 2019</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/dependencies/'>dependencies</a>, <a class='category' href='/blog/categories/development/'>development</a>, <a class='category' href='/blog/categories/docker/'>docker</a>
+  
+</span>
+
+
+        </div>
+        <p>Docker has transformed the way we package and ship applications. But. did you know it can transform your development setup too?</p>
+
+<!--more-->
+
+
+<p><img class="center" src="/images/posts/2019-01-02/docker-party.png" title="‘Docker party’" ></p>
+
+<p>Stop me if you&rsquo;ve heard this one before: <em>You get a new computer. As you&rsquo;re setting it up, you swear on Turing&rsquo;s grave, to only install the bare essentials on it and avoid bloatware at all costs. Fastforward a couple of months, you have the Java JDK, Go tools, multiple versions of Python and the Android SDK (for that <a href="https://play.google.com/store/apps/details?id=com.eightblocksaway.android.practicepronunciation">side-project app</a> you might someday resume developing) installed on your machine.</em></p>
+
+<h2>Docker to the rescue</h2>
+
+<p>That&rsquo;s right, you can use Docker to containerize your development environment! This way you avoid installing all that tooling on your host machine, making Docker your only dependency. <strong>Now you can develop from any computer, regardless of the OS, as long as it has Docker installed</strong>. As an extra benefit, all collaborators of the project get consistent environments, so, no more: <em>&ldquo;works on my machine&rdquo;</em>.</p>
+
+<p>I discovered this fighting to setup the env to write this blog on a new machine. After playing <em>&ldquo;google the exception&rdquo;</em> for a few hours I though: <em>there has to be a better way of doing this</em>. Using <a href="https://github.com/humburg/octopress-docker">this repo</a> as inspiration I added a <code>Dockerfile</code> to my project, that creates a Docker image containing all the dependencies needed to run <a href="http://octopress.org/">Octopress</a>. Then simply by mounting the project directory on the <code>/octopress</code> folder I can run all the <a href="http://octopress.org/docs/blogging/">usual <code>rake</code> tasks</a>, just as I&rsquo;d do locally, but on the container.</p>
+
+<p>No more messing around with language environments and dependencies. Build the image, spin up a container, and blog from anywhere.</p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.github.io/blog/2019/01/02/using-docker-for-development/';
+        var disqus_url = 'http://jivimberg.github.io/blog/2019/01/02/using-docker-for-development/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities/" title="Previous Post: Using UUID on Spring Data JPA entities">&laquo; Previous: Using UUID on Spring Data JPA entities</a>
+        
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>
