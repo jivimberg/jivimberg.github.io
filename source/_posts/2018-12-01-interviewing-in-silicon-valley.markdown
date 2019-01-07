@@ -7,65 +7,8 @@ categories: interviewing job silicon valley interview hiring tips
 published: false
 ---
 
-For the past few months, I’ve been interviewing with different companies on the Valley, from some of the well-known giants to promising startups. This is a distilled guide of the things I've learned in the journey.
 
-<!--more-->
-
-# Process timeline
-
-This is an overview of what the whole process ended up looking in my case:
-
-{% img center /images/posts/2018-12-22/processTimeline.png 750 ‘Process timeline’ %} 
-
-_How much time do you need to go through all of this?_ **Well, it depends**. For me it took a couple of months but YMMV. If you search online you’ll find [plenty of][30] [study plans][1] [to follow][2]. But I think the best thing you can do is to **take it at your own pace**. 
-
-Here are some tips I used to set up my schedule:
-
-* ** Divide the preparation in phases** just like I did on my timeline. Then [Create a new calendar on Google Calendar][3] and use it to **set reminders and deadlines for each of the phases** of the preparation.
-* I also used **[Trello][4]** to create a list of tasks to complete. I'd sort them by priority and grab a few to complete each day. The trick is to try to __break them down small enough so you can complete each of them in one sit__.
-
-{% img center /images/posts/2018-12-22/trello.png 750 ‘Trello screenshot’ %} 
-
-# Where to look for new roles
-
-So you’re ready to move on to greener pastures, _where do you start looking?_
-
-The first obvious answer is **LinkedIn**. Just make your profile as sexy as possible (make sure you [disable notifications if you want to be discrete][5]) and wait for recruiters to start pinging you. 
-
-If you’re looking **for a job at a startup, [Angel List][6]** is a great place to start. **To learn specifics** about a particular startup head to **[Crunchbase][7]** where you’ll find information about the _funding rounds_ the company has been through, _the investors_, _the team_, etc. 
-
-**If you already have a good sense of what you’re looking for,** I can recommend using **[Woo.io][8]**. You'll need to create a profile (you can import most of it from _LinkedIn_) and set your job expectations (role, technologies, company size, location, etc.). The site will magically find jobs that match your search and send them to you on a daily basis. You can then review the openings, and if they’re not of your liking, you can reject them (optionally) including a _reason_ why it’s not a good fit. **Woo will learn from your feedback and refine the search for future approaches.**
-
-On the other hand, **if you’re unsure about what you want to do next** you can try this trick suggested to me by a friend: Pick a hiring site and skim through the job postings. **Play it by gut;** when something catches your eye, try to reflect on why. _Was it the technology stack?_ _The company values?_ _Maybe the location?_ **Don’t worry if you can't put your finger on it, just keep going**. Repeat this enough times and you’ll start getting a sense of what makes you tick.
-
-{% img center /images/posts/2018-12-22/JobSearchFlowDiagram.png ‘Process timeline’ %} 
-
-**Trying to learn about the culture of a company might prove to be a challenge**. While most companies include something about culture and values along with their job postings, more often than not it's just some generic marketing _lorem ipsum_. Your best alternative is to talk with someone currently working there. **Tech conferences[^1] and Meetups** provide an excellent opportunity to talk to engineers and get a first-hand impression of what the culture is like. Finally, you can fall back to sites like **[Glassdoor][9][^2]** and **[Blind][10]**; just take comments with a grain of salt.
-
-# Updating your resume
-
-Sooner or later you’ll have to sit down and face the dreadful task of updating your resume.
-
-There’s a ton of advice online on how to write a good resume. Instead of trying to sum it all up I’m going to give you **the 3 tips that helped me the most**:
-
-1. **Show your accomplishments.** Your bullet points for each role should focus on your achievements. For example: _"Improved project loading performance on web-app by 5x by introducing hints on the 
-persistence layer to handle transactions more efficiently"_
-2. **Don’t include everything.** You’re not writing your autobiography, there’s _no need to include every single task you've ever worked on_. Adding extra information only decreases the [signal to noise ratio][11]. Trim down your resume to only keep the best of the best. **One or two pages max!**.
-3. **Make it look awesome**. _You don’t get a free pass on style just because you’re a developer and not a designer_. Making a pretty resume is going to take you longer, but believe me: recruiters do notice it and appreciate the effort. Going the extra mile will set you apart. For an easy to use graphic-design tool try **[Canva][12]**, __I can’t recommend it enough__.
-
-As an example this is what my resume currently looks like:
-
-[{% img center /images/posts/2018-12-22/resume-1.png 500 ‘My resume page 1’ %} ][resume]
-
-As with any piece of good writing **it’ll take many iterations to get there**. Start with a [shitty first draft][13] and share it with your friends and recruiters to get feedback. 
-
-# Low-risk interviews
-
-As with most things in life **you have to try and fail in order to get better**. There is no other way around it.
-
-I have to confess; at first I was terrified about doing interviews. It had been almost 5 years since the last time I interviewed back in Argentina. Fortunately, my friend [Luketua][Luketua][^3] was there to give me a great piece of advice: _do low-risk interviews_. 
-
-__One of the fastest ways of conquering fear is by JUST DOING the thing you fear__ (the second ride on a rollercoaster is not as scary, right?). So take that first step! Pick a company you find interesting, but _it's not your first choice_ and schedule an interview. Even if you _completely_ screw up you will at least have the experience of having gone through it, so the second time won't be as scary. Maybe you'll even learn which topics you need to focus your practice. Just go for it, __you've got nothing to lose__.
+----
 
 # Programming questions
 
@@ -195,21 +138,15 @@ The system design interview is an <b>open-ended conversation</b>. You are expect
 
 __The best resource I know to prepare for the System Design interview is [The System Design Primer][TheSystemDesignPrimer]__ (thanks _Pablius_ for the tip!). Additionally, you should __you should regularly read engineering blogs to learn how different challenges are solved in different companies.__ Some of the best ones are: [Netflix Tech Blog][NetflixTechBlog], [highscalability.com][highscalability.com] and [Github engineering][GithubEngineering]. You can find a [full list of company blogs here][FullListOfCompanyBlogsHere].
 
-# Behavioral questions
+----
 
-There are 3 parts to the behavioral questions preparation:
+# Low-risk interviews
 
-The first thing you should prepare is a __two-minute introduction of yourself.__ __This is your resume condensed to an elevator pitch__. Cover a little bit about _your background_, _your current job responsibilities_ and _any side-project worth mentioning_. If you're curious [this is what my introduction looked like][ThisIsWhatMyIntroductionLookedLike].
+As with most things in life **you have to try and fail in order to get better**. There is no other way around it.
 
-The second thing is to prepare for the typical interview questions such as _"Why are you leaving your current job?"_ or _"What are your strengths and weaknesses?"_. 
+I have to confess; at first I was terrified about doing interviews. It had been almost 5 years since the last time I interviewed back in Argentina. Fortunately, my friend [Luketua][Luketua][^3] was there to give me a great piece of advice: _do low-risk interviews_. 
 
-Finally, you should prepare a couple of stories for questions like: _"Tell me about a time you made a mistake"_ or _"Tell me about a time when you had conflicts interacting with one of your coworkers and how you handled it"_. Following the advice in [CTCI][19] I created a table like this:
-
-{% img center /images/posts/2018-12-22/storiesTable.png 750 ‘The on-site routine’ %}
-
-__Pro-tip:__ You can create a document with all this stuff and use it as a cheat-sheet during your phone call interviews. Believe me, after a few calls you'll not even need it.
-
-Once again the best advice I came across for Behavioral questions was from [CTCI][19] and her other book [Cracking the tech career][CrackingTheTechCareer]. You can check Gayle's [Soft Skills Cheatsheet][SoftSkillsCheatsheet] here.
+__One of the fastest ways of conquering fear is by JUST DOING the thing you fear__ (the second ride on a rollercoaster is not as scary, right?). So take that first step! Pick a company you find interesting, but _it's not your first choice_ and schedule an interview. Even if you _completely_ screw up you will at least have the experience of having gone through it, so the second time won't be as scary. Maybe you'll even learn which topics you need to focus your practice. Just go for it, __you've got nothing to lose__.
 
 # The on-site routine
 
@@ -217,7 +154,7 @@ This is the routine I came up with for the on-sites:
 
 {% img center /images/posts/2018-12-22/on-siteRoutine.png 750 ‘The on-site routine’ %}
 
-Mindfulness is something I’ve just recently discovered, and it’s helping me manage anxiety. I used [Headspace][29] app to do a **15/20 minutes meditation before going in.**
+Mindfulness is something I’ve just recently discovered. I was introduced to it through the book [Waking Up][WakingUp] and have started practicing meditation using the [Headspace][29] app. I usually did a **15/20 minutes meditation before the on-site** and found that it helped me relax before going in.
 
 # Your perception is __not__ predictive of performance
 
@@ -293,25 +230,9 @@ Finally here's a list of things you should take into account (other than compens
 
 That's all I have. If you made it down here you deserve a cookie 🍪. Hope you found something useful!
 
-[^1]:	You don’t have to pay full price for the conference if you’re only going to network. Many big conferences offer some kind of _Discovery pass_ that will grant you access to the _Exhibition halls_ where the companies set up their booths.
-
-[^2]:	Pro-tip: If the company is big, filter reviews by job title to get a more accurate sense of the culture.
-
 [^3]:   Check his blog: [Codex Transforma](https://www.codextransforma.com/en/decoding-the-inner-truth/decoding-the-inner-truth/)
 
-[1]:	https://www.linkedin.com/pulse/average-googler-four-weeks-study-plan-milad-naseri/
-[2]:	https://www.quora.com/Can-I-crack-the-Google-interview-in-just-1-month-of-preparation-If-yes-then-how-I-just-know-the-basics-of-C-and-C++
-[3]:	https://support.google.com/calendar/answer/37095?hl=en
-[4]:	https://trello.com
-[5]:	https://www.dailydot.com/debug/how-to-update-linkedin-without-notifications/
-[6]:	https://angel.co/
-[7]:	https://www.crunchbase.com
-[8]:	https://woo.io/
-[9]:	https://www.glassdoor.com/index.htm
-[10]:	https://www.teamblind.com/articles/Topics
-[11]:	https://en.wikipedia.org/wiki/Signal-to-noise_ratio
-[12]:	https://www.canva.com/
-[13]:	https://www.goodreads.com/quotes/288933-almost-all-good-writing-begins-with-terrible-first-efforts-you
+
 [15]:	https://www.stilldrinking.org/interviewing-is-broken
 [16]:	https://hbr.org/2016/04/how-to-take-the-bias-out-of-interviews
 [17]:	https://github.com/poteto/hiring-without-whiteboards
@@ -327,7 +248,6 @@ That's all I have. If you made it down here you deserve a cookie 🍪. Hope you 
 [27]:	https://twitter.com/SashaLaundy/status/936661004137635840
 [28]:	https://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/0984782850
 [29]:	https://www.headspace.com/
-[30]: https://www.quora.com/How-should-I-prepare-for-my-Google-interview-if-I-have-1-month-left-and-I%E2%80%99m-applying-for-a-software-engineer-role
 [31]:   https://kotlinlang.org/
 [RemovingAnItemWhileIteratingACollection]: https://stackoverflow.com/questions/223918/iterating-through-a-collection-avoiding-concurrentmodificationexception-when-mo
 [WhenToUse`atomicinteger`]: https://stackoverflow.com/questions/4818699/practical-uses-for-atomicinteger
@@ -337,16 +257,13 @@ That's all I have. If you made it down here you deserve a cookie 🍪. Hope you 
 [FullListOfCompanyBlogsHere]: https://github.com/kilimchoi/engineering-blogs
 [TheSystemDesignPrimer]: https://github.com/donnemartin/system-design-primer
 [CtciCheat-sheet]: http://www.crackingthecodinginterview.com/uploads/6/5/2/8/6528028/cracking_the_coding_skills_-_v6.pdf
-[SoftSkillsCheatsheet]: http://www.crackingthecodinginterview.com/uploads/6/5/2/8/6528028/cracking_the_soft_skills_-_v6.pdf
 [SliliconValleyCodeCampTalk]: https://www.youtube.com/watch?v=8T7a09V1KZo
 [GoogleAlerts]: https://www.google.com/alerts
 [ThisGuide]: https://github.com/jlevy/og-equity-compensation
 [It'sEvenIlegalToAsk]: https://www.businessinsider.com/places-where-salary-question-banned-us-2017-10
-[resume]: https://drive.google.com/file/d/1M2eVsboWoz76Cv7kD1WtE5UBAkxdnBUV/view?usp=sharing
 [Luketua]: https://www.lucasapa.com/
 [CodexTransforma]: https://www.codextransforma.com/en/decoding-the-inner-truth/decoding-the-inner-truth/
 [ctci-resources]: http://www.crackingthecodinginterview.com/resources.html
 [kotlinAdoption]: https://pusher.com/state-of-kotlin
-[ThisIsWhatMyIntroductionLookedLike]: https://docs.google.com/document/d/1bX3Vpr9icGCMbJvHMuWb3Q9GmKORf3W2DJ_fziV8Wtk/edit?usp=sharing
-[CrackingTheTechCareer]: https://www.amazon.com/Cracking-Tech-Career-Insider-Microsoft-ebook/dp/B00MFPZ9X6
 [AsciiGraphs]: http://stable.ascii-flow.appspot.com/#Draw
+[WakingUp]: https://www.amazon.com/Waking-Up-Spirituality-Without-Religion/dp/1451636024

@@ -27,7 +27,7 @@ em {
 @mixin fontStyle() {
    margin-left: 15px;
    font-weight: 300;
-   font-size: 16px;
+   font-size: 18px;
    line-height: 1.5;
 }
 
@@ -52,7 +52,17 @@ img.left {
   margin-right: 1.5em;
 }
 
+img.left-fill {
+  float: left;
+  margin-left: 100%;
+}
+
 img.right {
   float: right;
   margin-left: 1.5em;
+}
+
+img.right-fill {
+  float: right;
+  margin-left: 100%;
 }
