@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2019/01/06/how-to-prepare-for-the-silicon-valley-interview-part-1/</loc>
+<lastmod>2019-01-06T14:04:22-08:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2019/01/02/using-docker-for-development/</loc>
 <lastmod>2019-01-02T17:27:34-08:00</lastmod>
 </url>
@@ -404,5 +408,26 @@
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/categories/dependencies/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/interviewing/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/job/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/silicon/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/valley/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/interview/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/hiring/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/interview-series/</loc>
 </url>
 </urlset>
