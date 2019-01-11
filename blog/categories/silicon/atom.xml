@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Silicon | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/silicon/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-01-06T22:20:29-08:00</updated>
+  <updated>2019-01-10T22:35:46-08:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jivimberg.github.io/blog/2019/01/06/how-to-prepare-for-the-silicon-valley-interview-part-1/"/>
     <updated>2019-01-06T14:04:22-08:00</updated>
     <id>http://jivimberg.github.io/blog/2019/01/06/how-to-prepare-for-the-silicon-valley-interview-part-1</id>
-    <content type="html"><![CDATA[<p>For the past few months, I’ve been interviewing with different companies on the Valley, from some of the well-known giants to promising startups. Over the next couple of weeks I&rsquo;ll be publishing a series of articles about the things I learned in the journey. This is Part 1.</p>
+    <content type="html"><![CDATA[<p>For the past few months, I’ve been interviewing with different companies on the Valley, from some of the well-known giants to promising startups. Over the next couple of weeks I&rsquo;ll be publishing <a href="https://jivimberg.io/blog/categories/interview-series/">a series of articles</a> about the things I learned in the journey. This is Part 1.</p>
 
 <!--more-->
 
@@ -60,8 +60,8 @@
 <p>There’s a ton of advice online on how to write a good resume. Instead of trying to sum it all up I’m going to give you <strong>the 3 tips that helped me the most</strong>:</p>
 
 <ol>
-<li><strong>Show your accomplishments.</strong> Your bullet points for each role should focus on your achievements. For example: <em>&ldquo;Improved project loading performance on web-app by 5x by introducing hints on the
-persistence layer to handle transactions more efficiently&rdquo;</em></li>
+<li><strong>Show your accomplishments.</strong> Your bullet points for each role should focus on your achievements. For example: _&ldquo;Improved project loading performance on web-app by 5x by introducing hints on the
+persistence layer to handle transactions more efficiently&rdquo;_</li>
 <li><strong>Don’t include everything.</strong> You’re not writing your autobiography, there’s <em>no need to include every single task you&rsquo;ve ever worked on</em>. Adding extra information only decreases the <a href="https://en.wikipedia.org/wiki/Signal-to-noise_ratio">signal to noise ratio</a>. Trim down your resume to only keep the best of the best. <strong>One or two pages max!</strong></li>
 <li><strong>Make it look awesome</strong>. <em>You don’t get a free pass on style just because you’re a developer and not a designer</em>. Making a pretty resume is going to take you longer, but believe me: recruiters do notice it and appreciate the effort. Going the extra mile will set you apart. For an easy to use graphic-design tool try <strong><a href="https://www.canva.com/">Canva</a></strong>, <strong>I can’t recommend it enough</strong>.</li>
 </ol>
@@ -69,7 +69,7 @@ persistence layer to handle transactions more efficiently&rdquo;</em></li>
 
 <p>As an example this is what my resume currently looks like:</p>
 
-<p><a href="https://drive.google.com/file/d/12FKryxTfewr_QtvQtTDMJf-NwmuySY2k/view?usp=sharing"><img class="center" src="/images/posts/2019-01-06/resume-1.png" width="500" title="‘My resume page 1’" > </a></p>
+<p><a href="https://drive.google.com/file/d/12FKryxTfewr_QtvQtTDMJf-NwmuySY2k/view?usp=sharing"><img class="center" src="/images/posts/2019-01-06/resume-1.png" width="500" title="‘My resume page 1’" > </a></p>
 
 <p>As with any piece of good writing <strong>it’ll take many iterations to get there</strong>. Start with a <a href="https://www.goodreads.com/quotes/288933-almost-all-good-writing-begins-with-terrible-first-efforts-you">shitty first draft</a> and share it with your friends and recruiters to get feedback and make improvements.</p>
 
