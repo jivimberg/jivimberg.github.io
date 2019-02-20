@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Guice at a Glance - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Guice at a Glance written February 8, 2019 in cheat-sheet, dependency, framework, google, guice, injection A visual overview of Google’s Guice model &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2019/02/08/guice-at-a-glance">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49016076-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Guice at a Glance</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2019-02-08T15:12:32-08:00" pubdate data-updated="true">February 8, 2019</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/cheat-sheet/'>cheat-sheet</a>, <a class='category' href='/blog/categories/dependency/'>dependency</a>, <a class='category' href='/blog/categories/framework/'>framework</a>, <a class='category' href='/blog/categories/google/'>google</a>, <a class='category' href='/blog/categories/guice/'>guice</a>, <a class='category' href='/blog/categories/injection/'>injection</a>
+  
+</span>
+
+
+        </div>
+        <p>A visual overview of <a href="https://github.com/google/guice">Google’s Guice</a> model.</p>
+
+<!--more-->
+
+
+<p>A couple of weeks ago I started learning Guice. This cheat-sheet is a visual guide of how the different pieces that conform the framework fit together. I created it in the hope it helps beginners (like me) build a <a href="https://en.wikipedia.org/wiki/Mental_model">mental model</a> of how the framework works.</p>
+
+<p><a href="/images/posts/2019-02-08/guice.png"><img class="center" src="/images/posts/2019-02-08/guice.png" width="800" title="‘Guice cheat-sheet’" ></a></p>
+
+<p><a href="/images/posts/2019-02-08/guice.png"><em>(click for full size image)</em></a></p>
+
+<p>If you want to learn more about how <a href="https://github.com/google/guice">Guice</a> works head to their <a href="https://github.com/google/guice/wiki">oficial documentation</a>.</p>
+
+<p><img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.github.io/blog/2019/02/08/guice-at-a-glance/';
+        var disqus_url = 'http://jivimberg.github.io/blog/2019/02/08/guice-at-a-glance/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2019/01/23/how-to-prepare-for-the-silicon-valley-interview-part-3/" title="Previous Post: How to prepare for the Silicon Valley interview - Part 3">&laquo; Previous: How to prepare for the Silicon Valley interview - Part 3</a>
+        
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

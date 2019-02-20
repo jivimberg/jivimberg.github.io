@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-02-07T22:24:39-08:00</updated>
+  <updated>2019-02-20T17:40:59-03:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,28 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Guice at a Glance]]></title>
+    <link href="http://jivimberg.github.io/blog/2019/02/08/guice-at-a-glance/"/>
+    <updated>2019-02-08T15:12:32-08:00</updated>
+    <id>http://jivimberg.github.io/blog/2019/02/08/guice-at-a-glance</id>
+    <content type="html"><![CDATA[<p>A visual overview of <a href="https://github.com/google/guice">Google’s Guice</a> model.</p>
+
+<!--more-->
+
+
+<p>A couple of weeks ago I started learning Guice. This cheat-sheet is a visual guide of how the different pieces that conform the framework fit together. I created it in the hope it helps beginners (like me) build a <a href="https://en.wikipedia.org/wiki/Mental_model">mental model</a> of how the framework works.</p>
+
+<p><a href="http://jivimberg.github.io/images/posts/2019-02-08/guice.png"><img class="center" src="http://jivimberg.github.io/images/posts/2019-02-08/guice.png" width="800" title="‘Guice cheat-sheet’" ></a></p>
+
+<p><a href="http://jivimberg.github.io/images/posts/2019-02-08/guice.png"><em>(click for full size image)</em></a></p>
+
+<p>If you want to learn more about how <a href="https://github.com/google/guice">Guice</a> works head to their <a href="https://github.com/google/guice/wiki">oficial documentation</a>.</p>
+
+<p><img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to Prepare for the Silicon Valley Interview - Part 3]]></title>
@@ -2389,131 +2411,6 @@ fun main(args: Array<String>) {
 <ol>
 <li id="fn:1">
 <p>Otherwise the execution takes too long and doesn’t complete. Probably a limitation of Kotlin Playground<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Parallel Map in Kotlin]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/05/04/parallel-map-in-kotlin/"/>
-    <updated>2018-05-04T16:32:00-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/05/04/parallel-map-in-kotlin</id>
-    <content type="html"><![CDATA[<p>Ever wonder how to run <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html"><code>map</code></a>  in parallel using coroutines? This is how you do it.</p>
-
-<!--more-->
-
-
-
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.coroutineScope
-
-//sampleStart
-suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
-    map { async { f(it) } }.map { it.await() }
-}
-//sampleEnd
-</xmp>
-
-
-<p><em>Confused?</em> Let’s unpack it.</p>
-
-<p>First we have the <strong>function signature</strong> which is pretty similar to the actual <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html"><code>map</code></a> extension function signature on <code>Iterable</code>. The only thing we added were the <code>suspend</code> keywords. One for our function and another one on the parameter.</p>
-
-<p>Then we have the <code>coroutineScope</code> that marks the scope in which the <code>async</code> calls are going to be executed. This way if something goes wrong and an exception is thrown, all coroutines that were launched in this scope are cancelled. That&rsquo;s the main benefit of <a href="https://kotlinlang.org/docs/reference/coroutines/composing-suspending-functions.html#structured-concurrency-with-async">structured concurrency</a>.</p>
-
-<p>Finally we have the actual execution which is divided in 2 steps: The <em>first step</em> <strong>launches a new coroutine for each function application</strong> using <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/async.html"><code>async</code></a>. This effectively wraps the type of each element with  <code>Deferred</code>. In the <em>second step</em> we wait for all function applications to complete and unwrap the result with <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/-deferred/await.html"><code>await</code></a>.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
-
-<h2>How to use it</h2>
-
-<p>Easy! <strong>Just like you use <code>map</code></strong>:</p>
-
-<xmp class="kotlin-code" theme="darcula">
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.runBlocking
-
-suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
-    map { async { f(it) } }.map { it.await() }
-}
-//sampleStart
-fun main(args: Array<String>) = runBlocking {
-    println((1..100).pmap { it * 2 })
-}
-//sampleEnd
-</xmp>
-
-
-<p>(Psst! I’m using <a href="https://blog.jetbrains.com/kotlin/2018/04/embedding-kotlin-playground/">Kotlin Playground</a> so you can actually run this code!)</p>
-
-<h2>Prove that it’s running in parallel</h2>
-
-<p>Ok so let’s resort to the good old <code>delay</code> to prove that this is actually running in parallel. We are going to add a <strong>delay of 1 second</strong> on each multiplication and measure the time it takes to run.</p>
-
-<p>Running over <em>100 elements</em> the result should be: <strong>close to 1,000 milliseconds if it’s running in parallel</strong> and close to <em>100,000 milliseconds if it’s running sequentially</em>.</p>
-
-<xmp class="kotlin-code" theme="darcula">
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
-import kotlin.system.measureTimeMillis
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.coroutineScope
-
-suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
-    map { async { f(it) } }.map { it.await() }
-}
-//sampleStart
-fun main(args: Array<String>) = runBlocking {
-    val time = measureTimeMillis {
-        val output = (1..100).pmap {
-            delay(1000)
-            it * 2
-        }
-    
-        println(output)
-    }
-    
-    println("Total time: $time")
-}
-//sampleEnd
-</xmp>
-
-
-<h2>Why not <code>runBlocking</code>?</h2>
-
-<p>A previous iteration of this article proposed the following solution:</p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
-
-//sampleStart
-fun <A, B> Iterable<A>.pmapOld(f: suspend (A) -> B): List<B> = runBlocking {
-    map { async { f(it) } }.map { it.await() }
-}
-//sampleEnd
-</xmp>
-
-
-<p>And the description said:</p>
-
-<blockquote><p>Then we have the <code>runBlocking</code> which lets us bridge the blocking code with the coroutine world. As the name suggests <strong>this will block the current thread until everything inside the block finishes executing</strong>. Which is exactly what we want.</p></blockquote>
-
-<p>Fortunately <a href="https://disqus.com/by/disqus_VE5B5eZQX9/">Gildor</a> commented on why <a href="http://disq.us/p/1zbc6a7">this a bad idea</a>. First, we were not using <a href="https://medium.com/@elizarov/structured-concurrency-722d765aa952">Structured Concurrency</a>, so an invocation of <code>f</code> could fail and all other executions would continue unfazed. And also we were not playing nice with the rest of the code. By using <code>runBlocking</code> we were forcefully blocking the thread until the whole execution of <code>pmap</code> finishes, instead of letting the caller decide how the execution should go.</p>
-
-<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
-
-
-
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>Since I’m not explicitly passing any  <code>CoroutineContext</code> the <code>DefaultDispatcher</code> will be used. <a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
