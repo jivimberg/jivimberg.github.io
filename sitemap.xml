@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines/</loc>
+<lastmod>2019-02-23T16:52:48-03:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2019/02/08/guice-at-a-glance/</loc>
 <lastmod>2019-02-08T15:12:32-08:00</lastmod>
 </url>
@@ -459,5 +463,32 @@
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/categories/framework/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/sqs/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/queue/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/consumer/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/aws/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/producer/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/posts/2/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/posts/3/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/posts/4/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/posts/5/</loc>
 </url>
 </urlset>
