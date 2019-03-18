@@ -79,7 +79,7 @@ import kotlinx.coroutines.yield
 import java.lang.Thread.currentThread
 
 //sampleStart
-suspend fun CoroutineScope.repeatUntilCancelled(block: suspend () -\> Unit) {
+suspend fun CoroutineScope.repeatUntilCancelled(block: suspend () -> Unit) {
 	while (isActive) {
 	    try {
 	        block()
