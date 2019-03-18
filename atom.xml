@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-03-12T10:04:47-07:00</updated>
+  <updated>2019-03-17T17:27:42-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -66,7 +66,7 @@ fun start() = launch {
 
 <xmp class="kotlin-code" data-highlight-only theme="darcula">
 private fun CoroutineScope.launchMsgReceiver(channel: SendChannel<Message>) = launch {
-        runForever {
+        repeatUntilCancelled {
             val receiveRequest = ReceiveMessageRequest.builder()
                     .queueUrl(SQS_URL)
                     .waitTimeSeconds(20)
@@ -88,26 +88,40 @@ private fun CoroutineScope.launchMsgReceiver(channel: SendChannel<Message>) = la
 
 <p>It is written as a <code>CoroutineScope</code> to denote that it creates a new coroutine and does not wait for it to complete.</p>
 
-<p>Next thing you’ll notice is that all the code is wrapped with a <code>runForever</code>. This is a helper function that will loop our code block infinitely and make sure it keeps running even in the face of exceptions. Here’s the code:</p>
+<p>Next thing you’ll notice is that all the code is wrapped with a <code>repeatUntilCancelled</code>. This is a helper function that will repeat our block infinitely, and make sure it keeps running even in the face of exceptions. It will only stop when the coroutine is cancelled. We’ll use this little trick on our <em>Worker</em> code too. Here’s the code, courtesy of <a href="https://twitter.com/_fletchr">@_fletchr</a>:</p>
 
 <xmp class="kotlin-code" data-highlight-only theme="darcula">
-internal inline fun runForever(block: () -> Unit): Nothing {
-    while (true) {
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.yield
+import java.lang.Thread.currentThread
+
+//sampleStart
+suspend fun CoroutineScope.repeatUntilCancelled(block: suspend () -\> Unit) {
+    while (isActive) {
         try {
             block()
+            yield()
+        } catch (ex: CancellationException) {
+            println("coroutine on ${currentThread().name} cancelled")
         } catch (ex: Exception) {
-            println("${Thread.currentThread().name} failed with exception. Retrying...")
+            println("${currentThread().name} failed with {$ex}. Retrying...")
             ex.printStackTrace()
-            continue
         }
     }
-} 
+    
+    println("coroutine on ${currentThread().name} exiting")
+}
+//sampleEnd
 </xmp>
 
 
-<p>We’ll use this little trick on our <em>Worker</em> code too. Having the try/catch guarantees the coroutine will keep looping even if the block throws an exception (like a connection timeout reading messages from the queue, for example).</p>
+<p>We have while loop on the <code>isActive</code> property from the CoroutineScope that will guarantee we keep repeating the block until the coroutine is no longer active (i.e. it has been cancelled). We have access to this property because <code>repeatUntilCancelled</code> is an extension function on CoroutineScope.</p>
 
-<p>An elegant detail is that the return type of <code>runForever</code> is <code>Nothing</code><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. That tells the Kotlin compiler that we don’t expect the function call to ever return. If, by mistake, we write any other statement after <code>runForever</code> the compiler (or the IDE) will warn us about it.</p>
+<p>Having the <em>try/catch</em> guarantees the coroutine will keep looping even if the block throws an exception (like a connection timeout reading messages from the queue, for example). <code>CancellationException</code> is the exception used by the coroutines machinery to signal the cancellation of the coroutine. We handle it as a special case because we don&rsquo;t want to print a message saying <em>&ldquo;Retrying&hellip;&rdquo;</em>, because the while loop is about to break.</p>
+
+<p>The call to <code>yield()</code> is needed to avoid the case where all threads are busy with CPU intensive coroutines that do not suspend, and thus there&rsquo;s no chance for other coroutines to execute.</p>
 
 <p>Ok, back to our <code>launchMsgReceiver</code> function!  The next part is the actual polling for messages. You’ll notice that I’m maxing out the <code>waitTimeSeconds</code>  so the call waits up to <em>20 seconds</em>, for at least one message to be available before returning empty. I’m also picking the biggest value for the number of messages being retrieved at once (10), because the whole point of my consumer is to be able to process as many of them in parallel, as possible.</p>
 
@@ -120,9 +134,8 @@ internal inline fun runForever(block: () -> Unit): Nothing {
 <p>Now let’s take a look at the worker that will process the messages:</p>
 
 <xmp class="kotlin-code" data-highlight-only theme="darcula">
-internal inline fun runForever(block: () -\> Unit): Nothing {
  private fun CoroutineScope.launchWorker(channel: ReceiveChannel<Message>) = launch {
-        runForever {
+        repeatUntilCancelled {
             for (msg in channel) {
                 try {
                     processMsg(msg)
@@ -138,7 +151,7 @@ internal inline fun runForever(block: () -\> Unit): Nothing {
 </xmp>
 
 
-<p>The first lines are pretty similar to the <em>MsgReceiver</em>. We’re again launching a coroutine and not waiting for it to complete, and thus we have the <code>launch</code> call and our function is an extension of <code>CoroutineScope</code>. We’re also wrapping everything in a <code>runForever</code> for the same reasons we used it before. The only difference you might notice is that it takes a <code>ReceiveChannel</code> instead of <code>SendChannel</code>, because this is the receiving end of the communication.</p>
+<p>The first lines are pretty similar to the <em>MsgReceiver</em>. We’re again launching a coroutine and not waiting for it to complete, and thus we have the <code>launch</code> call and our function is an extension of <code>CoroutineScope</code>. We’re also wrapping everything in a <code>repeatUntilCancelled</code> for the same reasons we used it before. The only difference you might notice is that it takes a <code>ReceiveChannel</code> instead of <code>SendChannel</code>, because this is the receiving end of the communication.</p>
 
 <p>Next we use a <code>for</code> loop to consume messages from the channel. It will suspend the coroutine if there are no new messages in the channel. The use of <code>for</code> is important because we’re doing <a href="https://kotlinlang.org/docs/reference/coroutines/channels.html#fan-out">fan-out</a>, we have multiple coroutines consuming from the same channel. Consuming with <code>for</code> guarantees us that if one coroutine fails it won’t cancel the underlying channel, which is what would happen if we had used <code>consumeEach</code> to go through the messages, instead.</p>
 
@@ -169,7 +182,7 @@ private suspend fun deleteMessage(message: Message) {
         }.await()
         println("${Thread.currentThread().name} Message deleted: ${message.body()}")
     }
-
+    
     private suspend fun changeVisibility(message: Message) {
         sqs.changeMessageVisibility { req ->
             req.queueUrl(SQS_URL)
@@ -196,7 +209,7 @@ private suspend fun deleteMessage(message: Message) {
 <xmp class="kotlin-code" data-highlight-only theme="darcula">
 package com.jivimberg.sqs
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.\*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
@@ -216,13 +229,13 @@ class SqsSampleConsumerChannels(
     private val supervisorJob = SupervisorJob()
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + supervisorJob
-
+    
     fun start() = launch {
         val messageChannel = Channel<Message>()
         repeat(N_WORKERS) { launchWorker(messageChannel) }
         launchMsgReceiver(messageChannel)
     }
-
+    
     fun stop() {
         supervisorJob.cancel()
     }
@@ -230,24 +243,24 @@ class SqsSampleConsumerChannels(
 //sampleEnd
 
     private fun CoroutineScope.launchMsgReceiver(channel: SendChannel<Message>) = launch {
-        runForever {
+        repeatUntilCancelled {
             val receiveRequest = ReceiveMessageRequest.builder()
                     .queueUrl(SQS_URL)
                     .waitTimeSeconds(20)
                     .maxNumberOfMessages(10)
                     .build()
-
+    
             val messages = sqs.receiveMessage(receiveRequest).await().messages()
             println("${Thread.currentThread().name} Retrieved ${messages.size} messages")
-
+    
             messages.forEach {
                 channel.send(it)
             }
         }
     }
-
+    
     private fun CoroutineScope.launchWorker(channel: ReceiveChannel<Message>) = launch {
-        runForever {
+        repeatUntilCancelled {
             for (msg in channel) {
                 try {
                     processMsg(msg)
@@ -260,13 +273,13 @@ class SqsSampleConsumerChannels(
             }
         }
     }
-
+    
     private suspend fun processMsg(message: Message) {
         println("${Thread.currentThread().name} Started processing message: ${message.body()}")
         delay((1000L..2000L).random())
         println("${Thread.currentThread().name} Finished processing of message: ${message.body()}")
     }
-
+    
     private suspend fun deleteMessage(message: Message) {
         sqs.deleteMessage { req ->
             req.queueUrl(SQS_URL)
@@ -274,7 +287,7 @@ class SqsSampleConsumerChannels(
         }.await()
         println("${Thread.currentThread().name} Message deleted: ${message.body()}")
     }
-
+    
     private suspend fun changeVisibility(message: Message) {
         sqs.changeMessageVisibility { req ->
             req.queueUrl(SQS_URL)
@@ -296,7 +309,7 @@ fun main() = runBlocking {
     consumer.stop()
 }
 
-private const val N_WORKERS = 4
+private const val N\_WORKERS = 4
 </xmp>
 
 
@@ -315,7 +328,7 @@ private suspend fun processMsg(message: Message) = withContext(Dispatchers.Defau
 
 <p>Because we’re responsible developers, let’s see what would happen if something were to fail.</p>
 
-<p>As a first line of defense we know both our <em>Workers</em> and the <em>MsgReceiver</em> are running in <code>runForever</code> loops, so any exception should be logged and ignored. This is ok for us because once the visibility timeout is over, the message will re-appear in the queue for another worker to consume. Still, to be extra careful, let’s consider what would happen with our coroutines in case of exception if we didn’t have <code>runForever</code>s.</p>
+<p>As a first line of defense we know both our <em>Workers</em> and the <em>MsgReceiver</em> are running in <code>repeatUntilCancelled</code> loops, so any exception should be logged and ignored. This is ok for us because once the visibility timeout is over, the message will re-appear in the queue for another worker to consume. Still, to be extra careful, let’s consider what would happen with our coroutines in case of exception if we didn’t have <code>repeatUntilCancelled</code>s.</p>
 
 <p>The whole premise of <a href="https://kotlinlang.org/docs/reference/coroutines/basics.html#structured-concurrency">structured concurrency</a> is to avoid leaking coroutines in case of failure. That’s why, by default, <strong>whenever a child coroutine terminates with exception its parent and siblings are cancelled too</strong>. This is a nice property, but not quite what we want in this case. We don’t want all workers to be cancelled because one worker threw an exception. That’s why we use <code>supervisorJob</code> as part of our <code>coroutineContext</code>. <a href="https://kotlinlang.org/docs/reference/coroutines/exception-handling.html#supervision-job">SupervisorJob</a> is like a regular job, with the exception that cancellation is propagated only downwards.</p>
 
@@ -332,14 +345,6 @@ private suspend fun processMsg(message: Message) = withContext(Dispatchers.Defau
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
 
-
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>Thanks Patrick for the suggestion!<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
 
 ]]></content>
   </entry>
