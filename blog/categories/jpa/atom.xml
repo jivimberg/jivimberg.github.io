@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Jpa | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/jpa/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-04-18T08:47:04-07:00</updated>
+  <updated>2019-04-20T17:57:31-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -36,7 +36,7 @@
 </ul>
 
 
-<p>But as you probably already know: <a href="https://en.wikipedia.org/wiki/There_ain%27t_no_such_thing_as_a_free_lunch">🚫🆓🍽</a>. So here are some of the downsides of using UUIDss for you to consider:</p>
+<p>But as you probably already know: <a href="https://en.wikipedia.org/wiki/There_ain't_no_such_thing_as_a_free_lunch">🚫🆓🍽</a>. So here are some of the downsides of using UUIDss for you to consider:</p>
 
 <ul>
 <li><strong>Storage space.</strong> As you can imagine storing an UUID takes a lot more space than storying an Int. Specially if you make the mistake of storing it as a <code>String</code>. You might think Id space is not a big deal, but consider that <strong>Primary Keys are often used in indexes and as Foreign Keys on other tables</strong>. So the numbers start to add up.</li>
@@ -53,7 +53,7 @@
 <p>The first thing we need to do is <strong>generate the UUID</strong>. As mentioned above we’d like to do this on the application code so we can have <em>immutable entities</em>. Generating the UUID is easy, all we need to do is: <code>UUID.randomUUID()</code>. So our entity would look like this:</p>
 
 <xmp class="kotlin-code" theme="darcula" data-highlight-only>
-import java.util.*
+import java.util.\*
 import javax.persistence.Id
 import javax.persistence.Entity
 
@@ -96,8 +96,8 @@ public &lt;S extends T&gt; S save(S entity) {
 
 <xmp class="kotlin-code" theme="darcula" data-highlight-only>
 import org.springframework.data.domain.Persistable
-import java.util.*
-import javax.persistence.*
+import java.util.\*
+import javax.persistence.\*
 
 //sampleStart
 @MappedSuperclass
@@ -106,16 +106,16 @@ abstract class AbstractBaseEntity(givenId: UUID? = null) : Persistable<UUID> {
     @Id
     @Column(name = "id", length = 16, unique = true, nullable = false)
     private val id: UUID = givenId ?: UUID.randomUUID()
-
+    
     @Transient
     private var persisted: Boolean = givenId != null
     
     override fun getId(): UUID = id
-
+    
     override fun isNew(): Boolean = !persisted
-
+    
     override fun hashCode(): Int = id.hashCode()
-
+    
     override fun equals(other: Any?): Boolean {
         return when {
             this === other -> true
@@ -124,7 +124,7 @@ abstract class AbstractBaseEntity(givenId: UUID? = null) : Persistable<UUID> {
             else -> getId() == other.getId()
         }
     }
-
+    
     @PostPersist
     @PostLoad
     private fun setPersisted() {
@@ -150,7 +150,7 @@ abstract class AbstractBaseEntity(givenId: UUID? = null) : Persistable<UUID> {
 
 <xmp class="kotlin-code" theme="darcula" data-highlight-only>
 import org.springframework.data.repository.CrudRepository
-import java.util.*
+import java.util.\*
 import javax.persistence.Entity
 
 //sampleStart
@@ -171,7 +171,50 @@ class Artist(
 
 <hr />
 
+<h1>Approach 2: Making it simpler with @Version</h1>
+
+<p>This approach was suggested by <a href="https://disqus.com/by/disqus_UhNaTY8OWI/">Diego Marin</a> in the comments.</p>
+
+<p>Spring Data can leverage the existence of a <code>@Version</code> field to tell if the Entity is present or not. By having <code>@Version</code>, we also get <a href="https://www.baeldung.com/jpa-optimistic-locking">Optimistic Locking</a> for free.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import java.util.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Version
+
+//sampleStart
+@Entity
+class Celeb(
+        @Id @Column(name = "id", length = 16, unique = true, nullable = false)
+        val id: UUID = UUID.randomUUID(),
+        @Version
+        val version: Long? = null,
+        val name: String
+) {
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        id != (other as Celeb).id -> false
+        else -> true
+    }
+
+    override fun hashCode(): Int = id.hashCode()
+}
+//sampleEnd
+</xmp>
+
+
+<blockquote><p>⚠️ Make sure you’re importing <code>javax.persistence.Version</code> and NOT <code>org.springframework.data.annotation.Version</code>!</p></blockquote>
+
+<p>We still need to write the <code>id</code> column definition and <code>equal</code> and <code>hashCode</code> methods, so if this is something you’ll be applying in most of your entities you might want to consider extracting it to a superclass. Similar to what we did with <code>AssignedIdBaseEntity</code>, but using <code>@Version</code></p>
+
+<hr />
+
 <p>You can find all the <strong>code samples</strong> for this post on <strong><a href="https://github.com/jivimberg/spring-data-uuid-example">this GitHub repo</a></strong>.</p>
+
+<p><img class="right-fill" src="/images/signatures/signature1.png" width="200" title="‘My signature’" ></p>
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
