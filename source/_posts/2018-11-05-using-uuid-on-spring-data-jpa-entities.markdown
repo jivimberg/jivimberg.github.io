@@ -34,15 +34,15 @@ Now let’s talk about how we can implement this. I’ll go step by step explain
 The first thing we need to do is **generate the UUID**. As mentioned above we’d like to do this on the application code so we can have _immutable entities_. Generating the UUID is easy, all we need to do is: `UUID.randomUUID()`. So our entity would look like this:
 
 <xmp class="kotlin-code" theme="darcula" data-highlight-only>
-import java.util.*
+import java.util.\*
 import javax.persistence.Id
 import javax.persistence.Entity
 
 //sampleStart
 @Entity
 class Artist(
-        @Id val id: UUID = UUID.randomUUID(),
-        val name: String
+	    @Id val id: UUID = UUID.randomUUID(),
+	    val name: String
 )
 //sampleEnd
 </xmp>
@@ -62,12 +62,12 @@ The reason for this behavior is the implementation of Spring Data’s [`SimpleJp
 ```java
 @Transactional
 public <S extends T> S save(S entity) {
-	if (entityInformation.isNew(entity)) {
-		em.persist(entity);
-		return entity;
-	} else {
-		return em.merge(entity);
-	}
+    if (entityInformation.isNew(entity)) {
+        em.persist(entity);
+        return entity;
+    } else {
+        return em.merge(entity);
+    }
 }
 ```
 
@@ -77,40 +77,40 @@ public <S extends T> S save(S entity) {
 
 <xmp class="kotlin-code" theme="darcula" data-highlight-only>
 import org.springframework.data.domain.Persistable
-import java.util.*
-import javax.persistence.*
+import java.util.\*
+import javax.persistence.\*
 
 //sampleStart
 @MappedSuperclass
 abstract class AbstractBaseEntity(givenId: UUID? = null) : Persistable<UUID> {
 
-    @Id
-    @Column(name = "id", length = 16, unique = true, nullable = false)
-    private val id: UUID = givenId ?: UUID.randomUUID()
-
-    @Transient
-    private var persisted: Boolean = givenId != null
-    
-    override fun getId(): UUID = id
-
-    override fun isNew(): Boolean = !persisted
-
-    override fun hashCode(): Int = id.hashCode()
-
-    override fun equals(other: Any?): Boolean {
-        return when {
-            this === other -> true
-            other == null -> false
-            other !is AbstractBaseEntity -> false
-            else -> getId() == other.getId()
-        }
-    }
-
-    @PostPersist
-    @PostLoad
-    private fun setPersisted() {
-        persisted = true
-    }
+	@Id
+	@Column(name = "id", length = 16, unique = true, nullable = false)
+	private val id: UUID = givenId ?: UUID.randomUUID()
+	
+	@Transient
+	private var persisted: Boolean = givenId != null
+	
+	override fun getId(): UUID = id
+	
+	override fun isNew(): Boolean = !persisted
+	
+	override fun hashCode(): Int = id.hashCode()
+	
+	override fun equals(other: Any?): Boolean {
+	    return when {
+	        this === other -> true
+	        other == null -> false
+	        other !is AbstractBaseEntity -> false
+	        else -> getId() == other.getId()
+	    }
+	}
+	
+	@PostPersist
+	@PostLoad
+	private fun setPersisted() {
+	    persisted = true
+	}
 }
 //sampleEnd
 
@@ -130,14 +130,14 @@ Finally let’s see how a concrete entity would use this.
 
 <xmp class="kotlin-code" theme="darcula" data-highlight-only>
 import org.springframework.data.repository.CrudRepository
-import java.util.*
+import java.util.\*
 import javax.persistence.Entity
 
 //sampleStart
 @Entity
 class Artist(
-        id: UUID? = null,
-        val name: String
+	    id: UUID? = null,
+	    val name: String
 ) : AssignedIdBaseEntity(id)
 //sampleEnd
 </xmp>
@@ -150,7 +150,49 @@ And now if we do a `save()` on a new entity **we get one single SQL statement** 
 
 ---- 
 
-You can find all the **code samples** for this post on **[this GitHub repo][20]**.
+# Approach 2: Making it simpler with @Version
+
+This approach was suggested by [Diego Marin][20] in the comments. 
+
+Spring Data can leverage the existence of a `@Version` field to tell if the Entity is present or not. By having `@Version`, we also get [Optimistic Locking][21] for free.
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import java.util.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Version
+
+//sampleStart
+@Entity
+class Celeb(
+        @Id @Column(name = "id", length = 16, unique = true, nullable = false)
+        val id: UUID = UUID.randomUUID(),
+        @Version
+        val version: Long? = null,
+        val name: String
+) {
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        id != (other as Celeb).id -> false
+        else -> true
+    }
+
+    override fun hashCode(): Int = id.hashCode()
+}
+//sampleEnd
+</xmp>
+
+> ⚠️ Make sure you’re importing `javax.persistence.Version` and NOT `org.springframework.data.annotation.Version`!
+
+We still need to write the `id` column definition and `equal` and `hashCode` methods, so if this is something you’ll be applying in most of your entities you might want to consider extracting it to a superclass. Similar to what we did with `AssignedIdBaseEntity`, but using `@Version` 
+
+---- 
+
+You can find all the **code samples** for this post on **[this GitHub repo][22]**.
+
+{% img right-fill /images/signatures/signature1.png 200 ‘My signature’ %} 
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
@@ -159,7 +201,7 @@ You can find all the **code samples** for this post on **[this GitHub repo][20]*
 [3]:	https://spring.io/projects/spring-data-jpa
 [4]:	https://vladmihalcea.com/hibernate-and-uuid-identifiers/
 [5]:	https://proandroiddev.com/kotlin-for-beginners-immutability-and-the-value-of-val-78ab45b60b57
-[6]:	https://en.wikipedia.org/wiki/There_ain%27t_no_such_thing_as_a_free_lunch
+[6]:	https://en.wikipedia.org/wiki/There_ain't_no_such_thing_as_a_free_lunch
 [7]:	https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439
 [8]:	https://kotlinlang.org/docs/reference/classes.html#constructors
 [9]:	https://spring.io/projects/spring-data-jpa
@@ -173,4 +215,6 @@ You can find all the **code samples** for this post on **[this GitHub repo][20]*
 [17]:	https://kotlinexpertise.com/hibernate-with-kotlin-spring-boot/
 [18]:	https://twitter.com/s1m0nw1
 [19]:	https://youtrack.jetbrains.com/issue/KT-6653
-[20]:	https://github.com/jivimberg/spring-data-uuid-example
+[20]:	https://disqus.com/by/disqus_UhNaTY8OWI/
+[21]:	https://www.baeldung.com/jpa-optimistic-locking
+[22]:	https://github.com/jivimberg/spring-data-uuid-example
