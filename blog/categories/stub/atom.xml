@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Stub | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/stub/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-05-18T17:17:00-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Mockk All the Things]]></title>
+    <link href="http://jivimberg.github.io/blog/2019/05/09/mockk-features-rundown/"/>
+    <updated>2019-05-09T07:57:47-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2019/05/09/mockk-features-rundown</id>
+    <content type="html"><![CDATA[<p>Over the last few years Mockk has been gaining ground as the go-to mocking library in KotlinWorld ™. Just recently, it was listed as <em>“adopt”</em> in the <a href="https://www.thoughtworks.com/radar/languages-and-frameworks/mockk">ThoughtWorks technology Radar</a>. Want to know what all the fuss is about?</p>
+
+<!--more-->
+
+
+<p><img class="center" src="/images/posts/2019-05-18/mockkAllTheThings.gif" title="‘Channels animation’" ></p>
+
+<h2>Regular mocking</h2>
+
+<p>Let’s start with the basics. You can <em>mock</em>, <em>spy</em> and <em>verify</em> using this <a href="https://mockk.io/#dsl-tables">cute little DSL</a></p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verify
+import org.junit.jupiter.api.Test
+
+class ClockTest {
+
+//sampleStart
+    @Test
+    fun `regular mock`() {
+        val clock = mockk<Clock>()
+        every { clock.currentTime() } returns "7:20"
+    
+        clock.currentTime()
+    
+        verify { clock.currentTime() }
+    }
+    
+    @Test
+    fun `regular spy`() {
+        val clock = spyk<Clock>()
+    
+        clock.currentTime()
+    
+        verify { clock.currentTime() }
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<h2>Mocks with behavior</h2>
+
+<p>No need to settle for just one fixed return value. You can add complex behavior to your mocks like this:</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mock with complex behavior`() {
+        val clock = mockk<Clock>()
+        every { clock.currentTime() } answers { dateFormat.format(Calendar.getInstance()) }
+    
+        // ...
+    }
+    
+    companion object {
+        val dateFormat = SimpleDateFormat("HH:mm")
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>There are a bunch of utility functions and properties you can use inside the <code>answers</code> lambda to do things like calculate the response based on the function arguments. Full list <a href="http://mockk.io/#answer-scope">here</a>.</p>
+
+<h2>Mock chained calls</h2>
+
+<p>You can easily mock a chain of calls</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking chained calls`() {
+        val oven = mockk<Oven>()
+        every { oven.clock.currentTime() } returns "7:20"
+    
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<h2>Mock hierarchies</h2>
+
+<p>You can achieve the same result using hierarchical mocking</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `hierarchical mocking`() {
+        val oven = mockk<Oven>()
+        every { oven.clock } returns mockk {
+            every { currentTime() } returns "7:20"
+        }
+    
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>This is especially useful when mocking complex structures and to return collections of mocking objects, like in <a href="https://mockk.io/#hierarchical-mocking">this example</a>.</p>
+
+<h2>Mock objects</h2>
+
+<p>You can mock Objects as easily as you mock regular classes</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `object mocking`() {
+        mockkObject(UrlHelper)
+        every { UrlHelper.getBaseUrl() } returns URL("http://mockUrl.com")
+    
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<h2>Mock Unit</h2>
+
+<p>You can mock functions that return <code>Unit</code> using <code>just Runs</code></p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking functions that return Unit`() {
+        val clock = mockk<Clock>()
+        every { clock.changeBatteries() } just Runs
+    
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<h2>Mock Nothing</h2>
+
+<p>Or functions that return Nothing. In which case you have to throw an exception as behavior (because a function that returns <code>Nothing</code> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing.html">never returns</a> and can only end by throwing an exception, remember?)</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking functions that return Nothing`() {
+        val clock = mockk<Clock>()
+        every { clock.runForever() } throws Exception("called runForever")
+    
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<h2>Mock extensions functions</h2>
+
+<p>You can mock extensions functions as well:</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking functions extension functions`() {
+        with(mockk<Clock>()) {
+            every { Duration.ofMinutes(5).startTimer() } returns true
+    
+            //...
+        }
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>This works If the extension functions is defined on a class or an object. If it’s defined as a top level function instead, you can still mock it by following the advise in the next point 👇</p>
+
+<h2>Mocking top level functions</h2>
+
+<p>Got a top level function to mock? We’ve got you covered.</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+   class ClockTest {
+   //sampleStart
+    @Test
+    fun `mocking top level functions`() {
+        mockkStatic("mockk.ModelsKt")
+        every { resolve(any()) } returns URL("http://mockk.com/users/1")
+    
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>Ok, you might need to check your classes to know exactly what to use as argument for <code>mockkStatic</code>, but it’s no big deal.</p>
+
+<h2>Mock private functions</h2>
+
+<p>Yep, you can mock private functions by name.</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking private functions`() {
+        val oven = mockk<Oven>()
+        every { oven["lockDoor"]() } returns true
+        
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>You can even verify calls to private function by using <code>recordPrivateCalls = true</code></p>
+
+<h2>Mock varargs</h2>
+
+<p>There’s also support for mocking functions that use varargs:</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class VarargsTest {
+    //sampleStart
+    interface Calculator {
+        fun sumEverything(vararg num: Int): Int
+    }
+
+    @Test
+    fun `mocking varargs`() {
+        val calculator = mockk<Calculator>()
+        every { calculator.sumEverything(1, 2, 4) } returns 7
+
+        //...
+
+        every { calculator.sumEverything(1, *anyIntVararg(), 4) } returns 12
+
+        //...
+
+        every { calculator.sumEverything(1, *varargAllInt { it < 5 }) } returns 10
+
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>And it’s not only the basics either. As you can see in the example you can do all kind of complex matchings.</p>
+
+<h2>Mock constructor</h2>
+
+<p>You can mock constructors. Useful for those times when you don’t actually control the object creation, but want to still be able to mock it.</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking constructor`() {
+        mockkConstructor(Clock::class)
+
+        every { anyConstructed<Clock>().currentTime() } returns "7:40"
+
+        assertEquals("7:40", Clock().currentTime())
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<h2>Mock coroutines</h2>
+
+<p>If you’re working with coroutines and want to mock a suspending function you simply use <code>coEvery</code>. In this example <code>startTimer</code> is a suspending function:</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking suspending functions`() {
+        val clock = mockk<Clock>()
+        coEvery { clock.startTimer() } returns RUNNING
+
+        // ...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>Along with <code>coEvery</code> there’s a whole family of <code>co...</code> functions (<code>coAnswers</code>, <code>coVerify</code>, <code>coAssert</code>, etc.) for working with coroutines.</p>
+
+<hr />
+
+<p>This is by no means a comprehensive guide. My intention was just to showcase same of the things that Mockk can do for you. For an in-depth introduction I recommend checking the <a href="https://blog.kotlin-academy.com/search?q=mockk"><em>“Mocking is not rocket science”</em> series in Kotlin Academy</a>.</p>
+
+<p> <img class="right-fill" src="/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+]]></content>
+  </entry>
+  
+</feed>

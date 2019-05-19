@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2019/05/09/mockk-features-rundown/</loc>
+<lastmod>2019-05-09T07:57:47-07:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2019/04/18/different-kinds-of-channels-in-kotlin/</loc>
 <lastmod>2019-04-18T07:59:14-07:00</lastmod>
 </url>
@@ -485,5 +489,26 @@
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/categories/concurrency/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/mockk/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/stub/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/spy/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/posts/2/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/posts/3/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/posts/4/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/posts/5/</loc>
 </url>
 </urlset>
