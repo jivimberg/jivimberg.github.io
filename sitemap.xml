@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2019/06/07/graphic-design-tools-for-backend-engineers/</loc>
+<lastmod>2019-06-07T22:14:38-07:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2019/05/09/mockk-features-rundown/</loc>
 <lastmod>2019-05-09T07:57:47-07:00</lastmod>
 </url>
@@ -500,15 +504,24 @@
 <loc>http://jivimberg.github.io/blog/categories/spy/</loc>
 </url>
 <url>
-<loc>http://jivimberg.github.io/blog/posts/2/</loc>
+<loc>http://jivimberg.github.io/blog/categories/graphic/</loc>
 </url>
 <url>
-<loc>http://jivimberg.github.io/blog/posts/3/</loc>
+<loc>http://jivimberg.github.io/blog/categories/design/</loc>
 </url>
 <url>
-<loc>http://jivimberg.github.io/blog/posts/4/</loc>
+<loc>http://jivimberg.github.io/blog/categories/tools/</loc>
 </url>
 <url>
-<loc>http://jivimberg.github.io/blog/posts/5/</loc>
+<loc>http://jivimberg.github.io/blog/categories/communication/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/draw/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/graphs/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/visual/</loc>
 </url>
 </urlset>
