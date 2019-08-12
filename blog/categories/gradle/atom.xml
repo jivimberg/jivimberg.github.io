@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Gradle | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/gradle/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Random Thoughts on Using Gradle With Kotlin DSL]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl/"/>
+    <updated>2018-08-28T08:36:57-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl</id>
+    <content type="html"><![CDATA[<p>Since Gradle 3.0 you can <a href="https://blog.gradle.org/kotlin-meets-gradle"><strong>write your build scripts using Kotlin instead of Groovy</strong></a>. I was curious, so I decided to give it a try. Here are my thoughts on the process.</p>
+
+<!--more-->
+
+
+<h1>Why?</h1>
+
+<p>Ok, we can write our build scripts in Kotlin, but you might be wondering: <em>”why would I want to do that?”</em> Here are my reasons:</p>
+
+<h2>1. All things Kotlin</h2>
+
+<p>Our backend codebase is <em>mostly written in Kotlin</em>. We even wrote our <a href="https://jivimberg.io/blog/2018/07/03/writing-githooks-in-kotlin/">githooks using Kotlin scripts!</a> So it was only natural to use Kotlin on our build tools too.</p>
+
+<p>Being able to use the same language across the stack means that your learning efforts pays double. This way <strong>the team doesn’t have to learn a new language just to write a simple Gradle task.</strong> And as an added bonus you can apply <em>the same testing, coverage and code inspection tools</em> that you use in production to your tooling code.</p>
+
+<h2>2. IDE support</h2>
+
+<p>The second reason for making the transition was IDE support. Groovy is a dynamically typed language, which makes it harder for the IDE to provide accurate code completion and script validity through type checks. Kotlin being statically typed doesn’t suffer from the same problems</p>
+
+<p><img class="center" src="/images/posts/2018-09-11/kotlin-code-completion.png" title="‘Kotlin code completion’" ></p>
+
+<h2>3. Interoperability</h2>
+
+<p>As you probably know <a href="https://kotlinlang.org/docs/reference/java-interop.html">Kotlin was designed with Java interoperability in mind</a>. And the same interoperability <a href="">extends to Groovy code</a>.</p>
+
+<p>This interoperability let us <strong><a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy_2">call Groovy code from Kotlin</a> and <a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy">viceversa</a></strong>. Which effectively means that you can have <strong>a mix of both Groovy and Kotlin scripts working together in the same project</strong>. So no need to migrate all your build scripts at once, or to push stubborn <em>“Wally”</em> to learn Kotlin DSL.</p>
+
+<p><img class="center" src="/images/posts/2018-09-11/wally2.png" title="‘Wally’" ></p>
+
+<h1>The exodus</h1>
+
+<p><em>”So how painful was the migration?”</em> It wasn’t that bad really. Kotlin DSL was designed to be pretty similar to the classic <code>build.gradle</code> files.</p>
+
+<p>You’ll just have to <strong>push through that first moment</strong> when nothing seems to be working, your project doesn’t compile at all, and you know you’re a <code>⌘ + Z</code> away from a pristine working copy. <em>But you can&rsquo;t make an omelet without breaking a few eggs, can you?</em></p>
+
+<p><img class="center" src="/images/posts/2018-09-11/panic.png" title="‘Panic!’" ></p>
+
+<p><strong>I just wish there was some kind of automatic migration action in IntelliJ.</strong> Even if it’s a best effort that leaves you half way there, I’d greatly appreciate it. Ideally it should work just like when you paste some Java code into a Kotlin file: <code>⌘ + V</code> + ✨<em>fairy dust</em>✨ and you have your <code>build.gradle.kts</code> ready to go.</p>
+
+<h3>Resources</h3>
+
+<p>This are the resources that help me complete the migration. Hopefully you’ll find them helpful too.</p>
+
+<ul>
+<li><a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/"><strong>Official Gradle migration guide</strong></a> <strong>Start here!</strong> You don’t have to cover the whole thing but you can skim through it and later go back to the section you need.</li>
+<li><a href="https://github.com/gradle/kotlin-dsl/tree/master/samples/"><strong>Samples in the Kotlin DSL repo</strong></a> This is <strong>the go-to place for Kotlin DSL samples</strong>. You’ll find yourself coming back to this repo over and over. Be sure to search the <em>Issues</em> section too.</li>
+<li>For the times when the <a href="https://github.com/gradle/kotlin-dsl/tree/master/samples/">Kotlin DSL repo</a> doesn’t have what you’re looking for, I find it useful to use <a href="https://github.com/search/advanced"><strong>Github Search</strong></a> looking for code in files with <code>*.kts</code> extension.</li>
+<li><a href="https://github.com/jnizet/gradle-kotlin-dsl-migration-guide"><strong>jnizet/gradle-kotlin-dsl-migration-guide</strong></a> this is another migration guide that has proven useful in the past.</li>
+<li>Finally I followed <a href="https://handstandsam.com/2018/02/11/kotlin-buildsrc-for-better-gradle-dependency-management/"><strong>this article</strong></a> by <a href="https://handstandsam.com/about-me/">Handstand Sam</a> to do <em>dependency management</em> on out multi-module project.</li>
+</ul>
+
+
+<h1>The not so good</h1>
+
+<h2>1. <em>“I can’t just copy-past things from Stack Overflow”</em></h2>
+
+<p><img class="center" src="/images/posts/2018-09-11/copy-paste.jpg" width="250" title="‘Copy paste from Stack Overflow’" ></p>
+
+<p>This is <strong>by far the biggest drawback</strong>. In my experience most teams have one or two <em>”build tool experts”</em>. The rest of the team just use a few tasks and maybe add a dependency every now and then. This casual user might have a harder time using Kotlin DSL because <strong>copy-pasting pieces of code from the web will not work out of the box</strong>. Converting this snippets to Kotlin DSL is not rocket-science, but in some cases it might require some basic level of understanding of how Kotlin DSL works.</p>
+
+<p>This is specially true when using plugins that were not designed with Kotlin DSL in mind (I’m looking at you <a href="https://github.com/google/protobuf-gradle-plugin/issues/219">protobuf Gradle plugin</a>).</p>
+
+<h2>2. IDE support could be better</h2>
+
+<p>Remember all the nice things I said about IDE auto-completion on the build scripts? Well let me clarify: <em>“IDE support is awesome… most of the time”</em>.</p>
+
+<p>Once you have your script fully migrated and IntelliJ has finished indexing then everything should work just fine. But to get there you’ll have to have your full <code>build.gradle</code> script fully migrated. That’s why my advice is to <strong>comment everything out and start migrating piece by piece</strong>. For example you can start with configuring the <em>repositories</em>, and <em>plugins</em> and only then move to <em>dependencies</em>.</p>
+
+<p>This gets intensified if you are working on a <a href="https://guides.gradle.org/creating-multi-project-builds/">multi-module project</a> and/or you’re using <a href="https://docs.gradle.org/current/userguide/custom_plugins.html"><code>buildSrc</code> for custom plugins</a>.</p>
+
+<p>The silver lining is that IDE support is getting better with each release, and once you’ve migrated everything it mostly works.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Writing Githooks in Kotlin]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/07/03/writing-githooks-in-kotlin/"/>
+    <updated>2018-07-03T19:45:28-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/07/03/writing-githooks-in-kotlin</id>
+    <content type="html"><![CDATA[<p>You’re already using Kotlin on your codebase. Maybe, you’ve even migrated to the new <a href="https://github.com/gradle/kotlin-dsl">Kotlin DSL for Gradle</a>. Wouldn’t it be nice if you could use Kotlin for your <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">git hooks</a> too?</p>
+
+<!--more-->
+
+
+<p><strong>Well, turns out you can!</strong> Here’s how you do it…</p>
+
+<p><img class="center" src="/images/posts/2018-07-04/captain-hook.png" title="’Captain githook’" ></p>
+
+<h2>What do I need?</h2>
+
+<p>Git will basically run whatever script you drop on the <code>.git/hooks</code> directory. In their words:</p>
+
+<blockquote><p>To enable a hook script, put a file in the hooks subdirectory of your <code>.git</code> directory that is named appropriately (without any extension) and is executable</p></blockquote>
+
+<p>So all we need is to be able to execute Kotlin files as scripts. There is a <a href="https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md">Kotlin Scripting Support KEEP</a> under definition. But for the time being <strong>we’ll stick with the awesome <a href="https://github.com/holgerbrandl/kscript">KScript library</a> (by <a href="https://github.com/holgerbrandl">@holgerbrandl</a>)</strong> that enables Kotlin scripting on <em>*nix-based</em> systems.</p>
+
+<p>You can find the details for installing KScript <a href="https://github.com/holgerbrandl/kscript#installation">here</a>. On MacOS if you’re using <a href="https://brew.sh/">Homebrew</a> all you have to do is run: <code>brew install holgerbrandl/tap/kscript</code>.</p>
+
+<p>I’ll also be using <strong>Gradle</strong> to automatically install the githook and run the proper validation, but the same can be done with <strong>Maven</strong>.</p>
+
+<h2>The script</h2>
+
+<p>As an example I’m going to show how to do a <strong>pre-push client hook</strong> that aborts the push if <code>grade check</code> task is not successful. For this I’ve created a file named <code>Pre-Push.kts</code>:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+//sampleStart
+#!/usr/bin/env kscript
+
+import java.io.File
+
+println("${Constants.SCRIPT_LOG_TAG} Running pre-push hook")
+val hasStashed = stash()
+if (hasStashed) {
+    println("${Constants.SCRIPT_LOG_TAG} Stashing uncommited changes")
+}
+
+val checkExistStatus = runCheck()
+
+if (hasStashed) {
+    println("${Constants.SCRIPT_LOG_TAG} Unstashing your changes")
+    unstash()
+}
+
+val exitValue = when {
+    checkExistStatus != Constants.SUCCESS_EXIT_VALUE -> {
+        println("${Constants.SCRIPT_LOG_TAG} Gradle check failed. I'm sorry but you can't continue with your push")
+        Constants.ERROR_EXIT_VALUE
+    }
+    else -> {
+        println("${Constants.SCRIPT_LOG_TAG} Everything went fine. You can continue with your push")
+        Constants.SUCCESS_EXIT_VALUE
+    }
+}
+
+kotlin.system.exitProcess(exitValue)
+//sampleEnd
+
+fun runCheck(): ExitStatus {
+    println("${Constants.SCRIPT_LOG_TAG} Running gradle check")
+    return "gradle check".runCommandWithRedirect()
+}
+
+fun stash(): Boolean {
+    val stashOutput = """git stash push --include-untracked -m "stash created by pre-push hook"""".runCommand()
+    return stashOutput.firstOrNull() != Constants.NOTHING_TO_STASH_MSG
+}
+
+fun unstash() = "git stash pop -q".runCommand()
+
+fun String.runCommand(dir: File? = null): Sequence<String> =
+    ProcessBuilder("/bin/sh", "-c", this)
+        .redirectErrorStream(true)
+        .directory(dir)
+        .start()
+        .inputStream.bufferedReader().lineSequence()
+
+// Redirecting output and error to stdout
+fun String.runCommandWithRedirect(dir: File? = null): ExitStatus =
+    ProcessBuilder("/bin/sh", "-c", this)
+        .redirectErrorStream(true)
+        .inheritIO()
+        .directory(dir)
+        .start()
+        .waitFor()
+
+object Constants {
+    const val SCRIPT_LOG_TAG = "Pre-push -"
+    const val NOTHING_TO_STASH_MSG = "No local changes to save"
+    const val SUCCESS_EXIT_VALUE = 0
+    const val ERROR_EXIT_VALUE = -1
+}
+
+typealias ExitStatus = Int
+</xmp>
+
+
+<p>The first line is all the <em>magic incantation</em> we need to execute the script. By setting the shebang to <code>#!/usr/bin/env kscript</code> we get to use <code>kscript</code> as <a href="https://github.com/holgerbrandl/kscript#interpreter-usage">interpreter for the script</a>.</p>
+
+<p>The code after the import is <strong>the actual script</strong>. Those are the lines that are going to be executed as soon as somebody calls the script. <em>Just as you’d expect with any regular shell script.</em></p>
+
+<p>In a nutshell this is what the script does:</p>
+
+<ol>
+<li>Stash uncommitted changes <em>if any</em><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></li>
+<li>Run code validation (in this case <code>gradle check</code>)</li>
+<li>Unstash possible changes stashed on <em>step 1</em></li>
+<li>Log outcome and set the proper exit value</li>
+</ol>
+
+
+<p>The last step is important because <strong>if the script exits to anything other than 0 then git aborts the action</strong> (in this case the push).</p>
+
+<h3>How do I call things from a script?</h3>
+
+<p>To do anything useful on your script you’ll probably have to <strong>call some external tool</strong> at some point. In this particular case for example a mix of <em>git commands</em> and <em>gradle tasks</em>.</p>
+
+<p>There are 2 ways you can go about this:</p>
+
+<ol>
+<li>Either <strong>use a Kotlin/Java library</strong> for the task you’re trying to accomplish (in this example we could use <a href="https://www.eclipse.org/jgit/">JGit</a> and <a href="https://docs.gradle.org/current/userguide/embedding.html">Gradle tooling API</a>)</li>
+<li>Or <strong>call a shell command</strong> directly</li>
+</ol>
+
+
+<p>While the first approach is more <strong>portable</strong>, it will introduce some dependencies to your script (which fortunately <a href="https://github.com/holgerbrandl/kscript#declare-dependencies-with-deps">KScript has great support for</a>). On the other hand the second option is probably <strong>easier to implement</strong> because it’s just using the same commands we use everyday on our workflow.</p>
+
+<p>Since I can assume everybody in my team has <code>git</code> and <code>gradle</code> installed and in their path <strong>I went for option 2</strong>.</p>
+
+<h3>Running shell commands from Kotlin</h3>
+
+<p>We can run shell commands on Kotlin using <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html"><code>ProcessBuilder</code></a>, just like we’d do from Java.</p>
+
+<p>In this case I’ve created a <code>runCommandWithRedirect</code> extension function that looks like this:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+import java.io.File
+
+//sampleStart
+fun String.runCommandWithRedirect(dir: File? = null): ExitStatus {
+        return ProcessBuilder("/bin/sh", "-c", this)
+            .redirectErrorStream(true)
+            .inheritIO()
+            .directory(dir)
+            .start()
+            .waitFor()
+}
+
+//sampleEnd
+typealias ExitStatus = Int
+</xmp>
+
+
+<p>This function can be called on any String like this:</p>
+
+<p><code>"gradle check".runCommandWithRedirect()</code></p>
+
+<p>This function will:</p>
+
+<ol>
+<li>Redirect the standard and error output to the one for the current process, in our case that means <strong>the output of the command will be visible on the terminal when the githook is executed</strong>.</li>
+<li>Set the directory to the passed <code>dir</code> parameter, or use the current directory if no parameter is provided.</li>
+<li>Execute the command, wait for it to finish and return the <code>ExitStatus</code></li>
+</ol>
+
+
+<p>You can play around with the different <code>ProcessBuilder</code> options. In my script above for example I’ve another version of this function called <code>runCommand</code> that  <strong>executes the command and returns it’s output as a <code>Sequence&lt;String&gt;</code></strong>.</p>
+
+<h2>Automatic installation</h2>
+
+<p>Githooks are great to enforce code quality practices (i.e. <em>”You can’t push if your coverage is less than 80% “</em> 👮). But for the client-side githook to be execute it needs to be in the <code>.git/hooks</code> folder which is not versioned. That means that <strong>each developer on your team has to manually install the hook</strong>, which means that you are again, relying on the good memory of your teammates to enforce code quality.</p>
+
+<p>Instead we could use <a href="https://gist.github.com/KenVanHoeylandt/c7a928426bce83ffab400ab1fd99054a">this trick</a>. We can create a <em>gradle task</em> called <em>“copy”</em> that copies the githook from the <code>src</code> folder to the <code>git/hooks</code> and removes the file extension in the process.</p>
+
+<p>Then we can make the <em>“build”</em> task depend on this new <em>”copy”</em> task. <strong>The next time the developer runs <code>gradle build</code> the githook will be installed</strong>. And as a bonus:  the githook script is now versioned too! <sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></p>
+
+<p>Here’s how this would look like (using <a href="https://github.com/gradle/kotlin-dsl">Kotlin DSL for Gradle</a>)</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+tasks {
+    "copy"(Copy::class) {
+        from("src/main/kotlin/io/jivimberg/githook/pre-push.kts") {
+            rename { it.removeSuffix(".kts") }
+        }
+        into(".git/hooks")
+    }
+
+    "build" {
+        dependsOn("copy")
+    }
+}
+</xmp>
+
+
+<p>⚠️ Don’t forget to do <code>chmod u+x Pre-Push.kts</code> to make the script runnable, otherwise it won’t work.</p>
+
+<h2>What about performance?</h2>
+
+<p>Kotlin is a compiled language, so at some point your script will have to be compiled. Fortunately thanks to KScript <strong>this only happens the first time you run the script</strong> and it’s only compiled again if the script changes.</p>
+
+<p>Other than that there’s the JVM startup time which adds <strong>around 200ms of overhead</strong>. Maybe in the future we’ll be able to use <a href="https://kotlinlang.org/docs/reference/native-overview.html">Kotlin Native</a> to compile to native binaries directly and avoid this overhead.</p>
+
+<p>If you want to read more about performance comparison between <em>Python</em> and <em>Kotlin</em> scripts check the <a href="https://github.com/holgerbrandl/kscript#what-are-performance-and-resource-usage-difference-between-scripting-with-kotlin-and-python">KScript documentation</a>.</p>
+
+<h2>Bonus track: testing</h2>
+
+<p>Testing Kotlin scripts turned out <strong>not to be so straight forward.</strong></p>
+
+<p><a href="https://proandroiddev.com/testing-kotlin-scripts-42bbbbe09ae5">This article</a> suggests using a <code>runCommand</code> method similar to the one described above to execute the script and check it’s outputs. Whereas <a href="https://github.com/holgerbrandl/kscript/blob/master/test/TestsReadme.md">KScript own tests</a> are written using <a href="https://github.com/lehmannro/assert.sh">assert.sh</a>.</p>
+
+<p>Neither approach convinced me. I was just looking for a way of <strong>individually test the functions</strong> in my script <strong>using the same tools I use to test the other parts of my code</strong>.</p>
+
+<p>So what I ended up doing was moving all the <em>Pre-Push</em> logic to a regular <code>*.kt</code> file. And then simply creating a <code>*kts</code> Kotlin script that calls my class using the <a href="https://github.com/holgerbrandl/kscript#ease-prototyping-with-include"><code>//INCLUDE</code> KScript directive</a>.</p>
+
+<p><img class="center" src="/images/posts/2018-07-04/testing-githook-kotlin.png" title="’Testing githook’" ></p>
+
+<p>The downside is that I know have 2 files for my githook (a <code>*.kt</code> and a <code>*.kts</code>) but that seems <strong>a small price to pay for being able to easily test my code</strong>.</p>
+
+<h1>Conclusion</h1>
+
+<p>Writing githooks in Kotlin is possible and not that hard thanks to <a href="https://github.com/holgerbrandl/kscript">KScript</a>. <strong>You’ll be glad you have tried it out</strong> the next time you have to refactor that <em>pre-push</em> hook.</p>
+
+<p>You can find an <strong>example repository</strong> containing all the code for this blogpost here: <a href="https://github.com/jivimberg/kotlin-githook">https://github.com/jivimberg/kotlin-githook</a></p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>because you want to verify only on the changes that are going to be pushed<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>And it can even be subject to the same quality standards enforced by the githook itself. INCEPTION!<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Jacoco & Gradle - How to Verify Coverage With Exclusions]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/04/26/gradle-verify-coverage-with-exclusions/"/>
+    <updated>2018-04-26T08:49:52-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/04/26/gradle-verify-coverage-with-exclusions</id>
+    <content type="html"><![CDATA[<p>A post about how to add exclusions to your Jacoco test coverage verification in Gradle.</p>
+
+<!--more-->
+
+
+<p>This is how you setup Jacoco to fail when the code doesn’t meet the expected coverage threshold:</p>
+
+<p><div><script src='https://gist.github.com/ea79614ce9b80c29b03be8326586f238.js'></script>
+<noscript><pre><code>apply plugin: &quot;jacoco”
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.79
+            }
+        }
+    }
+}
+
+// to run coverage verification during the build (and fail when appropriate)
+check.dependsOn jacocoTestCoverageVerification	</code></pre></noscript></div>
+</p>
+
+<p>See that <code>rule</code>?  I’m not setting any particular <code>element</code> so <a href="https://docs.gradle.org/current/javadoc/org/gradle/testing/jacoco/tasks/rules/JacocoViolationRule.html#getElement--">by default it’ll set <em>BUNDLE</em></a>. <strong>This is just what I want as I’d like to set a threshold for the coverage of the entire module.</strong></p>
+
+<p>So if I need to exclude certain <strong>packages</strong> or <strong>files</strong> from the count this is what I do:</p>
+
+<p><div><script src='https://gist.github.com/3ee0beaa9ab8b20b48e4273378dcd30e.js'></script>
+<noscript><pre><code>jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude:  [
+                    &#39;com/example/my/package/*&#39;,
+                    &#39;com/example/service/MyApplication.kt&#39;,
+                    &#39;com/google/protobuf/*&#39;
+            ])
+        })
+    }
+
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.79
+            }
+        }
+    }
+}</code></pre></noscript></div>
+</p>
+
+<h3>Why <em>exclude</em> doesn’t work</h3>
+
+<p>My first approach was setting the <code>excludes</code> property on the rule like this:</p>
+
+<p><div><script src='https://gist.github.com/0962942885d4db41a9dad890aba5d225.js'></script>
+<noscript><pre><code>jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            excludes = [
+                    &#39;com/example/my/package/*&#39;,
+                    &#39;com/example/service/MyApplication.kt&#39;,
+                    &#39;com/google/protobuf/*&#39;
+            ]
+            limit {
+                minimum = 0.79
+            }
+        }
+    }
+}</code></pre></noscript></div>
+</p>
+
+<p>The reason this doesn’t work is that <code>excludes</code> works on objects of the type defined with the <code>element</code> property. In this case the type is <em>BUNDLE</em> whereas the thing we want to exclude are <strong>packages</strong> and <strong>files</strong>.</p>
+]]></content>
+  </entry>
+  
+</feed>

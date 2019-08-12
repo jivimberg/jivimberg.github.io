@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Concurrency | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/concurrency/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Different Kinds of Channels in Kotlin]]></title>
+    <link href="http://jivimberg.github.io/blog/2019/04/18/different-kinds-of-channels-in-kotlin/"/>
+    <updated>2019-04-18T07:59:14-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2019/04/18/different-kinds-of-channels-in-kotlin</id>
+    <content type="html"><![CDATA[<p>Overview of the different kinds of Kotlin channels and their behaviors.</p>
+
+<!--more-->
+
+
+<p><img class="center" src="/images/posts/2019-04-18/Channels.gif" width="600" title="‘Channels animation’" ></p>
+
+<h2>Rendezvous</h2>
+
+<p><img class="right" src="/images/posts/2019-04-18/baton.jpg" width="250" title="‘Passing the baton’" ></p>
+
+<p>In Rendezvous channels capacity is 0. Which means the channel has no buffer at all. Elements are transferred only when sender and receiver meet. Which is literally what <em>Rendezvous</em> means. I like to picture it as a <a href="https://en.wikipedia.org/wiki/Relay_race">relay race</a> where the runners need to meet at one point to pass the baton.</p>
+
+<p>In technical terms this means that <code>send</code> <em>suspends</em> until another coroutine invokes <code>receive</code>, and <code>receive</code> <em>suspends</em> until another coroutine invokes <code>send</code>.</p>
+
+<h2>Buffered</h2>
+
+<p>Buffered channels have a positive capacity but are not <code>Unlimited</code>. Calling <code>send</code> <em>suspends</em> only if the buffer is full. And calling <code>receive</code> <em>suspends</em> only if buffer is empty (i.e. there are no more messages in the channel).</p>
+
+<h2>Unlimited</h2>
+
+<p>You guessed it. Unlimited buffer. Sender will never <em>suspend</em> on <code>send</code>.</p>
+
+<p>But there’s no such thing as <em>Unlimited</em>, right? The implementation uses a linked-list buffer so your only constraint is memory.</p>
+
+<h2>Conflated</h2>
+
+<p>This is the oddball. The sender never <em>suspends</em>, but the channel offers at most one element at any given time. When a new element comes, the previous element in the channel (if any) is discarded. The receiver only gets the most recent element sent. Previous elements are lost.</p>
+
+<p><img class="right-fill" src="/images/signatures/signature7.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Using UUID on Spring Data JPA Entities - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Using UUID on Spring Data JPA Entities written November 5, 2018 in data, hibernate, jpa, kotlin, spring, uuid In this article I’ll explore how to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49016076-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Using UUID on Spring Data JPA Entities</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2018-11-05T07:25:37-08:00" pubdate data-updated="true">November 5, 2018</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/data/'>data</a>, <a class='category' href='/blog/categories/hibernate/'>hibernate</a>, <a class='category' href='/blog/categories/jpa/'>jpa</a>, <a class='category' href='/blog/categories/kotlin/'>kotlin</a>, <a class='category' href='/blog/categories/spring/'>spring</a>, <a class='category' href='/blog/categories/uuid/'>uuid</a>
+  
+</span>
+
+
+        </div>
+        <p>In this article I’ll explore <strong>how to model a <a href="https://stackoverflow.com/questions/6033905/create-the-perfect-jpa-entity">JPA Entity</a> using an <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a></strong> as Primary Key working with <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA.</a></p>
+
+<!--more-->
+
+
+<p><img class="center" src="/images/posts/2018-11-07/uuid.png" title="‘uuid key’" ></p>
+
+<h1>Why UUIDs?</h1>
+
+<p>Usually we use numerical keys on our models and let the DB generate that for us on persistence. But there are <strong>some reasons why you might prefer to use UUIDs</strong> as your Primary Key instead. Namely:</p>
+
+<ul>
+<li><strong>UUIDs are globally unique.</strong> This means that we don’t need a centralized component to generate unique ids, <strong>we can generate the ids on the application itself</strong> instead of relying on <a href="https://vladmihalcea.com/hibernate-and-uuid-identifiers/">some UUID generator</a> that populates the <code>id</code> field on persist.</li>
+<li>Having globally unique ids also means that <strong>your ids are unique across databases.</strong> This allows us to move data across databases without having to check for conflicting ids.</li>
+<li>Having application generated ids means the id is known even before the entity is persisted. This lets us <strong>model our entities as <a href="https://proandroiddev.com/kotlin-for-beginners-immutability-and-the-value-of-val-78ab45b60b57">immutable objects</a></strong> and we avoid having to handle null values on the id.</li>
+</ul>
+
+
+<p>But as you probably already know: <a href="https://en.wikipedia.org/wiki/There_ain't_no_such_thing_as_a_free_lunch">🚫🆓🍽</a>. So here are some of the downsides of using UUIDss for you to consider:</p>
+
+<ul>
+<li><strong>Storage space.</strong> As you can imagine storing an UUID takes a lot more space than storying an Int. Specially if you make the mistake of storing it as a <code>String</code>. You might think Id space is not a big deal, but consider that <strong>Primary Keys are often used in indexes and as Foreign Keys on other tables</strong>. So the numbers start to add up.</li>
+<li>They are <strong>not human friendly</strong>. What’s easier to remember: <code>223492</code> or <code>453bd9d7-83c0-47fb-b42e-0ab045b29f83 </code>? This is specially true if you happen to be exposing your ids on your public APIs. Think: <code>/albums/2311445/photo/7426321</code> vs <code>/albums/b3480d79-e458-4675-a7ba-61ac5957cb7c/photo/19b24967-1741-4405-a746-d2b081ee45f2 </code>.</li>
+</ul>
+
+
+<p><strong>If you’re still on the fence</strong> here’s a great article talking about the pros and cons of using UUIDs as primary keys: <a href="https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439">https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439</a>.</p>
+
+<h1>How to do it</h1>
+
+<p>Now let’s talk about how we can implement this. I’ll go step by step explaining why we add each piece of code.</p>
+
+<p>The first thing we need to do is <strong>generate the UUID</strong>. As mentioned above we’d like to do this on the application code so we can have <em>immutable entities</em>. Generating the UUID is easy, all we need to do is: <code>UUID.randomUUID()</code>. So our entity would look like this:</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import java.util.\*
+import javax.persistence.Id
+import javax.persistence.Entity
+
+//sampleStart
+@Entity
+class Artist(
+        @Id val id: UUID = UUID.randomUUID(),
+        val name: String
+)
+//sampleEnd
+</xmp>
+
+
+<p>You’ve probably noticed how we’re making the id an argument of the <a href="https://kotlinlang.org/docs/reference/classes.html#constructors">primary constructor</a>. This is required to <strong>let clients construct entities with known ids to represent persisted objects</strong>. This is useful for example to <strong>model an update operation</strong>: create an enwtity with a known id and updated values, then call <code>save()</code> on such entity.</p>
+
+<h2>isNew?</h2>
+
+<p>As mentioned we’re using <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA</a> for our Repository layer. Now there’s a small detail we have to take into account when <strong>using application provided ids with Spring Data</strong>. If you do a <code>artistRepository.save(Artist(name = "David Bowie"))</code> you might get an output like this:</p>
+
+<p><img class="center" src="/images/posts/2018-11-07/2sql.png" title="‘persist logs’" ></p>
+
+<p>If you pay close attention to the log you’ll notice that <strong>Hibernate is actually executing 2 SQL queries</strong>: one <code>select</code> followed by one <code>insert</code>. Not quite what we were expecting.</p>
+
+<p>The reason for this behavior is the implementation of Spring Data’s <a href="https://github.com/spring-projects/spring-data-jpa/blob/master/src/main/java/org/springframework/data/jpa/repository/support/SimpleJpaRepository.java"><code>SimpleJpaRepository.java</code></a>. In particular the <a href="https://github.com/spring-projects/spring-data-jpa/blob/01e36dbb44d6bc87f7deb3b6d6dacc955ea6c8bd/src/main/java/org/springframework/data/jpa/repository/support/SimpleJpaRepository.java#L506"><code>save()</code></a> method:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Transactional</span>
+</span><span class='line'><span class="kd">public</span> <span class="o">&lt;</span><span class="n">S</span> <span class="kd">extends</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">S</span> <span class="nf">save</span><span class="o">(</span><span class="n">S</span> <span class="n">entity</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">entityInformation</span><span class="o">.</span><span class="na">isNew</span><span class="o">(</span><span class="n">entity</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">em</span><span class="o">.</span><span class="na">persist</span><span class="o">(</span><span class="n">entity</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">entity</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">em</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">entity</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>The double SQL statement is caused by the call to <code>merge()</code></strong>. By default the way this class decides whether to do a <code>persist()</code> or a <code>merge()</code> <strong>is simply by checking if the id is null</strong>. Which works fine for DB assigned ids, but <em>not</em> for application assigned ones. 😕</p>
+
+<p><strong>The best way to control this is by implementing the <a href="https://github.com/spring-projects/spring-data-commons/blob/master/src/main/java/org/springframework/data/domain/Persistable.java"><code>Persistable&lt;ID&gt;</code></a> interface</strong> providing a <code>isNew()</code> method. Since this is something we’ll want to do every time we use application generated UUIDs <strong>I’ll extract this into an abstract class</strong> and making use of the <code>@MappedSuperClass</code> annotation.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import org.springframework.data.domain.Persistable
+import java.util.\*
+import javax.persistence.\*
+
+//sampleStart
+@MappedSuperclass
+abstract class AbstractBaseEntity(givenId: UUID? = null) : Persistable<UUID> {
+
+    @Id
+    @Column(name = "id", length = 16, unique = true, nullable = false)
+    private val id: UUID = givenId ?: UUID.randomUUID()
+    
+    @Transient
+    private var persisted: Boolean = givenId != null
+    
+    override fun getId(): UUID = id
+    
+    override fun isNew(): Boolean = !persisted
+    
+    override fun hashCode(): Int = id.hashCode()
+    
+    override fun equals(other: Any?): Boolean {
+        return when {
+            this === other -> true
+            other == null -> false
+            other !is AbstractBaseEntity -> false
+            else -> getId() == other.getId()
+        }
+    }
+    
+    @PostPersist
+    @PostLoad
+    private fun setPersisted() {
+        persisted = true
+    }
+}
+//sampleEnd
+
+</xmp>
+
+
+<blockquote><p>This design was <strong>suggested to me by <a href="https://twitter.com/PabloHernanS">@paschmid</a> and <a href="https://twitter.com/rcruzjo">@rcruzjo</a></strong>, this code would be quite ugly if it weren’t for them!</p></blockquote>
+
+<p>You can see how the <code>persisted</code> state is decided based on whether an id is provided on creation or not, to account for updates. Also notice how <strong>its value gets automatically updated upon <em>persist</em> and <em>load</em></strong> thanks to <code>@PostPersist</code> and <code>@PostLoad</code> annotations.</p>
+
+<p>Also since <code>id</code> is now <em>unique</em> and <em>non-nullable</em> <strong>we can use it to implement <code>equals()</code> and <code>hashcode()</code></strong> and avoid falling in some of the common pitfalls of implementing this methods (to learn more about this check <a href="https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/">this article</a> by <a href="https://twitter.com/vlad_mihalcea">@vlad_mihalcea</a> and <a href="https://kotlinexpertise.com/hibernate-with-kotlin-spring-boot/">this one</a> by <a href="https://twitter.com/s1m0nw1">@s1m0nw1</a>).</p>
+
+<p>And in case you’re wondering <strong>why we need an explicit <code>getId()</code> function</strong>, it is because of this issue: <a href="https://youtrack.jetbrains.com/issue/KT-6653">Kotlin properties do not override Java-style getters and setters</a>.</p>
+
+<h1>Putting it all together</h1>
+
+<p>Finally let’s see how a concrete entity would use this.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import org.springframework.data.repository.CrudRepository
+import java.util.\*
+import javax.persistence.Entity
+
+//sampleStart
+@Entity
+class Artist(
+        id: UUID? = null,
+        val name: String
+) : AssignedIdBaseEntity(id)
+//sampleEnd
+</xmp>
+
+
+<p>Pretty similar to our original approach right? Thanks to the abstract class all the <code>isNew()</code> <strong>implementation details are hidden</strong> from concrete entities.</p>
+
+<p>And now if we do a <code>save()</code> on a new entity <strong>we get one single SQL statement</strong> as we were expecting.</p>
+
+<p><img class="center" src="/images/posts/2018-11-07/1sql.png" width="600" title="‘persist logs with abstractEntity’" ></p>
+
+<hr />
+
+<h1>Approach 2: Making it simpler with @Version</h1>
+
+<p>This approach was suggested by <a href="https://disqus.com/by/disqus_UhNaTY8OWI/">Diego Marin</a> in the comments.</p>
+
+<p>Spring Data can leverage the existence of a <code>@Version</code> field to tell if the Entity is present or not. By having <code>@Version</code>, we also get <a href="https://www.baeldung.com/jpa-optimistic-locking">Optimistic Locking</a> for free.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import java.util.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Version
+
+//sampleStart
+@Entity
+class Celeb(
+        @Id @Column(name = "id", length = 16, unique = true, nullable = false)
+        val id: UUID = UUID.randomUUID(),
+        @Version
+        val version: Long? = null,
+        val name: String
+) {
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        id != (other as Celeb).id -> false
+        else -> true
+    }
+
+    override fun hashCode(): Int = id.hashCode()
+}
+//sampleEnd
+</xmp>
+
+
+<blockquote><p>⚠️ Make sure you’re importing <code>javax.persistence.Version</code> and NOT <code>org.springframework.data.annotation.Version</code>!</p></blockquote>
+
+<p>We still need to write the <code>id</code> column definition and <code>equal</code> and <code>hashCode</code> methods, so if this is something you’ll be applying in most of your entities you might want to consider extracting it to a superclass. Similar to what we did with <code>AssignedIdBaseEntity</code>, but using <code>@Version</code></p>
+
+<hr />
+
+<p>You can find all the <strong>code samples</strong> for this post on <strong><a href="https://github.com/jivimberg/spring-data-uuid-example">this GitHub repo</a></strong>.</p>
+
+<p><img class="right-fill" src="/images/signatures/signature1.png" width="200" title="‘My signature’" ></p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities/';
+        var disqus_url = 'http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka/" title="Previous Post: Reactive GraphQL subscriptions from Kafka">&laquo; Previous: Reactive GraphQL subscriptions from Kafka</a>
+        
+
+        
+          <a class="pull-right" href="/blog/2019/01/02/using-docker-for-development/" title="Next Post: Using Docker for development">Next: Using Docker for development &raquo;</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

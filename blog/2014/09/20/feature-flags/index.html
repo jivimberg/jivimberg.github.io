@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Feature Flags - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Feature Flags written September 20, 2014 in release management In this post I&rsquo;ll introduce the concept of Feature Toggles as a release &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2014/09/20/feature-flags">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49016076-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Feature Flags</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2014-09-20T14:53:01-07:00" pubdate data-updated="true">September 20, 2014</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/release-management/'>release management</a>
+  
+</span>
+
+
+        </div>
+        <p>In this post I&rsquo;ll introduce the concept of Feature Toggles as a release alternative to <a href="http://martinfowler.com/bliki/FeatureBranch.html">FeatureBranches</a>. This technique is also known as: Feature toggles, Feature switches, Feature flippers, etc.</p>
+
+<!-- more -->
+
+
+
+
+<p class='info warning' data-title='Disclamer'>This article is HEAVILY based on Martin Fowler's FeatureToggle (http://martinfowler.com/bliki/FeatureToggle.html). Feel free to refer to the original article for further detail.</p>
+
+
+<p>The basic idea of Feature Flags is to have a <strong>configuration file</strong> that defines a bunch of toggles for various features you are working on. The running application then uses these toggles in order to decide whether or not to show the new feature.</p>
+
+<p>We can have features in the UI or in the application code. There they could be as crude as a conditional test, or something more sophisticated like a strategy wired through dependency injection.</p>
+
+<p>Toggle checks should only appear at the minimum amount of points to ensure the new feature is properly hidden. Focus on just the entry points that would lead users there and toggle those entry points. If you find that creating, maintaining, or removing the toggles takes significant time, then that&rsquo;s a sign that you have too many toggle tests.</p>
+
+<h2>Types of toggles</h2>
+
+<p>Feature toggles come in 2 flavors:</p>
+
+<ol>
+<li><strong>Release toggles:</strong> Used to hide partly build features.</li>
+<li><strong>Business toggles:</strong> Used to selectively turn on features in regular use. For example to only expose certain features when the application is running in a particular environment configuration.</li>
+</ol>
+
+
+<p>Release toggles are primarily visible to the development organization and should be retired once the feature has bedded down in the application. Business toggles are visible to the business sponsors and are a permanent feature of the application. This means that <strong>the two kinds of toggles need to be clearly separated</strong>, usually appearing in separate configuration files.</p>
+
+<p>Another way of dividing the toggles is by the time they are set. Here we have:</p>
+
+<ol>
+<li>Set at runtime</li>
+<li>Set at build time</li>
+</ol>
+
+
+<p>You often need to build some admin tooling to help control of business toggles that can change at runtime.</p>
+
+<h2>Testing</h2>
+
+<p>In general there&rsquo;s no need to test all combinations of features. For release toggles it&rsquo;s usually sufficient to run two combinations:</p>
+
+<ol>
+<li>All the toggles on that are expected to be on in the next release</li>
+<li>All toggles on</li>
+</ol>
+
+
+<p>For business toggles the combination problem is greater, since you do need to consider the various combinations that appear in practice and how they might interfere. You usually won&rsquo;t need to test every combination, but what subset of combinations you need depends on your knowledge of how the application performs in production.</p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.github.io/blog/2014/09/20/feature-flags/';
+        var disqus_url = 'http://jivimberg.github.io/blog/2014/09/20/feature-flags/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2014/08/21/email-google-form-daily/" title="Previous Post: Email Google Form daily">&laquo; Previous: Email Google Form daily</a>
+        
+
+        
+          <a class="pull-right" href="/blog/2014/10/12/notes-on-api-design/" title="Next Post: Notes on API Design">Next: Notes on API Design &raquo;</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

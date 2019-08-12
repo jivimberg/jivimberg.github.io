@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Spring | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/spring/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using UUID on Spring Data JPA Entities]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities/"/>
+    <updated>2018-11-05T07:25:37-08:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities</id>
+    <content type="html"><![CDATA[<p>In this article I’ll explore <strong>how to model a <a href="https://stackoverflow.com/questions/6033905/create-the-perfect-jpa-entity">JPA Entity</a> using an <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a></strong> as Primary Key working with <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA.</a></p>
+
+<!--more-->
+
+
+<p><img class="center" src="/images/posts/2018-11-07/uuid.png" title="‘uuid key’" ></p>
+
+<h1>Why UUIDs?</h1>
+
+<p>Usually we use numerical keys on our models and let the DB generate that for us on persistence. But there are <strong>some reasons why you might prefer to use UUIDs</strong> as your Primary Key instead. Namely:</p>
+
+<ul>
+<li><strong>UUIDs are globally unique.</strong> This means that we don’t need a centralized component to generate unique ids, <strong>we can generate the ids on the application itself</strong> instead of relying on <a href="https://vladmihalcea.com/hibernate-and-uuid-identifiers/">some UUID generator</a> that populates the <code>id</code> field on persist.</li>
+<li>Having globally unique ids also means that <strong>your ids are unique across databases.</strong> This allows us to move data across databases without having to check for conflicting ids.</li>
+<li>Having application generated ids means the id is known even before the entity is persisted. This lets us <strong>model our entities as <a href="https://proandroiddev.com/kotlin-for-beginners-immutability-and-the-value-of-val-78ab45b60b57">immutable objects</a></strong> and we avoid having to handle null values on the id.</li>
+</ul>
+
+
+<p>But as you probably already know: <a href="https://en.wikipedia.org/wiki/There_ain't_no_such_thing_as_a_free_lunch">🚫🆓🍽</a>. So here are some of the downsides of using UUIDss for you to consider:</p>
+
+<ul>
+<li><strong>Storage space.</strong> As you can imagine storing an UUID takes a lot more space than storying an Int. Specially if you make the mistake of storing it as a <code>String</code>. You might think Id space is not a big deal, but consider that <strong>Primary Keys are often used in indexes and as Foreign Keys on other tables</strong>. So the numbers start to add up.</li>
+<li>They are <strong>not human friendly</strong>. What’s easier to remember: <code>223492</code> or <code>453bd9d7-83c0-47fb-b42e-0ab045b29f83 </code>? This is specially true if you happen to be exposing your ids on your public APIs. Think: <code>/albums/2311445/photo/7426321</code> vs <code>/albums/b3480d79-e458-4675-a7ba-61ac5957cb7c/photo/19b24967-1741-4405-a746-d2b081ee45f2 </code>.</li>
+</ul>
+
+
+<p><strong>If you’re still on the fence</strong> here’s a great article talking about the pros and cons of using UUIDs as primary keys: <a href="https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439">https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439</a>.</p>
+
+<h1>How to do it</h1>
+
+<p>Now let’s talk about how we can implement this. I’ll go step by step explaining why we add each piece of code.</p>
+
+<p>The first thing we need to do is <strong>generate the UUID</strong>. As mentioned above we’d like to do this on the application code so we can have <em>immutable entities</em>. Generating the UUID is easy, all we need to do is: <code>UUID.randomUUID()</code>. So our entity would look like this:</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import java.util.\*
+import javax.persistence.Id
+import javax.persistence.Entity
+
+//sampleStart
+@Entity
+class Artist(
+        @Id val id: UUID = UUID.randomUUID(),
+        val name: String
+)
+//sampleEnd
+</xmp>
+
+
+<p>You’ve probably noticed how we’re making the id an argument of the <a href="https://kotlinlang.org/docs/reference/classes.html#constructors">primary constructor</a>. This is required to <strong>let clients construct entities with known ids to represent persisted objects</strong>. This is useful for example to <strong>model an update operation</strong>: create an enwtity with a known id and updated values, then call <code>save()</code> on such entity.</p>
+
+<h2>isNew?</h2>
+
+<p>As mentioned we’re using <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA</a> for our Repository layer. Now there’s a small detail we have to take into account when <strong>using application provided ids with Spring Data</strong>. If you do a <code>artistRepository.save(Artist(name = "David Bowie"))</code> you might get an output like this:</p>
+
+<p><img class="center" src="/images/posts/2018-11-07/2sql.png" title="‘persist logs’" ></p>
+
+<p>If you pay close attention to the log you’ll notice that <strong>Hibernate is actually executing 2 SQL queries</strong>: one <code>select</code> followed by one <code>insert</code>. Not quite what we were expecting.</p>
+
+<p>The reason for this behavior is the implementation of Spring Data’s <a href="https://github.com/spring-projects/spring-data-jpa/blob/master/src/main/java/org/springframework/data/jpa/repository/support/SimpleJpaRepository.java"><code>SimpleJpaRepository.java</code></a>. In particular the <a href="https://github.com/spring-projects/spring-data-jpa/blob/01e36dbb44d6bc87f7deb3b6d6dacc955ea6c8bd/src/main/java/org/springframework/data/jpa/repository/support/SimpleJpaRepository.java#L506"><code>save()</code></a> method:</p>
+
+<pre><code class="java">@Transactional
+public &lt;S extends T&gt; S save(S entity) {
+    if (entityInformation.isNew(entity)) {
+        em.persist(entity);
+        return entity;
+    } else {
+        return em.merge(entity);
+    }
+}
+</code></pre>
+
+<p><strong>The double SQL statement is caused by the call to <code>merge()</code></strong>. By default the way this class decides whether to do a <code>persist()</code> or a <code>merge()</code> <strong>is simply by checking if the id is null</strong>. Which works fine for DB assigned ids, but <em>not</em> for application assigned ones. 😕</p>
+
+<p><strong>The best way to control this is by implementing the <a href="https://github.com/spring-projects/spring-data-commons/blob/master/src/main/java/org/springframework/data/domain/Persistable.java"><code>Persistable&lt;ID&gt;</code></a> interface</strong> providing a <code>isNew()</code> method. Since this is something we’ll want to do every time we use application generated UUIDs <strong>I’ll extract this into an abstract class</strong> and making use of the <code>@MappedSuperClass</code> annotation.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import org.springframework.data.domain.Persistable
+import java.util.\*
+import javax.persistence.\*
+
+//sampleStart
+@MappedSuperclass
+abstract class AbstractBaseEntity(givenId: UUID? = null) : Persistable<UUID> {
+
+    @Id
+    @Column(name = "id", length = 16, unique = true, nullable = false)
+    private val id: UUID = givenId ?: UUID.randomUUID()
+    
+    @Transient
+    private var persisted: Boolean = givenId != null
+    
+    override fun getId(): UUID = id
+    
+    override fun isNew(): Boolean = !persisted
+    
+    override fun hashCode(): Int = id.hashCode()
+    
+    override fun equals(other: Any?): Boolean {
+        return when {
+            this === other -> true
+            other == null -> false
+            other !is AbstractBaseEntity -> false
+            else -> getId() == other.getId()
+        }
+    }
+    
+    @PostPersist
+    @PostLoad
+    private fun setPersisted() {
+        persisted = true
+    }
+}
+//sampleEnd
+
+</xmp>
+
+
+<blockquote><p>This design was <strong>suggested to me by <a href="https://twitter.com/PabloHernanS">@paschmid</a> and <a href="https://twitter.com/rcruzjo">@rcruzjo</a></strong>, this code would be quite ugly if it weren’t for them!</p></blockquote>
+
+<p>You can see how the <code>persisted</code> state is decided based on whether an id is provided on creation or not, to account for updates. Also notice how <strong>its value gets automatically updated upon <em>persist</em> and <em>load</em></strong> thanks to <code>@PostPersist</code> and <code>@PostLoad</code> annotations.</p>
+
+<p>Also since <code>id</code> is now <em>unique</em> and <em>non-nullable</em> <strong>we can use it to implement <code>equals()</code> and <code>hashcode()</code></strong> and avoid falling in some of the common pitfalls of implementing this methods (to learn more about this check <a href="https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/">this article</a> by <a href="https://twitter.com/vlad_mihalcea">@vlad_mihalcea</a> and <a href="https://kotlinexpertise.com/hibernate-with-kotlin-spring-boot/">this one</a> by <a href="https://twitter.com/s1m0nw1">@s1m0nw1</a>).</p>
+
+<p>And in case you’re wondering <strong>why we need an explicit <code>getId()</code> function</strong>, it is because of this issue: <a href="https://youtrack.jetbrains.com/issue/KT-6653">Kotlin properties do not override Java-style getters and setters</a>.</p>
+
+<h1>Putting it all together</h1>
+
+<p>Finally let’s see how a concrete entity would use this.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import org.springframework.data.repository.CrudRepository
+import java.util.\*
+import javax.persistence.Entity
+
+//sampleStart
+@Entity
+class Artist(
+        id: UUID? = null,
+        val name: String
+) : AssignedIdBaseEntity(id)
+//sampleEnd
+</xmp>
+
+
+<p>Pretty similar to our original approach right? Thanks to the abstract class all the <code>isNew()</code> <strong>implementation details are hidden</strong> from concrete entities.</p>
+
+<p>And now if we do a <code>save()</code> on a new entity <strong>we get one single SQL statement</strong> as we were expecting.</p>
+
+<p><img class="center" src="/images/posts/2018-11-07/1sql.png" width="600" title="‘persist logs with abstractEntity’" ></p>
+
+<hr />
+
+<h1>Approach 2: Making it simpler with @Version</h1>
+
+<p>This approach was suggested by <a href="https://disqus.com/by/disqus_UhNaTY8OWI/">Diego Marin</a> in the comments.</p>
+
+<p>Spring Data can leverage the existence of a <code>@Version</code> field to tell if the Entity is present or not. By having <code>@Version</code>, we also get <a href="https://www.baeldung.com/jpa-optimistic-locking">Optimistic Locking</a> for free.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import java.util.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Version
+
+//sampleStart
+@Entity
+class Celeb(
+        @Id @Column(name = "id", length = 16, unique = true, nullable = false)
+        val id: UUID = UUID.randomUUID(),
+        @Version
+        val version: Long? = null,
+        val name: String
+) {
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        id != (other as Celeb).id -> false
+        else -> true
+    }
+
+    override fun hashCode(): Int = id.hashCode()
+}
+//sampleEnd
+</xmp>
+
+
+<blockquote><p>⚠️ Make sure you’re importing <code>javax.persistence.Version</code> and NOT <code>org.springframework.data.annotation.Version</code>!</p></blockquote>
+
+<p>We still need to write the <code>id</code> column definition and <code>equal</code> and <code>hashCode</code> methods, so if this is something you’ll be applying in most of your entities you might want to consider extracting it to a superclass. Similar to what we did with <code>AssignedIdBaseEntity</code>, but using <code>@Version</code></p>
+
+<hr />
+
+<p>You can find all the <strong>code samples</strong> for this post on <strong><a href="https://github.com/jivimberg/spring-data-uuid-example">this GitHub repo</a></strong>.</p>
+
+<p><img class="right-fill" src="/images/signatures/signature1.png" width="200" title="‘My signature’" ></p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Reactive GraphQL Subscriptions From Kafka]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka/"/>
+    <updated>2018-10-23T07:58:14-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka</id>
+    <content type="html"><![CDATA[<p>In this post I’ll be exploring how to implement <a href="https://github.com/facebook/graphql/blob/master/rfcs/Subscriptions.md">GraphQL subscriptions</a> <em>reactively</em> on a Spring Boot application using <a href="https://kafka.apache.org/">Kafka</a>.</p>
+
+<!--more-->
+
+
+<h1>The use case</h1>
+
+<p>So, <em>what are we trying to achieve?</em> We want to provide <strong>a way for clients to get notified</strong> whenever an event occurs in the application.</p>
+
+<p>The GraphQL way of doing this is through a <a href="https://github.com/facebook/graphql/blob/master/rfcs/Subscriptions.md">Subscription</a>. For the application events we’re using Kafka. So all we are trying to do is to tie those 2 things so that <strong>whenever an event pops up in Kafka all clients with an active subscription get notified</strong>.</p>
+
+<p><img class="center" src="/images/posts/2018-10-24/SubscriptionFlow.png" width="700" title="‘Subscription flow diagram’" ></p>
+
+<h1>The setup</h1>
+
+<p>Let’s introduce the different pieces of the puzzle:</p>
+
+<ol>
+<li>I have a <a href="https://spring.io/guides/gs/spring-boot/">Spring Boot application</a> that has some business logic.</li>
+<li>Using <a href="https://github.com/graphql-java-kickstart/graphql-spring-boot"><code>graphql-spring-boot-starter</code></a> I’m exposing my service through a GraphQL API. <strong>One of those endpoints it’s going to be a Subscription endpoint.</strong> It’s schema definition looks something like this:</li>
+</ol>
+
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">type</span> <span class="n">Subscription</span> <span class="o">{</span>
+</span><span class='line'> <span class="nl">event:</span> <span class="n">EventMessage</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<ol>
+<li>On the other end I have a <a href="https://kafka.apache.org/documentation/#intro_topics">Kafka topic</a> with events that a user might be interested in. We plan to use <a href="https://github.com/reactor/reactor-kafka">Reactor Kafka</a> to <strong>consume the events through a reactive stream</strong>.</li>
+</ol>
+
+
+<p><img class="center" src="/images/posts/2018-10-24/Setup.png" width="800" title="’Setup diagram’" ></p>
+
+<p>So the challenge is: <em>how do we connect all this pieces together?</em></p>
+
+<h1>Reactive all the way</h1>
+
+<p>To implement the resolver <a href="https://github.com/graphql-java-kickstart/graphql-java-tools">GraphQL Java Tools</a> <strong>requires that we implement a function that returns a <code>Publisher&lt;T&gt;</code></strong>. Where <em>T</em> is the type of event to be pushed to the subscriber. From <a href="https://github.com/graphql-java/graphql-java">GraphQL Java</a> documentation:</p>
+
+<blockquote><p>What is special is that the initial result of a subscription query is a <strong>reactive-streams Publisher object</strong> which you need to use to get the future values.</p></blockquote>
+
+<p>On the other end <strong>we can use <a href="https://github.com/reactor/reactor-kafka">Reactor Kafka</a> to create a reactive Receiver</strong> to consume the events from the topic. Then all that’s left is <strong>obtaining a <code>Publisher</code> from this receiver so that clients can subscribe to it</strong>. This is all the code we need:</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import graphql.schema.DataFetchingEnvironment
+import org.reactivestreams.Publisher
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
+import reactor.core.publisher.Flux
+import reactor.kafka.receiver.KafkaReceiver
+import reactor.kafka.receiver.ReceiverOptions
+
+@Component
+class SubscriptionsResolverImpl(
+    receiverOptions: ReceiverOptions<String, EntityUpdated>                 // Receiver configuration. Injected by Spring
+) : SubscriptionsResolver {
+
+    private val logger = LoggerFactory.getLogger(javaClass)
+
+    private val kafkaReceiver: Flux<GraphqlEvents.Update> by lazy {         // Use lazy to delay KafkaReceiver initialization
+        KafkaReceiver.create(receiverOptions).receive()                     // Create Kafka reactive receiver
+            .map { GraphqlEvents.Update.fromEvent(it.value()) }             // Map from Kafka event to Graphql Event
+            .doFinally { logger.info("Closing with signal: ${it.name}") }   // Log message on stream closure
+            .publish()                                                      // Get a ConnectableFlux. Turns stream to hot
+            .autoConnect()                                                  // Connect to upstream on first subscription
+    }
+
+    override fun event(env: DataFetchingEnvironment): Publisher<GraphqlEvents.Update> {
+        logger.info("GraphQL 'event' subscription called")                  // Log message on each new subscription
+        return kafkaReceiver                                                // Returns kafkaReceiver for GraphQL to subscribe to it
+    }
+}
+</xmp>
+
+
+<p>Just to recap. We are <strong>creating a Kafka Receiver</strong> for the topic we care about (the topic configuration is part of the <code>receiverOptions</code> object, not shown in the snippet).</p>
+
+<p>We are <strong>mapping the event</strong> from the <em>Kafka model</em> to the <em>GraphQL model</em> through the <code>map()</code> method.</p>
+
+<p>Then we are turning the receiver into a hot stream by calling <code>publish()</code>. We are doing this because <strong>we want new subscribers to only see events that happened after they subscribed to the <code>Publisher</code></strong>. And that’s exactly what <code>publish()</code> does. In fact if you pay close attention to the marble diagram of the <a href="https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html#publish--">method documentation</a> you’ll notice how <strong>it looks pretty similar to our use case flow diagram.</strong></p>
+
+<p><img class="center" src="/images/posts/2018-10-24/publish.png" width="500" title="‘Publish marble diagram’" ></p>
+
+<p>We’re calling <code>autoConnect()</code> so that it connects to the upstream source as soon as the first <code>Subscriber</code> subscribes.</p>
+
+<p>Finally we’re implementing the <code>event</code> function <strong>by simply returning the reference to our hot stream of events</strong>. Whenever a new client calls the Subscription endpoint <strong>GraphQL Java will subscribe to this stream</strong> and send a message for every new event that shows up in the configured Kafka topic.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Random Thoughts on Using Gradle With Kotlin DSL]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl/"/>
+    <updated>2018-08-28T08:36:57-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl</id>
+    <content type="html"><![CDATA[<p>Since Gradle 3.0 you can <a href="https://blog.gradle.org/kotlin-meets-gradle"><strong>write your build scripts using Kotlin instead of Groovy</strong></a>. I was curious, so I decided to give it a try. Here are my thoughts on the process.</p>
+
+<!--more-->
+
+
+<h1>Why?</h1>
+
+<p>Ok, we can write our build scripts in Kotlin, but you might be wondering: <em>”why would I want to do that?”</em> Here are my reasons:</p>
+
+<h2>1. All things Kotlin</h2>
+
+<p>Our backend codebase is <em>mostly written in Kotlin</em>. We even wrote our <a href="https://jivimberg.io/blog/2018/07/03/writing-githooks-in-kotlin/">githooks using Kotlin scripts!</a> So it was only natural to use Kotlin on our build tools too.</p>
+
+<p>Being able to use the same language across the stack means that your learning efforts pays double. This way <strong>the team doesn’t have to learn a new language just to write a simple Gradle task.</strong> And as an added bonus you can apply <em>the same testing, coverage and code inspection tools</em> that you use in production to your tooling code.</p>
+
+<h2>2. IDE support</h2>
+
+<p>The second reason for making the transition was IDE support. Groovy is a dynamically typed language, which makes it harder for the IDE to provide accurate code completion and script validity through type checks. Kotlin being statically typed doesn’t suffer from the same problems</p>
+
+<p><img class="center" src="/images/posts/2018-09-11/kotlin-code-completion.png" title="‘Kotlin code completion’" ></p>
+
+<h2>3. Interoperability</h2>
+
+<p>As you probably know <a href="https://kotlinlang.org/docs/reference/java-interop.html">Kotlin was designed with Java interoperability in mind</a>. And the same interoperability <a href="">extends to Groovy code</a>.</p>
+
+<p>This interoperability let us <strong><a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy_2">call Groovy code from Kotlin</a> and <a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy">viceversa</a></strong>. Which effectively means that you can have <strong>a mix of both Groovy and Kotlin scripts working together in the same project</strong>. So no need to migrate all your build scripts at once, or to push stubborn <em>“Wally”</em> to learn Kotlin DSL.</p>
+
+<p><img class="center" src="/images/posts/2018-09-11/wally2.png" title="‘Wally’" ></p>
+
+<h1>The exodus</h1>
+
+<p><em>”So how painful was the migration?”</em> It wasn’t that bad really. Kotlin DSL was designed to be pretty similar to the classic <code>build.gradle</code> files.</p>
+
+<p>You’ll just have to <strong>push through that first moment</strong> when nothing seems to be working, your project doesn’t compile at all, and you know you’re a <code>⌘ + Z</code> away from a pristine working copy. <em>But you can&rsquo;t make an omelet without breaking a few eggs, can you?</em></p>
+
+<p><img class="center" src="/images/posts/2018-09-11/panic.png" title="‘Panic!’" ></p>
+
+<p><strong>I just wish there was some kind of automatic migration action in IntelliJ.</strong> Even if it’s a best effort that leaves you half way there, I’d greatly appreciate it. Ideally it should work just like when you paste some Java code into a Kotlin file: <code>⌘ + V</code> + ✨<em>fairy dust</em>✨ and you have your <code>build.gradle.kts</code> ready to go.</p>
+
+<h3>Resources</h3>
+
+<p>This are the resources that help me complete the migration. Hopefully you’ll find them helpful too.</p>
+
+<ul>
+<li><a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/"><strong>Official Gradle migration guide</strong></a> <strong>Start here!</strong> You don’t have to cover the whole thing but you can skim through it and later go back to the section you need.</li>
+<li><a href="https://github.com/gradle/kotlin-dsl/tree/master/samples/"><strong>Samples in the Kotlin DSL repo</strong></a> This is <strong>the go-to place for Kotlin DSL samples</strong>. You’ll find yourself coming back to this repo over and over. Be sure to search the <em>Issues</em> section too.</li>
+<li>For the times when the <a href="https://github.com/gradle/kotlin-dsl/tree/master/samples/">Kotlin DSL repo</a> doesn’t have what you’re looking for, I find it useful to use <a href="https://github.com/search/advanced"><strong>Github Search</strong></a> looking for code in files with <code>*.kts</code> extension.</li>
+<li><a href="https://github.com/jnizet/gradle-kotlin-dsl-migration-guide"><strong>jnizet/gradle-kotlin-dsl-migration-guide</strong></a> this is another migration guide that has proven useful in the past.</li>
+<li>Finally I followed <a href="https://handstandsam.com/2018/02/11/kotlin-buildsrc-for-better-gradle-dependency-management/"><strong>this article</strong></a> by <a href="https://handstandsam.com/about-me/">Handstand Sam</a> to do <em>dependency management</em> on out multi-module project.</li>
+</ul>
+
+
+<h1>The not so good</h1>
+
+<h2>1. <em>“I can’t just copy-past things from Stack Overflow”</em></h2>
+
+<p><img class="center" src="/images/posts/2018-09-11/copy-paste.jpg" width="250" title="‘Copy paste from Stack Overflow’" ></p>
+
+<p>This is <strong>by far the biggest drawback</strong>. In my experience most teams have one or two <em>”build tool experts”</em>. The rest of the team just use a few tasks and maybe add a dependency every now and then. This casual user might have a harder time using Kotlin DSL because <strong>copy-pasting pieces of code from the web will not work out of the box</strong>. Converting this snippets to Kotlin DSL is not rocket-science, but in some cases it might require some basic level of understanding of how Kotlin DSL works.</p>
+
+<p>This is specially true when using plugins that were not designed with Kotlin DSL in mind (I’m looking at you <a href="https://github.com/google/protobuf-gradle-plugin/issues/219">protobuf Gradle plugin</a>).</p>
+
+<h2>2. IDE support could be better</h2>
+
+<p>Remember all the nice things I said about IDE auto-completion on the build scripts? Well let me clarify: <em>“IDE support is awesome… most of the time”</em>.</p>
+
+<p>Once you have your script fully migrated and IntelliJ has finished indexing then everything should work just fine. But to get there you’ll have to have your full <code>build.gradle</code> script fully migrated. That’s why my advice is to <strong>comment everything out and start migrating piece by piece</strong>. For example you can start with configuring the <em>repositories</em>, and <em>plugins</em> and only then move to <em>dependencies</em>.</p>
+
+<p>This gets intensified if you are working on a <a href="https://guides.gradle.org/creating-multi-project-builds/">multi-module project</a> and/or you’re using <a href="https://docs.gradle.org/current/userguide/custom_plugins.html"><code>buildSrc</code> for custom plugins</a>.</p>
+
+<p>The silver lining is that IDE support is getting better with each release, and once you’ve migrated everything it mostly works.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Oracle, JPA and the Mystery of the String That Was Null]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null/"/>
+    <updated>2018-06-23T10:34:26-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null</id>
+    <content type="html"><![CDATA[<p>This is the story of how Oracle DB was messing up Kotlin’s type system, and what I did to fix it.</p>
+
+<!--more-->
+
+
+<h2>The setup</h2>
+
+<p>Let’s start by <em>setting the stage</em>, for this particular project I was working with the following stack:</p>
+
+<p><img class="center" src="/images/posts/2018-06-23/Stack.png" width="720" title="’Spring + Data + Kotlin + Oracle’" ></p>
+
+<h2>The problem</h2>
+
+<p>So I had modeled the following <strong>Entity</strong> leveraging Kotlin’s <a href="https://kotlinlang.org/docs/reference/data-classes.html">data classes</a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+import javax.persistence.Entity
+import javax.persistence.Id
+
+//sampleStart
+@Entity
+data class Person(
+    val name: String,
+    @Id val id: Long? = null
+)
+//sampleEnd
+</xmp>
+
+
+<p>Tests where passing with flying colors, but for some reason we were noticing that <strong>the <em>name</em> would sometimes come back as <code>null</code></strong> even thought it was typed as <code>String</code> and not <code>String?</code>.</p>
+
+<h2>The analysis</h2>
+
+<p>To make things more difficult there where other failures in the communication layer masking the real issue. But we finally figured out what was happening when we notice <strong>it was only reproducible under the following conditions</strong>:</p>
+
+<ul>
+<li>The property <code>name</code> was empty</li>
+<li>Not reproducible on tests</li>
+<li>Persisting to <em>OracleDB</em> (instead of embedded H2)</li>
+</ul>
+
+
+<p>That’s when I discovered:
+<blockquote><p>This is because Oracle internally changes empty string to NULL values. Oracle simply won&rsquo;t let insert an empty string.</p><footer><strong>Some guy on Stack Overflow <a href="https://stackoverflow.com/a/13278879/1499171">https://stackoverflow.com/a/13278879/1499171</a></strong></footer></blockquote></p>
+
+<p>So when the data was mapped back to my <code>Person</code> object I ended up with a <code>null</code> value for <em>name</em>. This is probably only possible because <strong>Hibernate is using reflection to set the field value</strong> in runtime, thus breaking Kotlin’s <a href="https://kotlinlang.org/docs/reference/null-safety.html">null safety</a>.</p>
+
+<h2>What I did about it</h2>
+
+<p>The funny thing about this one is that <strong>there is not much you can do about it</strong>. <em>There is no magic configuration to tell Oracle how you want to handle empty strings.</em> Yes there are some hacks like changing <code>""</code> to <code>" "</code> but I’d rather invent a random <em>name</em> for the guy than persisting a whitespace.</p>
+
+<p>The silver lining is that most of the time <strong>if you’re not allowing null values you probably don’t want an empty string either</strong>. Now YMMV but I know this was true for a person’s name.</p>
+
+<p>In fact you might even want to <strong>implement a more strict validation</strong> so people can’t be named: “💩”.</p>
+
+<h3>Testing</h3>
+
+<p>First thing I did was to try to reproduce this using a test. But since I was using <code>@DataJpaTest</code> with H2 embedded DB empty strings where empty strings an nulls where nulls. So the issue was <strong>not reproducible</strong>.</p>
+
+<p>That’s when I learned that you <strong>can tell H2 to behave like an Oracle DB</strong> using <a href="http://www.h2database.com/html/features.html">Oracle Compatibility mode</a>. To achieve this I added the following configuration to my <code>application.yml</code> under <code>test/resources</code>:</p>
+
+<pre><code>spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;Mode=Oracle
+</code></pre>
+
+<p>And annotated my test class with:</p>
+
+<pre><code class="java">@RunWith(SpringRunner::class)
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class FormRepositoryTest {…}
+</code></pre>
+
+<p>And <em>voilà</em>, now you have an <strong>H2 in memory DB dressed up as Oracle</strong>.</p>
+
+<h3>Changing the schema</h3>
+
+<p>The other thing I realized is that <strong>the schema allowed for <code>null</code> values</strong> on the <em>name</em> column. I’d been using <code>javax.persistence.schema-generation</code> as a starting point for my schema and <strong>I wrongly assumed</strong> it would take the hint from the Kotlin type system to prevent null values<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>.</p>
+
+<p>Instead I had to explicitly annotate my Entity:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+import javax.persistence.Entity
+import javax.persistence.Id
+
+//sampleStart
+@Entity
+data class Person(
+    @Column(nullable = false) val name: String,
+    @Id val id: Long? = null
+)
+//sampleEnd
+</xmp>
+
+
+<p>and manually change my existing schema</p>
+
+<pre><code>CREATE TABLE Person (
+  id NUMBER(19, 0) NOT NULL,
+  name VARCHAR2(255 CHAR) NOT NULL,
+  PRIMARY KEY (id)
+);
+</code></pre>
+
+<p>The result is that now if somebody tries to persist a Person with an empty name a <strong>big fat Exception is thrown</strong>. Or at least until I implement proper name validation.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>If I had a dollar for every time I modeled a Person…<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>It would be nice right?<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Spring Functional Routing]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/05/20/spring-functional-router/"/>
+    <updated>2018-05-20T00:16:22-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/05/20/spring-functional-router</id>
+    <content type="html"><![CDATA[<p>This post is about the clever tricks you can pull with Spring new <strong>functional routing</strong> and it’s Kotlin DSL.</p>
+
+<!--more-->
+
+
+<p><img class="center" src="/images/posts/2018-05-19/trainSwitch.jpg" title="’Train switch’" ></p>
+
+<p>Spring 5 introduced the <a href="https://spring.io/blog/2016/09/22/new-in-spring-5-functional-web-framework">Functional Web Framework</a> and with it the ability to do functional routing. Basically instead of annotating your methods with the good old <code>@RequestMapping</code> you can now write functions that go from a <code>Request</code> to a <code>Response&lt;T&gt;</code> (called <code>HandlerFunction&lt;T&gt;</code>). And then use a <code>RouterFunction&lt;T&gt;</code> to map which path will end up in which handler.</p>
+
+<p>Now, for the sake of brevity, I won’t talk about all the benefits of this new functional paradigm. Instead I’d like to focus on <strong>some things that can be done with functional routing that were not possible before</strong>.</p>
+
+<p>I have to admit that <strong>at first</strong> I wasn’t sold on the functional routing thing. Why would I want to replace <code>@RequestMapping</code> with 2 different functions? Isn’t that more code to achieve the same goal? For comparison this is how a <em>simple</em> RoutingFunction could look like<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+    fun router() = router {
+        accept(TEXT_HTML).nest {
+            GET("/") { permanentRedirect(URI("index.html")).build() }
+        }
+        "/api".nest {
+            accept(APPLICATION_JSON).nest {
+                GET("/users", userHandler::findAll)
+                POST("/users", userHandler::create)
+            }
+        }
+        resources("/**", ClassPathResource("static/"))
+    } 
+</xmp>
+
+
+<p>It’s readable but certainly not as succinct as <code>@GetMapping("/api/users")</code>. But <strong>this terseness comes at the price of expressiveness</strong>. Or as <a href="https://spring.io/blog/2016/09/22/new-in-spring-5-functional-web-framework">this article on Spring.io</a> puts it:</p>
+
+<blockquote><p>The <code>RouterFunction</code> has a similar purpose as a <code>@RequestMapping</code> annotation. However, there is an important distinction: with the annotation <strong>your route is limited to what can be expressed through the annotation values</strong>.</p></blockquote>
+
+<h2>Complex routing</h2>
+
+<p>I’ll use an example to illustrate some of the things that can be achieved with complex routing. Say I have some data modeling a <em>résumé</em> that contains multiple <em>sections</em>. <strong>I want to expose each of this sections as a different REST endpoint</strong>. Underneath we need to handle each call the same way, the only difference is that we’d be processing a different <em>section</em> of data. We could do the routing like this:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.core.io.ClassPathResource
+import org.springframework.http.MediaType
+import org.springframework.web.reactive.function.server.RouterFunctions.resources
+import org.springframework.web.reactive.function.server.router
+
+//sampleStart
+    enum class Section(val fieldName: String) {
+    PERSONAL_INFO("personalInfo"),
+    EXPERIENCE("experience"),
+    SIDE_PROJECTS("sideProject"),
+    EDUCATION("education"),
+}
+
+@Configuration
+class Routing {
+    @Bean
+    fun resumeRouter(handler: ResumeHandler) = router {
+        accept(MediaType.APPLICATION_JSON).nest {
+            Section.values().forEach {
+                GET("/${it.fieldName}", handler.getSectionHandler(it))
+            }
+        }
+    }
+}
+//sampleEnd
+
+@Component
+class ResumeHandler {
+fun getSectionHandler(section: Section): (ServerRequest) -\> Mono<ServerResponse> =
+            { // get section from data and return response }
+}
+</xmp>
+
+
+<p>We can iterate through the enum and create a new mapping for each of the sections with the <code>GET</code> function. Furthermore the function <code>getSectionHandler</code> can receive the enum as parameter and use it for handling the response instead of having to rely only on the <code>ServerRequest</code> context.</p>
+
+<p>Now this is only one of the <em>tricks</em> that can be done with functional routing. Having a <a href="https://spring.io/blog/2017/08/01/spring-framework-5-kotlin-apis-the-functional-way#functional-routing-with-the-kotlin-dsl-for-spring-webflux">Kotlin DSL</a> means we can do <strong>any kind of scripting we can think of</strong> when defining the routes. As always:</p>
+
+<p><img class="center" src="/images/posts/2018-05-19/withGreatPower.png" title="’With great power comes great responsibility’" ></p>
+
+<p>Abusing this feature would make your routing logic a <strong>tangled mess</strong>, too hard to understand and maintain. So be smart about it.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Source: [kotlin-swagger-spring-functional-template][2]<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

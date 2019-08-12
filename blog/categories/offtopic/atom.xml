@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Offtopic | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/offtopic/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Why Was This Blog Created]]></title>
+    <link href="http://jivimberg.github.io/blog/2014/03/17/why-was-this-blog-created/"/>
+    <updated>2014-03-17T22:48:56-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/03/17/why-was-this-blog-created</id>
+    <content type="html"><![CDATA[<p>There are billions of blogs written by more experienced and talented devs, there is <a href="http://stackoverflow.com">stackoverflow.com</a> and communities for each tool and language ever created, so why bother creating yet another dev blog? Here are the two reasons why I started this blog.</p>
+
+<!--more-->
+
+
+<p>The first reason why I chose to get my hands dirty writing this pages is that I&rsquo;m like the Memento guy trying to code. Whatever code I&rsquo;m working on today will seem completely new for me next month. So one day I had an idea, what if I could have a place where I would go back and check my notes and snippets of the things I learned. There&rsquo;s a phrase that goes: <em>&ldquo;To know I read, to learn I do, to understand I teach&rdquo;</em>. So even in theory the process of thinking how to write about something is helping me remember it.</p>
+
+<p>And the second reason is that I&rsquo;ve been using online resources for so long that I&rsquo;m starting to feel that it&rsquo;s affecting my karma for not contributing back. So here are my two cents. Hopefully someone will find it useful.</p>
+
+<p>Enjoy!</p>
+]]></content>
+  </entry>
+  
+</feed>

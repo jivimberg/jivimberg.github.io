@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Collections | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/collections/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Map.merge]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/07/20/map-dot-merge/"/>
+    <updated>2018-07-20T07:32:49-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/07/20/map-dot-merge</id>
+    <content type="html"><![CDATA[<p>Sometimes is the small things… Like finding a new method that does exactly what you were needing.</p>
+
+<!--more-->
+
+
+<p>Let’s say I’m trying to build a book index. In case you haven’t touch an actual, physical, <em>dead-tree</em> book in a while here’s what an index looks like<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
+
+<p><img class="center" src="/images/posts/2018-07-20/index.gif" title="&lsquo;Discoverability&rsquo;" ></p>
+
+<p>One way of doing this would be to <strong>build a map of: <em>terms</em> to <em>a list of comma separated pages</em></strong>. This is, by no means, the best way of modeling an index, but it’ll serve our purpose of illustrating the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#merge-K-V-java.util.function.BiFunction-"><code>Map.merge</code></a> method.</p>
+
+<p>Up until yesterday I’d have written such code like this:</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Index</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">termToPagesMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&gt;();&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kt">void</span> <span class="nf">addWord</span><span class="o">(</span><span class="n">String</span> <span class="n">term</span><span class="o">,</span> <span class="kt">int</span> <span class="n">page</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">final</span> <span class="n">String</span> <span class="n">newPage</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">page</span><span class="o">);</span>
+</span><span class='line'>    <span class="kd">final</span> <span class="n">String</span> <span class="n">pages</span> <span class="o">=</span> <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">term</span><span class="o">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">pages</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">term</span><span class="o">,</span> <span class="n">newPage</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">term</span><span class="o">,</span> <span class="n">pages</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="n">newPage</span><span class="o">));</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><strong>But today I know better!</strong> With <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#merge-K-V-java.util.function.BiFunction-"><code>Map.merge</code></a> I can achieve the same result in just 1 line:</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Index</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">termToPagesMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&gt;();&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kt">void</span> <span class="nf">addWord</span><span class="o">(</span><span class="n">String</span> <span class="n">term</span><span class="o">,</span> <span class="kt">int</span> <span class="n">page</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">term</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">page</span><span class="o">),</span> <span class="o">(</span><span class="n">pages</span><span class="o">,</span> <span class="n">newPage</span><span class="o">)</span> <span class="o">-&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">pages</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="n">newPage</span><span class="o">));</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>Basically we provide:</p>
+
+<ul>
+<li>The entry <strong>key</strong></li>
+<li>A <strong>value</strong> to be used if there was no associated value to the key (or it was <code>null</code>)</li>
+<li>A <strong> remapping function</strong> that takes the <strong>old value</strong>, the <strong>new value</strong> and calculates the new value for the map</li>
+</ul>
+
+
+<h2>Bonus track: Removal</h2>
+
+<p>There’s one more trick you can do with <code>Map.merge</code>. Citing the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#merge-K-V-java.util.function.BiFunction-">documentation</a>:</p>
+
+<blockquote><p>If the function returns <code>null</code> the mapping is removed</p></blockquote>
+
+<p>Something to keep in mind in case it comes in handy in the future. Or if you find yourself debugging an issue of <em>”vanishing entries on a Map”</em>, then maybe you should check your <strong> remapping function</strong> 😉</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>I’m aware that ebooks have indexes too, but who the fuck uses them when you can do a full blown text search<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Implementing takeWhileInclusive in Kotlin]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin/"/>
+    <updated>2018-06-02T13:33:38-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin</id>
+    <content type="html"><![CDATA[<p>Implementing <code>takeWhileInclusive</code> extension function in Kotlin.</p>
+
+<!--more-->
+
+
+<blockquote><p>TL,DR (aka <em>“just show me the code”</em> ): <a href="https://gist.github.com/jivimberg/ff5aad3f5c6315deb420fd508a145c61">https://gist.github.com/jivimberg/ff5aad3f5c6315deb420fd508a145c61</a></p></blockquote>
+
+<p>You probably know about <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/take-while.html"><code>takeWhile</code></a> operation that <strong>returns a List containing the first elements satisfying the given predicate.</strong></p>
+
+<xmp class="kotlin-code">
+fun main(args: Array<String>) {
+//sampleStart
+    val someNumbers = listOf(1, 5, 3, 22, 4, 8, 14, 23, 49, 77, 2, 49)
+    println(someNumbers.takeWhile { it % 7 != 0 })
+//sampleEnd
+}
+</xmp>
+
+
+<p>I was in need of an <strong>inclusive</strong> version of the <code>takeWhile</code>. In other words I needed a function that returned the first elements satisfying the given predicate, <strong>plus the first element that didn’t satisfy it</strong>.</p>
+
+<p>So in the provided example <code>takeWhile</code> returns <code>[1, 5, 3, 22, 4, 8]</code> whereas <code>takeWhileInclusive</code> would return <code>[1, 5, 3, 22, 4, 8, 14] </code> .</p>
+
+<p>A quick search showed me I was not alone. <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/take-while.html"><em>matklad</em></a> already had a simple implementation working for <code>Sequence</code>:</p>
+
+<p><div><script src='https://gist.github.com/54776705250e3b375618f59a8247a237.js'></script>
+<noscript><pre><code>fun &lt;T&gt; Sequence&lt;T&gt;.takeWhileInclusive(pred: (T) -&gt; Boolean): Sequence&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = pred(it)
+        result
+    }
+}
+</code></pre></noscript></div>
+</p>
+
+<p>Using <strong>extension functions</strong> we are able to add a new function to the standard library type <code>Sequence</code>. If this is your first encounter with an extension function I’d encourage you to read more about them <a href="https://kotlinlang.org/docs/reference/extensions.html#extension-functions">here</a> and then play with them <a href="https://try.kotlinlang.org/#/Kotlin%20Koans/Introduction/Extension%20functions/Task.kt">here</a>.</p>
+
+<p>I found this implementation of <code>takeWhileInclusive</code> quite <strong>elegant</strong>. It uses the original <code>takeWhile</code> with the given predicated, but keeps a <code>shouldContinue</code> variable to delay the predicate evaluation by one step. In other words the evaluation of the predicate passed to <code>takeWhile</code> on element <em>i</em> will actually be the result of applying the predicate function on <em>i - 1</em>. Which if you think about it <em>is exactly what we need</em>. Let’s give it a try:</p>
+
+<xmp class="kotlin-code">
+fun <T> Sequence<T>.takeWhileInclusive(
+        predicate: (T) -> Boolean
+): Sequence<T> {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+fun main(args: Array<String>) {
+//sampleStart
+   val someNumbers = listOf(1, 5, 3, 22, 4, 8, 14, 23, 49, 77, 2, 49).asSequence()
+   println(someNumbers.takeWhileInclusive { it % 7 != 0 }.toList())
+//sampleEnd
+}
+</xmp>
+
+
+<p>This was good! Only <a href="https://gist.github.com/matklad/54776705250e3b375618f59a8247a237#gistcomment-2093675">this comment</a> posted on the original gist made me doubt about the <em>safety</em> of this approach:</p>
+
+<blockquote><p><em>“I love this. If Sequence were parallel, though, wouldn&rsquo;t there be worries about using out-of-closure state?”</em></p></blockquote>
+
+<p>That send me down the rabbit hole and I spent some days reading about <code>parallelStreams</code> and <code>coroutines</code> until I convinced my self the approach was ok.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
+
+<p>With that out of the way I decided to port this solution to be supported in all the places where the <code>takeWhile</code> exists (including <code>String</code> and <code>CharArray</code>). So that <strong>we don’t have to convert to a from a Sequence just to use this function</strong>.</p>
+
+<p>Here’s the end result, ready to be dropped on your project:</p>
+
+<p><div><script src='https://gist.github.com/ff5aad3f5c6315deb420fd508a145c61.js'></script>
+<noscript><pre><code>// kotlin.collections
+
+inline fun &lt;T&gt; Array&lt;out T&gt;.takeWhileInclusive(
+        predicate: (T) -&gt; Boolean
+): List&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun ByteArray.takeWhileInclusive(
+        predicate: (Byte) -&gt; Boolean
+): List&lt;Byte&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun ShortArray.takeWhileInclusive(
+        predicate: (Short) -&gt; Boolean
+): List&lt;Short&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun IntArray.takeWhileInclusive(
+        predicate: (Int) -&gt; Boolean
+): List&lt;Int&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun LongArray.takeWhileInclusive(
+        predicate: (Long) -&gt; Boolean
+): List&lt;Long&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun FloatArray.takeWhileInclusive(
+        predicate: (Float) -&gt; Boolean
+): List&lt;Float&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun DoubleArray.takeWhileInclusive(
+        predicate: (Double) -&gt; Boolean
+): List&lt;Double&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun BooleanArray.takeWhileInclusive(
+        predicate: (Boolean) -&gt; Boolean
+): List&lt;Boolean&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun CharArray.takeWhileInclusive(
+        predicate: (Char) -&gt; Boolean
+): List&lt;Char&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun &lt;T&gt; Iterable&lt;T&gt;.takeWhileInclusive(
+        predicate: (T) -&gt; Boolean
+): List&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+// kotlin.sequences
+
+fun &lt;T&gt; Sequence&lt;T&gt;.takeWhileInclusive(
+        predicate: (T) -&gt; Boolean
+): Sequence&lt;T&gt; {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+// kotlin.text
+
+inline fun CharSequence.takeWhileInclusive(
+        predicate: (Char) -&gt; Boolean
+): CharSequence {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}
+
+inline fun String.takeWhileInclusive(
+        predicate: (Char) -&gt; Boolean
+): String {
+    var shouldContinue = true
+    return takeWhile {
+        val result = shouldContinue
+        shouldContinue = predicate(it)
+        result
+    }
+}</code></pre></noscript></div>
+</p>
+
+<p>Hope you find this useful!</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>If you want to read more about my discoveries, check this question at <a href="https://stackoverflow.com/q/50373754/1499171">StackOverflow</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Parallel Map in Java (From Kotlin)]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/05/07/parallel-map-in-java/"/>
+    <updated>2018-05-07T13:19:58-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/05/07/parallel-map-in-java</id>
+    <content type="html"><![CDATA[<p>Following up of my <a href="http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin/">previous post</a>, I was curious how a parallel map operation would look like using Java’s <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#parallelStream--"><code>parallelStream</code></a>. Here’s what I find out.</p>
+
+<!--more-->
+
+
+<p>In Java to use <code>map</code> you do:</p>
+
+<xmp class="kotlin-code">
+import java.util.stream.Collectors
+
+//sampleStart
+fun main(args: Array<String>) {
+    val output = (1..100).toList()
+            .stream()
+            .map { it * 2 }
+            .collect(Collectors.toList())
+    println(output)
+}
+//sampleEnd
+</xmp>
+
+
+<p><em>(In case you’re wondering I’m using Java collections from Kotlin)</em></p>
+
+<p>And to do a <em>parallel</em> <code>map</code> you can simply do:</p>
+
+<xmp class="kotlin-code">
+import java.util.stream.Collectors
+
+//sampleStart
+fun main(args: Array<String>) {
+    val output = (1..100).toList()
+            .parallelStream()
+            .map { it * 2 }
+            .collect(Collectors.toList())
+    println(output)
+}
+//sampleEnd
+</xmp>
+
+
+<p>No need to write a special <code>pmap</code> operation like we did for Kotlin. Just call <code>parallelStream</code> and that’s it. <em>Pretty cool, right?</em></p>
+
+<p>I was curious about how this solution <strong>compared to the one on <a href="http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin/">my previous post</a></strong>,  so I decided to time it too.</p>
+
+<xmp class="kotlin-code">
+import java.util.stream.Collectors
+import kotlin.system.measureTimeMillis
+
+//sampleStart
+fun main(args: Array<String>) {
+    val time = measureTimeMillis {
+        val output = (1..100).toList()
+                .parallelStream()
+                .map {
+                    Thread.sleep(100)
+                    it * 2
+                }
+                .collect(Collectors.toList())
+
+        println(output)
+    }
+
+    println("Total time: $time")
+}
+//sampleEnd
+</xmp>
+
+
+<p>In this case instead I’m actually setting a delay of <strong>100 milliseconds</strong> (instead of <em>1,000</em> like I did on my previous post)<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. I was expecting the total time to be something close to <em>100 milliseconds</em>, just like it was for the Kotlin <code>pmap</code>, <strong>instead I got something close to 5,000</strong>.</p>
+
+<p>Turns out <code>parallelStream</code> uses the default <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ForkJoinPool.html"><em>ForkJoinPool.commonPool</em></a> which by default has a parallelism level <strong>equal to the number of available processors.</strong> In this case 2 processors: <em>100 operations * 100 milliseconds / 2 processors = 5000 milliseconds</em>. You can check the number of available processors simply by adding this line to the script:</p>
+
+<p><code>println(Runtime.getRuntime().availableProcessors())</code></p>
+
+<h2>But, I want more parallelism!</h2>
+
+<p>What if we want to increase the parallelism level? There are <em>2 ways to achieve this.</em></p>
+
+<p><em>The first one</em> is to make our code <strong>run in a custom thread pool</strong> of our choice. Unfortunately Java doesn’t make it easy to provide a custom thread pool, but <a href="http://www.baeldung.com/java-8-parallel-streams-custom-threadpool">the workaround is not so bad either</a>.</p>
+
+<p><em>The other option</em> is to change the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ForkJoinPool.html"><em>ForkJoinPool.commonPool</em></a> parallelism level by system property like this:</p>
+
+<p><code>System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "10")</code></p>
+
+<p>Unfortunately this doesn’t work on Kotlin Playground so you’ll have to try it on your own machine or take my word that it works.</p>
+
+<p>It’s worth noting that with the second approach you’d still be using the same default thread pool <strong>shared globally across the app</strong>. As you can imagine this can be <strong>EXTREMELY BAD</strong> as you’d be basically depleting resources for the whole application. Some would even argue <a href="https://zeroturnaround.com/rebellabs/java-parallel-streams-are-bad-for-your-health/">this is reason enough not to use <code>parallelStream</code> at all</a>. Although that seems a little extreme if you ask me.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Otherwise the execution takes too long and doesn’t complete. Probably a limitation of Kotlin Playground<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Parallel Map in Kotlin]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/05/04/parallel-map-in-kotlin/"/>
+    <updated>2018-05-04T16:32:00-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/05/04/parallel-map-in-kotlin</id>
+    <content type="html"><![CDATA[<p>Ever wonder how to run <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html"><code>map</code></a>  in parallel using coroutines? This is how you do it.</p>
+
+<!--more-->
+
+
+
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.coroutineScope
+
+//sampleStart
+suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
+    map { async { f(it) } }.map { it.await() }
+}
+//sampleEnd
+</xmp>
+
+
+<p><em>Confused?</em> Let’s unpack it.</p>
+
+<p>First we have the <strong>function signature</strong> which is pretty similar to the actual <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html"><code>map</code></a> extension function signature on <code>Iterable</code>. The only thing we added were the <code>suspend</code> keywords. One for our function and another one on the parameter.</p>
+
+<p>Then we have the <code>coroutineScope</code> that marks the scope in which the <code>async</code> calls are going to be executed. This way if something goes wrong and an exception is thrown, all coroutines that were launched in this scope are cancelled. That&rsquo;s the main benefit of <a href="https://kotlinlang.org/docs/reference/coroutines/composing-suspending-functions.html#structured-concurrency-with-async">structured concurrency</a>.</p>
+
+<p>Finally we have the actual execution which is divided in 2 steps: The <em>first step</em> <strong>launches a new coroutine for each function application</strong> using <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/async.html"><code>async</code></a>. This effectively wraps the type of each element with  <code>Deferred</code>. In the <em>second step</em> we wait for all function applications to complete and unwrap the result with <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/-deferred/await.html"><code>await</code></a>.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
+
+<h2>How to use it</h2>
+
+<p>Easy! <strong>Just like you use <code>map</code></strong>:</p>
+
+<xmp class="kotlin-code" theme="darcula">
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
+
+suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
+    map { async { f(it) } }.map { it.await() }
+}
+//sampleStart
+fun main(args: Array<String>) = runBlocking {
+    println((1..100).pmap { it * 2 })
+}
+//sampleEnd
+</xmp>
+
+
+<p>(Psst! I’m using <a href="https://blog.jetbrains.com/kotlin/2018/04/embedding-kotlin-playground/">Kotlin Playground</a> so you can actually run this code!)</p>
+
+<h2>Prove that it’s running in parallel</h2>
+
+<p>Ok so let’s resort to the good old <code>delay</code> to prove that this is actually running in parallel. We are going to add a <strong>delay of 1 second</strong> on each multiplication and measure the time it takes to run.</p>
+
+<p>Running over <em>100 elements</em> the result should be: <strong>close to 1,000 milliseconds if it’s running in parallel</strong> and close to <em>100,000 milliseconds if it’s running sequentially</em>.</p>
+
+<xmp class="kotlin-code" theme="darcula">
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import kotlin.system.measureTimeMillis
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.coroutineScope
+
+suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
+    map { async { f(it) } }.map { it.await() }
+}
+//sampleStart
+fun main(args: Array<String>) = runBlocking {
+    val time = measureTimeMillis {
+        val output = (1..100).pmap {
+            delay(1000)
+            it * 2
+        }
+    
+        println(output)
+    }
+    
+    println("Total time: $time")
+}
+//sampleEnd
+</xmp>
+
+
+<h2>Why not <code>runBlocking</code>?</h2>
+
+<p>A previous iteration of this article proposed the following solution:</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+
+//sampleStart
+fun <A, B> Iterable<A>.pmapOld(f: suspend (A) -> B): List<B> = runBlocking {
+    map { async { f(it) } }.map { it.await() }
+}
+//sampleEnd
+</xmp>
+
+
+<p>And the description said:</p>
+
+<blockquote><p>Then we have the <code>runBlocking</code> which lets us bridge the blocking code with the coroutine world. As the name suggests <strong>this will block the current thread until everything inside the block finishes executing</strong>. Which is exactly what we want.</p></blockquote>
+
+<p>Fortunately <a href="https://disqus.com/by/disqus_VE5B5eZQX9/">Gildor</a> commented on why <a href="http://disq.us/p/1zbc6a7">this a bad idea</a>. First, we were not using <a href="https://medium.com/@elizarov/structured-concurrency-722d765aa952">Structured Concurrency</a>, so an invocation of <code>f</code> could fail and all other executions would continue unfazed. And also we were not playing nice with the rest of the code. By using <code>runBlocking</code> we were forcefully blocking the thread until the whole execution of <code>pmap</code> finishes, instead of letting the caller decide how the execution should go.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Since I’m not explicitly passing any  <code>CoroutineContext</code> the <code>DefaultDispatcher</code> will be used. <a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

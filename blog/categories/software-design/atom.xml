@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Software Design | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/software-design/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Notes on API Design]]></title>
+    <link href="http://jivimberg.github.io/blog/2014/10/12/notes-on-api-design/"/>
+    <updated>2014-10-12T15:34:29-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/10/12/notes-on-api-design</id>
+    <content type="html"><![CDATA[<p>This is from a presentation I gave at work about how to design APIs that don&rsquo;t suck. You can download the whole presentation from <a href="/downloads/ApiDesignKeynote.zip">here</a></p>
+
+<!-- more -->
+
+
+<h2>3 aspects of a good API</h2>
+
+<p><img class="left" src="/images/posts/2014-10-12/Discoverability.jpg" width="250" title="&lsquo;Discoverability&rsquo;" ></p>
+
+<p><strong>Discoverability:</strong> Is how easy is for a user to access to the exposed functionality. We should always remember that our API is only a tool: a means to an end. The user wants to understand as little as possible to confidently achieve his goal.</p>
+
+<p><img class="right" src="/images/posts/2014-10-12/Consistency.jpg" width="250" title="&lsquo;Consistency&rsquo;" >
+<br></p>
+
+<p><strong>Consistency:</strong> Helps improving the usability by reusing the same patterns across the whole API consistently. This way we beneffit from reusing the concepts the user has already learned.</p>
+
+<p><img class="left" src="/images/posts/2014-10-12/Stability.jpg" width="250" title="&lsquo;Stability&rsquo;" ></p>
+
+<p><strong>Stability:</strong> There are 2 different types of stability that we need to be aware of:</p>
+
+<ol>
+<li><strong>Backward compatibility:</strong> Your changes you introduce in your new version of your API must not break the apps of your users written against a previous version. To achieve this one of the best tools you have is testing. Investing time in writing tests early will result in the ability to change your API confidently, knowing that if the tests are passing then you have achieved backward compatibility</li>
+<li><strong>Conceptual Stability:</strong> The user has build a conceptual model of how the API works. If possible we should avoid changing the concepts he has already learned. This one is even trickier to achieve because there is no exact way of testing it.</li>
+</ol>
+
+
+<h2>4 Principles to avoid complex APIs</h2>
+
+<p><img class="left" src="/images/posts/2014-10-12/EconomyOfConcepts.jpg" width="250" title="&lsquo;EconomyOfConcepts&rsquo;" ></p>
+
+<p><strong>Economy of concepts:</strong> Minimizing the concepts introduced in your API will result in a flatter learning curve. A good way to achieve this is by making your API coexists with the platform. For example: avoid introducing new collections the user has to learn how to use, reuse known design patterns, honour the language naming convention, etc.</p>
+
+<p><img class="right" src="/images/posts/2014-10-12/Symmetry.jpg" width="250" title="&lsquo;Symmetry&rsquo;" ></p>
+
+<p><strong>Simetry:</strong> Once more a simmetric API is easier to learn because it is more predictable. For example: if the user sees a method called <code>open()</code> he probably will know that there is another called <code>close()</code> that he should call at the end, and so on and so forth.</p>
+
+<p><img class="left" src="/images/posts/2014-10-12/Naming.jpg" width="250" title="&lsquo;Naming&rsquo;" ></p>
+
+<p><strong>Naming:</strong> Always use the same name for the same concept. Devs tend to get creative when naming things and that&rsquo;s a bad idea! If we, for example, use the term <em>&lsquo;create&rsquo;</em> in one place and <em>&lsquo;build&rsquo;</em> in another, it becomes very difficult to understand which is the pattern behind the design of the API. When used appropiately a a simple name we can communicate a complex concept with little or no ambiguity. As a rule of thumb if we are having a hard time naming some component then perhaps it&rsquo;s responsibility is not clear enough and we should review our design.</p>
+
+<p><img class="right" src="/images/posts/2014-10-12/MinimizeAccessibility.jpg" width="350" title="&lsquo;Minimize Accessibility&rsquo;" ></p>
+
+<p><strong>Minimize Accessibility:</strong> Similar to encapsulation in Object Oriented Design, we should hide all the details the user doesn&rsquo;t need to know about. This way we are able to change those things under the hood without loosing backward compatibility. This maximizes information hiding and simplifies the use of the API, avoiding confusion by eliminating unnecessary choices.</p>
+
+<h2>6 Helpful tips</h2>
+
+<p><img class="left" src="/images/posts/2014-10-12/UseCaseDriven.jpg" width="250" title="&lsquo;Use case driven&rsquo;" ></p>
+
+<p><strong>Use case driven:</strong> It is useful to validate the possible use cases with future users of the API as soon as possible. One good trick is to start writing code against the API even when the implementation is not ready yet.
+An advantage of using use cases is that since we intereract with the API through code each use case can be easily translated into a test case. Furthermore using a TDD approach will provide some feeling on the usability of the API.</p>
+
+<p><img class="right" src="/images/posts/2014-10-12/WhenInDoubt.jpg" width="250" title="&lsquo;When in doubt leave it out&rsquo;" ></p>
+
+<p><strong>When in doubt&hellip;:</strong> One of the most difficult choices an API designer is faced with, is deciding what stays and what goes. In general, if there isn&rsquo;t a great use case supporting a piece of the API, we&rsquo;re better off not having it there in the first place. <em>Remember: you can always add to an API, but you almost never can remove from it.</em> APIs are &ldquo;add only&rdquo;!</p>
+
+<p><img class="left" src="/images/posts/2014-10-12/Documentation.jpg" width="350" title="&lsquo;Documentation&rsquo;" ></p>
+
+<p><strong>Documentation:</strong> It&rsquo;s well known that devs don&rsquo;t read the documentation. Luckily if your API is discoverable then your users won&rsquo;t need much documentation. 2 tips on this regard:</p>
+
+<ol>
+<li>Document by exception: Focus only on what the user needs to know</li>
+<li>Use lot of examples: In fact if you could only write one thing make it a example.</li>
+</ol>
+
+
+<p><img class="right" src="/images/posts/2014-10-12/Change.jpg" width="250" title="&lsquo;Plan for a change&rsquo;" ></p>
+
+<p><strong>Plan for a change:</strong> In any successful API, the only constant is change. Features change, users request new features, we realise we made some obvious mistakes. Our API will change and we better be ready for it. When changing your API make sure to review your initial assumptions.</p>
+
+<p><img class="left" src="/images/posts/2014-10-12/DontDoEverything.jpg" width="250" title="&lsquo;Don&rsquo;t do everythng&rsquo;" ></p>
+
+<p><strong>Don&rsquo;t do everything:</strong> It is as important to know what you won&rsquo;t do than knowing what you do. You have to always be open to breaking an API into several modules. Sometimes it us better to have two small APIs that one large one.</p>
+
+<p><img class="right" src="/images/posts/2014-10-12/ImplVsInterface.jpg" width="350" title="&lsquo;Implementation Vs Interface&rsquo;" ></p>
+
+<p><strong>Implementation != Interface</strong> It is important to be clear on what it&rsquo;s an implementation detail and what is essential to the API. Exposing implementation details confuse the user and limits our freedom to change the API later on. For example: Avoid describing specific algorithms, avoid including tuning parameters, avoid specifying hashing functions. Focus on results, not means.</p>
+]]></content>
+  </entry>
+  
+</feed>

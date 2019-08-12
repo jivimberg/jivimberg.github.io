@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Knockout | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/knockout/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How I Stumbled With Knockout's Computed Observables]]></title>
+    <link href="http://jivimberg.github.io/blog/2016/05/01/how-i-stumbled-with-knockouts-computed-observables/"/>
+    <updated>2016-05-01T15:01:16-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2016/05/01/how-i-stumbled-with-knockouts-computed-observables</id>
+    <content type="html"><![CDATA[<p>The first thing you learn about Knockout is about <a href="http://knockoutjs.com/documentation/observables.html">observables</a>. The second thing is <a href="http://knockoutjs.com/documentation/computedObservables.html">computed observables</a>. They are dead simple. They even form part of the <a href="http://knockoutjs.com/examples/helloWorld.html">Hello World example</a>. But then, the magic was not working for me. Here&rsquo;s why:</p>
+
+<!--more-->
+
+
+<p>In a nutshell <strong>computed observables</strong> are functions that are dependent on one or more other observables, and that will automatically update whenever any of these dependencies change.</p>
+
+<script async src="//jsfiddle.net/rniemeyer/LkqTU/embed/js,html,css,result/dark/"></script>
+
+
+<p>On my usecase I wanted the computed to updated only if certain condition was met. So I used a variable and a good old if.</p>
+
+<script async src="//jsfiddle.net/jivimberg/uza8ds21/embed/js,html,css,result/dark/"></script>
+
+
+<p>I also added a toggle function to be able to change the value of the <code>bindingActive</code> variable from the UI. So the <code>fullName</code> should get updated once I toggle the boolean variable. <strong>Guess what? it doesn&rsquo;t!</strong></p>
+
+<p>Go ahead, give it a try. Turn on the toggle using the link and you&rsquo;ll notice that the message does not appear as it did on the Hello World example.</p>
+
+<p>I spent half a day looking for an answer of what I was doing wrong. Until I decided to do what I should&rsquo;ve done in the first place. Instead of regarding some new technology as magic, I went ahead and read the documentation to actually understand how it works.</p>
+
+<p>So here&rsquo;s how the <a href="http://knockoutjs.com/documentation/computed-dependency-tracking.html">dependency tracking algorithm</a> works according to KO documentation:</p>
+
+<blockquote><ol>
+<li>Whenever you declare a computed observable, KO immediately invokes its evaluator function to get its initial value.</li>
+<li>While the evaluator function is running, KO sets up a subscription to any observables (including other computed observables) that the evaluator reads. The subscription callback is set to cause the evaluator to run again, looping the whole process back to step 1 (disposing of any old subscriptions that no longer apply).</li>
+<li>KO notifies any subscribers about the new value of your computed observable.</li>
+</ol>
+</blockquote>
+
+<p>Notice what&rsquo;s going on? Since <code>bindingActive</code> initial value is <em>false</em> the tracking algorithm does not see the observables on it&rsquo;s first past. Therefore the <strong>computed observable is not suscribed to update when any of the observables change!</strong></p>
+
+<h3>How can we fix this?</h3>
+
+<p>Well a simple solution would be to define the toggle as an observable too. That way the computed observable suscribes to the toggle var observable and it gets recomputed when the variable changes.</p>
+
+<p>Note that afterwards the step 2 of the tracking algorithm is designed to recognized the new observables that it missed the first time. That&rsquo;s quite nice! Only in our case since no observable was seen at all the computed observable was never updated.</p>
+
+<p>Here&rsquo;s how such solution would look like:</p>
+
+<script async src="//jsfiddle.net/jivimberg/ymucehk2/embed/js,html,css,result/dark/"></script>
+
+
+<p>Another way of solving this issue would be to call the observables for <code>firstName</code> and <code>lastName</code> outside the if. That works too, but I like the other approach better.</p>
+]]></content>
+  </entry>
+  
+</feed>

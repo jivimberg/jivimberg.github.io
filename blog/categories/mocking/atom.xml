@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Mocking | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/mocking/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Mockk All the Things]]></title>
+    <link href="http://jivimberg.github.io/blog/2019/05/09/mockk-features-rundown/"/>
+    <updated>2019-05-09T07:57:47-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2019/05/09/mockk-features-rundown</id>
+    <content type="html"><![CDATA[<p>Over the last few years Mockk has been gaining ground as the go-to mocking library in KotlinWorld ™. Just recently, it was listed as <em>“adopt”</em> in the <a href="https://www.thoughtworks.com/radar/languages-and-frameworks/mockk">ThoughtWorks technology Radar</a>. Want to know what all the fuss is about?</p>
+
+<!--more-->
+
+
+<p><img class="center" src="/images/posts/2019-05-18/mockkAllTheThings.gif" title="‘Channels animation’" ></p>
+
+<h2>Regular mocking</h2>
+
+<p>Let’s start with the basics. You can <em>mock</em>, <em>spy</em> and <em>verify</em> using this <a href="https://mockk.io/#dsl-tables">cute little DSL</a></p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verify
+import org.junit.jupiter.api.Test
+
+class ClockTest {
+
+//sampleStart
+    @Test
+    fun `regular mock`() {
+        val clock = mockk<Clock>()
+        every { clock.currentTime() } returns "7:20"
+    
+        clock.currentTime()
+    
+        verify { clock.currentTime() }
+    }
+    
+    @Test
+    fun `regular spy`() {
+        val clock = spyk<Clock>()
+    
+        clock.currentTime()
+    
+        verify { clock.currentTime() }
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<h2>Mocks with behavior</h2>
+
+<p>No need to settle for just one fixed return value. You can add complex behavior to your mocks like this:</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mock with complex behavior`() {
+        val clock = mockk<Clock>()
+        every { clock.currentTime() } answers { dateFormat.format(Calendar.getInstance()) }
+    
+        // ...
+    }
+    
+    companion object {
+        val dateFormat = SimpleDateFormat("HH:mm")
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>There are a bunch of utility functions and properties you can use inside the <code>answers</code> lambda to do things like calculate the response based on the function arguments. Full list <a href="http://mockk.io/#answer-scope">here</a>.</p>
+
+<h2>Mock chained calls</h2>
+
+<p>You can easily mock a chain of calls</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking chained calls`() {
+        val oven = mockk<Oven>()
+        every { oven.clock.currentTime() } returns "7:20"
+    
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<h2>Mock hierarchies</h2>
+
+<p>You can achieve the same result using hierarchical mocking</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `hierarchical mocking`() {
+        val oven = mockk<Oven>()
+        every { oven.clock } returns mockk {
+            every { currentTime() } returns "7:20"
+        }
+    
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>This is especially useful when mocking complex structures and to return collections of mocking objects, like in <a href="https://mockk.io/#hierarchical-mocking">this example</a>.</p>
+
+<h2>Mock objects</h2>
+
+<p>You can mock Objects as easily as you mock regular classes</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `object mocking`() {
+        mockkObject(UrlHelper)
+        every { UrlHelper.getBaseUrl() } returns URL("http://mockUrl.com")
+    
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<h2>Mock Unit</h2>
+
+<p>You can mock functions that return <code>Unit</code> using <code>just Runs</code></p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking functions that return Unit`() {
+        val clock = mockk<Clock>()
+        every { clock.changeBatteries() } just Runs
+    
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<h2>Mock Nothing</h2>
+
+<p>Or functions that return Nothing. In which case you have to throw an exception as behavior (because a function that returns <code>Nothing</code> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing.html">never returns</a> and can only end by throwing an exception, remember?)</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking functions that return Nothing`() {
+        val clock = mockk<Clock>()
+        every { clock.runForever() } throws Exception("called runForever")
+    
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<h2>Mock extensions functions</h2>
+
+<p>You can mock extensions functions as well:</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking functions extension functions`() {
+        with(mockk<Clock>()) {
+            every { Duration.ofMinutes(5).startTimer() } returns true
+    
+            //...
+        }
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>This works If the extension functions is defined on a class or an object. If it’s defined as a top level function instead, you can still mock it by following the advise in the next point 👇</p>
+
+<h2>Mocking top level functions</h2>
+
+<p>Got a top level function to mock? We’ve got you covered.</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+   class ClockTest {
+   //sampleStart
+    @Test
+    fun `mocking top level functions`() {
+        mockkStatic("mockk.ModelsKt")
+        every { resolve(any()) } returns URL("http://mockk.com/users/1")
+    
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>Ok, you might need to check your classes to know exactly what to use as argument for <code>mockkStatic</code>, but it’s no big deal.</p>
+
+<h2>Mock private functions</h2>
+
+<p>Yep, you can mock private functions by name.</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking private functions`() {
+        val oven = mockk<Oven>()
+        every { oven["lockDoor"]() } returns true
+        
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>You can even verify calls to private function by using <code>recordPrivateCalls = true</code></p>
+
+<h2>Mock varargs</h2>
+
+<p>There’s also support for mocking functions that use varargs:</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class VarargsTest {
+    //sampleStart
+    interface Calculator {
+        fun sumEverything(vararg num: Int): Int
+    }
+
+    @Test
+    fun `mocking varargs`() {
+        val calculator = mockk<Calculator>()
+        every { calculator.sumEverything(1, 2, 4) } returns 7
+
+        //...
+
+        every { calculator.sumEverything(1, *anyIntVararg(), 4) } returns 12
+
+        //...
+
+        every { calculator.sumEverything(1, *varargAllInt { it < 5 }) } returns 10
+
+        //...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>And it’s not only the basics either. As you can see in the example you can do all kind of complex matchings.</p>
+
+<h2>Mock constructor</h2>
+
+<p>You can mock constructors. Useful for those times when you don’t actually control the object creation, but want to still be able to mock it.</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking constructor`() {
+        mockkConstructor(Clock::class)
+
+        every { anyConstructed<Clock>().currentTime() } returns "7:40"
+
+        assertEquals("7:40", Clock().currentTime())
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<h2>Mock coroutines</h2>
+
+<p>If you’re working with coroutines and want to mock a suspending function you simply use <code>coEvery</code>. In this example <code>startTimer</code> is a suspending function:</p>
+
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+class ClockTest {
+    //sampleStart
+    @Test
+    fun `mocking suspending functions`() {
+        val clock = mockk<Clock>()
+        coEvery { clock.startTimer() } returns RUNNING
+
+        // ...
+    }
+    //sampleEnd
+}
+</xmp>
+
+
+<p>Along with <code>coEvery</code> there’s a whole family of <code>co...</code> functions (<code>coAnswers</code>, <code>coVerify</code>, <code>coAssert</code>, etc.) for working with coroutines.</p>
+
+<hr />
+
+<p>This is by no means a comprehensive guide. My intention was just to showcase same of the things that Mockk can do for you. For an in-depth introduction I recommend checking the <a href="https://blog.kotlin-academy.com/search?q=mockk"><em>“Mocking is not rocket science”</em> series in Kotlin Academy</a>.</p>
+
+<p> <img class="right-fill" src="/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Using PowerMock + TestNG to Mock a Static Class]]></title>
+    <link href="http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class/"/>
+    <updated>2016-04-03T08:38:47-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class</id>
+    <content type="html"><![CDATA[<p>￼
+This week I needed to test a class that depended on a method from an static class. I saw we were using <a href="https://github.com/jayway/powermock" title="PowerMock">PowerMock</a> and thought to myself: <em>“Well this sounds pretty common, I bet it’s easy to accomplish”</em>. But of course I ran into half a dozen issues before I was able to make it work. Here’s my two cents to make your experience easier than mine.</p>
+
+<!--more-->
+
+
+<h2>Setup</h2>
+
+<p>Let’s start with the ingredients. To mock static methods you’ll need a couple of libraries:</p>
+
+<ul>
+<li><a href="http://easymock.org/">EasyMock</a> for the mocking<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></li>
+<li><a href="https://github.com/jayway/powermock">PowerMock</a></li>
+<li><a href="http://testng.org/">TestNG</a> for the test</li>
+</ul>
+
+
+<p>When choosing your library version you’ll need to make sure <strong>PowerMock</strong> and <strong>TestNG</strong> versions are compatible. You can do so by comparing your versions with the ones specified <a href="https://github.com/jayway/powermock/wiki/TestNG_usage">here</a>.</p>
+
+<p>Also, if you’re not using <strong>Maven</strong> to include PowerMock in your project make sure you also add it’s dependencies. You’ll find a zip file containing everything you need <a href="https://github.com/jayway/powermock/wiki/GettingStarted">here</a>.</p>
+
+<h2>Writing the test</h2>
+
+<p>To have the test working you’ll need to do 3 things:</p>
+
+<ol>
+<li>Configure <strong>TestNG</strong> to use the PowerMock object factory</li>
+<li>Use <code>@PrepareForTest</code> annotation to prepare the static class</li>
+<li><strong>Mock</strong> the static class method</li>
+<li><strong>Write the rest</strong> of the test</li>
+</ol>
+
+
+<p>Let’s go one by one:</p>
+
+<h4>1. Configure TestNG to use the PowerMock object factory</h4>
+
+<p>There are a bunch of ways of doing this, namely:</p>
+
+<ul>
+<li>Configure it on the <code>suite.xml</code> file</li>
+<li>Extending your test class with <code>PowerMockTestCase</code></li>
+<li>Or by adding a method like this to your test</li>
+</ul>
+
+
+<pre><code class="java">@ObjectFactory
+public IObjectFactory getObjectFactory() {
+    return new org.powermock.modules.testng.PowerMockObjectFactory();
+}
+</code></pre>
+
+<p>I choose to go with the latter because I don’t use the <code>suite.xml</code> file and adding an annotated method is less restrictive than extending a class. But feel free to use whatever works for you.</p>
+
+<h4>2. @PrepareForTest</h4>
+
+<p>You’ll need to prepare your static class for mocking. You can do so with the <code>@PrepareForTest</code> annotation like this:</p>
+
+<pre><code class="java">@PrepareForTest(StaticHelper.class)
+public class MyTest {
+    ...
+}
+</code></pre>
+
+<p>Note that you can pass an array of classes to the annotation if you need to prepare multiple classes.</p>
+
+<h4>3. Mocking</h4>
+
+<p>Now you’re ready to mock the static method like this:</p>
+
+<pre><code class="java">@Test
+public void test() throws Exception {
+    // mocking static method
+    PowerMock.mockStatic(StaticHelper.class);
+    EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello world”)).anyTimes();
+    PowerMock.replay(StaticHelper.class);
+    ...
+} 
+</code></pre>
+
+<h4>4. Writing the rest</h4>
+
+<p>Ok let’s put everything together and write the rest of the test</p>
+
+<pre><code class="java">@PrepareForTest(StaticHelper.class)
+public class MyTest {
+
+    @ObjectFactory
+    public IObjectFactory getObjectFactory() {
+        return new org.powermock.modules.testng.PowerMockObjectFactory();
+    }
+
+    @Test
+    public void test() throws Exception {
+        // mocking static method
+        PowerMock.mockStatic(StaticHelper.class);
+        EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello world”)).anyTimes();
+        PowerMock.replay(StaticHelper.class);
+
+        // test
+        Assert.assertEquals(“hello world” ” StaticHelper.doSomething());
+    }
+
+}
+</code></pre>
+
+<p>Of course this is an oversimplified example. The cool thing about mocking static methods is that <strong>the static call you may need to mock may be hidden under several layers of abstraction</strong>. Using this approach you are able to mock the static call and test your classes without changing a single line of production code.</p>
+
+<h2>Some things to watch out for</h2>
+
+<p>There are a few things to keep in mind when initializing the mock:</p>
+
+<ol>
+<li>You cannot create mocks during <strong>field initialization</strong>.</li>
+<li>You cannot create mocks inside <strong>before static methods</strong>.</li>
+</ol>
+
+
+<p>Finally I also run into the following error when running my test:</p>
+
+<pre><code>java.lang.VerifyError: Expecting a stackmap frame at branch target 71 in method com.abc.domain.myPackage.MyClass$JaxbAccessorM_getDescription_setDescription_java_lang_String.get(Ljava/lang/Object;)Ljava/lang/Object; at offset 20_
+</code></pre>
+
+<p>Turns out that, as explained <a href="http://stackoverflow.com/questions/15122890/java-lang-verifyerror-expecting-a-stackmap-frame-at-branch-target-jdk-1-7">here</a> Java 7 introduced a stricter verification and changed the class format. The byte code generation library PowerMock uses is generating code that does not comply with the new verification. But worry not, <strong>this validation can be disabled</strong> by passing <code>-noverify</code> as argument to the JVM.</p>
+
+<p>If you&rsquo;re running you&rsquo;re using Maven to run your tests remember to add the argument to your plugin configuration.</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>This guide uses <strong>EasyMock</strong> but you can also use <strong>Mockito</strong><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

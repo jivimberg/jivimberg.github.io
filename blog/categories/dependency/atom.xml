@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Dependency | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/dependency/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Guice at a Glance]]></title>
+    <link href="http://jivimberg.github.io/blog/2019/02/08/guice-at-a-glance/"/>
+    <updated>2019-02-08T15:12:32-08:00</updated>
+    <id>http://jivimberg.github.io/blog/2019/02/08/guice-at-a-glance</id>
+    <content type="html"><![CDATA[<p>A visual overview of <a href="https://github.com/google/guice">Google’s Guice</a> model.</p>
+
+<!--more-->
+
+
+<p>A couple of weeks ago I started learning Guice. This cheat-sheet is a visual guide of how the different pieces that conform the framework fit together. I created it in the hope it helps beginners (like me) build a <a href="https://en.wikipedia.org/wiki/Mental_model">mental model</a> of how the framework works.</p>
+
+<p><a href="/images/posts/2019-02-08/guice.png"><img class="center" src="/images/posts/2019-02-08/guice.png" width="800" title="‘Guice cheat-sheet’" ></a></p>
+
+<p><a href="/images/posts/2019-02-08/guice.png"><em>(click for full size image)</em></a></p>
+
+<p>If you want to learn more about how <a href="https://github.com/google/guice">Guice</a> works head to their <a href="https://github.com/google/guice/wiki">oficial documentation</a>.</p>
+
+<p><img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+</feed>

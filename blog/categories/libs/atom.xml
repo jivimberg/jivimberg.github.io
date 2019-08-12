@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Libs | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/libs/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Keep Trying With Guava Retrying]]></title>
+    <link href="http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying/"/>
+    <updated>2014-07-17T14:22:07-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying</id>
+    <content type="html"><![CDATA[<p>We were having a <a href="http://en.wikipedia.org/wiki/Race_condition#Software">race condition</a> on a server which was &ldquo;fixed&rdquo; by adding an sleep to the thread to check again later. Yes, it sucked, so I decided to make something more sophisticated and went looking for a library to handle retryies with multiple strategies. That&rsquo;s when I first read about <a href="https://github.com/rholder/guava-retrying">Guava Retrying</a></p>
+
+<!--more-->
+
+
+<p>In the words of it&rsquo;s creator (<a href="https://github.com/rholder">rholder</a>):</p>
+
+<blockquote><p>Guava-Retrying is a small extension to Google&rsquo;s Guava library to allow for the creation of configurable retrying strategies for an arbitrary function call, such as something that talks to a remote service with flaky uptime.</p></blockquote>
+
+<p>Simply put give it a taks and it will retry it until success&hellip; or until a given condition is met, or after X attempts, or until it does not throw exception, or&hellip; well you get the point: <strong>flexibility</strong>.</p>
+
+<h3>Quick example</h3>
+
+<p>Let&rsquo;s say we want to execute a task that will:
+* Retry if the result is null
+* Retry if an exception of type IOException is thrown
+* Wait 300 miliseconds to try again.
+* Stop after 5 attempts</p>
+
+<p>Then we would do something like:</p>
+
+<pre><code class="java">Callable&lt;Boolean&gt; yourTask = new Callable&lt;Boolean&gt;() {
+    public Boolean call() throws Exception {
+        return true; // do something interesting here
+    }
+};
+
+Retryer&lt;Boolean&gt; retryer = RetryerBuilder.&lt;Boolean&gt;newBuilder()
+        .retryIfResult(Predicates.&lt;Boolean&gt;isNull())
+        .retryIfExceptionOfType(IOException.class)
+        .withWaitStrategy(WaitStrategies.fixedWait(300,                                                                             TimeUnit.MILLISECONDS))
+        .withStopStrategy(StopStrategies.stopAfterAttempt(5))
+        .build();
+
+try {
+    retryer.call(yourTask);
+} catch (RetryException e) {
+    e.printStackTrace();
+} catch (ExecutionException e) {
+    e.printStackTrace();
+}
+</code></pre>
+
+<p>After attempting 5 times it will throw a <code>RetryException</code> with information about the last attempt. Any other exception thrown by your task will be wrapped and rethrown in a <code>ExecutionException</code></p>
+
+<p>Other <strong>wait strategies</strong> supported: Random backoff, Incremental backoff, Exponential backoff, Fibonacci backoff</p>
+
+<p>Other <strong>stop strategies</strong> supported: never stop, stop after delay.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AutoValue for Android]]></title>
+    <link href="http://jivimberg.github.io/blog/2014/04/20/autovalue-for-android/"/>
+    <updated>2014-04-20T17:14:00-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/04/20/autovalue-for-android</id>
+    <content type="html"><![CDATA[<p>Remember <a href="http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way/">my last post</a> on value types using <a href="https://github.com/google/auto/tree/master/value">Google&rsquo;s AutoValue</a>? Today while doing some work on a new Android project I&rsquo;m starting I thought: <em>&lsquo;Great chance to use AutoValue!&rsquo;</em>. Guess what, there is a port of Google AutoValue for the Android platform.</p>
+
+<!-- More -->
+
+
+<p>So the first thing I thought was: <em>&lsquo;Why do I need an special port of the AutoValue in the first place?&rsquo;</em>. Even though you could use the original <a href="https://github.com/google/auto/tree/master/value">Google&rsquo;s AutoValue</a> and it will work just find, there are 2 reasons why you should consider the Android port:</p>
+
+<ol>
+<li>Android AutoValue splits the project in 2 libraries. Only one is included in your apk (which just contains the interface) and the other is only used during compile time</li>
+<li>Apart from all the things you get using the original lib the Android AutoValue also includes Parceable generation just adding <code>implements Parcelable</code> to your classes.</li>
+</ol>
+
+
+<p>That&rsquo;s pretty much all. Head to the <a href="https://github.com/frankiesardo/android-auto-value">Android Autovalue github repo</a> to see how to use it in your project.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Value Types the Easy Way]]></title>
+    <link href="http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way/"/>
+    <updated>2014-04-07T20:54:07-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way</id>
+    <content type="html"><![CDATA[<p>Value types is a fancy name for those classes where you have to implement <code>equals()</code> and <code>hashCode()</code>, and usually <code>toString()</code>. You&rsquo;ve probably wrote thounsands of those classes, but have you ever wonder why do you have write almost 50 lines of code to express such a common concept?</p>
+
+<!-- more -->
+
+
+<p>Let&rsquo;s say you want to model an Employee, with name and age. If you were to write it following all of <a href="http://www.amazon.com/Effective-Java-Edition-Joshua-Bloch/dp/0321356683">Effective Java&rsquo;s</a> advices (which is how you always roll, right?) you would get something like this:</p>
+
+<pre><code class="java">public class EmployeeTheOldFashionedWay {
+
+    private final String name;
+    private final int age;
+
+    public EmployeeTheOldFashionedWay(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EmployeeTheOldFashionedWay that = (EmployeeTheOldFashionedWay) o;
+
+        if (age != that.age) return false;
+        if (!name.equals(that.name)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + age;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeTheOldFashionedWay{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
+}
+</code></pre>
+
+<p>This is wrong for many reasons:</p>
+
+<ul>
+<li>Way too long</li>
+<li>Obvious violation of the <a href="http://en.wikipedia.org/wiki/Don't_repeat_yourself">DRY</a> principle</li>
+<li>You won&rsquo;t tests this methods</li>
+<li>They won&rsquo;t be closely reviewed</li>
+<li>This classes <strong>will</strong> change and that&rsquo;s when bugs are introduced</li>
+<li>Bad signal-to-noise in your code (i.e. too much code to express such an easy concept)</li>
+</ul>
+
+
+<p>Perhaps you are aware that this code can be easily written using IDE Templates. Your favorite IDE can generate constructor based on fields, getters, <code>equals()</code>, <code>hashCode()</code> and <code>toString()</code> methods letting you write value types classes in a breeze. But then all the things we said are wrong with the value type still hold. The only thing we achieve is to write them faster.</p>
+
+<h3>Google AutoValue</h3>
+
+<p>What I&rsquo;m presenting today is Google&rsquo;s solution to the value types issue. With <a href="https://github.com/google/auto/tree/master/value">AutoValue</a> you could write the same Employee class in approximately 10 lines of code like this:</p>
+
+<pre><code class="java">@AutoValue
+public abstract class EmployeeWithAutoValue {
+    public static EmployeeWithAutoValue create(String name, int age) {
+        return new AutoValue_EmployeeWithAutoValue(name, age);
+    }
+
+    public abstract String getName();
+
+    public abstract int getAge();
+}
+</code></pre>
+
+<h4>What the heck just happened there?</h4>
+
+<p>That <code>@AutoValue</code> annotation you see on the class is just a standard annotation that generates a package private implementation for your abstract class called: <em>AutoValue_EmployeeWithAutoValue</em>. In case you were wondering <a href="https://gist.github.com/jivimberg/ca86f975e3945e30978f">this is how that implementation looks like</a>.</p>
+
+<p>Is this the best alternative? I don&rsquo;t really know&hellip; but in <a href="https://docs.google.com/presentation/d/14u_h-lMn7f1rXE1nDiLX0azS3IkgjGl5uxp5jGJ75RE/edit">this presentation</a> the authors of AutoValue compare it to other solutions and explain why they think theirs is better.</p>
+
+<h4>Usage</h4>
+
+<p>This is how you use your Employee class:</p>
+
+<pre><code class="java">public static void main(String[] args) {
+        EmployeeWithAutoValue employee = EmployeeWithAutoValue.create("Juan", 33);
+        System.out.println("employee.getName() = " + employee.getName());
+        System.out.println("employee.getAge() = " + employee.getAge());
+    }
+</code></pre>
+
+<p>Pretty regular stuff over here. That&rsquo;s one of the good things of AutoValue: consumers don&rsquo;t need to know what&rsquo;s going on behind the scenes.</p>
+
+<h4>Features and drawbacks</h4>
+
+<ul>
+<li>You can&rsquo;t use constructors but you can use any number of static factory methods you like. Which if you have read <a href="http://my.safaribooksonline.com/book/programming/java/9780137150021/creating-and-destroying-objects/ch02lev1sec1">Effective Java Item 1</a> you know is a good idea anyway.</li>
+<li>No support for <em>mutable</em> value types. Again you are better off using immutables anyway.</li>
+<li>If you want to provide your own implementation of <code>equals()</code>, <code>hashCode()</code> or <code>toString()</code> you can! Just add your own method to the class and autovalue won&rsquo;t generate it in the implementation.</li>
+<li>AutoValue assumes all your non-primitive fields are not nullable and add checks in the generated code. You can modify this behaviour applying the annotation <code>@Nullable</code> to the corresponding accessor method and factory parameter.</li>
+<li>You <em>can</em> add behaviour to your class</li>
+<li>You <em>can</em> implement interfaces</li>
+<li><strong>WARNING!</strong> The big disadvantage. The generator has to choose an order for the constructor parameters, so it uses the order in which they appear in the file. That means that a simple refactor moving the accessors can break the abstract class or worse silently mix the parameters. <strong>You&rsquo;ve been warned!</strong></li>
+</ul>
+
+
+<h4>Making it work in IntelliJ Idea</h4>
+
+<p>I used Intellij Idea to try this and I must say it took me some time to get the generated class folder to be marked as src. In the end what did the trick was to reimport the mvn project.
+Just know that once it has been added as a src folder you&rsquo;ll have to compile the code one time before the IDE can tell there is a generated class named <em>Autovalue_XXX.</em> You can add this to the list of minor annoyances of using AutoValue if you like.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Guava - Fun With Comparisons]]></title>
+    <link href="http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons/"/>
+    <updated>2014-03-28T17:26:47-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons</id>
+    <content type="html"><![CDATA[<p>Implementing <code>compare()</code> and <code>compareTo()</code> methods was never fun. Luckily <a href="https://code.google.com/p/guava-libraries/">Guava</a> provides an utility that makes comparison methods easier to write and more pleasing to the eye.</p>
+
+<!--more-->
+
+
+<p>So let&rsquo;s say we have the class <code>Person</code>:</p>
+
+<pre><code class="java">private class Person {
+        private String name;
+        private int zipCode;
+        private Age age;
+}
+
+private enum Age { YOUNG, OLD }
+</code></pre>
+
+<p>And we want to sort it by name, then by zipcode and finally, if they are still matched, by age (having <code>Age.YOUNG</code> first) but making <code>null</code> values greater than non <code>null</code> values.</p>
+
+<p>Such comparator could look something like this:</p>
+
+<pre><code class="java">public class VerboseComparator
+            implements Comparator&lt;Person&gt;
+    {
+
+        @Override
+        public int compare(Person o1, Person o2) {
+            int cmp = o1.name.compareTo(o2.name);
+            if (cmp != 0) {
+                return cmp;
+            }
+
+            cmp = Integer.compare(o1.zipCode, o2.zipCode);
+            if (cmp != 0) {
+                return cmp;
+            }
+
+            if(o1.age == null &amp;&amp; o2.age != null){
+                return -1;
+            } else if (o1.age != null &amp;&amp; o2.age == null) {
+                return 1;
+            } else if (o1.age == null &amp;&amp; o2.age == null) {
+                return 0;
+            } else {
+                return o1.age.compareTo(o2.age);
+            }
+        }
+    }
+</code></pre>
+
+<p>Yeah I know, it&rsquo;s hard to read, prone to errors and it has a way too many if statements.</p>
+
+<p>But <em>Don&rsquo;t Panic!</em> with Guava we can write this same comparator like this:</p>
+
+<pre><code class="java">private static class GuavaComparator
+            implements Comparator&lt;Person&gt;
+    {
+
+        @Override
+        public int compare(Person o1, Person o2) {
+            return ComparisonChain.start()
+                    .compare(o1.name, o2.name)
+                    .compare(o1.zipCode, o2.zipCode)
+                    .compare(o1.age, o2.age, Ordering.natural().nullsFirst())
+                    .result();
+        }
+    }
+</code></pre>
+
+<p>That looks way better and it&rsquo;s easier to understand.</p>
+
+<p>Furthermore ComparisonChain stops calling the next <code>compare()</code> method as soon as one returns a value different than 0. So if you have an expensive calculation for comparison to untide similar objects you can rest assured it will only be called when absolutely necessary.</p>
+
+<p>If you find this useful you&rsquo;ll probably want to check out other <a href="https://code.google.com/p/guava-libraries/wiki/OrderingExplained">guava&rsquo;s Ordering Utilities</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Guava - Using and Avoiding Null]]></title>
+    <link href="http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null/"/>
+    <updated>2014-03-19T00:34:41-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null</id>
+    <content type="html"><![CDATA[<p>I&rsquo;m starting a series of posts on <a href="https://code.google.com/p/guava-libraries/">Guava</a> (Google&rsquo;s core libraries). Today I am going to start with <strong>null</strong>, how to use it, and how to avoid it when necessary.</p>
+
+<!--more-->
+
+
+<blockquote><p><strong>&ldquo;I call it my billion-dollar mistake.&rdquo;</strong><br/>
+Sir C. A. R. Hoare, on his invention of the null reference</p></blockquote>
+
+<h3>Null in Guava Collections</h3>
+
+<p>How many times have you expected null values on your collections? And how many times have you <em>actually</em> check to prevent null values on them?</p>
+
+<p>That&rsquo;s why most of Guava &ldquo;New Collections&rdquo; and utilities will fail fast with a NPE when you try to add null to them. And they provide the <strong>Optional</strong> utilty for those cases where we need to indicate absence of some kind, without using null.</p>
+
+<pre><code class="java">//This will fail with java.lang.NullPointerException: at index 2
+ImmutableList.of("one", "two", null);
+</code></pre>
+
+<h3>Optional</h3>
+
+<p>Optional is a way of representing a reference which may be present or not. The whole point of using Optional instead of null, is that there is no way the client can miss the case where the reference is absent. It forces him to actively unwrap the value or else the program won&rsquo;t compile.</p>
+
+<p>Here is how you create an optional:</p>
+
+<pre><code class="java">Optional&lt;String&gt; creatingAnOptional(){
+        Optional&lt;String&gt; result;
+
+        String value = findString(); //may return null
+        result = Optional.fromNullable(value);
+
+        // which is the same as doing:
+        if(value != null){
+            result = Optional.of(value);
+        } else {
+            result = Optional.absent();
+        }
+
+        return result;
+    }
+</code></pre>
+
+<p>And here is how you query for the value:</p>
+
+<pre><code class="java">void queryingOptionals(){
+        Optional&lt;String&gt; optional = creatingAnOptional();
+
+        if(optional.isPresent()){
+            String value = optional.get(); //We are sure is the value is there
+            System.out.println("The string is: " + value);
+        }
+
+        //or
+        System.out.println("Value or default: " + optional.or("Default value"));
+    }
+</code></pre>
+
+<p>The next time you are writing a method that return a values which may or may not be present, remember to use Optional. It will make your API much clearer and force the caller to consider the absent value case.</p>
+]]></content>
+  </entry>
+  
+</feed>

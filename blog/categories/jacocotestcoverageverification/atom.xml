@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Jacocotestcoverageverification | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/jacocotestcoverageverification/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Jacoco & Gradle - How to Verify Coverage With Exclusions]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/04/26/gradle-verify-coverage-with-exclusions/"/>
+    <updated>2018-04-26T08:49:52-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/04/26/gradle-verify-coverage-with-exclusions</id>
+    <content type="html"><![CDATA[<p>A post about how to add exclusions to your Jacoco test coverage verification in Gradle.</p>
+
+<!--more-->
+
+
+<p>This is how you setup Jacoco to fail when the code doesn’t meet the expected coverage threshold:</p>
+
+<p><div><script src='https://gist.github.com/ea79614ce9b80c29b03be8326586f238.js'></script>
+<noscript><pre><code>apply plugin: &quot;jacoco”
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.79
+            }
+        }
+    }
+}
+
+// to run coverage verification during the build (and fail when appropriate)
+check.dependsOn jacocoTestCoverageVerification	</code></pre></noscript></div>
+</p>
+
+<p>See that <code>rule</code>?  I’m not setting any particular <code>element</code> so <a href="https://docs.gradle.org/current/javadoc/org/gradle/testing/jacoco/tasks/rules/JacocoViolationRule.html#getElement--">by default it’ll set <em>BUNDLE</em></a>. <strong>This is just what I want as I’d like to set a threshold for the coverage of the entire module.</strong></p>
+
+<p>So if I need to exclude certain <strong>packages</strong> or <strong>files</strong> from the count this is what I do:</p>
+
+<p><div><script src='https://gist.github.com/3ee0beaa9ab8b20b48e4273378dcd30e.js'></script>
+<noscript><pre><code>jacocoTestCoverageVerification {
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude:  [
+                    &#39;com/example/my/package/*&#39;,
+                    &#39;com/example/service/MyApplication.kt&#39;,
+                    &#39;com/google/protobuf/*&#39;
+            ])
+        })
+    }
+
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.79
+            }
+        }
+    }
+}</code></pre></noscript></div>
+</p>
+
+<h3>Why <em>exclude</em> doesn’t work</h3>
+
+<p>My first approach was setting the <code>excludes</code> property on the rule like this:</p>
+
+<p><div><script src='https://gist.github.com/0962942885d4db41a9dad890aba5d225.js'></script>
+<noscript><pre><code>jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            excludes = [
+                    &#39;com/example/my/package/*&#39;,
+                    &#39;com/example/service/MyApplication.kt&#39;,
+                    &#39;com/google/protobuf/*&#39;
+            ]
+            limit {
+                minimum = 0.79
+            }
+        }
+    }
+}</code></pre></noscript></div>
+</p>
+
+<p>The reason this doesn’t work is that <code>excludes</code> works on objects of the type defined with the <code>element</code> property. In this case the type is <em>BUNDLE</em> whereas the thing we want to exclude are <strong>packages</strong> and <strong>files</strong>.</p>
+]]></content>
+  </entry>
+  
+</feed>

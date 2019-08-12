@@ -1,0 +1,951 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Jpa | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/jpa/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using UUID on Spring Data JPA Entities]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities/"/>
+    <updated>2018-11-05T07:25:37-08:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities</id>
+    <content type="html"><![CDATA[<p>In this article I’ll explore <strong>how to model a <a href="https://stackoverflow.com/questions/6033905/create-the-perfect-jpa-entity">JPA Entity</a> using an <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a></strong> as Primary Key working with <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA.</a></p>
+
+<!--more-->
+
+
+<p><img class="center" src="/images/posts/2018-11-07/uuid.png" title="‘uuid key’" ></p>
+
+<h1>Why UUIDs?</h1>
+
+<p>Usually we use numerical keys on our models and let the DB generate that for us on persistence. But there are <strong>some reasons why you might prefer to use UUIDs</strong> as your Primary Key instead. Namely:</p>
+
+<ul>
+<li><strong>UUIDs are globally unique.</strong> This means that we don’t need a centralized component to generate unique ids, <strong>we can generate the ids on the application itself</strong> instead of relying on <a href="https://vladmihalcea.com/hibernate-and-uuid-identifiers/">some UUID generator</a> that populates the <code>id</code> field on persist.</li>
+<li>Having globally unique ids also means that <strong>your ids are unique across databases.</strong> This allows us to move data across databases without having to check for conflicting ids.</li>
+<li>Having application generated ids means the id is known even before the entity is persisted. This lets us <strong>model our entities as <a href="https://proandroiddev.com/kotlin-for-beginners-immutability-and-the-value-of-val-78ab45b60b57">immutable objects</a></strong> and we avoid having to handle null values on the id.</li>
+</ul>
+
+
+<p>But as you probably already know: <a href="https://en.wikipedia.org/wiki/There_ain't_no_such_thing_as_a_free_lunch">🚫🆓🍽</a>. So here are some of the downsides of using UUIDss for you to consider:</p>
+
+<ul>
+<li><strong>Storage space.</strong> As you can imagine storing an UUID takes a lot more space than storying an Int. Specially if you make the mistake of storing it as a <code>String</code>. You might think Id space is not a big deal, but consider that <strong>Primary Keys are often used in indexes and as Foreign Keys on other tables</strong>. So the numbers start to add up.</li>
+<li>They are <strong>not human friendly</strong>. What’s easier to remember: <code>223492</code> or <code>453bd9d7-83c0-47fb-b42e-0ab045b29f83 </code>? This is specially true if you happen to be exposing your ids on your public APIs. Think: <code>/albums/2311445/photo/7426321</code> vs <code>/albums/b3480d79-e458-4675-a7ba-61ac5957cb7c/photo/19b24967-1741-4405-a746-d2b081ee45f2 </code>.</li>
+</ul>
+
+
+<p><strong>If you’re still on the fence</strong> here’s a great article talking about the pros and cons of using UUIDs as primary keys: <a href="https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439">https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439</a>.</p>
+
+<h1>How to do it</h1>
+
+<p>Now let’s talk about how we can implement this. I’ll go step by step explaining why we add each piece of code.</p>
+
+<p>The first thing we need to do is <strong>generate the UUID</strong>. As mentioned above we’d like to do this on the application code so we can have <em>immutable entities</em>. Generating the UUID is easy, all we need to do is: <code>UUID.randomUUID()</code>. So our entity would look like this:</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import java.util.\*
+import javax.persistence.Id
+import javax.persistence.Entity
+
+//sampleStart
+@Entity
+class Artist(
+        @Id val id: UUID = UUID.randomUUID(),
+        val name: String
+)
+//sampleEnd
+</xmp>
+
+
+<p>You’ve probably noticed how we’re making the id an argument of the <a href="https://kotlinlang.org/docs/reference/classes.html#constructors">primary constructor</a>. This is required to <strong>let clients construct entities with known ids to represent persisted objects</strong>. This is useful for example to <strong>model an update operation</strong>: create an enwtity with a known id and updated values, then call <code>save()</code> on such entity.</p>
+
+<h2>isNew?</h2>
+
+<p>As mentioned we’re using <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA</a> for our Repository layer. Now there’s a small detail we have to take into account when <strong>using application provided ids with Spring Data</strong>. If you do a <code>artistRepository.save(Artist(name = "David Bowie"))</code> you might get an output like this:</p>
+
+<p><img class="center" src="/images/posts/2018-11-07/2sql.png" title="‘persist logs’" ></p>
+
+<p>If you pay close attention to the log you’ll notice that <strong>Hibernate is actually executing 2 SQL queries</strong>: one <code>select</code> followed by one <code>insert</code>. Not quite what we were expecting.</p>
+
+<p>The reason for this behavior is the implementation of Spring Data’s <a href="https://github.com/spring-projects/spring-data-jpa/blob/master/src/main/java/org/springframework/data/jpa/repository/support/SimpleJpaRepository.java"><code>SimpleJpaRepository.java</code></a>. In particular the <a href="https://github.com/spring-projects/spring-data-jpa/blob/01e36dbb44d6bc87f7deb3b6d6dacc955ea6c8bd/src/main/java/org/springframework/data/jpa/repository/support/SimpleJpaRepository.java#L506"><code>save()</code></a> method:</p>
+
+<pre><code class="java">@Transactional
+public &lt;S extends T&gt; S save(S entity) {
+    if (entityInformation.isNew(entity)) {
+        em.persist(entity);
+        return entity;
+    } else {
+        return em.merge(entity);
+    }
+}
+</code></pre>
+
+<p><strong>The double SQL statement is caused by the call to <code>merge()</code></strong>. By default the way this class decides whether to do a <code>persist()</code> or a <code>merge()</code> <strong>is simply by checking if the id is null</strong>. Which works fine for DB assigned ids, but <em>not</em> for application assigned ones. 😕</p>
+
+<p><strong>The best way to control this is by implementing the <a href="https://github.com/spring-projects/spring-data-commons/blob/master/src/main/java/org/springframework/data/domain/Persistable.java"><code>Persistable&lt;ID&gt;</code></a> interface</strong> providing a <code>isNew()</code> method. Since this is something we’ll want to do every time we use application generated UUIDs <strong>I’ll extract this into an abstract class</strong> and making use of the <code>@MappedSuperClass</code> annotation.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import org.springframework.data.domain.Persistable
+import java.util.\*
+import javax.persistence.\*
+
+//sampleStart
+@MappedSuperclass
+abstract class AbstractBaseEntity(givenId: UUID? = null) : Persistable<UUID> {
+
+    @Id
+    @Column(name = "id", length = 16, unique = true, nullable = false)
+    private val id: UUID = givenId ?: UUID.randomUUID()
+    
+    @Transient
+    private var persisted: Boolean = givenId != null
+    
+    override fun getId(): UUID = id
+    
+    override fun isNew(): Boolean = !persisted
+    
+    override fun hashCode(): Int = id.hashCode()
+    
+    override fun equals(other: Any?): Boolean {
+        return when {
+            this === other -> true
+            other == null -> false
+            other !is AbstractBaseEntity -> false
+            else -> getId() == other.getId()
+        }
+    }
+    
+    @PostPersist
+    @PostLoad
+    private fun setPersisted() {
+        persisted = true
+    }
+}
+//sampleEnd
+
+</xmp>
+
+
+<blockquote><p>This design was <strong>suggested to me by <a href="https://twitter.com/PabloHernanS">@paschmid</a> and <a href="https://twitter.com/rcruzjo">@rcruzjo</a></strong>, this code would be quite ugly if it weren’t for them!</p></blockquote>
+
+<p>You can see how the <code>persisted</code> state is decided based on whether an id is provided on creation or not, to account for updates. Also notice how <strong>its value gets automatically updated upon <em>persist</em> and <em>load</em></strong> thanks to <code>@PostPersist</code> and <code>@PostLoad</code> annotations.</p>
+
+<p>Also since <code>id</code> is now <em>unique</em> and <em>non-nullable</em> <strong>we can use it to implement <code>equals()</code> and <code>hashcode()</code></strong> and avoid falling in some of the common pitfalls of implementing this methods (to learn more about this check <a href="https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/">this article</a> by <a href="https://twitter.com/vlad_mihalcea">@vlad_mihalcea</a> and <a href="https://kotlinexpertise.com/hibernate-with-kotlin-spring-boot/">this one</a> by <a href="https://twitter.com/s1m0nw1">@s1m0nw1</a>).</p>
+
+<p>And in case you’re wondering <strong>why we need an explicit <code>getId()</code> function</strong>, it is because of this issue: <a href="https://youtrack.jetbrains.com/issue/KT-6653">Kotlin properties do not override Java-style getters and setters</a>.</p>
+
+<h1>Putting it all together</h1>
+
+<p>Finally let’s see how a concrete entity would use this.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import org.springframework.data.repository.CrudRepository
+import java.util.\*
+import javax.persistence.Entity
+
+//sampleStart
+@Entity
+class Artist(
+        id: UUID? = null,
+        val name: String
+) : AssignedIdBaseEntity(id)
+//sampleEnd
+</xmp>
+
+
+<p>Pretty similar to our original approach right? Thanks to the abstract class all the <code>isNew()</code> <strong>implementation details are hidden</strong> from concrete entities.</p>
+
+<p>And now if we do a <code>save()</code> on a new entity <strong>we get one single SQL statement</strong> as we were expecting.</p>
+
+<p><img class="center" src="/images/posts/2018-11-07/1sql.png" width="600" title="‘persist logs with abstractEntity’" ></p>
+
+<hr />
+
+<h1>Approach 2: Making it simpler with @Version</h1>
+
+<p>This approach was suggested by <a href="https://disqus.com/by/disqus_UhNaTY8OWI/">Diego Marin</a> in the comments.</p>
+
+<p>Spring Data can leverage the existence of a <code>@Version</code> field to tell if the Entity is present or not. By having <code>@Version</code>, we also get <a href="https://www.baeldung.com/jpa-optimistic-locking">Optimistic Locking</a> for free.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import java.util.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Version
+
+//sampleStart
+@Entity
+class Celeb(
+        @Id @Column(name = "id", length = 16, unique = true, nullable = false)
+        val id: UUID = UUID.randomUUID(),
+        @Version
+        val version: Long? = null,
+        val name: String
+) {
+    override fun equals(other: Any?) = when {
+        this === other -> true
+        javaClass != other?.javaClass -> false
+        id != (other as Celeb).id -> false
+        else -> true
+    }
+
+    override fun hashCode(): Int = id.hashCode()
+}
+//sampleEnd
+</xmp>
+
+
+<blockquote><p>⚠️ Make sure you’re importing <code>javax.persistence.Version</code> and NOT <code>org.springframework.data.annotation.Version</code>!</p></blockquote>
+
+<p>We still need to write the <code>id</code> column definition and <code>equal</code> and <code>hashCode</code> methods, so if this is something you’ll be applying in most of your entities you might want to consider extracting it to a superclass. Similar to what we did with <code>AssignedIdBaseEntity</code>, but using <code>@Version</code></p>
+
+<hr />
+
+<p>You can find all the <strong>code samples</strong> for this post on <strong><a href="https://github.com/jivimberg/spring-data-uuid-example">this GitHub repo</a></strong>.</p>
+
+<p><img class="right-fill" src="/images/signatures/signature1.png" width="200" title="‘My signature’" ></p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hierarchical Queries on RDBMS With JPA]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/08/04/recursive-queries-on-rdbms-with-jpa/"/>
+    <updated>2018-08-04T11:29:52-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/08/04/recursive-queries-on-rdbms-with-jpa</id>
+    <content type="html"><![CDATA[<p>Hello! In this post I’ll explore the different alternatives for querying hierarchical data stored on a RDBMS using <a href="http://www.oracle.com/technetwork/java/javaee/tech/persistence-jsp-140049.html">JPA</a>.</p>
+
+<!--more-->
+
+
+<h1>What are we trying to do?</h1>
+
+<p>Let’s use a silly example to illustrate what we are trying to achieve. Say we want to model <strong>mother-daughter relationships</strong>, we can do so with an entity like this:</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import javax.persistence.CascadeType
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.OneToMany
+
+//sampleStart
+@Entity
+data class Woman (
+    val name: String,
+    @OneToMany(cascade = [CascadeType.ALL]) val daughters: MutableSet<Woman> = mutableSetOf(),
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long? = null
+)
+//sampleEnd
+
+\~</xmp>
+
+
+<p>In OO-talk that’s just one Type with a reference to itself like this:</p>
+
+<p><img class="center" src="/images/posts/2018-08-04/UML.jpg" width="240" title="’UML’" ></p>
+
+<p>And once we start creating a bunch of mothers, we’ll get a <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graph</a>. Although for this example, and to keep things simple, <strong>we’ll just model the offspring of just one single person</strong> so we get a nice tree like this:</p>
+
+<p><img class="center" src="/images/posts/2018-08-04/tree.jpg" width="480" title="’Tree’" ></p>
+
+<p>But in DB this is stored in <strong>2 tables</strong>. One contains the Woman data and the other one the relationships.</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;table>
+</span><span class='line'>&lt;thead>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;th> Id &lt;/th>
+</span><span class='line'>&lt;th> Name   &lt;/th>
+</span><span class='line'>&lt;th>       &lt;/th>
+</span><span class='line'>&lt;th> Woman_Id &lt;/th>
+</span><span class='line'>&lt;th>  Daughters_Id &lt;/th>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;/thead>
+</span><span class='line'>&lt;tbody>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 1  &lt;/td>
+</span><span class='line'>&lt;td> Wendy  &lt;/td>
+</span><span class='line'>&lt;td>       &lt;/td>
+</span><span class='line'>&lt;td> 1        &lt;/td>
+</span><span class='line'>&lt;td> 2             &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 1  &lt;/td>
+</span><span class='line'>&lt;td> Wendy  &lt;/td>
+</span><span class='line'>&lt;td>       &lt;/td>
+</span><span class='line'>&lt;td> 1        &lt;/td>
+</span><span class='line'>&lt;td> 3             &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 2  &lt;/td>
+</span><span class='line'>&lt;td> Brenda &lt;/td>
+</span><span class='line'>&lt;td>       &lt;/td>
+</span><span class='line'>&lt;td> 2        &lt;/td>
+</span><span class='line'>&lt;td> 4             &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 2  &lt;/td>
+</span><span class='line'>&lt;td> Brenda &lt;/td>
+</span><span class='line'>&lt;td>       &lt;/td>
+</span><span class='line'>&lt;td> 2        &lt;/td>
+</span><span class='line'>&lt;td> 5             &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 3  &lt;/td>
+</span><span class='line'>&lt;td> Carol  &lt;/td>
+</span><span class='line'>&lt;td>       &lt;/td>
+</span><span class='line'>&lt;td> 3        &lt;/td>
+</span><span class='line'>&lt;td> 6             &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 4  &lt;/td>
+</span><span class='line'>&lt;td> Linda  &lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 5  &lt;/td>
+</span><span class='line'>&lt;td> Betty  &lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 6  &lt;/td>
+</span><span class='line'>&lt;td> Lisa   &lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;/tbody>
+</span><span class='line'>&lt;/table>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></p>
+
+<p>We’ll focus in just one single type of query, namely:</p>
+
+<blockquote><p><em>Find a node and return the whole subtree underneath</em></p></blockquote>
+
+<p>Or in domain specific terms:</p>
+
+<blockquote><p><em>Find a woman and return her along with her offspring</em></p></blockquote>
+
+<h1>Alternatives</h1>
+
+<p>Let’s explore our options. For the following examples I’ll be using <a href="https://kotlinlang.org/">Kotlin</a>, <a href="http://projects.spring.io/spring-data/">Spring Data</a>, <a href="http://www.oracle.com/technetwork/java/javaee/tech/persistence-jsp-140049.html">JPA</a>, <a href="http://hibernate.org/">Hibernate</a> and an <a href="https://www.oracle.com/database/index.html">Oracle Database</a>. Thanks to JPA you’ll notice that most of the time <strong>the solutions provided work on whatever you’ve decided to use</strong> (I’ll note it when it’s not the case). You can use Java instead of Kotlin, Eclipselink instead of Hibernate and MySQL instead of Oracle, and even abandon Spring completely.</p>
+
+<p>Because this is meant to be a formative post <strong>I’ll start with some of the “wrong” approaches first</strong> and explain its downsides. If you’re in a rush you can just scroll to the bottom 😃</p>
+
+<h2>Eager fetching</h2>
+
+<p>The simplest solution is using <a href="https://www.thoughts-on-java.org/entity-mappings-introduction-jpa-fetchtypes/">Eager fetching</a>. We can enable eager fetching specifying the <code>fetch</code> parameter on the <code>@OneToMany</code>  annotation like this:</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import javax.persistence.CascadeType
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.OneToMany
+
+//sampleStart
+@Entity
+data class Woman (
+    val name: String,
+    @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL]) val daughters: MutableSet<Woman> = mutableSetOf(),
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long? = null
+)
+//sampleEnd
+
+</xmp>
+
+
+<p>Great, it works! But wait, <em>why do I see so many SELECT calls to the database?</em> As you’ve probably figured out the issue with this approach is that it falls in the <a href="https://stackoverflow.com/questions/97197/what-is-the-n1-select-query-issue">N + 1 SELECT problem</a>.</p>
+
+<p>Some authors even go as far as considering <a href="https://vladmihalcea.com/eager-fetching-is-a-code-smell/">eager fetching a <strong>code smell</strong></a>. In the words of <a href="https://vladmihalcea.com/about/">Vlad Mihalcea</a> (emphasis mine):</p>
+
+<blockquote><p>The EAGER fetching strategy is a code smell. Most often it’s used for simplicity sake without considering the long-term performance penalties. The fetching strategy <strong>should never be the entity mapping responsibility</strong>. Each business use case has different entity load requirements and therefore the fetching strategy should be delegated to each individual query.</p></blockquote>
+
+<h2>Using <code>join fetch</code></h2>
+
+<p>Another alternative would be to use <code>join fetch</code> as part of the JPQL query.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+fun findWomanUsingJoinFetch(id: Long): Woman? {
+        return em.createQuery("select distinct w from Woman w left join fetch w.daughters", Woman::class.java)
+        .resultList
+        .find { it.id == id }
+}
+</xmp>
+
+
+<p>With <code>join fetch</code> we can tell JPA to do a <code>join</code> to execute the query and also include the data as part of the response object when mapping to the OO world.</p>
+
+<p>The <em>huge downside</em> is that we’re actually <strong>querying ALL women</strong>  and only then selecting the one we were looking for from the <code>resultList</code>. This means that, unless you’re querying for the root node, <strong>you’ll always be doing extra work</strong>.</p>
+
+<p>And no, a <code>where</code> clause can’t help us here. Using <code>where w.id = :id</code> would leave us with just the root and one level of descendants in the <em>resultList</em>.</p>
+
+<p>Unfortunately <strong>I couldn’t find a way of making this a single JPQL query</strong>.  <a href="https://vladmihalcea.com/about/">Vlad Mihalcea</a> has a <a href="https://vladmihalcea.com/hibernate-facts-multi-level-fetching/">great article</a> explaining how to use <code>join fetch</code> to query all the leaves of the tree and then build the associations all the way up the entity hierarchy. Sadly we can’t apply the same approach here because we’re querying a <em>multi-level homogeneous tree</em>. That means that <strong>all the nodes are of the same type, and thus mapped to the same table,</strong> and furthermore leaves can be N levels deep. So if we try Vlad’s approach we’d end up with the similar <strong><code>where</code> problem</strong> mentioned above.</p>
+
+<h2>Entity graph</h2>
+
+<p>Another proposed solution is to use <a href="https://docs.oracle.com/javaee/7/tutorial/persistence-entitygraphs001.htm">Entity Graphs</a> introduced in <em>JPA 2.1</em>. You can use Entity Graphs as a query hint to <strong>specify which fields you want eagerly fetched as part of the query</strong>.</p>
+
+<blockquote><p>Entity graphs have attributes that correspond to the fields that will be eagerly fetched during a find or query operation</p></blockquote>
+
+<p>They come in 2 flavors. Static through annotations:</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+import javax.persistence.CascadeType
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.NamedAttributeNode
+import javax.persistence.NamedEntityGraph
+import javax.persistence.NamedEntityGraphs
+import javax.persistence.NamedSubgraph
+import javax.persistence.OneToMany
+
+//sampleStart
+@Entity
+@NamedEntityGraphs(
+    NamedEntityGraph(name = "womanWithDaughters",
+        attributeNodes = [NamedAttributeNode(value = "daughters", subgraph = "daughterWithDaughters")],
+        subgraphs = [
+            NamedSubgraph(
+                name = "daughterWithDaughters",
+                attributeNodes = [NamedAttributeNode("daughters")]
+            )
+        ]
+    )
+)
+data class Woman (
+//sampleEnd
+    val name: String,
+    @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL]) val daughters: MutableSet<Woman> = mutableSetOf(),
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long? = null
+)
+</xmp>
+
+
+<p>Or you can construct the graph <strong>programmatically</strong> to have some more flexibility:</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+fun findWomanUsingEntityGraph(id: Long): Woman {
+    val graph = em.createEntityGraph(Woman::class.java)
+        .also { it.addSubgraph<Woman>("daughters") }
+    return em.find(Woman::class.java, id, mapOf("javax.persistence.loadgraph" to graph))
+}
+</xmp>
+
+
+<p>I thought: <em>“This is it IT! If I can manually build the graph for each query I can even specify how many levels deep I want to go”</em>. But once again, it didn’t quite work 😞</p>
+
+<p>I tried creating graphs with subgraphs N levels deep but <strong>the query would just ignore them and only fetch up to 2 levels</strong>. From the annotations flavor this limitation is clear since:</p>
+
+<ol>
+<li>You can’t use a subgraph reference on an attribute of the same graph recursively (it’ll fail at runtime)</li>
+<li>And <code>@NamedSubgraph</code> can’t have other <code>subgraphs</code> defined underneath.</li>
+</ol>
+
+
+<p>I was hoping this would be possible through the API, but apparently it’s not. Maybe Hibernate is to blame here, I don’t really know… But <em>I couldn’t find any documentation beyond the basic 2 level example</em>.</p>
+
+<h2>Using <code>@BatchSize</code></h2>
+
+<p>Going back to the Eager Fetch approach, we hated it because it resulted in N queries where N is the number of Women in the table. <strong>With  <code>@BatchSize</code> we can mitigate this</strong>.</p>
+
+<xmp class="kotlin-code" theme="darcula" data-highlight-only>
+data class Woman(
+    val name: String,
+    @BatchSize(size = 10)
+    @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL]) val daughters: MutableSet<Woman> = mutableSetOf(),
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long? = null
+)
+</xmp>
+
+
+<p>By setting the batch size to 10 we’re basically saying: <em>“Since you’re going to the DB to execute a query bring up to 10 elements instead of just one”</em>. Effectively <strong>reducing the number of roundtrips to the database</strong>.</p>
+
+<p><code>@BatchSize</code> is a <a href="https://docs.jboss.org/hibernate/orm/5.3/javadocs/org/hibernate/annotations/BatchSize.html">Hibernate specific annotation</a> but on Eclipselink you can use <a href="http://www.eclipse.org/eclipselink/documentation/2.5/jpa/extensions/q_batch_size.htm"><code>eclipselink.batch.size</code></a> to achieve the same result. In fact, remember that as a rule of thumb  <strong>it’s better to apply this kind of configurations to the query</strong> instead of using an annotation on the entity.</p>
+
+<h2>Connect by (Best solution!)</h2>
+
+<p>If you’re using Oracle then we can solve this using a native query with <a href="https://docs.oracle.com/cd/B19306_01/server.102/b14200/queries003.htm"><code>CONNECT BY</code></a>. Turns out this clause was created specifically for <strong>selecting rows in hierarchical order</strong>.</p>
+
+<p><img class="center" src="/images/posts/2018-08-04/connectby.gif" title="’Connect by syntax’" ></p>
+
+<p>We use <code>START WITH</code> to specify the root node of the hierarchy, and then <code>CONNECT BY</code> to specify the relationship between rows. Our query would look like this:</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">SELECT</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span><span class="p">,</span> <span class="n">w</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">wd</span><span class="p">.</span><span class="n">daughters_id</span>
+</span><span class='line'><span class="k">FROM</span> <span class="n">woman</span> <span class="n">w</span>
+</span><span class='line'><span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">woman_daughters</span> <span class="n">wd</span> <span class="k">ON</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">woman_id</span>
+</span><span class='line'><span class="k">START</span> <span class="k">WITH</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="o">?</span><span class="mi">1</span>
+</span><span class='line'><span class="k">CONNECT</span> <span class="k">BY</span> <span class="k">PRIOR</span> <span class="n">wd</span><span class="p">.</span><span class="n">daughters_id</span> <span class="o">=</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>Note how in the <code>CONNECT BY</code> clause we use <code>PRIOR</code> to refer to the parent row.</p>
+
+<p>This achieves exactly what we want <strong>in just one query!</strong>. But this doesn’t come for free. By using native queries we are stepping out of the <em>JPA magical world™</em>. This means that what the query returns is not an object but a list of rows of the form:</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;table>
+</span><span class='line'>&lt;thead>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;th> Id &lt;/th>
+</span><span class='line'>&lt;th> Name   &lt;/th>
+</span><span class='line'>&lt;th> Daughters_id &lt;/th>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;/thead>
+</span><span class='line'>&lt;tbody>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 1  &lt;/td>
+</span><span class='line'>&lt;td> Wendy  &lt;/td>
+</span><span class='line'>&lt;td> 2            &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 1  &lt;/td>
+</span><span class='line'>&lt;td> Wendy  &lt;/td>
+</span><span class='line'>&lt;td> 3            &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 2  &lt;/td>
+</span><span class='line'>&lt;td> Brenda &lt;/td>
+</span><span class='line'>&lt;td> 4            &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 2  &lt;/td>
+</span><span class='line'>&lt;td> Brenda &lt;/td>
+</span><span class='line'>&lt;td> 5            &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 3  &lt;/td>
+</span><span class='line'>&lt;td> Carol  &lt;/td>
+</span><span class='line'>&lt;td> 6            &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 4  &lt;/td>
+</span><span class='line'>&lt;td> Linda  &lt;/td>
+</span><span class='line'>&lt;td> null         &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 5  &lt;/td>
+</span><span class='line'>&lt;td> Betty  &lt;/td>
+</span><span class='line'>&lt;td> null         &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 6  &lt;/td>
+</span><span class='line'>&lt;td> Lisa   &lt;/td>
+</span><span class='line'>&lt;td> null         &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;/tbody>
+</span><span class='line'>&lt;/table>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></p>
+
+<p>So we’ll have to write the code to transform this back to our domain model. To achieve this I used the <code>@SqlResultSetMapping</code> to model the native query result.</p>
+
+<xmp class="kotlin-code" theme="darcula"data-highlight-only>
+    import javax.persistence.CascadeType
+import javax.persistence.ColumnResult
+import javax.persistence.ConstructorResult
+import javax.persistence.Entity
+import javax.persistence.EntityManager
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.OneToMany
+import javax.persistence.SqlResultSetMapping
+
+//sampleStart
+data class WomanWithRef(
+    val id: Long,
+    val name: String,
+    val fieldsId: Long?
+)
+
+@Entity
+@SqlResultSetMapping(
+    name = "WomanWithRef",
+    classes = [
+        ConstructorResult (
+            targetClass = WomanWithRef::class,
+            columns = [
+                ColumnResult(name = "id", type = Long::class),
+                ColumnResult(name = "name", type = String::class),
+                ColumnResult(name = "daughters_id", type = Long::class)
+            ]
+        )
+    ]
+)
+data class Woman(
+    val name: String,
+    @OneToMany(cascade = [CascadeType.ALL]) val daughters: MutableSet<Woman> = mutableSetOf(),
+    @Id @GeneratedValue(strategy = GenerationType.AUTO) val id: Long? = null
+)
+//sampleEnd
+
+</xmp>
+
+
+<p>And we can finally write the query like this:</p>
+
+<xmp class="kotlin-code" theme="darcula"data-highlight-only>
+//sampleStart
+fun findTypeWithConnectBy(id: Long): Woman {
+    val results: List<WomanWithRef> = em.createNativeQuery(
+        """   
+            SELECT w.id, w.name, wd.daughters_id
+            FROM woman w
+            LEFT JOIN woman_daughters wd ON w.id = wd.woman_id
+            START WITH w.id = ?1
+            CONNECT BY PRIOR wd.daughters_id = w.id
+        """.trimIndent(), "TypeWithRefMapping")
+        .setParameter(1, id)
+        .resultList as List<WomanWithRef>
+    return buildGraph(results, id)
+}
+
+//sampleEnd
+fun buildGraph(queryResult: List<WomanWithRef>, id: Long): Woman {
+    val rows = queryResult { it.id == id }
+    val firstRow = rows.first()
+
+    val fields = if (rows.size == 1 && firstRow.daughterId == null) {
+        mutableSetOf()
+    } else {
+        rows.mapNotNull { it.daughterId }
+            .map { buildGraph(queryResult, it) }
+            .toMutableSet()
+    }
+
+    return Woman(firstRow.name, fields, id)
+}
+
+</xmp>
+
+
+<p>Using the <code>buildGraph</code> function to traverse the query result and reconstruct the root <code>Woman</code> object.</p>
+
+<p>If you’re using <code>HibernateCallback</code> here’s another way of writing the result mapping: <a href="https://docs.spring.io/spring/docs/2.0.x/javadoc-api/org/springframework/orm/hibernate/HibernateCallback.html">https://docs.spring.io/spring/docs/2.0.x/javadoc-api/org/springframework/orm/hibernate/HibernateCallback.html</a></p>
+
+<p><strong>If you’re not using Oracle</strong> (or some other DB that supports <code>CONNECT BY</code>) you can do recursive queries using <a href="https://en.wikipedia.org/wiki/Hierarchical_and_recursive_queries_in_SQL#Common_table_expression">Common Table Expression (CTE)</a> to achieve a similar result.</p>
+
+<h1>Is RDBMS right for you?</h1>
+
+<p>If you find yourself bending over backwards to make this graph-like queries work, or if you need a query language that will let you express something like:</p>
+
+<blockquote><p><em>Find all women whose great-grandmother is named Carol and have at least one descendant named Brenda</em></p></blockquote>
+
+<p>Then <strong>maybe you should consider your options beyond RDBMS</strong>. You can take a look at graph databases such as <a href="https://neo4j.com/">Neo4j</a> and get familiar with it’s <a href="https://neo4j.com/developer/cypher-query-language/">query language</a>. Or, if you’re not ready to make the jump but want to explore a graph API on top of your relational data you should take a look at <a href="http://www.oracle.com/technetwork/database/options/spatialandgraph/overview/index.html">Oracle Spatial and Graph</a>.</p>
+
+<hr />
+
+<p><em>Phew!</em> that was a long one… Hope you find it useful!</p>
+
+<p>If you know of a better way of doing this kind of queries I’d love to hear about it, leave me a comment down here👇 or just <a href="https://twitter.com/jivimberg">ping me on Twitter</a>.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Oracle, JPA and the Mystery of the String That Was Null]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null/"/>
+    <updated>2018-06-23T10:34:26-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null</id>
+    <content type="html"><![CDATA[<p>This is the story of how Oracle DB was messing up Kotlin’s type system, and what I did to fix it.</p>
+
+<!--more-->
+
+
+<h2>The setup</h2>
+
+<p>Let’s start by <em>setting the stage</em>, for this particular project I was working with the following stack:</p>
+
+<p><img class="center" src="/images/posts/2018-06-23/Stack.png" width="720" title="’Spring + Data + Kotlin + Oracle’" ></p>
+
+<h2>The problem</h2>
+
+<p>So I had modeled the following <strong>Entity</strong> leveraging Kotlin’s <a href="https://kotlinlang.org/docs/reference/data-classes.html">data classes</a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+import javax.persistence.Entity
+import javax.persistence.Id
+
+//sampleStart
+@Entity
+data class Person(
+    val name: String,
+    @Id val id: Long? = null
+)
+//sampleEnd
+</xmp>
+
+
+<p>Tests where passing with flying colors, but for some reason we were noticing that <strong>the <em>name</em> would sometimes come back as <code>null</code></strong> even thought it was typed as <code>String</code> and not <code>String?</code>.</p>
+
+<h2>The analysis</h2>
+
+<p>To make things more difficult there where other failures in the communication layer masking the real issue. But we finally figured out what was happening when we notice <strong>it was only reproducible under the following conditions</strong>:</p>
+
+<ul>
+<li>The property <code>name</code> was empty</li>
+<li>Not reproducible on tests</li>
+<li>Persisting to <em>OracleDB</em> (instead of embedded H2)</li>
+</ul>
+
+
+<p>That’s when I discovered:
+<blockquote><p>This is because Oracle internally changes empty string to NULL values. Oracle simply won&rsquo;t let insert an empty string.</p><footer><strong>Some guy on Stack Overflow <a href="https://stackoverflow.com/a/13278879/1499171">https://stackoverflow.com/a/13278879/1499171</a></strong></footer></blockquote></p>
+
+<p>So when the data was mapped back to my <code>Person</code> object I ended up with a <code>null</code> value for <em>name</em>. This is probably only possible because <strong>Hibernate is using reflection to set the field value</strong> in runtime, thus breaking Kotlin’s <a href="https://kotlinlang.org/docs/reference/null-safety.html">null safety</a>.</p>
+
+<h2>What I did about it</h2>
+
+<p>The funny thing about this one is that <strong>there is not much you can do about it</strong>. <em>There is no magic configuration to tell Oracle how you want to handle empty strings.</em> Yes there are some hacks like changing <code>""</code> to <code>" "</code> but I’d rather invent a random <em>name</em> for the guy than persisting a whitespace.</p>
+
+<p>The silver lining is that most of the time <strong>if you’re not allowing null values you probably don’t want an empty string either</strong>. Now YMMV but I know this was true for a person’s name.</p>
+
+<p>In fact you might even want to <strong>implement a more strict validation</strong> so people can’t be named: “💩”.</p>
+
+<h3>Testing</h3>
+
+<p>First thing I did was to try to reproduce this using a test. But since I was using <code>@DataJpaTest</code> with H2 embedded DB empty strings where empty strings an nulls where nulls. So the issue was <strong>not reproducible</strong>.</p>
+
+<p>That’s when I learned that you <strong>can tell H2 to behave like an Oracle DB</strong> using <a href="http://www.h2database.com/html/features.html">Oracle Compatibility mode</a>. To achieve this I added the following configuration to my <code>application.yml</code> under <code>test/resources</code>:</p>
+
+<pre><code>spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;Mode=Oracle
+</code></pre>
+
+<p>And annotated my test class with:</p>
+
+<pre><code class="java">@RunWith(SpringRunner::class)
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class FormRepositoryTest {…}
+</code></pre>
+
+<p>And <em>voilà</em>, now you have an <strong>H2 in memory DB dressed up as Oracle</strong>.</p>
+
+<h3>Changing the schema</h3>
+
+<p>The other thing I realized is that <strong>the schema allowed for <code>null</code> values</strong> on the <em>name</em> column. I’d been using <code>javax.persistence.schema-generation</code> as a starting point for my schema and <strong>I wrongly assumed</strong> it would take the hint from the Kotlin type system to prevent null values<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>.</p>
+
+<p>Instead I had to explicitly annotate my Entity:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+import javax.persistence.Entity
+import javax.persistence.Id
+
+//sampleStart
+@Entity
+data class Person(
+    @Column(nullable = false) val name: String,
+    @Id val id: Long? = null
+)
+//sampleEnd
+</xmp>
+
+
+<p>and manually change my existing schema</p>
+
+<pre><code>CREATE TABLE Person (
+  id NUMBER(19, 0) NOT NULL,
+  name VARCHAR2(255 CHAR) NOT NULL,
+  PRIMARY KEY (id)
+);
+</code></pre>
+
+<p>The result is that now if somebody tries to persist a Person with an empty name a <strong>big fat Exception is thrown</strong>. Or at least until I implement proper name validation.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>If I had a dollar for every time I modeled a Person…<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>It would be nice right?<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

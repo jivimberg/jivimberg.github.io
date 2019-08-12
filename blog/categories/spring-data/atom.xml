@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Spring-data | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/spring-data/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Oracle, JPA and the Mystery of the String That Was Null]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null/"/>
+    <updated>2018-06-23T10:34:26-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null</id>
+    <content type="html"><![CDATA[<p>This is the story of how Oracle DB was messing up Kotlin’s type system, and what I did to fix it.</p>
+
+<!--more-->
+
+
+<h2>The setup</h2>
+
+<p>Let’s start by <em>setting the stage</em>, for this particular project I was working with the following stack:</p>
+
+<p><img class="center" src="/images/posts/2018-06-23/Stack.png" width="720" title="’Spring + Data + Kotlin + Oracle’" ></p>
+
+<h2>The problem</h2>
+
+<p>So I had modeled the following <strong>Entity</strong> leveraging Kotlin’s <a href="https://kotlinlang.org/docs/reference/data-classes.html">data classes</a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+import javax.persistence.Entity
+import javax.persistence.Id
+
+//sampleStart
+@Entity
+data class Person(
+    val name: String,
+    @Id val id: Long? = null
+)
+//sampleEnd
+</xmp>
+
+
+<p>Tests where passing with flying colors, but for some reason we were noticing that <strong>the <em>name</em> would sometimes come back as <code>null</code></strong> even thought it was typed as <code>String</code> and not <code>String?</code>.</p>
+
+<h2>The analysis</h2>
+
+<p>To make things more difficult there where other failures in the communication layer masking the real issue. But we finally figured out what was happening when we notice <strong>it was only reproducible under the following conditions</strong>:</p>
+
+<ul>
+<li>The property <code>name</code> was empty</li>
+<li>Not reproducible on tests</li>
+<li>Persisting to <em>OracleDB</em> (instead of embedded H2)</li>
+</ul>
+
+
+<p>That’s when I discovered:
+<blockquote><p>This is because Oracle internally changes empty string to NULL values. Oracle simply won&rsquo;t let insert an empty string.</p><footer><strong>Some guy on Stack Overflow <a href="https://stackoverflow.com/a/13278879/1499171">https://stackoverflow.com/a/13278879/1499171</a></strong></footer></blockquote></p>
+
+<p>So when the data was mapped back to my <code>Person</code> object I ended up with a <code>null</code> value for <em>name</em>. This is probably only possible because <strong>Hibernate is using reflection to set the field value</strong> in runtime, thus breaking Kotlin’s <a href="https://kotlinlang.org/docs/reference/null-safety.html">null safety</a>.</p>
+
+<h2>What I did about it</h2>
+
+<p>The funny thing about this one is that <strong>there is not much you can do about it</strong>. <em>There is no magic configuration to tell Oracle how you want to handle empty strings.</em> Yes there are some hacks like changing <code>""</code> to <code>" "</code> but I’d rather invent a random <em>name</em> for the guy than persisting a whitespace.</p>
+
+<p>The silver lining is that most of the time <strong>if you’re not allowing null values you probably don’t want an empty string either</strong>. Now YMMV but I know this was true for a person’s name.</p>
+
+<p>In fact you might even want to <strong>implement a more strict validation</strong> so people can’t be named: “💩”.</p>
+
+<h3>Testing</h3>
+
+<p>First thing I did was to try to reproduce this using a test. But since I was using <code>@DataJpaTest</code> with H2 embedded DB empty strings where empty strings an nulls where nulls. So the issue was <strong>not reproducible</strong>.</p>
+
+<p>That’s when I learned that you <strong>can tell H2 to behave like an Oracle DB</strong> using <a href="http://www.h2database.com/html/features.html">Oracle Compatibility mode</a>. To achieve this I added the following configuration to my <code>application.yml</code> under <code>test/resources</code>:</p>
+
+<pre><code>spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;Mode=Oracle
+</code></pre>
+
+<p>And annotated my test class with:</p>
+
+<pre><code class="java">@RunWith(SpringRunner::class)
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class FormRepositoryTest {…}
+</code></pre>
+
+<p>And <em>voilà</em>, now you have an <strong>H2 in memory DB dressed up as Oracle</strong>.</p>
+
+<h3>Changing the schema</h3>
+
+<p>The other thing I realized is that <strong>the schema allowed for <code>null</code> values</strong> on the <em>name</em> column. I’d been using <code>javax.persistence.schema-generation</code> as a starting point for my schema and <strong>I wrongly assumed</strong> it would take the hint from the Kotlin type system to prevent null values<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>.</p>
+
+<p>Instead I had to explicitly annotate my Entity:</p>
+
+<xmp class="kotlin-code" data-highlight-only>
+import javax.persistence.Entity
+import javax.persistence.Id
+
+//sampleStart
+@Entity
+data class Person(
+    @Column(nullable = false) val name: String,
+    @Id val id: Long? = null
+)
+//sampleEnd
+</xmp>
+
+
+<p>and manually change my existing schema</p>
+
+<pre><code>CREATE TABLE Person (
+  id NUMBER(19, 0) NOT NULL,
+  name VARCHAR2(255 CHAR) NOT NULL,
+  PRIMARY KEY (id)
+);
+</code></pre>
+
+<p>The result is that now if somebody tries to persist a Person with an empty name a <strong>big fat Exception is thrown</strong>. Or at least until I implement proper name validation.</p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>If I had a dollar for every time I modeled a Person…<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+<li id="fn:2">
+<p>It would be nice right?<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Idea | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/idea/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[IntelliJ IDEA Tips]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/06/10/intellij-idea-tips/"/>
+    <updated>2018-06-10T17:11:52-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/06/10/intellij-idea-tips</id>
+    <content type="html"><![CDATA[<p>Here are a couple of <strong>IntelliJ IDEA</strong> shortcuts and configurations I wish I’d known sooner.</p>
+
+<!--more-->
+
+
+<h2>1. Changing the default font</h2>
+
+<p>The <strong>first</strong> thing I do every time I have to configure a new installation of IntelliJ is setting the theme to <em>Darcula</em>.</p>
+
+<p><img class="center" src="/images/posts/2018-06-10/Darcula.png" width="720" title="’Darcula theme’" ></p>
+
+<p>The <strong>second</strong> thing I do is <strong>changing the font</strong> to <a href="https://github.com/tonsky/FiraCode">Fira Code</a>, and <strong>enabling font ligatures.</strong> Here’s how it looks like:</p>
+
+<p><img class="center" src="/images/posts/2018-06-10/FiraCodeExample.png" width="720" title="’Fira code example’" ></p>
+
+<p>You can enable this from <code>Settings</code> > <code>Editor</code> > <code>Font</code>. Make sure to check <code>Enable font ligatures</code> if you like that <code>≠</code> symbol.</p>
+
+<p><img class="center" src="/images/posts/2018-06-10/FiraCode.png" width="720" title="’Fira code setting’" ></p>
+
+<h2>2. Auto-reformat</h2>
+
+<p>If you’re one of those developers that is obsessively hitting <code>⌥⇧⌘L</code>  to get your code reformatted on every keystroke then <strong>I’m about to change your life</strong>.</p>
+
+<p>First install the <strong><a href="https://plugins.jetbrains.com/plugin/7642-save-actions">Save actions</a></strong> plugin. Now open <code>Settings</code> > <code>Other settings</code> > <code>Save actions</code>, in there select:</p>
+
+<ul>
+<li><code>Activate save actions on save</code></li>
+<li><code>Reformat file</code></li>
+<li>And customize any other inspection and quick fix to your liking</li>
+</ul>
+
+
+<p><img class="center" src="/images/posts/2018-06-10/saveActions.png" width="720" title="’Save actions settings’" ></p>
+
+<p>Now your can just spit your <em>ugly</em> code and <strong>it’ll get perfectly formatted on each save</strong>. <em>Nice uh?</em></p>
+
+<h2>3. Extend selection</h2>
+
+<p>This is not a configuration, but one of my <strong>favorite shortcuts</strong>. I learned this from a <a href="https://youtu.be/bFcaO1pXzws?t=20m13s">talk</a> by <a href="https://twitter.com/hhariri?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor">Hadi Hariri</a>.</p>
+
+<p>What is it for? Paraphrasing the <a href="https://blog.jetbrains.com/idea/2013/05/30-days-with-intellij-idea-editor-basics/">IntelliJ blog</a>:</p>
+
+<blockquote><p>Structural selection allows you to select expressions based on grammar. By pressing <code>⌥↑</code> you keep expanding your selection (starting from the caret). And vice versa, you can shrink it by pressing <code>⌥↓</code>.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p></blockquote>
+
+<p>Here you can see it in action:</p>
+
+<p><img class="center" src="/images/posts/2018-06-10/expandSelection.gif" title="’Expand and shrink selection animation’" ></p>
+
+<p>Just mentioning this one because it was new to me at the time and nowadays I find myself using it <strong>all the time!</strong></p>
+
+<h2>Have any IntelliJ tip to share? I’d love to know about it! <strong>Post a comment</strong> down here 👇</h2>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Had to update the key mappings in the quote because they were old in the original blog post.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

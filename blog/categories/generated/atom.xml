@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Generated | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/generated/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[JaCoCo &amp; Kotlin: Coverage on Generated Code]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code/"/>
+    <updated>2018-08-12T21:26:43-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code</id>
+    <content type="html"><![CDATA[<p>JaCoCo works <em>flawlessly</em> with Kotlin. Except when it reports lines not covered on generated code 😡. Fortunately there’s a fix already in place.</p>
+
+<!--more-->
+
+
+<hr />
+
+<h3><em>Update 08/26:</em> <strong>JaCoCo 0.8.2 has now officially been released</strong> 👏 No need to use the <em>0.8.2-SNAPSHOT</em> anymore.</h3>
+
+<hr />
+
+<p><img class="center" src="/images/posts/2018-08-12/JaCoCo-before.png" width="720" title="’JaCoCo before’" ></p>
+
+<p><blockquote><p>What!? I didn’t even write those functions! There’s no way I’m writing tests for them. I’m pretty sure the compiler knows what it’s doing…</p><footer><strong>Me</strong> <cite>Every Time I Saw the Coverage Report</cite></footer></blockquote></p>
+
+<p>Good news is that this <a href="https://github.com/goodwinnk">has been fixed</a> in the latest JaCoCo release (thanks to <a href="https://github.com/goodwinnk">goodwink</a>). Bad news is that <strong>0.8.2 is not out yet</strong> 😞</p>
+
+<p>If you are like me, and can’t wait to get this working, you can <strong>use the SNAPSHOT version of JaCoCo</strong> making this changes on your <code>build.gradle</code>:</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='kotlin'><span class='line'><span class="n">repositories</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">…</span>
+</span><span class='line'>    <span class="n">maven</span><span class="p">(&amp;</span><span class="n">ldquo</span><span class="p">;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="p">=</span><span class="s">&quot;https://oss.sonatype.org/content/repositories/snapshots&quot;</span><span class="p">&gt;</span><span class="n">https</span><span class="p">:</span><span class="c1">//oss.sonatype.org/content/repositories/snapshots&lt;/a&gt;&amp;rdquo;)</span>
+</span><span class='line'><span class="p">}&lt;/</span><span class="n">p</span><span class="p">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">&lt;</span><span class="n">p</span><span class="p">&gt;</span><span class="n">jacoco</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">toolVersion</span> <span class="p">=</span> <span class="p">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="m">0.8</span><span class="p">.</span><span class="m">2</span><span class="p">-</span><span class="n">SNAPSHOT</span><span class="p">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
+</span><span class='line'><span class="p">}&lt;/</span><span class="n">p</span><span class="p">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">&lt;</span><span class="n">p</span><span class="p">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><em>(I’m using <a href="https://github.com/gradle/kotlin-dsl">Gradle with Kotlin DSL</a> in this example)</em></p>
+
+<p>Now you can finally take your Kotlin coverage to 100% without having to write tests for <code>component1()</code> and <code>component2()</code>.</p>
+
+<p><img class="center" src="/images/posts/2018-08-12/JaCoCo-after.png" width="720" title="’JaCoCo after’" ></p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Database | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/database/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Book Recomendations: Migrating to Microservices Databases]]></title>
+    <link href="http://jivimberg.github.io/blog/2018/05/25/book-recomendations-migrating-to-microservices-databases/"/>
+    <updated>2018-05-25T07:32:00-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2018/05/25/book-recomendations-migrating-to-microservices-databases</id>
+    <content type="html"><![CDATA[<p>Just finished reading <em> Migrating to microservices databases</em> by <a href="https://twitter.com/yanaga">Edson Yanaga</a>. If you can relate to the 3 nouns in the title then you’ll want to check it out.</p>
+
+<!--more-->
+
+
+<blockquote><p>Code is easy; state is hard.</p>
+
+<p>— <em>Edson Yanaga</em></p></blockquote>
+
+<p>If you are on the journey of <strong>migrating your monolith to a micro-service architecture</strong> (like every other developer this days) then, at some point, you probably found yourself staring at a whiteboard full of rectangles and hexagons thinking: <em>where does the data fit in this mess?</em></p>
+
+<p>Maybe you’ve read about the <a href="http://microservices.io/patterns/data/database-per-service.html">“Database per service”</a> pattern and now you’re wondering what your requirements are on <a href="https://en.wikipedia.org/wiki/Consistency_(database_systems)">data consistency</a>. Or somebody told you about <a href="https://martinfowler.com/bliki/CQRS.html">CQRS</a> but you don’t know it’s advantages and disadvantages.</p>
+
+<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="/images/posts/2018-05-26/MigratingToMicroservicesDatabases.png" title="’Migrating to Micro-services databases book cover’" ></a></p>
+
+<p>Edson’s book opens with a brief recap of the micro-service world. Going from <em>“Why microservices”</em> to <a href="https://en.wikipedia.org/wiki/A/B_testing">A/B testing</a> and <a href="https://martinfowler.com/bliki/CanaryRelease.html">Canary deployment</a>, the book provides a <strong>super-quick explanation of each concept without going into many details.</strong></p>
+
+<p>By contrast the second part of the book deeps dive into <strong>how to handle the data</strong> of your micro-services. <em>Chapter 3</em> explains how to do <strong>Zero downtime migration</strong> of your relational DB and which tools to use.</p>
+
+<p>On <em>Chapter 4</em> Edson introduces the different <strong>consistency models</strong> and compares <strong>CRUD Vs. CQRS</strong> (explaining also <em>Event sourcing</em>)</p>
+
+<p><strong>The last chapter is, to me, the best.</strong> <em>Chapter 5</em>  contains a recount and description of some of the different <strong>Integration Strategies</strong> we might want to consider when <em>migrating the monolith</em>. Each strategy is briefly described, and we are also provided with an assessment of <strong>applicability</strong> and section of <strong>considerations</strong> to keep in mind if using this strategy.</p>
+
+<h2>Conclusion</h2>
+
+<p>The hardest part of design is not knowing the architectural patterns or the different techniques to solve a problem, but <strong>knowing which solution is a good fit to which problem.</strong> Yanaga’s book serves as a good <strong>catalog of possible solutions</strong> to consider, when working with data on micro-services. It provides a concise analysis of each <strong>strategy</strong> and helps us avoid those  <em>”I wish I’ve thought this better before writing the code”</em> moments.</p>
+]]></content>
+  </entry>
+  
+</feed>

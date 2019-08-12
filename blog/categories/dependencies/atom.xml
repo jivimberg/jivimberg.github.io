@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Dependencies | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/dependencies/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T08:15:09-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using Docker for Development]]></title>
+    <link href="http://jivimberg.github.io/blog/2019/01/02/using-docker-for-development/"/>
+    <updated>2019-01-02T17:27:34-08:00</updated>
+    <id>http://jivimberg.github.io/blog/2019/01/02/using-docker-for-development</id>
+    <content type="html"><![CDATA[<p>Docker has transformed the way we package and ship applications. But. did you know it can transform your development setup too?</p>
+
+<!--more-->
+
+
+<p><img class="center" src="/images/posts/2019-01-02/docker-party.png" title="‘Docker party’" ></p>
+
+<p>Stop me if you&rsquo;ve heard this one before: <em>You get a new computer. As you&rsquo;re setting it up, you swear on Turing&rsquo;s grave, to only install the bare essentials on it and avoid bloatware at all costs. Fastforward a couple of months, you have the Java JDK, Go tools, multiple versions of Python and the Android SDK (for that <a href="https://play.google.com/store/apps/details?id=com.eightblocksaway.android.practicepronunciation">side-project app</a> you might someday resume developing) installed on your machine.</em></p>
+
+<h2>Docker to the rescue</h2>
+
+<p>That&rsquo;s right, you can use Docker to containerize your development environment! This way you avoid installing all that tooling on your host machine, making Docker your only dependency. <strong>Now you can develop from any computer, regardless of the OS, as long as it has Docker installed</strong>. As an extra benefit, all collaborators of the project get consistent environments, so, no more: <em>&ldquo;works on my machine&rdquo;</em>.</p>
+
+<p>I discovered this fighting to setup the env to write this blog on a new machine. After playing <em>&ldquo;google the exception&rdquo;</em> for a few hours I though: <em>there has to be a better way of doing this</em>. Using <a href="https://github.com/humburg/octopress-docker">this repo</a> as inspiration I added a <code>Dockerfile</code> to my project, that creates a Docker image containing all the dependencies needed to run <a href="http://octopress.org/">Octopress</a>. Then simply by mounting the project directory on the <code>/octopress</code> folder I can run all the <a href="http://octopress.org/docs/blogging/">usual <code>rake</code> tasks</a>, just as I&rsquo;d do locally, but on the container.</p>
+
+<p>No more messing around with language environments and dependencies. Build the image, spin up a container, and blog from anywhere.</p>
+]]></content>
+  </entry>
+  
+</feed>
