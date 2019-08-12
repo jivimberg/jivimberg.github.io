@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Web | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-07-09T00:01:20-07:00</updated>
+  <updated>2019-08-12T07:55:52-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -23,7 +23,7 @@
 <!--more-->
 
 
-<p><img class="center" src="/images/posts/2018-04-30/ketchup2.png" width="250" title="’Mr Burns ketchup catsup’" ></p>
+<p>{% img center /images/posts/2018-04-30/ketchup2.png 250 ’Mr Burns ketchup catsup’ %}</p>
 
 <p>☝That’s me every single time I try to start a <em>simple</em> web project. If you are like me, not a full-time front-end developer, you probably know what I’m talking about (if not check <strong><a href="https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f">this article</a></strong> and try not to choke on your cereal laughing).</p>
 

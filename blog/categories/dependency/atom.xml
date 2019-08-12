@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Dependency | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/dependency/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-07-09T00:01:20-07:00</updated>
+  <updated>2019-08-12T07:55:52-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -25,13 +25,13 @@
 
 <p>A couple of weeks ago I started learning Guice. This cheat-sheet is a visual guide of how the different pieces that conform the framework fit together. I created it in the hope it helps beginners (like me) build a <a href="https://en.wikipedia.org/wiki/Mental_model">mental model</a> of how the framework works.</p>
 
-<p><a href="/images/posts/2019-02-08/guice.png"><img class="center" src="/images/posts/2019-02-08/guice.png" width="800" title="‘Guice cheat-sheet’" ></a></p>
+<p><a href="/images/posts/2019-02-08/guice.png">{% img center /images/posts/2019-02-08/guice.png 800 ‘Guice cheat-sheet’ %}</a></p>
 
 <p><a href="/images/posts/2019-02-08/guice.png"><em>(click for full size image)</em></a></p>
 
 <p>If you want to learn more about how <a href="https://github.com/google/guice">Guice</a> works head to their <a href="https://github.com/google/guice/wiki">oficial documentation</a>.</p>
 
-<p><img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+<p>{% img right-fill /images/signatures/signature2.png 200 ‘My signature’ %}</p>
 ]]></content>
   </entry>
   

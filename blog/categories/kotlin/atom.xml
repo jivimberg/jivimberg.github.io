@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Kotlin | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/kotlin/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-07-09T00:01:20-07:00</updated>
+  <updated>2019-08-12T07:55:52-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -23,7 +23,7 @@
 <!--more-->
 
 
-<p><img class="center" src="/images/posts/2019-05-18/mockkAllTheThings.gif" title="‘Channels animation’" ></p>
+<p>{% img center /images/posts/2019-05-18/mockkAllTheThings.gif ‘Channels animation’ %}</p>
 
 <h2>Regular mocking</h2>
 
@@ -328,7 +328,7 @@ class ClockTest {
 
 <p>This is by no means a comprehensive guide. My intention was just to showcase same of the things that Mockk can do for you. For an in-depth introduction I recommend checking the <a href="https://blog.kotlin-academy.com/search?q=mockk"><em>“Mocking is not rocket science”</em> series in Kotlin Academy</a>.</p>
 
-<p> <img class="right-fill" src="/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
+<p> {% img right-fill /images/signatures/signature10.png 200 ‘My signature’ %}</p>
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
@@ -347,11 +347,11 @@ class ClockTest {
 <!--more-->
 
 
-<p><img class="center" src="/images/posts/2019-04-18/Channels.gif" width="600" title="‘Channels animation’" ></p>
+<p>{% img center /images/posts/2019-04-18/Channels.gif  600 ‘Channels animation’ %}</p>
 
 <h2>Rendezvous</h2>
 
-<p><img class="right" src="/images/posts/2019-04-18/baton.jpg" width="250" title="‘Passing the baton’" ></p>
+<p>{% img right /images/posts/2019-04-18/baton.jpg 250 ‘Passing the baton’ %}</p>
 
 <p>In Rendezvous channels capacity is 0. Which means the channel has no buffer at all. Elements are transferred only when sender and receiver meet. Which is literally what <em>Rendezvous</em> means. I like to picture it as a <a href="https://en.wikipedia.org/wiki/Relay_race">relay race</a> where the runners need to meet at one point to pass the baton.</p>
 
@@ -371,7 +371,7 @@ class ClockTest {
 
 <p>This is the oddball. The sender never <em>suspends</em>, but the channel offers at most one element at any given time. When a new element comes, the previous element in the channel (if any) is discarded. The receiver only gets the most recent element sent. Previous elements are lost.</p>
 
-<p><img class="right-fill" src="/images/signatures/signature7.png" width="200" title="‘My signature’" ></p>
+<p>{% img right-fill /images/signatures/signature7.png 200 ‘My signature’ %}</p>
 ]]></content>
   </entry>
   
@@ -403,7 +403,7 @@ class ClockTest {
 </ol>
 
 
-<p><img class="center" src="/images/posts/2019-03-10/consumerDiagram.png" width="800" title="‘SQS consumer diagram’" ></p>
+<p>{% img center /images/posts/2019-03-10/consumerDiagram.png 800 ‘SQS consumer diagram’ %}</p>
 
 <h3><em>fun start()</em></h3>
 
@@ -564,7 +564,7 @@ private suspend fun deleteMessage(message: Message) {
 
 <p>One of the central tenets of Kotlin coroutines is <em><a href="https://kotlinlang.org/docs/reference/coroutines/basics.html#structured-concurrency">structured concurrency</a></em>. <em>Structured concurrency</em> helps us write code that properly cleans up active coroutines in case of exceptions. If you think you’re a hardcore developer and instead launch your coroutines using <code>GlobalScope.launch { ... }</code>, then you risk leaking coroutines when something fails (check <a href="https://twitter.com/relizarov">@relizarov</a>’s <a href="https://medium.com/@elizarov/structured-concurrency-722d765aa952">article</a> to see an example of this). So, how’s are our coroutines structured?</p>
 
-<p><img class="center" src="/images/posts/2019-03-10/coroutinesScope.png" width="400" title="‘coroutines structure’" ></p>
+<p>{% img center /images/posts/2019-03-10/coroutinesScope.png 400 ‘coroutines structure’ %}</p>
 
 <p>To mark the lifecycle of our coroutines we extend our class with <code>CoroutineScope</code> and provide a context by overriding <code>corroutinesContext: CorroutineContext</code>. This is the context that’ll be used by our root coroutine, the one started by the <code>launch</code> call on the <code>start()</code> function, at the beginning of this post. Since we want our coroutines to match the lifecycle of our class we’ve added a <code>close()</code> method that clients can call to cancel all the coroutines in the consumer. If you’re using some kind of framework you might want to tie this function the lifecycle of the class in some other way.</p>
 
@@ -694,7 +694,7 @@ private suspend fun processMsg(message: Message) = withContext(Dispatchers.Defau
 
 <p>The whole premise of <a href="https://kotlinlang.org/docs/reference/coroutines/basics.html#structured-concurrency">structured concurrency</a> is to avoid leaking coroutines in case of failure. That’s why, by default, <strong>whenever a child coroutine terminates with exception its parent and siblings are cancelled too</strong>. This is a nice property, but not quite what we want in this case. We don’t want all workers to be cancelled because one worker threw an exception. That’s why we use <code>supervisorJob</code> as part of our <code>coroutineContext</code>. <a href="https://kotlinlang.org/docs/reference/coroutines/exception-handling.html#supervision-job">SupervisorJob</a> is like a regular job, with the exception that cancellation is propagated only downwards.</p>
 
-<p><img class="center" src="/images/posts/2019-03-10/Supervisor.png" width="600" title="‘Regular Job vs. Supervisor Job’" ></p>
+<p>{% img center /images/posts/2019-03-10/Supervisor.png 600 ‘Regular Job vs. Supervisor Job’ %}</p>
 
 <p>Finally, don’t forget to configure a <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html">dead letter queue</a> for those messages that can’t be processed even after multiple retries.</p>
 
@@ -702,7 +702,7 @@ private suspend fun processMsg(message: Message) = withContext(Dispatchers.Defau
 
 <p>That’s all! You can find all the code from this post in <a href="https://gist.github.com/jivimberg/b0f4f94871c6f3e7d17fae1106c28047">this gist</a>. If you have any improvement to suggest, I’d ❤️ to hear about it. Leave me a comment down there.</p>
 
-<p><img class="right-fill" src="/images/signatures/signature11.png" width="200" title="‘My signature’" ></p>
+<p>{% img right-fill /images/signatures/signature11.png 200 ‘My signature’ %}</p>
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
@@ -721,7 +721,7 @@ private suspend fun processMsg(message: Message) = withContext(Dispatchers.Defau
 <!--more-->
 
 
-<p><img class="center" src="/images/posts/2018-11-07/uuid.png" title="‘uuid key’" ></p>
+<p>{% img center /images/posts/2018-11-07/uuid.png ‘uuid key’ %}</p>
 
 <h1>Why UUIDs?</h1>
 
@@ -771,7 +771,7 @@ class Artist(
 
 <p>As mentioned we’re using <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA</a> for our Repository layer. Now there’s a small detail we have to take into account when <strong>using application provided ids with Spring Data</strong>. If you do a <code>artistRepository.save(Artist(name = "David Bowie"))</code> you might get an output like this:</p>
 
-<p><img class="center" src="/images/posts/2018-11-07/2sql.png" title="‘persist logs’" ></p>
+<p>{% img center /images/posts/2018-11-07/2sql.png ‘persist logs’ %}</p>
 
 <p>If you pay close attention to the log you’ll notice that <strong>Hibernate is actually executing 2 SQL queries</strong>: one <code>select</code> followed by one <code>insert</code>. Not quite what we were expecting.</p>
 
@@ -865,7 +865,7 @@ class Artist(
 
 <p>And now if we do a <code>save()</code> on a new entity <strong>we get one single SQL statement</strong> as we were expecting.</p>
 
-<p><img class="center" src="/images/posts/2018-11-07/1sql.png" width="600" title="‘persist logs with abstractEntity’" ></p>
+<p>{% img center /images/posts/2018-11-07/1sql.png 600 ‘persist logs with abstractEntity’ %}</p>
 
 <hr />
 
@@ -912,7 +912,7 @@ class Celeb(
 
 <p>You can find all the <strong>code samples</strong> for this post on <strong><a href="https://github.com/jivimberg/spring-data-uuid-example">this GitHub repo</a></strong>.</p>
 
-<p><img class="right-fill" src="/images/signatures/signature1.png" width="200" title="‘My signature’" ></p>
+<p>{% img right-fill /images/signatures/signature1.png 200 ‘My signature’ %}</p>
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
@@ -937,7 +937,7 @@ class Celeb(
 
 <p>The GraphQL way of doing this is through a <a href="https://github.com/facebook/graphql/blob/master/rfcs/Subscriptions.md">Subscription</a>. For the application events we’re using Kafka. So all we are trying to do is to tie those 2 things so that <strong>whenever an event pops up in Kafka all clients with an active subscription get notified</strong>.</p>
 
-<p><img class="center" src="/images/posts/2018-10-24/SubscriptionFlow.png" width="700" title="‘Subscription flow diagram’" ></p>
+<p>{% img center /images/posts/2018-10-24/SubscriptionFlow.png 700 ‘Subscription flow diagram’ %}</p>
 
 <h1>The setup</h1>
 
@@ -949,20 +949,18 @@ class Celeb(
 </ol>
 
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">type</span> <span class="n">Subscription</span> <span class="o">{</span>
-</span><span class='line'> <span class="nl">event:</span> <span class="n">EventMessage</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:java %}
+type Subscription {
+ event: EventMessage
+}
+{% endcodeblock %}</p>
 
 <ol>
 <li>On the other end I have a <a href="https://kafka.apache.org/documentation/#intro_topics">Kafka topic</a> with events that a user might be interested in. We plan to use <a href="https://github.com/reactor/reactor-kafka">Reactor Kafka</a> to <strong>consume the events through a reactive stream</strong>.</li>
 </ol>
 
 
-<p><img class="center" src="/images/posts/2018-10-24/Setup.png" width="800" title="’Setup diagram’" ></p>
+<p>{% img center /images/posts/2018-10-24/Setup.png 800 ’Setup diagram’ %}</p>
 
 <p>So the challenge is: <em>how do we connect all this pieces together?</em></p>
 
@@ -1012,7 +1010,7 @@ class SubscriptionsResolverImpl(
 
 <p>Then we are turning the receiver into a hot stream by calling <code>publish()</code>. We are doing this because <strong>we want new subscribers to only see events that happened after they subscribed to the <code>Publisher</code></strong>. And that’s exactly what <code>publish()</code> does. In fact if you pay close attention to the marble diagram of the <a href="https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html#publish--">method documentation</a> you’ll notice how <strong>it looks pretty similar to our use case flow diagram.</strong></p>
 
-<p><img class="center" src="/images/posts/2018-10-24/publish.png" width="500" title="‘Publish marble diagram’" ></p>
+<p>{% img center /images/posts/2018-10-24/publish.png 500 ‘Publish marble diagram’ %}</p>
 
 <p>We’re calling <code>autoConnect()</code> so that it connects to the upstream source as soon as the first <code>Subscriber</code> subscribes.</p>
 

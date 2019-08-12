@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2019/08/11/book-recommendations-the-advantage/</loc>
+<lastmod>2019-08-11T20:09:32-07:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2019/06/07/graphic-design-tools-for-backend-engineers/</loc>
 <lastmod>2019-06-07T22:14:38-07:00</lastmod>
 </url>
@@ -523,5 +527,32 @@
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/categories/visual/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/leadership/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/organizational/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/health/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/culture/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/business/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/posts/2/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/posts/3/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/posts/4/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/posts/5/</loc>
 </url>
 </urlset>

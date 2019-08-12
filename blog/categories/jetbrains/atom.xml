@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Jetbrains | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/jetbrains/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-07-09T00:01:20-07:00</updated>
+  <updated>2019-08-12T07:55:52-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -27,15 +27,15 @@
 
 <p>The <strong>first</strong> thing I do every time I have to configure a new installation of IntelliJ is setting the theme to <em>Darcula</em>.</p>
 
-<p><img class="center" src="/images/posts/2018-06-10/Darcula.png" width="720" title="’Darcula theme’" ></p>
+<p>{% img center /images/posts/2018-06-10/Darcula.png 720 ’Darcula theme’ %}</p>
 
 <p>The <strong>second</strong> thing I do is <strong>changing the font</strong> to <a href="https://github.com/tonsky/FiraCode">Fira Code</a>, and <strong>enabling font ligatures.</strong> Here’s how it looks like:</p>
 
-<p><img class="center" src="/images/posts/2018-06-10/FiraCodeExample.png" width="720" title="’Fira code example’" ></p>
+<p>{% img center /images/posts/2018-06-10/FiraCodeExample.png 720 ’Fira code example’ %}</p>
 
 <p>You can enable this from <code>Settings</code> > <code>Editor</code> > <code>Font</code>. Make sure to check <code>Enable font ligatures</code> if you like that <code>≠</code> symbol.</p>
 
-<p><img class="center" src="/images/posts/2018-06-10/FiraCode.png" width="720" title="’Fira code setting’" ></p>
+<p>{% img center /images/posts/2018-06-10/FiraCode.png 720 ’Fira code setting’ %}</p>
 
 <h2>2. Auto-reformat</h2>
 
@@ -50,7 +50,7 @@
 </ul>
 
 
-<p><img class="center" src="/images/posts/2018-06-10/saveActions.png" width="720" title="’Save actions settings’" ></p>
+<p>{% img center /images/posts/2018-06-10/saveActions.png 720 ’Save actions settings’ %}</p>
 
 <p>Now your can just spit your <em>ugly</em> code and <strong>it’ll get perfectly formatted on each save</strong>. <em>Nice uh?</em></p>
 
@@ -64,7 +64,7 @@
 
 <p>Here you can see it in action:</p>
 
-<p><img class="center" src="/images/posts/2018-06-10/expandSelection.gif" title="’Expand and shrink selection animation’" ></p>
+<p>{% img center /images/posts/2018-06-10/expandSelection.gif ’Expand and shrink selection animation’ %}</p>
 
 <p>Just mentioning this one because it was new to me at the time and nowadays I find myself using it <strong>all the time!</strong></p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Concurrency | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/concurrency/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-07-09T00:01:20-07:00</updated>
+  <updated>2019-08-12T07:55:52-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -23,11 +23,11 @@
 <!--more-->
 
 
-<p><img class="center" src="/images/posts/2019-04-18/Channels.gif" width="600" title="‘Channels animation’" ></p>
+<p>{% img center /images/posts/2019-04-18/Channels.gif  600 ‘Channels animation’ %}</p>
 
 <h2>Rendezvous</h2>
 
-<p><img class="right" src="/images/posts/2019-04-18/baton.jpg" width="250" title="‘Passing the baton’" ></p>
+<p>{% img right /images/posts/2019-04-18/baton.jpg 250 ‘Passing the baton’ %}</p>
 
 <p>In Rendezvous channels capacity is 0. Which means the channel has no buffer at all. Elements are transferred only when sender and receiver meet. Which is literally what <em>Rendezvous</em> means. I like to picture it as a <a href="https://en.wikipedia.org/wiki/Relay_race">relay race</a> where the runners need to meet at one point to pass the baton.</p>
 
@@ -47,7 +47,7 @@
 
 <p>This is the oddball. The sender never <em>suspends</em>, but the channel offers at most one element at any given time. When a new element comes, the previous element in the channel (if any) is discarded. The receiver only gets the most recent element sent. Previous elements are lost.</p>
 
-<p><img class="right-fill" src="/images/signatures/signature7.png" width="200" title="‘My signature’" ></p>
+<p>{% img right-fill /images/signatures/signature7.png 200 ‘My signature’ %}</p>
 ]]></content>
   </entry>
   

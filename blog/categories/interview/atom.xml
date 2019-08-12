@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Interview | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/interview/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-07-09T00:01:20-07:00</updated>
+  <updated>2019-08-12T07:55:52-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -23,7 +23,7 @@
 <!--more-->
 
 
-<p><img class="center" src="/images/posts/2019-01-23/interviewProcess3.png" width="750" title="‘The on-site routine’" ></p>
+<p>{% img center /images/posts/2019-01-23/interviewProcess3.png 750 ‘The on-site routine’ %}</p>
 
 <h1>Low-risk interviews</h1>
 
@@ -52,7 +52,7 @@
 
 <p>The day of the on-site you’ll probably have a lot on your mind, so it’s better if you just follow the same simple routine. This is what I came up with after many on-sites:</p>
 
-<p><img class="center" src="/images/posts/2019-01-23/on-siteRoutine.png" width="750" title="‘The on-site routine’" ></p>
+<p>{% img center /images/posts/2019-01-23/on-siteRoutine.png 750 ‘The on-site routine’ %}</p>
 
 <p>Mindfulness is something I’ve just recently discovered. I was introduced to it through the book <a href="https://www.amazon.com/Waking-Up-Spirituality-Without-Religion/dp/1451636024">Waking Up</a> and have started practicing meditation using the <a href="https://www.headspace.com/">Headspace</a> app. I usually did a <strong>15/20 minutes meditation before the on-site</strong> and found that it helped me relax before going in.</p>
 
@@ -102,11 +102,11 @@
 
 <p>This is how an offer might be structured:</p>
 
-<p><img class="center" src="/images/posts/2019-01-23/compensation1.png" width="750" title="‘The on-site routine’" ></p>
+<p>{% img center /images/posts/2019-01-23/compensation1.png 750 ‘The on-site routine’ %}</p>
 
 <p>To compare competing offers you&rsquo;ll want to get the yearly compensation so:</p>
 
-<p><img class="center" src="/images/posts/2019-01-23/compensation2.png" width="750" title="‘The on-site routine’" ></p>
+<p>{% img center /images/posts/2019-01-23/compensation2.png 750 ‘The on-site routine’ %}</p>
 
 <p>If you want to be thorough (and you should be), you should also consider the <strong>vesting period</strong> (4 years with a one year cliff seems the most common) as well as financial benefits such as <strong>matching 401k</strong> and <strong>employee stock option plans</strong>.</p>
 
@@ -145,7 +145,7 @@
 
 <p>Ok, I guess that’s the end of the <a href="">Interviewing Series</a>. If you made it here you deserve a cookie 🍪. Hope you found something useful, and thanks for reading!</p>
 
-<p><img class="right-fill" src="/images/signatures/signature6.png" width="200" title="‘My signature’" ></p>
+<p>{% img right-fill /images/signatures/signature6.png 200 ‘My signature’ %}</p>
 
 <p><em>Special thanks to: <a href="https://twitter.com/rcruzjo">@rcruzjo</a>, <a href="https://twitter.com/patriciob">@patriciob</a>, <a href="https://twitter.com/pgveiga">@pgveiga</a> and <a href="https://www.instagram.com/luketua">@luketua</a> for helping me edit and improve this series.</em></p>
 <div class="footnotes">
@@ -169,7 +169,7 @@
 <!--more-->
 
 
-<p><img class="center" src="/images/posts/2019-01-10/processFocus2.png" width="750" title="‘Process timeline focus part 1’" ></p>
+<p>{% img center /images/posts/2019-01-10/processFocus2.png 750 ‘Process timeline focus part 1’ %}</p>
 
 <h1>Programming questions</h1>
 
@@ -183,7 +183,7 @@
 
 <p>I’ve mentioned this book in <a href="https://jivimberg.io/blog/2019/01/06/how-to-prepare-for-the-silicon-valley-interview-part-1/">my previous article</a>. <a href="https://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/0984782850">Cracking the coding interview 6th edition</a> (CTCI from now onwards) by <em><a href="http://www.gayle.com/">Gayle Laakmann McDowell</a></em> is the <strong>holy bible of interviewing</strong>.</p>
 
-<p><a href="https://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/0984782850"><img class="center" src="/images/posts/2019-01-10/ctci-cover.jpg" width="300" title="‘Cracking the coding interview 6th edition’" ></a></p>
+<p><a href="https://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/0984782850">{% img center /images/posts/2019-01-10/ctci-cover.jpg 300 ‘Cracking the coding interview 6th edition’ %}</a></p>
 
 <p>I like it because <strong>it’s remarkably complete</strong>. It includes a description of the different interview processes at some of the big companies (Apple, Google, Facebook, etc.), it provides tips on how to set up a good resume, it covers the basics on Big O notation and <em><a href="http://www.crackingthecodinginterview.com/contents.html">much, much more…</a></em></p>
 
@@ -199,7 +199,7 @@
 
 <p>One thing I like about LeetCode is that it <em>provides tests results after submission</em> so you can figure out what you did wrong. Another useful feature is that it ranks your submission based on performance so you can see how well you did, compared to other solutions.</p>
 
-<p><img class="center" src="/images/posts/2019-01-10/leetcode-submission.png" width="750" title="‘Leetcode submission comparison’" ></p>
+<p>{% img center /images/posts/2019-01-10/leetcode-submission.png 750 ‘Leetcode submission comparison’ %}</p>
 
 <p>Where it falls short is in the solution explanation. <strong>Only a small fraction of the problems have <a href="https://leetcode.com/articles/remove-duplicates-from-sorted-list/">official articles covering the solution</a> and the different alternative implementations.</strong> For the rest of them, you’ll have to resort to the discussion forum, in the hopes that somebody there posted his/her answer, and the code is readable.</p>
 
@@ -236,7 +236,7 @@
 
 <p>The best advice I could find on how to tackle a problem is from <a href="https://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/0984782850">Cracking the coding interview</a>. Luckily, they’ve put together this amazing cheat-sheet with a step by step guide:</p>
 
-<p><a href="http://www.crackingthecodinginterview.com/resources.html"><img class="center" src="/images/posts/2019-01-10/ctci-cheatsheet-1.png" width="750" title="‘CTCI cheatsheet’" ></a></p>
+<p><a href="http://www.crackingthecodinginterview.com/resources.html">{% img center /images/posts/2019-01-10/ctci-cheatsheet-1.png 750 ‘CTCI cheatsheet’ %}</a></p>
 
 <p><em>(It’s also a great example on how  <strong>NOT</strong> to lay out an ordered list of items)</em></p>
 
@@ -283,7 +283,7 @@
 
 <p>It should look something like this:</p>
 
-<p><img class="center" src="/images/posts/2019-01-10/isPalindrome.png" width="600" title="‘Whiteboard debugging example’" ></p>
+<p>{% img center /images/posts/2019-01-10/isPalindrome.png 600 ‘Whiteboard debugging example’ %}</p>
 
 <p>For this technique to work the only trick is to <strong>suppress your instinct to jump ahead</strong>. With the interviewer watching you&rsquo;ll get anxious and will want to speed things up by skipping a <em>&ldquo;trivial loop&rdquo;</em> or just jumping to the result. DON&rsquo;T DO IT! Step through the code one line at a time just like the compiler would do. This is the only way you&rsquo;ll find 🐞 in your code.</p>
 
@@ -309,7 +309,9 @@
 
 <h1>System design questions</h1>
 
-<p><blockquote><p>The system design interview is an <b>open-ended conversation</b>. You are expected to lead it.</p><footer><strong>The System Design Primer</strong></footer></blockquote></p>
+<p>{% blockquote The System Design Primer %}
+The system design interview is an <b>open-ended conversation</b>. You are expected to lead it.
+{% endblockquote %}</p>
 
 <p>The best resource I know to prepare for the System Design interview is <a href="https://github.com/donnemartin/system-design-primer">The System Design Primer</a> (thanks <em>Pablius</em> for the tip!). Additionally, you should <strong>regularly read engineering blogs</strong> to learn how different challenges are solved in different companies. Some of the best ones are: <a href="https://medium.com/netflix-techblog">Netflix Tech Blog</a>, <a href="http://highscalability.com/">highscalability.com</a> and <a href="https://githubengineering.com/">Github engineering</a>. You can find a <a href="https://github.com/kilimchoi/engineering-blogs">full list of company blogs here</a>.</p>
 
@@ -317,7 +319,7 @@
 
 <p>That’s all I’ve got to say about practicing for the technical interview. On the third and final part of <a href="https://jivimberg.io/blog/categories/interview-series/">the series</a> I’ll talk about the on-site and what happens afterwards (a job offer or rejection). See you next time!</p>
 
-<p><img class="right-fill" src="/images/signatures/signature8.png" width="200" title="‘My signature’" ></p>
+<p>{% img right-fill /images/signatures/signature8.png 200 ‘My signature’ %}</p>
 
 <p><em>Special thanks to: <a href="https://twitter.com/rcruzjo">@rcruzjo</a>, <a href="https://twitter.com/patriciob">@patriciob</a>, <a href="https://twitter.com/pgveiga">@pgveiga</a> and <a href="https://www.instagram.com/luketua">@luketua</a> for helping me edit and improve this series.</em></p>
 <div class="footnotes">
@@ -347,13 +349,13 @@
 
 <p>This is an overview of what the whole process entails:</p>
 
-<p><img class="center" src="/images/posts/2019-01-06/processTimeline.png" width="750" title="‘Process timeline’" ></p>
+<p>{% img center /images/posts/2019-01-06/processTimeline.png 750 ‘Process timeline’ %}</p>
 
 <p>I found that dividing the whole process in parts helped me build a schedule and create deadlines for the different phases.</p>
 
 <p>This article will cover the first two phases:</p>
 
-<p><img class="center" src="/images/posts/2019-01-06/timelineFocusPart1.png" width="750" title="‘Process timeline focus part 1’" ></p>
+<p>{% img center /images/posts/2019-01-06/timelineFocusPart1.png 750 ‘Process timeline focus part 1’ %}</p>
 
 <p>But before we jump to the first phase let&rsquo;s talk about the interview timeline.</p>
 
@@ -371,7 +373,7 @@
 </ul>
 
 
-<p><img class="center" src="/images/posts/2019-01-06/trello.png" width="750" title="‘Trello screenshot’" ></p>
+<p>{% img center /images/posts/2019-01-06/trello.png 750 ‘Trello screenshot’ %}</p>
 
 <h2>Updating your resume</h2>
 
@@ -389,7 +391,7 @@ persistence layer to handle transactions more efficiently&rdquo;_</li>
 
 <p>As an example this is what my resume currently looks like:</p>
 
-<p><a href="https://drive.google.com/file/d/12FKryxTfewr_QtvQtTDMJf-NwmuySY2k/view?usp=sharing"><img class="center" src="/images/posts/2019-01-06/resume-1.png" width="500" title="‘My resume page 1’" > </a></p>
+<p><a href="https://drive.google.com/file/d/12FKryxTfewr_QtvQtTDMJf-NwmuySY2k/view?usp=sharing">{% img center /images/posts/2019-01-06/resume-1.png 500 ‘My resume page 1’ %} </a></p>
 
 <p>As with any piece of good writing <strong>it’ll take many iterations to get there</strong>. Start with a <a href="https://www.goodreads.com/quotes/288933-almost-all-good-writing-begins-with-terrible-first-efforts-you">shitty first draft</a> and share it with your friends and recruiters to get feedback and make improvements.</p>
 
@@ -403,7 +405,7 @@ persistence layer to handle transactions more efficiently&rdquo;_</li>
 
 <p>Finally, you should prepare a couple of <strong>stories</strong> for questions like: <em>&ldquo;Tell me about a time you made a mistake&rdquo;</em> or <em>&ldquo;Tell me about a time when you had conflicts interacting with one of your coworkers and how you handled it&rdquo;</em>. Following the advice in <a href="http://www.crackingthecodinginterview.com/">Cracking the Coding Interview</a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> I created a table like this:</p>
 
-<p><img class="center" src="/images/posts/2019-01-06/storiesTable.png" width="750" title="‘stories table’" ></p>
+<p>{% img center /images/posts/2019-01-06/storiesTable.png 750 ‘stories table’ %}</p>
 
 <p><strong>Pro-tip:</strong> You can create a document with all this stuff and use it as a cheat-sheet during your phone call interviews. Believe me, after a few calls you&rsquo;ll not even need it.</p>
 
@@ -421,7 +423,7 @@ persistence layer to handle transactions more efficiently&rdquo;_</li>
 
 <p>On the other hand, <strong>if you’re unsure about what you want to do next</strong> you can try this trick: Pick a hiring site and skim through the job postings. <strong>Play it by gut;</strong> when something catches your eye, try to reflect on why. <em>Was it the technology stack?</em> <em>The company values?</em> <em>Maybe the location?</em> <strong>Don’t worry if you can&rsquo;t put your finger on it, just keep going</strong>. Repeat this enough times and you’ll start getting a sense of what makes you tick.</p>
 
-<p><img class="center" src="/images/posts/2019-01-06/JobSearchFlowDiagram.png" title="‘Process timeline’" ></p>
+<p>{% img center /images/posts/2019-01-06/JobSearchFlowDiagram.png ‘Process timeline’ %}</p>
 
 <h2>Research the company and team</h2>
 
@@ -439,7 +441,7 @@ persistence layer to handle transactions more efficiently&rdquo;_</li>
 
 <p>That&rsquo;s all for today, hope you found it useful! On my next article I&rsquo;ll talk about how to prepare and practice for the coding interview. Stay tuned!</p>
 
-<p><img class="right-fill" src="/images/signatures/signature13.png" width="200" title="‘My signature’" ></p>
+<p>{% img right-fill /images/signatures/signature13.png 200 ‘My signature’ %}</p>
 
 <p><em>Special thanks to: <a href="https://twitter.com/rcruzjo">@rcruzjo</a>, <a href="https://twitter.com/patriciob">@patriciob</a>, <a href="https://twitter.com/pgveiga">@pgveiga</a> and <a href="https://www.instagram.com/luketua">@luketua</a> for helping me edit and improve this series.</em></p>
 <div class="footnotes">

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Organizational | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/organizational/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2019-08-12T07:55:52-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Book Recommendations: The Advantage]]></title>
+    <link href="http://jivimberg.github.io/blog/2019/08/11/book-recommendations-the-advantage/"/>
+    <updated>2019-08-11T20:09:32-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2019/08/11/book-recommendations-the-advantage</id>
+    <content type="html"><![CDATA[<p>Today I’m reviewing <a href="https://read.amazon.com/kp/embed?asin=B006ORWT3Y&amp;preview=newtab&amp;linkCode=kpe&amp;ref_=cm_sw_r_kb_dp_CFpuDbJQRH32R">The Advantage</a> by <a href="https://twitter.com/patricklencioni">Patrick Lencioni</a>. A book written for leaders looking to build a healthy organization.</p>
+
+<!--more-->
+
+
+
+
+<iframe type="text/html" width="336" height="550" frameborder="0" allowfullscreen style="margin: auto; display: block; max-width:100%"  src="https://read.amazon.com/kp/card?asin=B006ORWT3Y&preview=inline&linkCode=kpe&ref_=cm_sw_r_kb_dp_CFpuDbJQRH32R" ></iframe>
+
+
+<h1>Intro</h1>
+
+<p>The book opens explaining why organizational health is so important. This is <em>The Advantage</em> referenced by the title. If you&rsquo;re not sold on the idea that culture is a big business advantage by the end of the chapter, you&rsquo;re probably better off reading something else…</p>
+
+<h1>The 6 questions</h1>
+
+<p>Next, the author goes on to describe <em>The Four Disciplines Model</em> ™. In a nutshell:</p>
+
+<h2>1. Build a Cohesive Leadership Team</h2>
+
+<p>Keep the team small. Make sure every leader understands that playing for the leadership team is more important than favoring their specific departments. Foster conflict, but achieve commitment (<a href="https://en.wikipedia.org/wiki/Disagree_and_commit">&ldquo;Disagree and commit&rdquo;</a>). Once you reach commitment, keep people accountable. Finally, <strong>embrace feedback</strong>, you have to be willing to be vulnerable with your team-mates. It is ok to admit when you fuck up<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
+
+<h2>2. Create Clarity</h2>
+
+<p>Once you have a good leadership team, make sure you&rsquo;re aligned on the important topics. To achieve this, the leadership team should answer 6 questions:</p>
+
+<ol>
+<li>Why do we exist?</li>
+<li>How do we behave?</li>
+<li>What do we do?</li>
+<li>How will we succeed?</li>
+<li>What is most important, right now?</li>
+<li>Who must do what?</li>
+</ol>
+
+
+<p>The answers to these questions will become the kernel of every decision taken. So, don&rsquo;t fall for generic marketing 💩. Be really specific on what your key differentiator is, and drop everything else. If you&rsquo;re not willing to center all your business in, say, <em>customer satisfaction</em> just don&rsquo;t mention it.</p>
+
+<p>{% img center /images/posts/2019-08-11/dunder-mifflin.jpg ‘Dunder Mifflin mission statement’ %}</p>
+
+<p>Bottomline, if your answers sound like <a href="https://dundermifflinpaper.com/">Dunder Mifflin</a>&rsquo;s mission statement you&rsquo;re doing it wrong.</p>
+
+<p>As soon as there&rsquo;s agreement and commitment on these answers the leadership team needs to communicate them to the rest of the organization.</p>
+
+<h2>3. Over-communicate Clarity</h2>
+
+<p>The book advocates for 2 communication strategies:</p>
+
+<ul>
+<li>Cascading communication: <strong>the same message</strong> should be relayed down the ranks, organically. That is, don&rsquo;t just learn a script and repeat it like a robot, understand the message and pass it through face to face. Give people the chance to ask questions to clarify meaning.</li>
+<li>Over-communication: <strong>Repeat</strong> the message until it sticks. Say it again, and again, and again&hellip; Only after hearing the same thing from multiple source people will believe it.</li>
+</ul>
+
+
+<h2>4. Reinforce clarity</h2>
+
+<p>Finally, make sure <strong>all</strong> actions are aligned with the answers agreed upon by the leadership team. Actions speak louder than words. Lead by example.</p>
+
+<p>All company processes should reinforce these values. When hiring don&rsquo;t just look for technical ability, check for cultural fit first. The first few days of a new hire in the company are key to instruct new employees on the company values. Don&rsquo;t waste them with trivial stuff like setting up the email account, they&rsquo;ll have time for that. Similarly, every benefit, promotion and reward should be designed to remind employees what&rsquo;s important.</p>
+
+<h1>Meetings</h1>
+
+<p>The last part of the book focuses on how to have meaningful meetings. It proposes a framework of 4 different type of meetings:</p>
+
+<ul>
+<li><strong>Daily checkins:</strong> aka <a href="https://en.wikipedia.org/wiki/Stand-up_meeting">Standup Meetings</a>.</li>
+<li><strong>Weekly staff meetings:</strong> in which the author proposes setting no agenda beforehand and instead using the first 15 minutes to align on what topics should be discussed.</li>
+<li><strong>Adhoc topical meetings:</strong>  2 to 4 hours meetings focused on a single topic.</li>
+<li><strong>Quarterly off-site</strong> 1 or 2 days offsite to revisit and reiterate on the 6 questions.</li>
+</ul>
+
+
+<p>To be honest I didn&rsquo;t find much <em>new</em> knowledge on the meetings topic. But maybe that&rsquo;s only because I was familiar with the author&rsquo;s book on the subject: <a href="https://www.amazon.com/Death-Meeting-Leadership-Solving-Business/dp/0787968056">Death by meetings</a>.</p>
+
+<p> {% img right-fill /images/signatures/signature11.png 200 ‘My signature’ %}</p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>More on this in <a href="https://jivimberg.io/blog/2018/09/30/book-recommendations-radical-candor/">Radical Candor</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Kotlin-dsl | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/kotlin-dsl/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-07-09T00:01:20-07:00</updated>
+  <updated>2019-08-12T07:55:52-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -37,7 +37,7 @@
 
 <p>The second reason for making the transition was IDE support. Groovy is a dynamically typed language, which makes it harder for the IDE to provide accurate code completion and script validity through type checks. Kotlin being statically typed doesn’t suffer from the same problems</p>
 
-<p><img class="center" src="/images/posts/2018-09-11/kotlin-code-completion.png" title="‘Kotlin code completion’" ></p>
+<p>{% img center /images/posts/2018-09-11/kotlin-code-completion.png ‘Kotlin code completion’ %}</p>
 
 <h2>3. Interoperability</h2>
 
@@ -45,7 +45,7 @@
 
 <p>This interoperability let us <strong><a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy_2">call Groovy code from Kotlin</a> and <a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy">viceversa</a></strong>. Which effectively means that you can have <strong>a mix of both Groovy and Kotlin scripts working together in the same project</strong>. So no need to migrate all your build scripts at once, or to push stubborn <em>“Wally”</em> to learn Kotlin DSL.</p>
 
-<p><img class="center" src="/images/posts/2018-09-11/wally2.png" title="‘Wally’" ></p>
+<p>{% img center /images/posts/2018-09-11/wally2.png ‘Wally’ %}</p>
 
 <h1>The exodus</h1>
 
@@ -53,7 +53,7 @@
 
 <p>You’ll just have to <strong>push through that first moment</strong> when nothing seems to be working, your project doesn’t compile at all, and you know you’re a <code>⌘ + Z</code> away from a pristine working copy. <em>But you can&rsquo;t make an omelet without breaking a few eggs, can you?</em></p>
 
-<p><img class="center" src="/images/posts/2018-09-11/panic.png" title="‘Panic!’" ></p>
+<p>{% img center /images/posts/2018-09-11/panic.png ‘Panic!’ %}</p>
 
 <p><strong>I just wish there was some kind of automatic migration action in IntelliJ.</strong> Even if it’s a best effort that leaves you half way there, I’d greatly appreciate it. Ideally it should work just like when you paste some Java code into a Kotlin file: <code>⌘ + V</code> + ✨<em>fairy dust</em>✨ and you have your <code>build.gradle.kts</code> ready to go.</p>
 
@@ -74,7 +74,7 @@
 
 <h2>1. <em>“I can’t just copy-past things from Stack Overflow”</em></h2>
 
-<p><img class="center" src="/images/posts/2018-09-11/copy-paste.jpg" width="250" title="‘Copy paste from Stack Overflow’" ></p>
+<p>{% img center /images/posts/2018-09-11/copy-paste.jpg 250 ‘Copy paste from Stack Overflow’ %}</p>
 
 <p>This is <strong>by far the biggest drawback</strong>. In my experience most teams have one or two <em>”build tool experts”</em>. The rest of the team just use a few tasks and maybe add a dependency every now and then. This casual user might have a harder time using Kotlin DSL because <strong>copy-pasting pieces of code from the web will not work out of the box</strong>. Converting this snippets to Kotlin DSL is not rocket-science, but in some cases it might require some basic level of understanding of how Kotlin DSL works.</p>
 
