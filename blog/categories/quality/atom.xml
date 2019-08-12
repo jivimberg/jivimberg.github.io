@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Quality | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/quality/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-08-12T07:55:52-07:00</updated>
+  <updated>2019-08-12T08:00:08-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -25,7 +25,7 @@
 
 <p><strong>Well, turns out you can!</strong> Here’s how you do it…</p>
 
-<p>{% img center /images/posts/2018-07-04/captain-hook.png ’Captain githook’ %}</p>
+<p><img class="center" src="/images/posts/2018-07-04/captain-hook.png" title="’Captain githook’" ></p>
 
 <h2>What do I need?</h2>
 
@@ -232,7 +232,7 @@ tasks {
 
 <p>So what I ended up doing was moving all the <em>Pre-Push</em> logic to a regular <code>*.kt</code> file. And then simply creating a <code>*kts</code> Kotlin script that calls my class using the <a href="https://github.com/holgerbrandl/kscript#ease-prototyping-with-include"><code>//INCLUDE</code> KScript directive</a>.</p>
 
-<p>{% img center /images/posts/2018-07-04/testing-githook-kotlin.png ’Testing githook’ %}</p>
+<p><img class="center" src="/images/posts/2018-07-04/testing-githook-kotlin.png" title="’Testing githook’" ></p>
 
 <p>The downside is that I know have 2 files for my githook (a <code>*.kt</code> and a <code>*.kts</code>) but that seems <strong>a small price to pay for being able to easily test my code</strong>.</p>
 

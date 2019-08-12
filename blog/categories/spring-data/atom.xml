@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Spring-data | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/spring-data/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-08-12T07:55:52-07:00</updated>
+  <updated>2019-08-12T08:00:08-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -27,7 +27,7 @@
 
 <p>Let’s start by <em>setting the stage</em>, for this particular project I was working with the following stack:</p>
 
-<p>{% img center /images/posts/2018-06-23/Stack.png 720 ’Spring + Data + Kotlin + Oracle’ %}</p>
+<p><img class="center" src="/images/posts/2018-06-23/Stack.png" width="720" title="’Spring + Data + Kotlin + Oracle’" ></p>
 
 <h2>The problem</h2>
 
@@ -61,9 +61,7 @@ data class Person(
 
 
 <p>That’s when I discovered:
-{% blockquote Some guy on Stack Overflow <a href="https://stackoverflow.com/a/13278879/1499171">https://stackoverflow.com/a/13278879/1499171</a> %}
-This is because Oracle internally changes empty string to NULL values. Oracle simply won&rsquo;t let insert an empty string.
-{% endblockquote %}</p>
+<blockquote><p>This is because Oracle internally changes empty string to NULL values. Oracle simply won&rsquo;t let insert an empty string.</p><footer><strong>Some guy on Stack Overflow <a href="https://stackoverflow.com/a/13278879/1499171">https://stackoverflow.com/a/13278879/1499171</a></strong></footer></blockquote></p>
 
 <p>So when the data was mapped back to my <code>Person</code> object I ended up with a <code>null</code> value for <em>name</em>. This is probably only possible because <strong>Hibernate is using reflection to set the field value</strong> in runtime, thus breaking Kotlin’s <a href="https://kotlinlang.org/docs/reference/null-safety.html">null safety</a>.</p>
 

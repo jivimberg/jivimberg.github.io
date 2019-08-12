@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Data | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/data/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-08-12T07:55:52-07:00</updated>
+  <updated>2019-08-12T08:00:08-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -23,7 +23,7 @@
 <!--more-->
 
 
-<p>{% img center /images/posts/2018-11-07/uuid.png ‘uuid key’ %}</p>
+<p><img class="center" src="/images/posts/2018-11-07/uuid.png" title="‘uuid key’" ></p>
 
 <h1>Why UUIDs?</h1>
 
@@ -73,7 +73,7 @@ class Artist(
 
 <p>As mentioned we’re using <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA</a> for our Repository layer. Now there’s a small detail we have to take into account when <strong>using application provided ids with Spring Data</strong>. If you do a <code>artistRepository.save(Artist(name = "David Bowie"))</code> you might get an output like this:</p>
 
-<p>{% img center /images/posts/2018-11-07/2sql.png ‘persist logs’ %}</p>
+<p><img class="center" src="/images/posts/2018-11-07/2sql.png" title="‘persist logs’" ></p>
 
 <p>If you pay close attention to the log you’ll notice that <strong>Hibernate is actually executing 2 SQL queries</strong>: one <code>select</code> followed by one <code>insert</code>. Not quite what we were expecting.</p>
 
@@ -167,7 +167,7 @@ class Artist(
 
 <p>And now if we do a <code>save()</code> on a new entity <strong>we get one single SQL statement</strong> as we were expecting.</p>
 
-<p>{% img center /images/posts/2018-11-07/1sql.png 600 ‘persist logs with abstractEntity’ %}</p>
+<p><img class="center" src="/images/posts/2018-11-07/1sql.png" width="600" title="‘persist logs with abstractEntity’" ></p>
 
 <hr />
 
@@ -214,7 +214,7 @@ class Celeb(
 
 <p>You can find all the <strong>code samples</strong> for this post on <strong><a href="https://github.com/jivimberg/spring-data-uuid-example">this GitHub repo</a></strong>.</p>
 
-<p>{% img right-fill /images/signatures/signature1.png 200 ‘My signature’ %}</p>
+<p><img class="right-fill" src="/images/signatures/signature1.png" width="200" title="‘My signature’" ></p>
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
@@ -241,7 +241,7 @@ class Celeb(
 
 <p>Maybe you’ve read about the <a href="http://microservices.io/patterns/data/database-per-service.html">“Database per service”</a> pattern and now you’re wondering what your requirements are on <a href="https://en.wikipedia.org/wiki/Consistency_(database_systems)">data consistency</a>. Or somebody told you about <a href="https://martinfowler.com/bliki/CQRS.html">CQRS</a> but you don’t know it’s advantages and disadvantages.</p>
 
-<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/">{% img center /images/posts/2018-05-26/MigratingToMicroservicesDatabases.png ’Migrating to Micro-services databases book cover’ %}</a></p>
+<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="/images/posts/2018-05-26/MigratingToMicroservicesDatabases.png" title="’Migrating to Micro-services databases book cover’" ></a></p>
 
 <p>Edson’s book opens with a brief recap of the micro-service world. Going from <em>“Why microservices”</em> to <a href="https://en.wikipedia.org/wiki/A/B_testing">A/B testing</a> and <a href="https://martinfowler.com/bliki/CanaryRelease.html">Canary deployment</a>, the book provides a <strong>super-quick explanation of each concept without going into many details.</strong></p>
 

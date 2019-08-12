@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-08-12T07:55:52-07:00</updated>
+  <updated>2019-08-12T08:00:08-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -25,44 +25,69 @@
 
 <p>Let’s say I’m trying to build a book index. In case you haven’t touch an actual, physical, <em>dead-tree</em> book in a while here’s what an index looks like<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
 
-<p>{% img center /images/posts/2018-07-20/index.gif &lsquo;Discoverability&rsquo; %}</p>
+<p><img class="center" src="/images/posts/2018-07-20/index.gif" title="&lsquo;Discoverability&rsquo;" ></p>
 
 <p>One way of doing this would be to <strong>build a map of: <em>terms</em> to <em>a list of comma separated pages</em></strong>. This is, by no means, the best way of modeling an index, but it’ll serve our purpose of illustrating the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#merge-K-V-java.util.function.BiFunction-"><code>Map.merge</code></a> method.</p>
 
 <p>Up until yesterday I’d have written such code like this:</p>
 
-<p>{% codeblock lang:java %}
-public class Index {
-    private final Map&lt;String, String> termToPagesMap = new HashMap&lt;>();</p>
-
-<pre><code>public void addWord(String term, int page) {
-    final String newPage = String.valueOf(page);
-    final String pages = termToPagesMap.get(term);
-    if (pages == null) {
-        termToPagesMap.put(term, newPage);
-    } else {
-        termToPagesMap.put(term, pages.concat(", " + newPage));
-    }
-}
-</code></pre>
-
-<p>}</p>
-
-<p>{% endcodeblock %}</p>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Index</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">termToPagesMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&gt;();&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kt">void</span> <span class="nf">addWord</span><span class="o">(</span><span class="n">String</span> <span class="n">term</span><span class="o">,</span> <span class="kt">int</span> <span class="n">page</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">final</span> <span class="n">String</span> <span class="n">newPage</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">page</span><span class="o">);</span>
+</span><span class='line'>    <span class="kd">final</span> <span class="n">String</span> <span class="n">pages</span> <span class="o">=</span> <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">term</span><span class="o">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">pages</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">term</span><span class="o">,</span> <span class="n">newPage</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">term</span><span class="o">,</span> <span class="n">pages</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="n">newPage</span><span class="o">));</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p><strong>But today I know better!</strong> With <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#merge-K-V-java.util.function.BiFunction-"><code>Map.merge</code></a> I can achieve the same result in just 1 line:</p>
 
-<p>{% codeblock lang:java %}
-public class Index {
-    private final Map&lt;String, String> termToPagesMap = new HashMap&lt;>();</p>
-
-<pre><code>public void addWord(String term, int page) {
-        termToPagesMap.merge(term, String.valueOf(page), (pages, newPage) -&gt; pages.concat(", " + newPage));
-}
-</code></pre>
-
-<p>}
-{% endcodeblock %}</p>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Index</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">termToPagesMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&gt;();&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kt">void</span> <span class="nf">addWord</span><span class="o">(</span><span class="n">String</span> <span class="n">term</span><span class="o">,</span> <span class="kt">int</span> <span class="n">page</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">term</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">page</span><span class="o">),</span> <span class="o">(</span><span class="n">pages</span><span class="o">,</span> <span class="n">newPage</span><span class="o">)</span> <span class="o">-&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">pages</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="n">newPage</span><span class="o">));</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Basically we provide:</p>
 

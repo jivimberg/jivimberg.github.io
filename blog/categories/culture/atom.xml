@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Culture | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/culture/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-08-12T07:55:52-07:00</updated>
+  <updated>2019-08-12T08:00:08-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -56,7 +56,7 @@
 
 <p>The answers to these questions will become the kernel of every decision taken. So, don&rsquo;t fall for generic marketing 💩. Be really specific on what your key differentiator is, and drop everything else. If you&rsquo;re not willing to center all your business in, say, <em>customer satisfaction</em> just don&rsquo;t mention it.</p>
 
-<p>{% img center /images/posts/2019-08-11/dunder-mifflin.jpg ‘Dunder Mifflin mission statement’ %}</p>
+<p><img class="center" src="/images/posts/2019-08-11/dunder-mifflin.jpg" title="‘Dunder Mifflin mission statement’" ></p>
 
 <p>Bottomline, if your answers sound like <a href="https://dundermifflinpaper.com/">Dunder Mifflin</a>&rsquo;s mission statement you&rsquo;re doing it wrong.</p>
 
@@ -92,7 +92,7 @@
 
 <p>To be honest I didn&rsquo;t find much <em>new</em> knowledge on the meetings topic. But maybe that&rsquo;s only because I was familiar with the author&rsquo;s book on the subject: <a href="https://www.amazon.com/Death-Meeting-Leadership-Solving-Business/dp/0787968056">Death by meetings</a>.</p>
 
-<p> {% img right-fill /images/signatures/signature11.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature11.png" width="200" title="‘My signature’" ></p>
 <div class="footnotes">
 <hr/>
 <ol>

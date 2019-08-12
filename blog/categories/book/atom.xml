@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Book | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/book/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-08-12T07:55:52-07:00</updated>
+  <updated>2019-08-12T08:00:08-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -56,7 +56,7 @@
 
 <p>The answers to these questions will become the kernel of every decision taken. So, don&rsquo;t fall for generic marketing 💩. Be really specific on what your key differentiator is, and drop everything else. If you&rsquo;re not willing to center all your business in, say, <em>customer satisfaction</em> just don&rsquo;t mention it.</p>
 
-<p>{% img center /images/posts/2019-08-11/dunder-mifflin.jpg ‘Dunder Mifflin mission statement’ %}</p>
+<p><img class="center" src="/images/posts/2019-08-11/dunder-mifflin.jpg" title="‘Dunder Mifflin mission statement’" ></p>
 
 <p>Bottomline, if your answers sound like <a href="https://dundermifflinpaper.com/">Dunder Mifflin</a>&rsquo;s mission statement you&rsquo;re doing it wrong.</p>
 
@@ -92,7 +92,7 @@
 
 <p>To be honest I didn&rsquo;t find much <em>new</em> knowledge on the meetings topic. But maybe that&rsquo;s only because I was familiar with the author&rsquo;s book on the subject: <a href="https://www.amazon.com/Death-Meeting-Leadership-Solving-Business/dp/0787968056">Death by meetings</a>.</p>
 
-<p> {% img right-fill /images/signatures/signature11.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature11.png" width="200" title="‘My signature’" ></p>
 <div class="footnotes">
 <hr/>
 <ol>
@@ -121,11 +121,7 @@
 
 <h1>1.  Be honest. Specially when it’s hard</h1>
 
-<p>{% blockquote Kim Scott, Radical Candor %}</p>
-
-<p>“From the time we learn to speak, we’re told that if you don’t have anything nice to say, don’t say anything at all. When you become a manager, it’s your job to say it&ndash;and your obligation.”</p>
-
-<p>{% endblockquote %}</p>
+<p><blockquote><p></p></p><p><p>“From the time we learn to speak, we’re told that if you don’t have anything nice to say, don’t say anything at all. When you become a manager, it’s your job to say it&ndash;and your obligation.”</p></p><p><p></p><footer><strong>Kim Scott</strong> <cite>Radical Candor</cite></footer></blockquote></p>
 
 <p>If somebody’s work is subpar and you let it pass and pretend is good, <strong>you’re doing everybody a disservice</strong>. You’re hurting the team because either you or somebody else, will have to cover up for the guy and redo the work. And at the same time you’re setting a precedent that it is OK to deliver poor work.</p>
 
@@ -179,7 +175,7 @@
 <!--more-->
 
 
-<p><a href="https://content.pivotal.io/ebooks/migrating-to-cloud-native-application-architectures">{% img center /images/posts/2018-07-28/cover.jpg ’Migrating to Cloud-Native Application book cover’ %}</a></p>
+<p><a href="https://content.pivotal.io/ebooks/migrating-to-cloud-native-application-architectures"><img class="center" src="/images/posts/2018-07-28/cover.jpg" title="’Migrating to Cloud-Native Application book cover’" ></a></p>
 
 <p>I’m really digging this O’Reilly booklet style! They <strong>condense a good overview of a specific topic in one-sitting books</strong>. While at the same time provide enough links and resources to keep you digging for a few afternoons if interested.</p>
 
@@ -213,7 +209,7 @@
 
 <p>Maybe you’ve read about the <a href="http://microservices.io/patterns/data/database-per-service.html">“Database per service”</a> pattern and now you’re wondering what your requirements are on <a href="https://en.wikipedia.org/wiki/Consistency_(database_systems)">data consistency</a>. Or somebody told you about <a href="https://martinfowler.com/bliki/CQRS.html">CQRS</a> but you don’t know it’s advantages and disadvantages.</p>
 
-<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/">{% img center /images/posts/2018-05-26/MigratingToMicroservicesDatabases.png ’Migrating to Micro-services databases book cover’ %}</a></p>
+<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="/images/posts/2018-05-26/MigratingToMicroservicesDatabases.png" title="’Migrating to Micro-services databases book cover’" ></a></p>
 
 <p>Edson’s book opens with a brief recap of the micro-service world. Going from <em>“Why microservices”</em> to <a href="https://en.wikipedia.org/wiki/A/B_testing">A/B testing</a> and <a href="https://martinfowler.com/bliki/CanaryRelease.html">Canary deployment</a>, the book provides a <strong>super-quick explanation of each concept without going into many details.</strong></p>
 
@@ -239,7 +235,7 @@
 <!--more-->
 
 
-<p>{% img center /images/posts/2018-04-30/ketchup2.png 250 ’Mr Burns ketchup catsup’ %}</p>
+<p><img class="center" src="/images/posts/2018-04-30/ketchup2.png" width="250" title="’Mr Burns ketchup catsup’" ></p>
 
 <p>☝That’s me every single time I try to start a <em>simple</em> web project. If you are like me, not a full-time front-end developer, you probably know what I’m talking about (if not check <strong><a href="https://hackernoon.com/how-it-feels-to-learn-javascript-in-2016-d3a717dd577f">this article</a></strong> and try not to choke on your cereal laughing).</p>
 

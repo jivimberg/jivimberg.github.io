@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Aws | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-08-12T07:55:52-07:00</updated>
+  <updated>2019-08-12T08:00:08-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -41,7 +41,7 @@
 </ol>
 
 
-<p>{% img center /images/posts/2019-03-10/consumerDiagram.png 800 ‘SQS consumer diagram’ %}</p>
+<p><img class="center" src="/images/posts/2019-03-10/consumerDiagram.png" width="800" title="‘SQS consumer diagram’" ></p>
 
 <h3><em>fun start()</em></h3>
 
@@ -202,7 +202,7 @@ private suspend fun deleteMessage(message: Message) {
 
 <p>One of the central tenets of Kotlin coroutines is <em><a href="https://kotlinlang.org/docs/reference/coroutines/basics.html#structured-concurrency">structured concurrency</a></em>. <em>Structured concurrency</em> helps us write code that properly cleans up active coroutines in case of exceptions. If you think you’re a hardcore developer and instead launch your coroutines using <code>GlobalScope.launch { ... }</code>, then you risk leaking coroutines when something fails (check <a href="https://twitter.com/relizarov">@relizarov</a>’s <a href="https://medium.com/@elizarov/structured-concurrency-722d765aa952">article</a> to see an example of this). So, how’s are our coroutines structured?</p>
 
-<p>{% img center /images/posts/2019-03-10/coroutinesScope.png 400 ‘coroutines structure’ %}</p>
+<p><img class="center" src="/images/posts/2019-03-10/coroutinesScope.png" width="400" title="‘coroutines structure’" ></p>
 
 <p>To mark the lifecycle of our coroutines we extend our class with <code>CoroutineScope</code> and provide a context by overriding <code>corroutinesContext: CorroutineContext</code>. This is the context that’ll be used by our root coroutine, the one started by the <code>launch</code> call on the <code>start()</code> function, at the beginning of this post. Since we want our coroutines to match the lifecycle of our class we’ve added a <code>close()</code> method that clients can call to cancel all the coroutines in the consumer. If you’re using some kind of framework you might want to tie this function the lifecycle of the class in some other way.</p>
 
@@ -332,7 +332,7 @@ private suspend fun processMsg(message: Message) = withContext(Dispatchers.Defau
 
 <p>The whole premise of <a href="https://kotlinlang.org/docs/reference/coroutines/basics.html#structured-concurrency">structured concurrency</a> is to avoid leaking coroutines in case of failure. That’s why, by default, <strong>whenever a child coroutine terminates with exception its parent and siblings are cancelled too</strong>. This is a nice property, but not quite what we want in this case. We don’t want all workers to be cancelled because one worker threw an exception. That’s why we use <code>supervisorJob</code> as part of our <code>coroutineContext</code>. <a href="https://kotlinlang.org/docs/reference/coroutines/exception-handling.html#supervision-job">SupervisorJob</a> is like a regular job, with the exception that cancellation is propagated only downwards.</p>
 
-<p>{% img center /images/posts/2019-03-10/Supervisor.png 600 ‘Regular Job vs. Supervisor Job’ %}</p>
+<p><img class="center" src="/images/posts/2019-03-10/Supervisor.png" width="600" title="‘Regular Job vs. Supervisor Job’" ></p>
 
 <p>Finally, don’t forget to configure a <a href="https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html">dead letter queue</a> for those messages that can’t be processed even after multiple retries.</p>
 
@@ -340,7 +340,7 @@ private suspend fun processMsg(message: Message) = withContext(Dispatchers.Defau
 
 <p>That’s all! You can find all the code from this post in <a href="https://gist.github.com/jivimberg/b0f4f94871c6f3e7d17fae1106c28047">this gist</a>. If you have any improvement to suggest, I’d ❤️ to hear about it. Leave me a comment down there.</p>
 
-<p>{% img right-fill /images/signatures/signature11.png 200 ‘My signature’ %}</p>
+<p><img class="right-fill" src="/images/signatures/signature11.png" width="200" title="‘My signature’" ></p>
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
