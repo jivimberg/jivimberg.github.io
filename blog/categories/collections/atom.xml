@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Collections | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/collections/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-08-12T08:15:09-07:00</updated>
+  <updated>2019-08-19T07:39:43-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -489,7 +489,7 @@ import kotlinx.coroutines.coroutineScope
 
 //sampleStart
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
-    map { async { f(it) } }.map { it.await() }
+    map { async { f(it) } }.awaitAll()
 }
 //sampleEnd
 </xmp>
@@ -501,7 +501,9 @@ suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineSco
 
 <p>Then we have the <code>coroutineScope</code> that marks the scope in which the <code>async</code> calls are going to be executed. This way if something goes wrong and an exception is thrown, all coroutines that were launched in this scope are cancelled. That&rsquo;s the main benefit of <a href="https://kotlinlang.org/docs/reference/coroutines/composing-suspending-functions.html#structured-concurrency-with-async">structured concurrency</a>.</p>
 
-<p>Finally we have the actual execution which is divided in 2 steps: The <em>first step</em> <strong>launches a new coroutine for each function application</strong> using <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/async.html"><code>async</code></a>. This effectively wraps the type of each element with  <code>Deferred</code>. In the <em>second step</em> we wait for all function applications to complete and unwrap the result with <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/-deferred/await.html"><code>await</code></a>.<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
+<p>Finally we have the actual execution which is divided in 2 steps: The <em>first step</em> <strong>launches a new coroutine for each function application</strong> using <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/async.html"><code>async</code></a>. This effectively wraps the type of each element with  <code>Deferred</code>.</p>
+
+<p>In the <em>second step</em> we wait for all function invocations to complete and unwrap the result using <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/await-all.html"><code>awaitAll()</code></a>. This is similar to doing <code>.map { it.await() }</code> but better because <code>awaitAll()</code> will fail as soon as one of the invocations fails, instead of having to sequentially wait for the call to <code>await()</code> on the failing deferred. For example, let’s say we call <code>pmap</code> with 3 elements. <code>f(0)</code> will complete in 2 minutes, <code>f(1)</code> completes in 5 minutes and <code>f(3)</code> fails immediately. With <code>.map { it.await() }</code> we’d have to wait for <code>f(1)</code> and <code>f(2)</code> completion before seeing the <code>f(3)</code> failure, whereas <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/await-all.html"><code>awaitAll()</code></a> will know that something failed right away.</p>
 
 <h2>How to use it</h2>
 
@@ -513,7 +515,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
-    map { async { f(it) } }.map { it.await() }
+    map { async { f(it) } }.awaitAll()
 }
 //sampleStart
 fun main(args: Array<String>) = runBlocking {
@@ -539,7 +541,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.coroutineScope
 
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
-    map { async { f(it) } }.map { it.await() }
+    map { async { f(it) } }.awaitAll()
 }
 //sampleStart
 fun main(args: Array<String>) = runBlocking {
@@ -568,7 +570,7 @@ import kotlinx.coroutines.runBlocking
 
 //sampleStart
 fun <A, B> Iterable<A>.pmapOld(f: suspend (A) -> B): List<B> = runBlocking {
-    map { async { f(it) } }.map { it.await() }
+    map { async { f(it) } }.awaitAll()
 }
 //sampleEnd
 </xmp>
@@ -583,14 +585,6 @@ fun <A, B> Iterable<A>.pmapOld(f: suspend (A) -> B): List<B> = runBlocking {
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
 
-
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>Since I’m not explicitly passing any  <code>CoroutineContext</code> the <code>DefaultDispatcher</code> will be used. <a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
 
 ]]></content>
   </entry>
