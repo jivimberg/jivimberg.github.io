@@ -17,7 +17,7 @@ import kotlinx.coroutines.coroutineScope
 
 //sampleStart
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
-	map { async { f(it) } }.map { it.await() }
+	map { async { f(it) } }.awaitAll()
 }
 //sampleEnd
 </xmp>
@@ -28,7 +28,9 @@ First we have the **function signature** which is pretty similar to the actual [
 
 Then we have the `coroutineScope` that marks the scope in which the `async` calls are going to be executed. This way if something goes wrong and an exception is thrown, all coroutines that were launched in this scope are cancelled. That's the main benefit of [structured concurrency][3]. 
 
-Finally we have the actual execution which is divided in 2 steps: The _first step_ **launches a new coroutine for each function application** using [`async`][4]. This effectively wraps the type of each element with  `Deferred`. In the _second step_ we wait for all function applications to complete and unwrap the result with [`await`][5].[^1]
+Finally we have the actual execution which is divided in 2 steps: The _first step_ **launches a new coroutine for each function application** using [`async`][4]. This effectively wraps the type of each element with  `Deferred`. 
+
+In the _second step_ we wait for all function invocations to complete and unwrap the result using [`awaitAll()`][5]. This is similar to doing `.map { it.await() }` but better because `awaitAll()` will fail as soon as one of the invocations fails, instead of having to sequentially wait for the call to `await()` on the failing deferred. For example, let’s say we call `pmap` with 3 elements. `f(0)` will complete in 2 minutes, `f(1)` completes in 5 minutes and `f(3)` fails immediately. With `.map { it.await() }` we’d have to wait for `f(1)` and `f(2)` completion before seeing the `f(3)` failure, whereas [`awaitAll()`][6] will know that something failed right away.
 
 ## How to use it
 
@@ -40,7 +42,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
-	map { async { f(it) } }.map { it.await() }
+	map { async { f(it) } }.awaitAll()
 }
 //sampleStart
 fun main(args: Array<String>) = runBlocking {
@@ -49,7 +51,7 @@ fun main(args: Array<String>) = runBlocking {
 //sampleEnd
 </xmp>
 
-(Psst! I’m using [Kotlin Playground][6] so you can actually run this code!)
+(Psst! I’m using [Kotlin Playground][7] so you can actually run this code!)
 
 ## Prove that it’s running in parallel
 
@@ -65,7 +67,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.coroutineScope
 
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
-	map { async { f(it) } }.map { it.await() }
+	map { async { f(it) } }.awaitAll()
 }
 //sampleStart
 fun main(args: Array<String>) = runBlocking {
@@ -94,7 +96,7 @@ import kotlinx.coroutines.runBlocking
 
 //sampleStart
 fun <A, B> Iterable<A>.pmapOld(f: suspend (A) -> B): List<B> = runBlocking {
-    map { async { f(it) } }.map { it.await() }
+	map { async { f(it) } }.awaitAll()
 }
 //sampleEnd
 </xmp>
@@ -103,18 +105,17 @@ And the description said:
 
 > Then we have the `runBlocking` which lets us bridge the blocking code with the coroutine world. As the name suggests **this will block the current thread until everything inside the block finishes executing**. Which is exactly what we want.
 
-Fortunately [Gildor][7] commented on why [this a bad idea][8]. First, we were not using [Structured Concurrency][9], so an invocation of `f` could fail and all other executions would continue unfazed. And also we were not playing nice with the rest of the code. By using `runBlocking` we were forcefully blocking the thread until the whole execution of `pmap` finishes, instead of letting the caller decide how the execution should go.
+Fortunately [Gildor][8] commented on why [this a bad idea][9]. First, we were not using [Structured Concurrency][10], so an invocation of `f` could fail and all other executions would continue unfazed. And also we were not playing nice with the rest of the code. By using `runBlocking` we were forcefully blocking the thread until the whole execution of `pmap` finishes, instead of letting the caller decide how the execution should go.
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
-
-[^1]:	Since I’m not explicitly passing any  `CoroutineContext` the `DefaultDispatcher` will be used. 
 
 [1]:	https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html
 [2]:	https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html
 [3]:	https://kotlinlang.org/docs/reference/coroutines/composing-suspending-functions.html#structured-concurrency-with-async
 [4]:	https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/async.html
-[5]:	https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.experimental/-deferred/await.html
-[6]:	https://blog.jetbrains.com/kotlin/2018/04/embedding-kotlin-playground/
-[7]:	https://disqus.com/by/disqus_VE5B5eZQX9/
-[8]:	http://disq.us/p/1zbc6a7
-[9]:	https://medium.com/@elizarov/structured-concurrency-722d765aa952
+[5]:	https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/await-all.html
+[6]:	https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/await-all.html
+[7]:	https://blog.jetbrains.com/kotlin/2018/04/embedding-kotlin-playground/
+[8]:	https://disqus.com/by/disqus_VE5B5eZQX9/
+[9]:	http://disq.us/p/1zbc6a7
+[10]:	https://medium.com/@elizarov/structured-concurrency-722d765aa952
