@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-08-19T07:39:43-07:00</updated>
+  <updated>2019-09-30T22:53:04-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,113 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Book Recommendations: Shape Up]]></title>
+    <link href="http://jivimberg.github.io/blog/2019/09/15/book-recommendations-shape-up/"/>
+    <updated>2019-09-15T10:51:31-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2019/09/15/book-recommendations-shape-up</id>
+    <content type="html"><![CDATA[<p>I love reading about how people do creative work. Be it <a href="https://en.wikipedia.org/wiki/On_Writing:_A_Memoir_of_the_Craft">writing books</a> or <a href="http://the-witness.net/news/">designing video games</a>, there’s something magical about peaking behind the curtain and learning how the pros do their thing.</p>
+
+<p>Today I’m reviewing <a href="https://basecamp.com/shapeup">Shape Up</a>. A book about the process of writing software at Basecamp.</p>
+
+<!--more-->
+
+
+<p><a href="https://basecamp.com/shapeup"><img class="center" src="http://jivimberg.github.io/images/posts/2019-09-29/shapeUpCover.png" width="700" title="‘Book cover’" ></a></p>
+
+<p>(<em>I promise those potato shapes ☝️ will make sense by the time you finish the book</em>)</p>
+
+<h1>What is it?</h1>
+
+<p>Shape Up is a book by <a href="https://twitter.com/rjs">Ryan Singer</a> about how <a href="https://basecamp.com/about">Basecamp</a> (the company) writes <a href="https://basecamp.com/">Basecamp</a> (the app). It goes through the development process, from the moment a new idea comes up, ‘till it shows up in production as a fully implemented feature.</p>
+
+<h1>Why does it matter?</h1>
+
+<p><strong>Because it’s fresh!</strong> This is not your run-of-the-mill <em>“How we do Agile”</em> kind of book. There are no Kickoff meetings, no Kanban boards, no Daily Standup. They don’t even keep a backlog!</p>
+
+<p>Coming from the people that wrote <a href="https://basecamp.com/books/remote">Remote</a> and <a href="https://basecamp.com/books/calm">It doesn’t have to be crazy at work</a>, you know this is a company that’s not afraid to innovate.</p>
+
+<blockquote><p>Now that our process is fully formed, documented, and ready to go, we’re here to share it with all those curious enough to listen to a new way of doing things. Explorers, pioneers, those who don’t care what everyone else is doing. Those who want to work better than the rest.</p><footer><strong>Jason Fried</strong> <cite>Basecamp CEO</cite></footer></blockquote>
+
+
+<p>Also it doesn’t hurt that it is short, well-written and has real life examples and stick-figure drawings. <strong>Oh! and it’s free!! 💸</strong></p>
+
+<h1>So, what did your learn?</h1>
+
+<p>A bunch of things! I’m not going to cover everything because I wouldn’t be able to do it justice. Instead I’ll focus on a couple of nuggets of wisdom. If you find them interesting go check the book! Getting a better sense on how the whole process is structured shines a new light on the bits you’ll find described here.</p>
+
+<h2>The shape of your task</h2>
+
+<p>A big part of the book is about what happens before the developer starts coding. It is about choosing and defining what’s going to be build. This is what Basecamp calls <a href="https://basecamp.com/shapeup/1.1-chapter-02"><em>”Shaping”</em></a>, and it is so integral to their process that it’s right there on the book’s title. I found this refreshing, since more often than not books will focus on the execution of tasks instead of how to shape those tasks.</p>
+
+<p>Basecamp uses cycles of 6 weeks.  While the developers are busy delivering features, a group of senior staff members<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> work on defining what’s going to come next. If the project is approved (more on this later), a team of developers will use this spec to make it happen on the next cycle.</p>
+
+<p>They key for shaping to work, is that it has to happen at <strong>the proper level of abstraction</strong>. Go too abstract and the dev team might end up building the wrong thing. Go too concrete and they have no wiggle room to workaround a technical pitfall or revise a design choice.</p>
+
+<p><img class="right" src="http://jivimberg.github.io/images/posts/2019-09-29/knob.png" width="400" title="‘Abstraction knob’" ></p>
+
+<p>For example, they’d use fat marker drawings instead of wireframes, to avoid delving too deep into the UI design details.</p>
+
+<p>You want to end up with a good definition of the problem and a rough sketch of the solution. A clear sense of what’s part of the solution and what’s out of scope. A set of elements and how they connect to each other, but no comprehensive list of tasks or high-res mockups. Those things will come later when the dev team takes over and starts exploring the solution.</p>
+
+<p><img class="left" src="http://jivimberg.github.io/images/posts/2019-09-29/fatMarker.png" width="150" title="‘Fat marker sketch’" ></p>
+
+<p>Only once shaping is complete they’d take it to the <a href="https://basecamp.com/shapeup/2.2-chapter-08#the-betting-table"><em>“betting table“</em></a> where they decide if this is something they want to bet the next 6 weeks on. If the pitch is accepted it goes into the next cycle. If it’s not then nothing happens. There’s no centralized backlog or list of rejected ideas. If somebody considers it important, or thinks that a better solution can be found, then they’d lobby for it again 6 weeks later.</p>
+
+<h2>Evaluating new ideas and user requests</h2>
+
+<p>Every single new idea and feature request gets the same answer:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-09-29/interesting.png" width="400" title="‘Interesting! Maybe some time’" ></p>
+
+<p>Basecamp believes an idea needs to go through the shaping process detailed above before they’re ready to bet on it.  When a new request comes in, they’d first try to identify what’s the user need (which sometimes might be quite different from what the user is asking for). Then, they see how they can solve the need with the minimal amount of effort. They acknowledge there’s always a better, more complete solution if you have infinite time at your disposal. The trick here is to find a good solution that works under the given constrains (in their case, that it can be built by a small team of engineers and designers in no more than 6 weeks)</p>
+
+<p>If they’re not able to narrow down the problem and it’s not critical, they simply let it rest and wait to see if the same problem shows up again, so they can get a better sense of what they’re solving for. <strong>Grab-bags such as: “Redesign profile page” or “Refactor engine” are a no-go</strong>. The scope has to be well-defined before they’re ready to bet on an idea.</p>
+
+<h2>Showing progress</h2>
+
+<p>This is how we track progress in our industry:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-09-29/scrum.jpg" width="700" title="‘Wall full of post-it notes’" ></p>
+
+<p>The problem with this approach is that it only works if all required tasks are known up-front. And let’s face, 99% of the time that’s not the case. Most of the time you’d start coding the first task only to discover a new component needs to be added, and you’ll have to fix a few connections this change will introduce.</p>
+
+<p>The book acknowledges this exploration phase as an inherent part of the developers work. It makes the distinction between 2 different types of tasks:</p>
+
+<ul>
+<li><strong>Imagined tasks</strong>: Those thought about before you start coding</li>
+<li><strong>Discovered tasks</strong>: Those you discover as you go.</li>
+</ul>
+
+
+<p>The tool they came up with to communicate progress are <a href="https://basecamp.com/features/hill-charts">Hill Charts</a> and they look like this:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-09-29/hillChart1.png" width="600" title="‘Hill Chart’" ></p>
+
+<p>As you can tell, it’s not (only) a function of pending tasks, but also of confidence in that all remaining tasks have been discovered.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-09-29/hillChart2.png" width="600" title="‘Hill Chart 2’" ></p>
+
+<p>A good way of gaining confidence at the start of a project is to begin with the pieces that present the most uncertainty and move them to the top of the hill first. Doing this before finishing the downhill stuff reduces the chances the project will be late.</p>
+
+<hr />
+
+<p>That’s all…</p>
+
+<p>If you enjoyed the review you’ll love the book. <a href="https://basecamp.com/shapeup">Go check it out!!</a></p>
+
+<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature5.png" width="200" title="‘My signature’" ></p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Not sure why they’re not referred to as PMs in the book<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Book Recommendations: The Advantage]]></title>
@@ -2794,151 +2901,6 @@ tasks {
 <p>because you want to verify only on the changes that are going to be pushed<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 <li id="fn:2">
 <p>And it can even be subject to the same quality standards enforced by the githook itself. INCEPTION!<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Oracle, JPA and the Mystery of the String That Was Null]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null/"/>
-    <updated>2018-06-23T10:34:26-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null</id>
-    <content type="html"><![CDATA[<p>This is the story of how Oracle DB was messing up Kotlin’s type system, and what I did to fix it.</p>
-
-<!--more-->
-
-
-<h2>The setup</h2>
-
-<p>Let’s start by <em>setting the stage</em>, for this particular project I was working with the following stack:</p>
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-23/Stack.png" width="720" title="’Spring + Data + Kotlin + Oracle’" ></p>
-
-<h2>The problem</h2>
-
-<p>So I had modeled the following <strong>Entity</strong> leveraging Kotlin’s <a href="https://kotlinlang.org/docs/reference/data-classes.html">data classes</a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
-
-<xmp class="kotlin-code" data-highlight-only>
-import javax.persistence.Entity
-import javax.persistence.Id
-
-//sampleStart
-@Entity
-data class Person(
-    val name: String,
-    @Id val id: Long? = null
-)
-//sampleEnd
-</xmp>
-
-
-<p>Tests where passing with flying colors, but for some reason we were noticing that <strong>the <em>name</em> would sometimes come back as <code>null</code></strong> even thought it was typed as <code>String</code> and not <code>String?</code>.</p>
-
-<h2>The analysis</h2>
-
-<p>To make things more difficult there where other failures in the communication layer masking the real issue. But we finally figured out what was happening when we notice <strong>it was only reproducible under the following conditions</strong>:</p>
-
-<ul>
-<li>The property <code>name</code> was empty</li>
-<li>Not reproducible on tests</li>
-<li>Persisting to <em>OracleDB</em> (instead of embedded H2)</li>
-</ul>
-
-
-<p>That’s when I discovered:</p>
-
-<blockquote><p>This is because Oracle internally changes empty string to NULL values. Oracle simply won't let insert an empty string.</p><footer><strong>Some guy on Stack Overflow</strong> <cite><a href='https://stackoverflow.com/a/13278879/1499171'>stackoverflow.com/a/13278879/&hellip;</a></cite></footer></blockquote>
-
-
-<p>So when the data was mapped back to my <code>Person</code> object I ended up with a <code>null</code> value for <em>name</em>. This is probably only possible because <strong>Hibernate is using reflection to set the field value</strong> in runtime, thus breaking Kotlin’s <a href="https://kotlinlang.org/docs/reference/null-safety.html">null safety</a>.</p>
-
-<h2>What I did about it</h2>
-
-<p>The funny thing about this one is that <strong>there is not much you can do about it</strong>. <em>There is no magic configuration to tell Oracle how you want to handle empty strings.</em> Yes there are some hacks like changing <code>""</code> to <code>" "</code> but I’d rather invent a random <em>name</em> for the guy than persisting a whitespace.</p>
-
-<p>The silver lining is that most of the time <strong>if you’re not allowing null values you probably don’t want an empty string either</strong>. Now YMMV but I know this was true for a person’s name.</p>
-
-<p>In fact you might even want to <strong>implement a more strict validation</strong> so people can’t be named: “💩”.</p>
-
-<h3>Testing</h3>
-
-<p>First thing I did was to try to reproduce this using a test. But since I was using <code>@DataJpaTest</code> with H2 embedded DB empty strings where empty strings an nulls where nulls. So the issue was <strong>not reproducible</strong>.</p>
-
-<p>That’s when I learned that you <strong>can tell H2 to behave like an Oracle DB</strong> using <a href="http://www.h2database.com/html/features.html">Oracle Compatibility mode</a>. To achieve this I added the following configuration to my <code>application.yml</code> under <code>test/resources</code>:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>spring:
-</span><span class='line'>  datasource:
-</span><span class='line'>    url: jdbc:h2:mem:testdb;Mode=Oracle</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And annotated my test class with:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@RunWith</span><span class="o">(</span><span class="nl">SpringRunner:</span><span class="o">:</span><span class="n">class</span><span class="o">)</span>
-</span><span class='line'><span class="nd">@DataJpaTest</span>
-</span><span class='line'><span class="nd">@AutoConfigureTestDatabase</span><span class="o">(</span><span class="n">replace</span> <span class="o">=</span> <span class="n">AutoConfigureTestDatabase</span><span class="o">.</span><span class="na">Replace</span><span class="o">.</span><span class="na">NONE</span><span class="o">)</span>
-</span><span class='line'><span class="kd">class</span> <span class="nc">FormRepositoryTest</span> <span class="o">{</span><span class="err">…</span><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And <em>voilà</em>, now you have an <strong>H2 in memory DB dressed up as Oracle</strong>.</p>
-
-<h3>Changing the schema</h3>
-
-<p>The other thing I realized is that <strong>the schema allowed for <code>null</code> values</strong> on the <em>name</em> column. I’d been using <code>javax.persistence.schema-generation</code> as a starting point for my schema and <strong>I wrongly assumed</strong> it would take the hint from the Kotlin type system to prevent null values<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>.</p>
-
-<p>Instead I had to explicitly annotate my Entity:</p>
-
-<xmp class="kotlin-code" data-highlight-only>
-import javax.persistence.Entity
-import javax.persistence.Id
-
-//sampleStart
-@Entity
-data class Person(
-    @Column(nullable = false) val name: String,
-    @Id val id: Long? = null
-)
-//sampleEnd
-</xmp>
-
-
-<p>and manually change my existing schema</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">CREATE</span> <span class="n">TABLE</span> <span class="nf">Person</span> <span class="o">(</span>
-</span><span class='line'>  <span class="n">id</span> <span class="nf">NUMBER</span><span class="o">(</span><span class="mi">19</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span> <span class="n">NOT</span> <span class="n">NULL</span><span class="o">,</span>
-</span><span class='line'>  <span class="n">name</span> <span class="nf">VARCHAR2</span><span class="o">(</span><span class="mi">255</span> <span class="n">CHAR</span><span class="o">)</span> <span class="n">NOT</span> <span class="n">NULL</span><span class="o">,</span>
-</span><span class='line'>  <span class="n">PRIMARY</span> <span class="nf">KEY</span> <span class="o">(</span><span class="n">id</span><span class="o">)</span>
-</span><span class='line'><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The result is that now if somebody tries to persist a Person with an empty name a <strong>big fat Exception is thrown</strong>. Or at least until I implement proper name validation.</p>
-
-<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
-
-
-
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>If I had a dollar for every time I modeled a Person…<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-<li id="fn:2">
-<p>It would be nice right?<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
