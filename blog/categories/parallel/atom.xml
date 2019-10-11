@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Parallel | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/parallel/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-09-30T22:53:04-07:00</updated>
+  <updated>2019-10-11T08:23:13-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -138,6 +138,7 @@ fun main(args: Array<String>) {
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.awaitAll
 
 //sampleStart
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
@@ -165,6 +166,7 @@ suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineSco
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.awaitAll
 
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
     map { async { f(it) } }.awaitAll()
@@ -191,6 +193,7 @@ import kotlinx.coroutines.runBlocking
 import kotlin.system.measureTimeMillis
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.awaitAll
 
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
     map { async { f(it) } }.awaitAll()
@@ -219,6 +222,7 @@ fun main(args: Array<String>) = runBlocking {
 <xmp class="kotlin-code" data-highlight-only theme="darcula">
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.awaitAll
 
 //sampleStart
 fun <A, B> Iterable<A>.pmapOld(f: suspend (A) -> B): List<B> = runBlocking {
