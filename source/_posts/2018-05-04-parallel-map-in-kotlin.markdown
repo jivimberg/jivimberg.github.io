@@ -14,6 +14,7 @@ Ever wonder how to run [`map`][1]  in parallel using coroutines? This is how you
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.awaitAll
 
 //sampleStart
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
@@ -40,6 +41,7 @@ Easy! **Just like you use `map`**:
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.awaitAll
 
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
 	map { async { f(it) } }.awaitAll()
@@ -65,6 +67,7 @@ import kotlinx.coroutines.runBlocking
 import kotlin.system.measureTimeMillis
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.awaitAll
 
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
 	map { async { f(it) } }.awaitAll()
@@ -93,6 +96,7 @@ A previous iteration of this article proposed the following solution:
 <xmp class="kotlin-code" data-highlight-only theme="darcula">
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.awaitAll
 
 //sampleStart
 fun <A, B> Iterable<A>.pmapOld(f: suspend (A) -> B): List<B> = runBlocking {
