@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2019-10-11T08:23:13-07:00</updated>
+  <updated>2020-02-02T11:19:16-08:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,348 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hexagonal Architecture on Spring Boot]]></title>
+    <link href="http://jivimberg.github.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot/"/>
+    <updated>2020-02-01T20:51:59-08:00</updated>
+    <id>http://jivimberg.github.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot</id>
+    <content type="html"><![CDATA[<p>In this article, I&rsquo;ll show how to implement a Spring Boot application using Hexagonal Architecture.</p>
+
+<!--more-->
+
+
+<p>We&rsquo;ll build a Bank Account simulation with <em>deposit</em> and <em>withdraw</em> operations exposed through REST endpoints.</p>
+
+<h2>Hexagonal Architecture</h2>
+
+<p>Hexagonal architecture is an architectural style that <strong>focuses on keeping the business logic decoupled from external concerns</strong>.</p>
+
+<p>The business core interacts with other components through ports and adapters. This way, we can change the underlying technologies without having to modify the application core.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-02-01/HexagonalArchitecture-generic.png" width="700" title="‘Generic Hexagonal Architecture diagram’" ></p>
+
+<h2>Application Core</h2>
+
+<h3>Domain Model</h3>
+
+<p>Let&rsquo;s start with the domain model. Its main responsibility is to model the business rules. It also verifies that the objects are always in a valid state:</p>
+
+<figure class='code'><figcaption><span>BankAccount.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccount</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">Long</span> <span class="n">id</span><span class="o">;</span>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">BigDecimal</span> <span class="n">balance</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">if</span><span class="o">(</span><span class="n">balance</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">amount</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>              <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>          <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="n">balance</span> <span class="o">=</span> <span class="n">balance</span><span class="o">.</span><span class="na">subtract</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>          <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">balance</span> <span class="o">=</span> <span class="n">balance</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The domain model should have no dependency on any specific technology. That&rsquo;s the reason why you&rsquo;ll find no Spring annotations here.</p>
+
+<h3>Ports</h3>
+
+<p>Now it&rsquo;s time to have our business logic interact with the outside world. To achieve this, we&rsquo;ll introduce some ports.</p>
+
+<p>First, let&rsquo;s define 2 Incoming ports. <strong>These are used by external components to call our application</strong>. In this case, we&rsquo;ll have one per use case. One for <em>Deposit</em>:</p>
+
+<figure class='code'><figcaption><span>DepositUseCase.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">DepositUseCase</span> <span class="o">{</span>
+</span><span class='line'>      <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And one for <em>Withdraw</em>:</p>
+
+<figure class='code'><figcaption><span>WithdrawUseCase.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">WithdrawUseCase</span> <span class="o">{</span>
+</span><span class='line'>      <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Similarly, we&rsquo;ll also have 2 Outgoing ports. <strong>These are for our application to interact with the database</strong>. Once again, we&rsquo;ll have one per use case. One for <em>Loading</em> the Account:</p>
+
+<figure class='code'><figcaption><span>LoadAccountPort.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">LoadAccountPort</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">Optional</span><span class="o">&lt;</span><span class="n">BankAccount</span><span class="o">&gt;</span> <span class="nf">load</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And one for <em>Saving</em> it:</p>
+
+<figure class='code'><figcaption><span>SaveAccountPort.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SaveAccountPort</span> <span class="o">{</span>
+</span><span class='line'>      <span class="kt">void</span> <span class="nf">save</span><span class="o">(</span><span class="n">BankAccount</span> <span class="n">bankAccount</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3.3 Service</h3>
+
+<p>Next, we&rsquo;ll create a service to tie all the pieces together and drive the execution:</p>
+
+<figure class='code'><figcaption><span>BankAccountService.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountService</span> <span class="kd">implements</span> <span class="n">DepositUseCase</span><span class="o">,</span> <span class="n">WithdrawUseCase</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">LoadAccountPort</span> <span class="n">loadAccountPort</span><span class="o">;</span>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">SaveAccountPort</span> <span class="n">saveAccountPort</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">BankAccount</span> <span class="n">account</span> <span class="o">=</span> <span class="n">loadAccountPort</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+</span><span class='line'>                  <span class="o">.</span><span class="na">orElseThrow</span><span class="o">(</span><span class="nl">NoSuchElementException:</span><span class="o">:</span><span class="k">new</span><span class="o">);</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="n">account</span><span class="o">.</span><span class="na">deposit</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="n">saveAccountPort</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">account</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">BankAccount</span> <span class="n">account</span> <span class="o">=</span> <span class="n">loadAccountPort</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+</span><span class='line'>                  <span class="o">.</span><span class="na">orElseThrow</span><span class="o">(</span><span class="nl">NoSuchElementException:</span><span class="o">:</span><span class="k">new</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="kt">boolean</span> <span class="n">hasWithdrawn</span> <span class="o">=</span> <span class="n">account</span><span class="o">.</span><span class="na">withdraw</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="k">if</span><span class="o">(</span><span class="n">hasWithdrawn</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>              <span class="n">saveAccountPort</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">account</span><span class="o">);</span>
+</span><span class='line'>          <span class="o">}</span>
+</span><span class='line'>          <span class="k">return</span> <span class="n">hasWithdrawn</span><span class="o">;</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note how the service implements the incoming ports. On each method, it uses the <em>Load</em> port to fetch the account from the database. Then, it performs the changes on the domain model. And finally, it saves those changes through the <em>Save</em> port.</p>
+
+<h2>Adapters</h2>
+
+<h3>Web</h3>
+
+<p>To complete our application, we need to provide implementations for the defined ports. We call these adapters.</p>
+
+<p>For the incoming interactions, we&rsquo;ll create a REST controller:</p>
+
+<figure class='code'><figcaption><span>BankAccountController.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@RestController</span>
+</span><span class='line'><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/account&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountController</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">private</span> <span class="kd">final</span> <span class="n">DepositUseCase</span> <span class="n">depositUseCase</span><span class="o">;</span>
+</span><span class='line'>      <span class="kd">private</span> <span class="kd">final</span> <span class="n">WithdrawUseCase</span> <span class="n">withdrawUseCase</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/{id}/deposit/{amount}&quot;</span><span class="o">)</span>
+</span><span class='line'>      <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">depositUseCase</span><span class="o">.</span><span class="na">deposit</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/{id}/withdraw/{amount}&quot;</span><span class="o">)</span>
+</span><span class='line'>      <span class="kt">void</span> <span class="nf">withdraw</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">withdrawUseCase</span><span class="o">.</span><span class="na">withdraw</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The controller uses the defined ports to make calls to the application core.</p>
+
+<h3>Persistence</h3>
+
+<p>For the persistence layer, we&rsquo;ll use Mongo DB through Spring Data:</p>
+
+<figure class='code'><figcaption><span>SpringDataBankAccountRepository.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SpringDataBankAccountRepository</span> <span class="kd">extends</span> <span class="n">MongoRepository</span><span class="o">&lt;</span><span class="n">BankAccount</span><span class="o">,</span> <span class="n">Long</span><span class="o">&gt;</span> <span class="o">{</span> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also, we&rsquo;ll create a <em>BankAccountRepository</em> class that connects the outgoing ports with the <em>SpringDataBankAccountRepository</em>:</p>
+
+<figure class='code'><figcaption><span>BankAccountRepository.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Component</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountRepository</span> <span class="kd">implements</span> <span class="n">LoadAccountPort</span><span class="o">,</span> <span class="n">SaveAccountPort</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">SpringDataBankAccountRepository</span> <span class="n">repository</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">BankAccount</span><span class="o">&gt;</span> <span class="nf">load</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">save</span><span class="o">(</span><span class="n">BankAccount</span> <span class="n">bankAccount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">repository</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">bankAccount</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Infrastructure</h3>
+
+<p>Finally, we need to tell Spring to expose the <em>BankAccountService</em> as a bean, so it can be injected in the controller:</p>
+
+<figure class='code'><figcaption><span>BeanConfiguration.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
+</span><span class='line'><span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">basePackageClasses</span> <span class="o">=</span> <span class="n">HexagonalApplication</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BeanConfiguration</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Bean</span>
+</span><span class='line'>      <span class="n">BankAccountService</span> <span class="nf">bankAccountService</span><span class="o">(</span><span class="n">BankAccountRepository</span> <span class="n">repository</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="k">new</span> <span class="nf">BankAccountService</span><span class="o">(</span><span class="n">repository</span><span class="o">,</span> <span class="n">repository</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Defining the beans in the Adapters layer helps us maintain the infrastructure code decoupled from the business logic.</p>
+
+<h2>Conclusion</h2>
+
+<p>In this article, we&rsquo;ve seen how to implement an application using Hexagonal Architecture and Spring Boot. This is what the system ends up looking like:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-02-01/HexagonalArchitecture-impl.png" width="700" title="‘Generic Hexagonal Architecture Spring Boot example’" ></p>
+
+<p>The code for this example is <a href="https://github.com/jivimberg/hexagonal-architecture">available on Github</a>.</p>
+
+<hr />
+
+<p>This article is based on the <em>highly recommendable</em> <a href="https://leanpub.com/get-your-hands-dirty-on-clean-architecture">&ldquo;Get Your Hands Dirty on Clean Architecture</a> by <a href="https://twitter.com/TomHombergs">Tom Hombergs</a>, and <a href="https://www.baeldung.com/hexagonal-architecture-ddd-spring">this Baeldung article</a> by <a href="https://www.baeldung.com/author/lukasz-rys/">Łukasz Ryś</a>.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature9.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Book Recommendations: Shape Up]]></title>
@@ -2655,252 +2997,6 @@ fun buildGraph(queryResult: List<WomanWithRef>, id: Long): Woman {
 <ol>
 <li id="fn:1">
 <p>I’m aware that ebooks have indexes too, but who the fuck uses them when you can do a full blown text search<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Writing Githooks in Kotlin]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/07/03/writing-githooks-in-kotlin/"/>
-    <updated>2018-07-03T19:45:28-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/07/03/writing-githooks-in-kotlin</id>
-    <content type="html"><![CDATA[<p>You’re already using Kotlin on your codebase. Maybe, you’ve even migrated to the new <a href="https://github.com/gradle/kotlin-dsl">Kotlin DSL for Gradle</a>. Wouldn’t it be nice if you could use Kotlin for your <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">git hooks</a> too?</p>
-
-<!--more-->
-
-
-<p><strong>Well, turns out you can!</strong> Here’s how you do it…</p>
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-07-04/captain-hook.png" title="’Captain githook’" ></p>
-
-<h2>What do I need?</h2>
-
-<p>Git will basically run whatever script you drop on the <code>.git/hooks</code> directory. In their words:</p>
-
-<blockquote><p>To enable a hook script, put a file in the hooks subdirectory of your <code>.git</code> directory that is named appropriately (without any extension) and is executable</p></blockquote>
-
-<p>So all we need is to be able to execute Kotlin files as scripts. There is a <a href="https://github.com/Kotlin/KEEP/blob/scripting/proposals/scripting-support.md">Kotlin Scripting Support KEEP</a> under definition. But for the time being <strong>we’ll stick with the awesome <a href="https://github.com/holgerbrandl/kscript">KScript library</a> (by <a href="https://github.com/holgerbrandl">@holgerbrandl</a>)</strong> that enables Kotlin scripting on <em>*nix-based</em> systems.</p>
-
-<p>You can find the details for installing KScript <a href="https://github.com/holgerbrandl/kscript#installation">here</a>. On MacOS if you’re using <a href="https://brew.sh/">Homebrew</a> all you have to do is run: <code>brew install holgerbrandl/tap/kscript</code>.</p>
-
-<p>I’ll also be using <strong>Gradle</strong> to automatically install the githook and run the proper validation, but the same can be done with <strong>Maven</strong>.</p>
-
-<h2>The script</h2>
-
-<p>As an example I’m going to show how to do a <strong>pre-push client hook</strong> that aborts the push if <code>grade check</code> task is not successful. For this I’ve created a file named <code>Pre-Push.kts</code>:</p>
-
-<xmp class="kotlin-code" data-highlight-only>
-//sampleStart
-#!/usr/bin/env kscript
-
-import java.io.File
-
-println("${Constants.SCRIPT_LOG_TAG} Running pre-push hook")
-val hasStashed = stash()
-if (hasStashed) {
-    println("${Constants.SCRIPT_LOG_TAG} Stashing uncommited changes")
-}
-
-val checkExistStatus = runCheck()
-
-if (hasStashed) {
-    println("${Constants.SCRIPT_LOG_TAG} Unstashing your changes")
-    unstash()
-}
-
-val exitValue = when {
-    checkExistStatus != Constants.SUCCESS_EXIT_VALUE -> {
-        println("${Constants.SCRIPT_LOG_TAG} Gradle check failed. I'm sorry but you can't continue with your push")
-        Constants.ERROR_EXIT_VALUE
-    }
-    else -> {
-        println("${Constants.SCRIPT_LOG_TAG} Everything went fine. You can continue with your push")
-        Constants.SUCCESS_EXIT_VALUE
-    }
-}
-
-kotlin.system.exitProcess(exitValue)
-//sampleEnd
-
-fun runCheck(): ExitStatus {
-    println("${Constants.SCRIPT_LOG_TAG} Running gradle check")
-    return "gradle check".runCommandWithRedirect()
-}
-
-fun stash(): Boolean {
-    val stashOutput = """git stash push --include-untracked -m "stash created by pre-push hook"""".runCommand()
-    return stashOutput.firstOrNull() != Constants.NOTHING_TO_STASH_MSG
-}
-
-fun unstash() = "git stash pop -q".runCommand()
-
-fun String.runCommand(dir: File? = null): Sequence<String> =
-    ProcessBuilder("/bin/sh", "-c", this)
-        .redirectErrorStream(true)
-        .directory(dir)
-        .start()
-        .inputStream.bufferedReader().lineSequence()
-
-// Redirecting output and error to stdout
-fun String.runCommandWithRedirect(dir: File? = null): ExitStatus =
-    ProcessBuilder("/bin/sh", "-c", this)
-        .redirectErrorStream(true)
-        .inheritIO()
-        .directory(dir)
-        .start()
-        .waitFor()
-
-object Constants {
-    const val SCRIPT_LOG_TAG = "Pre-push -"
-    const val NOTHING_TO_STASH_MSG = "No local changes to save"
-    const val SUCCESS_EXIT_VALUE = 0
-    const val ERROR_EXIT_VALUE = -1
-}
-
-typealias ExitStatus = Int
-</xmp>
-
-
-<p>The first line is all the <em>magic incantation</em> we need to execute the script. By setting the shebang to <code>#!/usr/bin/env kscript</code> we get to use <code>kscript</code> as <a href="https://github.com/holgerbrandl/kscript#interpreter-usage">interpreter for the script</a>.</p>
-
-<p>The code after the import is <strong>the actual script</strong>. Those are the lines that are going to be executed as soon as somebody calls the script. <em>Just as you’d expect with any regular shell script.</em></p>
-
-<p>In a nutshell this is what the script does:</p>
-
-<ol>
-<li>Stash uncommitted changes <em>if any</em><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></li>
-<li>Run code validation (in this case <code>gradle check</code>)</li>
-<li>Unstash possible changes stashed on <em>step 1</em></li>
-<li>Log outcome and set the proper exit value</li>
-</ol>
-
-
-<p>The last step is important because <strong>if the script exits to anything other than 0 then git aborts the action</strong> (in this case the push).</p>
-
-<h3>How do I call things from a script?</h3>
-
-<p>To do anything useful on your script you’ll probably have to <strong>call some external tool</strong> at some point. In this particular case for example a mix of <em>git commands</em> and <em>gradle tasks</em>.</p>
-
-<p>There are 2 ways you can go about this:</p>
-
-<ol>
-<li>Either <strong>use a Kotlin/Java library</strong> for the task you’re trying to accomplish (in this example we could use <a href="https://www.eclipse.org/jgit/">JGit</a> and <a href="https://docs.gradle.org/current/userguide/embedding.html">Gradle tooling API</a>)</li>
-<li>Or <strong>call a shell command</strong> directly</li>
-</ol>
-
-
-<p>While the first approach is more <strong>portable</strong>, it will introduce some dependencies to your script (which fortunately <a href="https://github.com/holgerbrandl/kscript#declare-dependencies-with-deps">KScript has great support for</a>). On the other hand the second option is probably <strong>easier to implement</strong> because it’s just using the same commands we use everyday on our workflow.</p>
-
-<p>Since I can assume everybody in my team has <code>git</code> and <code>gradle</code> installed and in their path <strong>I went for option 2</strong>.</p>
-
-<h3>Running shell commands from Kotlin</h3>
-
-<p>We can run shell commands on Kotlin using <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html"><code>ProcessBuilder</code></a>, just like we’d do from Java.</p>
-
-<p>In this case I’ve created a <code>runCommandWithRedirect</code> extension function that looks like this:</p>
-
-<xmp class="kotlin-code" data-highlight-only>
-import java.io.File
-
-//sampleStart
-fun String.runCommandWithRedirect(dir: File? = null): ExitStatus {
-        return ProcessBuilder("/bin/sh", "-c", this)
-            .redirectErrorStream(true)
-            .inheritIO()
-            .directory(dir)
-            .start()
-            .waitFor()
-}
-
-//sampleEnd
-typealias ExitStatus = Int
-</xmp>
-
-
-<p>This function can be called on any String like this:</p>
-
-<p><code>"gradle check".runCommandWithRedirect()</code></p>
-
-<p>This function will:</p>
-
-<ol>
-<li>Redirect the standard and error output to the one for the current process, in our case that means <strong>the output of the command will be visible on the terminal when the githook is executed</strong>.</li>
-<li>Set the directory to the passed <code>dir</code> parameter, or use the current directory if no parameter is provided.</li>
-<li>Execute the command, wait for it to finish and return the <code>ExitStatus</code></li>
-</ol>
-
-
-<p>You can play around with the different <code>ProcessBuilder</code> options. In my script above for example I’ve another version of this function called <code>runCommand</code> that  <strong>executes the command and returns it’s output as a <code>Sequence&lt;String&gt;</code></strong>.</p>
-
-<h2>Automatic installation</h2>
-
-<p>Githooks are great to enforce code quality practices (i.e. <em>”You can’t push if your coverage is less than 80% “</em> 👮). But for the client-side githook to be execute it needs to be in the <code>.git/hooks</code> folder which is not versioned. That means that <strong>each developer on your team has to manually install the hook</strong>, which means that you are again, relying on the good memory of your teammates to enforce code quality.</p>
-
-<p>Instead we could use <a href="https://gist.github.com/KenVanHoeylandt/c7a928426bce83ffab400ab1fd99054a">this trick</a>. We can create a <em>gradle task</em> called <em>“copy”</em> that copies the githook from the <code>src</code> folder to the <code>git/hooks</code> and removes the file extension in the process.</p>
-
-<p>Then we can make the <em>“build”</em> task depend on this new <em>”copy”</em> task. <strong>The next time the developer runs <code>gradle build</code> the githook will be installed</strong>. And as a bonus:  the githook script is now versioned too! <sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></p>
-
-<p>Here’s how this would look like (using <a href="https://github.com/gradle/kotlin-dsl">Kotlin DSL for Gradle</a>)</p>
-
-<xmp class="kotlin-code" data-highlight-only>
-tasks {
-    "copy"(Copy::class) {
-        from("src/main/kotlin/io/jivimberg/githook/pre-push.kts") {
-            rename { it.removeSuffix(".kts") }
-        }
-        into(".git/hooks")
-    }
-
-    "build" {
-        dependsOn("copy")
-    }
-}
-</xmp>
-
-
-<p>⚠️ Don’t forget to do <code>chmod u+x Pre-Push.kts</code> to make the script runnable, otherwise it won’t work.</p>
-
-<h2>What about performance?</h2>
-
-<p>Kotlin is a compiled language, so at some point your script will have to be compiled. Fortunately thanks to KScript <strong>this only happens the first time you run the script</strong> and it’s only compiled again if the script changes.</p>
-
-<p>Other than that there’s the JVM startup time which adds <strong>around 200ms of overhead</strong>. Maybe in the future we’ll be able to use <a href="https://kotlinlang.org/docs/reference/native-overview.html">Kotlin Native</a> to compile to native binaries directly and avoid this overhead.</p>
-
-<p>If you want to read more about performance comparison between <em>Python</em> and <em>Kotlin</em> scripts check the <a href="https://github.com/holgerbrandl/kscript#what-are-performance-and-resource-usage-difference-between-scripting-with-kotlin-and-python">KScript documentation</a>.</p>
-
-<h2>Bonus track: testing</h2>
-
-<p>Testing Kotlin scripts turned out <strong>not to be so straight forward.</strong></p>
-
-<p><a href="https://proandroiddev.com/testing-kotlin-scripts-42bbbbe09ae5">This article</a> suggests using a <code>runCommand</code> method similar to the one described above to execute the script and check it’s outputs. Whereas <a href="https://github.com/holgerbrandl/kscript/blob/master/test/TestsReadme.md">KScript own tests</a> are written using <a href="https://github.com/lehmannro/assert.sh">assert.sh</a>.</p>
-
-<p>Neither approach convinced me. I was just looking for a way of <strong>individually test the functions</strong> in my script <strong>using the same tools I use to test the other parts of my code</strong>.</p>
-
-<p>So what I ended up doing was moving all the <em>Pre-Push</em> logic to a regular <code>*.kt</code> file. And then simply creating a <code>*kts</code> Kotlin script that calls my class using the <a href="https://github.com/holgerbrandl/kscript#ease-prototyping-with-include"><code>//INCLUDE</code> KScript directive</a>.</p>
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-07-04/testing-githook-kotlin.png" title="’Testing githook’" ></p>
-
-<p>The downside is that I know have 2 files for my githook (a <code>*.kt</code> and a <code>*.kts</code>) but that seems <strong>a small price to pay for being able to easily test my code</strong>.</p>
-
-<h1>Conclusion</h1>
-
-<p>Writing githooks in Kotlin is possible and not that hard thanks to <a href="https://github.com/holgerbrandl/kscript">KScript</a>. <strong>You’ll be glad you have tried it out</strong> the next time you have to refactor that <em>pre-push</em> hook.</p>
-
-<p>You can find an <strong>example repository</strong> containing all the code for this blogpost here: <a href="https://github.com/jivimberg/kotlin-githook">https://github.com/jivimberg/kotlin-githook</a></p>
-
-<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
-
-
-
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>because you want to verify only on the changes that are going to be pushed<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-<li id="fn:2">
-<p>And it can even be subject to the same quality standards enforced by the githook itself. INCEPTION!<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
