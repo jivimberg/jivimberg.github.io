@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2020-02-02T11:19:16-08:00</updated>
+  <updated>2020-02-02T20:28:07-08:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -91,7 +91,7 @@
 
 <p>Now it&rsquo;s time to have our business logic interact with the outside world. To achieve this, we&rsquo;ll introduce some ports.</p>
 
-<p>First, let&rsquo;s define 2 Incoming ports. <strong>These are used by external components to call our application</strong>. In this case, we&rsquo;ll have one per use case. One for <em>Deposit</em>:</p>
+<p>First, let&rsquo;s define 2 incoming ports. <strong>These are used by external components to call our application</strong>. In this case, we&rsquo;ll have one per use case. One for <em>Deposit</em>:</p>
 
 <figure class='code'><figcaption><span>DepositUseCase.java </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -115,7 +115,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Similarly, we&rsquo;ll also have 2 Outgoing ports. <strong>These are for our application to interact with the database</strong>. Once again, we&rsquo;ll have one per use case. One for <em>Loading</em> the Account:</p>
+<p>Similarly, we&rsquo;ll also have 2 outgoing ports. <strong>These are for our application to interact with the database</strong>. Once again, we&rsquo;ll have one per use case. One for <em>Loading</em> the Account:</p>
 
 <figure class='code'><figcaption><span>LoadAccountPort.java </span></figcaption>
 <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -139,7 +139,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>3.3 Service</h3>
+<h3>Service</h3>
 
 <p>Next, we&rsquo;ll create a service to tie all the pieces together and drive the execution:</p>
 
