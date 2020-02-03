@@ -55,7 +55,7 @@ The domain model should have no dependency on any specific technology. That's th
 
 Now it's time to have our business logic interact with the outside world. To achieve this, we'll introduce some ports.
 
-First, let's define 2 Incoming ports. **These are used by external components to call our application**. In this case, we'll have one per use case. One for _Deposit_:
+First, let's define 2 incoming ports. **These are used by external components to call our application**. In this case, we'll have one per use case. One for _Deposit_:
 
 {% codeblock lang:java DepositUseCase.java %}
 public interface DepositUseCase {
@@ -71,7 +71,7 @@ public interface WithdrawUseCase {
 }
 {% endcodeblock %}
 
-Similarly, we'll also have 2 Outgoing ports. **These are for our application to interact with the database**. Once again, we'll have one per use case. One for _Loading_ the Account:
+Similarly, we'll also have 2 outgoing ports. **These are for our application to interact with the database**. Once again, we'll have one per use case. One for _Loading_ the Account:
 
 {% codeblock lang:java LoadAccountPort.java %}
 public interface LoadAccountPort {
@@ -87,7 +87,7 @@ public interface SaveAccountPort {
 }
 {% endcodeblock %}
 
-### 3.3 Service
+### Service
 Next, we'll create a service to tie all the pieces together and drive the execution:
 
 {% codeblock lang:java BankAccountService.java %}
