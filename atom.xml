@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2020-02-02T20:28:07-08:00</updated>
+  <updated>2020-04-26T21:45:42-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,157 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to Craft Effective Presentations]]></title>
+    <link href="http://jivimberg.github.io/blog/2020/03/13/how-to-create-effective-presentations/"/>
+    <updated>2020-03-13T15:17:29-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2020/03/13/how-to-create-effective-presentations</id>
+    <content type="html"><![CDATA[<p>This is a compilation of all the things I learned for creating effective presentations.</p>
+
+<!--more-->
+
+
+<h2>The golden rule: <strong>NO BULLET POINTS </strong></h2>
+
+<p>If you can only take one thing from this article let it be this: <em>DO NOT use bullet-points on your slides</em>.</p>
+
+<p>There&rsquo;s a simple reason for this: Humans brains are really dumb. They can’t process spoken and written words at the same time. <strong>People will either read the slides or listen to you, but not both.</strong> And since you’re presenting my guess is you want them paying attention to you. So drop all that extra text so people can focus on what you’re saying.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/badExample.png" width="600" title="‘Slide with a lot of text’" ></p>
+
+<p>The first step to a bullet-free slide is breaking your content into smaller chunks. <strong>Each slide should focus on a single idea that can be expressed in one or two sentences</strong> (no more than 20 words). Less is more. The rest of the content, the things that you’d normally put in the bullet points, can be spoken. There’s no limit to the number of slides you can use, just make sure you’re only adding the key points on text and speaking the rest.</p>
+
+<p>You&rsquo;ll soon find out that doing this kind of breakdown is hard. Condensing each topic to a single line takes time. But I promise you, once you do this you’ll be halfway through to creating a great presentation.</p>
+
+<p>Now that you have your central ideas, let&rsquo;s talk about styling. The main goal is to keep it simple so viewers are not distracted. Choose a sans-serif typeface (the ones without the ornaments) and make your text HUGE.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/serif-vs-sans-serif.jpg" width="400" title="‘Example of serif and sans serif fonts’" ></p>
+
+<p>Big letters are important because everybody in the room should be able to read it, and it’ll help you stay under the 20 words limit. Pick contrasting colors for text and background. You can use <a href="https://colorhunt.co/">Color Hunt</a> to find a cool palette for your deck.  Finally, place the text in the upper left corner. You can add an image or graph if needed, but don’t put something just because you have the space. Make sure it’s meaningful. Keep it short, keep it simple.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/bigText.png" width="600" title="‘Big text is easier to read’" ></p>
+
+<p style='text-align: center;'>
+(Yes, this is the whole slide)
+</p>
+
+
+<h2>The handout</h2>
+
+<p>You might be worried that, by removing text from the slides, people won’t get the full context when going through your deck after the presentation. The solution is to create 2 different artifacts: a presentation and a handout.</p>
+
+<p>All you have to do is move the text from the slides to the presenter notes.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/presenterNotes.png" width="600" title="‘Handout example’" ></p>
+
+<p>Then, to email your presentation just select <em>Print settings and preview</em> and choose <em>1 slide with notes</em>. Now you have a PDF handout to send after the presentation that includes all the context needed to understand each slide. As a bonus you also get notes you can use while presenting.</p>
+
+<h2>Guiding the audience focus</h2>
+
+<p>Now that we have trimmed the fat from the content it’s time to deal with other sources of distraction. Every single thing not contributing to the message is noise and should go.</p>
+
+<p>First, avoid cluttered templates. They might look cute on page but they can distract the audience.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/clutteredTemplates.png" width="600" title="‘Example of a slide with a cluttered template’" ></p>
+
+<p>Also, get rid of all the cheese transitions. The only animations you should need is <em>appear </em>and<em> disappear</em> to reveal content as you talk. You can also color and opacity on text or images to guide the audience attention. To achieve this you simply duplicate the slide and apply the appropriate changes.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/focus.gif" width="600" title="‘Example of using color and opacity to guide audience focus’" ></p>
+
+<p>The only exception to the &ldquo;no animation rule&rdquo; is if your animation is needed to express the slide’s idea. For example, you might animate a pointer to represent the order of execution on a snippet of code, as I did here:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/animationExample2.gif" title="‘Example of a valid use of animation in a slide’" ></p>
+
+<p style='text-align: center;'>
+(I used Magic Move on  Keynote to create this)
+</p>
+
+
+<p>The same rule applies to all other elements of your slide: layout, image size and placement, color, etc. People will infer meaning from all these things, so make sure they’re reinforcing your message and not working against it. For example if you’re talking about three things that happened one after the other align them horizontally and sort them left to right. If you mention a big number make the text big. If you’re comparing two similar things make them the same size and place them side by side. Note how in the “elements of design” slide shown above, the text placement emphasizes the words’ meaning.</p>
+
+<p>Finally, if you have gifs on you presentation, <strong>make sure to stop them after one or two repetitions</strong>. Anything, blinking or moving on the screen is competing with you for attention. <a href="https://davidwalsh.name/prevent-gif-loop">https://davidwalsh.name/prevent-gif-loop</a></p>
+
+<h2>Start with a hook</h2>
+
+<blockquote><p>Humans think in stories, and we try to make sense of the world by telling stories. <em>Yuval Noah Harari</em></p></blockquote>
+
+<p>You know how most presentations start with: &ldquo;My name is Juan and I’m professional turtle trainer, today I’ll talk about depression in turtles“? People already showed up, so they either know who you are or care about the topic you’ll be presenting about, or both. So instead of opening with a boring introduction try using a hook.</p>
+
+<p>Review Start your presentation with a story, a joke or an anecdote related to the topic. Grab the attention of the audience from your first line. Once they’re  hooked in and paying attention you can introduce yourself. You see this all the time on TED talks like this one:</p>
+
+<div style="max-width:600px;margin:30px auto"><div style="position:relative;height:0;padding-bottom:56.25%"><iframe src="https://embed.ted.com/talks/shawn_achor_the_happy_secret_to_better_work" width="854" height="480" style="position:absolute;left:0;top:0;width:100%;height:100%" frameborder="0" scrolling="no" allowfullscreen></iframe></div></div>
+
+
+<h2>Repeat, Repeat, Repeat</h2>
+
+<p>If you want your message to stick <strong>say it multiple times</strong>. The trick to avoid boring your audience is to say the same thing in many different ways. Paraphrase, use an image, present an example or a counter-example, make a rethorical question, use a conversational style… Get creative!</p>
+
+<p>This works because different people prefer different styles of communication. Some of us are more visually inclined, some like specific examples over generalizations, etc. Also, by repeating the mains ideas you’re signaling the audience what’s important. You’re separating the wheat from the chaff. Last but not least, it also works because people get distracted and they might have missed the point the first time.</p>
+
+<p>When possible try to evoke some emotion. As the <a href="https://en.wikipedia.org/wiki/Head_First_(book_series)">Head First Series</a> taught us: <em>“brains are tuned to pay attention to the biochemistry of emotions”</em>. Share a personal anecdote, make them laugh with a joke or pique their curiosity with a controversial claim and you can guarantee they’ll be paying attention.</p>
+
+<h2>The slides</h2>
+
+<p>Let&rsquo;s go over some of the most common types of slides and how to improve them.</p>
+
+<h3>The title slide</h3>
+
+<p>Most of the time the title slide includes just the title of the talk. Instead, consider providing some context on what’s going to be covered in the presentation as a full sentence. If you’re opening with a hook you can have visuals on your title slide to get right into it.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/titleSlides.png" width="700" title="‘Example of title slides’" ></p>
+
+<h3>The intro slide</h3>
+
+<p>Consider using a blank screen for your introduction. This way you guarantee the attention will be on you and not your slides. Another option is to use a personal photo, related to the topic at hand. Either way, remember that it’s best to open with a hook instead of your introduction.</p>
+
+<h3>The agenda slide</h3>
+
+<p>Most of the time you don&rsquo;t really need an agenda slide. Just jump straight to the content. But if you do include one, make sure you use a small number of sections. Three or four is the sweet spot. You can use images and colors as visual representation of each section.</p>
+
+<h3>The quote slide</h3>
+
+<p>You should have the quote on your slide, only if you’re going to read it word by word. If what you’re saying doesn’t match the text on the screen people will get confused. Another option is to simply blank the screen while reading the quote (here you get to paraphrase if you want).</p>
+
+<h3>The image slide</h3>
+
+<p>When using images go big. Don&rsquo;t worry about breaking the template if you’re using one. Take an empty slide and set the image as background. Don’t put text on it unless you really need to. And if you do use contrasting colors, or place the text over a box with a transparent background to make it readable.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/imageSlides.png" width="700" title="‘Examples of image slides’" ></p>
+
+<h3>The code slide</h3>
+
+<p>Make sure to use syntax highlighting to make the code more readable. Copy and paste from your favorite IDE or use an online syntax highlighting tool to get a color palette that works with your background.</p>
+
+<p><strong>Remove all boilerplate</strong>. If it’s obvious it can be omitted. For example, if you’re showing  a Java class remove all getters, setters and constructors. Don’t worry if the code on the slide doesn’t really compile. You can include the actual code in the handout or link to a public repo or gist.</p>
+
+<p>If the code has multiple parts you&rsquo;ll be talking about, highlight only the section you’re focusing on and gray out all the rest.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/codeSlide.gif" width="600" title="‘Example of using color and opacity to guide audience focus’" ></p>
+
+<p>Consider using pseudo code so people don&rsquo;t need to be familiar with your language of choice to understand the slide.</p>
+
+<p>Finally, if you like living on the edge and want to do live coding on the stage, you can open your code in full screen on a different workspace and have a separator slide to transition to the editor. Some IDEs have a <a href="https://www.jetbrains.com/help/idea/ide-viewing-modes.html">presentation mode</a> you can use to make the font huge and remove all other distractions. Just make sure to have a plan B because demos always fail.</p>
+
+<h3>The &ldquo;Thank You&rdquo; slide</h3>
+
+<p>Many times this is the slide that stays on screen for the most time. Don’t just write “Thank you” or “Q &amp; A”. Use it to present a summary of the main ideas on your presentation. Make sure to include your social handles in case somebody from the audience wants to reach out to you.</p>
+
+<h2>Bonus: Blanking out the screen</h2>
+
+<p>In this article I mention using an empty slide or blanking out the screen for some sections like the introduction or the quote slide. Having nothing on the screen means all eyes are on you. There’s nothing competing for the audience attention. You’ll be surprised with how well this works.</p>
+
+<p>To achieve this you can either user an empty slide with a black background, or use one of the <a href="https://support.google.com/docs/answer/1696717?co=GENIE.Platform=Desktop&amp;hl=en">keyboard shortcuts</a> in any part of your presentation.</p>
+
+<hr />
+
+<h2>Acknowledgements</h2>
+
+<p>Some of these things I learned from <a href="https://zachholman.com/talks">Zach Holman writings</a> (check his website <a href="https://speaking.io/">speaking.io</a>). More recently I attended a course from <a href="http://christinehaasconsulting.com/services/">Christine Haas Consulting</a> which really helped me polish my presentation skills. The rest comes from years of watching great presenters and practicing. That’s the only way to improve, right?</p>
+
+<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Hexagonal Architecture on Spring Boot]]></title>
@@ -2907,99 +3058,6 @@ fun buildGraph(queryResult: List<WomanWithRef>, id: Long): Woman {
 <h2>Bottom line</h2>
 
 <p><strong>GO READ IT!</strong> It won’t take you more than an afternoon and chances are you’ll learn something new. You’ll walk away with <strong>a better understanding of the cloud-native landscape.</strong></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Map.merge]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/07/20/map-dot-merge/"/>
-    <updated>2018-07-20T07:32:49-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/07/20/map-dot-merge</id>
-    <content type="html"><![CDATA[<p>Sometimes is the small things… Like finding a new method that does exactly what you were needing.</p>
-
-<!--more-->
-
-
-<p>Let’s say I’m trying to build a book index. In case you haven’t touch an actual, physical, <em>dead-tree</em> book in a while here’s what an index looks like<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>:</p>
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-07-20/index.gif" title="'Discoverability'" ></p>
-
-<p>One way of doing this would be to <strong>build a map of: <em>terms</em> to <em>a list of comma separated pages</em></strong>. This is, by no means, the best way of modeling an index, but it’ll serve our purpose of illustrating the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#merge-K-V-java.util.function.BiFunction-"><code>Map.merge</code></a> method.</p>
-
-<p>Up until yesterday I’d have written such code like this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Index</span> <span class="o">{</span>
-</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">termToPagesMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
-</span><span class='line'>  
-</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addWord</span><span class="o">(</span><span class="n">String</span> <span class="n">term</span><span class="o">,</span> <span class="kt">int</span> <span class="n">page</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>      <span class="kd">final</span> <span class="n">String</span> <span class="n">newPage</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">page</span><span class="o">);</span>
-</span><span class='line'>      <span class="kd">final</span> <span class="n">String</span> <span class="n">pages</span> <span class="o">=</span> <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">term</span><span class="o">);</span>
-</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">pages</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>          <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">term</span><span class="o">,</span> <span class="n">newPage</span><span class="o">);</span>
-</span><span class='line'>      <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-</span><span class='line'>          <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">term</span><span class="o">,</span> <span class="n">pages</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="n">newPage</span><span class="o">));</span>
-</span><span class='line'>      <span class="o">}</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>But today I know better!</strong> With <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#merge-K-V-java.util.function.BiFunction-"><code>Map.merge</code></a> I can achieve the same result in just 1 line:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Index</span> <span class="o">{</span>
-</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">termToPagesMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
-</span><span class='line'>  
-</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addWord</span><span class="o">(</span><span class="n">String</span> <span class="n">term</span><span class="o">,</span> <span class="kt">int</span> <span class="n">page</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>          <span class="n">termToPagesMap</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">term</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">page</span><span class="o">),</span> <span class="o">(</span><span class="n">pages</span><span class="o">,</span> <span class="n">newPage</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">pages</span><span class="o">.</span><span class="na">concat</span><span class="o">(</span><span class="s">&quot;, &quot;</span> <span class="o">+</span> <span class="n">newPage</span><span class="o">));</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Basically we provide:</p>
-
-<ul>
-<li>The entry <strong>key</strong></li>
-<li>A <strong>value</strong> to be used if there was no associated value to the key (or it was <code>null</code>)</li>
-<li>A <strong> remapping function</strong> that takes the <strong>old value</strong>, the <strong>new value</strong> and calculates the new value for the map</li>
-</ul>
-
-
-<h2>Bonus track: Removal</h2>
-
-<p>There’s one more trick you can do with <code>Map.merge</code>. Citing the <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Map.html#merge-K-V-java.util.function.BiFunction-">documentation</a>:</p>
-
-<blockquote><p>If the function returns <code>null</code> the mapping is removed</p></blockquote>
-
-<p>Something to keep in mind in case it comes in handy in the future. Or if you find yourself debugging an issue of <em>”vanishing entries on a Map”</em>, then maybe you should check your <strong> remapping function</strong> 😉</p>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>I’m aware that ebooks have indexes too, but who the fuck uses them when you can do a full blown text search<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
 ]]></content>
   </entry>
   
