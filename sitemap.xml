@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2020/05/09/the-whiteboard-interview-is-broken/</loc>
+<lastmod>2020-05-09T17:48:02-07:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2020/03/13/how-to-create-effective-presentations/</loc>
 <lastmod>2020-03-13T15:17:29-07:00</lastmod>
 </url>
@@ -589,15 +593,6 @@
 <loc>http://jivimberg.github.io/blog/categories/slides/</loc>
 </url>
 <url>
-<loc>http://jivimberg.github.io/blog/posts/2/</loc>
-</url>
-<url>
-<loc>http://jivimberg.github.io/blog/posts/3/</loc>
-</url>
-<url>
-<loc>http://jivimberg.github.io/blog/posts/4/</loc>
-</url>
-<url>
-<loc>http://jivimberg.github.io/blog/posts/5/</loc>
+<loc>http://jivimberg.github.io/blog/categories/whiteboard/</loc>
 </url>
 </urlset>
