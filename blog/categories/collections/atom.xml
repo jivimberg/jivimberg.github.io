@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Collections | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/collections/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2020-05-14T11:29:03-07:00</updated>
+  <updated>2020-05-23T23:10:02-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -515,12 +515,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.Dispatchers
 
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
     map { async { f(it) } }.awaitAll()
 }
 //sampleStart
-fun main(args: Array<String>) = runBlocking {
+fun main(args: Array<String>) = runBlocking(Dispatchers.Default) {
     println((1..100).pmap { it * 2 })
 }
 //sampleEnd
@@ -542,12 +543,13 @@ import kotlin.system.measureTimeMillis
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.Dispatchers
 
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
     map { async { f(it) } }.awaitAll()
 }
 //sampleStart
-fun main(args: Array<String>) = runBlocking {
+fun main(args: Array<String>) = runBlocking(Dispatchers.Default) {
     val time = measureTimeMillis {
         val output = (1..100).pmap {
             delay(1000)
@@ -563,7 +565,7 @@ fun main(args: Array<String>) = runBlocking {
 </xmp>
 
 
-<h2>Why not <code>runBlocking</code>?</h2>
+<h2>Beware of <code>runBlocking</code></h2>
 
 <p>A previous iteration of this article proposed the following solution:</p>
 
@@ -573,6 +575,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.awaitAll
 
 //sampleStart
+// DON'T DO THIS
 fun <A, B> Iterable<A>.pmapOld(f: suspend (A) -> B): List<B> = runBlocking {
     map { async { f(it) } }.awaitAll()
 }
@@ -580,11 +583,31 @@ fun <A, B> Iterable<A>.pmapOld(f: suspend (A) -> B): List<B> = runBlocking {
 </xmp>
 
 
-<p>And the description said:</p>
+<p>As <a href="https://disqus.com/by/disqus_VE5B5eZQX9/">Gildor</a> pointed out in the comments, <a href="http://disq.us/p/1zbc6a7">this a very bad idea</a>. By default <a href="https://kotlinlang.org/docs/reference/coroutines/coroutine-context-and-dispatchers.html#unconfined-vs-confined-dispatcher"><code>runBlocking</code> uses a dispatcher that is confined to the invoker thread</a>. Which means we are forcefully blocking the thread until the execution of <code>pmap</code> finishes, instead of letting the caller decide how the execution should go.</p>
 
-<blockquote><p>Then we have the <code>runBlocking</code> which lets us bridge the blocking code with the coroutine world. As the name suggests <strong>this will block the current thread until everything inside the block finishes executing</strong>. Which is exactly what we want.</p></blockquote>
+<p>Note that the same would happen if we simply wrap our <code>pmap</code> call with <code>runBlocking</code>.</p>
 
-<p>Fortunately <a href="https://disqus.com/by/disqus_VE5B5eZQX9/">Gildor</a> commented on why <a href="http://disq.us/p/1zbc6a7">this a bad idea</a>. First, we were not using <a href="https://medium.com/@elizarov/structured-concurrency-722d765aa952">Structured Concurrency</a>, so an invocation of <code>f</code> could fail and all other executions would continue unfazed. And also we were not playing nice with the rest of the code. By using <code>runBlocking</code> we were forcefully blocking the thread until the whole execution of <code>pmap</code> finishes, instead of letting the caller decide how the execution should go.</p>
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.awaitAll
+
+
+suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
+    map { async { f(it) } }.awaitAll()
+}
+
+//sampleStart
+// DON'T DO THIS
+fun main() = runBlocking<Unit> {
+    (1..100).pmap { fibonnaci(it.toBigInteger()) }
+}
+//sampleEnd
+
+</xmp>
+
+
+<p>This is because <code>coroutineScope</code> basically inherits the caller’s context. So again we’d be running in the single thread confined Dispatcher <code>runBlocking</code> gets by default. Which may, or may not, be OK depending on your use case. Remember that you can always change the Dispatcher used by <code>runBlocking</code> by passing one: <code>runBlocking(Dispatchers.IO)</code>.</p>
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
