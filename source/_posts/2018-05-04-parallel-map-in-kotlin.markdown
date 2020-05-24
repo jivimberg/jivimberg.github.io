@@ -42,12 +42,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.Dispatchers
 
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
 	map { async { f(it) } }.awaitAll()
 }
 //sampleStart
-fun main(args: Array<String>) = runBlocking {
+fun main(args: Array<String>) = runBlocking(Dispatchers.Default) {
 	println((1..100).pmap { it * 2 })
 }
 //sampleEnd
@@ -68,12 +69,13 @@ import kotlin.system.measureTimeMillis
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.Dispatchers
 
 suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
 	map { async { f(it) } }.awaitAll()
 }
 //sampleStart
-fun main(args: Array<String>) = runBlocking {
+fun main(args: Array<String>) = runBlocking(Dispatchers.Default) {
 	val time = measureTimeMillis {
 	    val output = (1..100).pmap {
 	        delay(1000)
@@ -89,7 +91,7 @@ fun main(args: Array<String>) = runBlocking {
 </xmp>
 
 
-## Why not `runBlocking`?
+## Beware of `runBlocking`
 
 A previous iteration of this article proposed the following solution:
 
@@ -99,17 +101,37 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.awaitAll
 
 //sampleStart
+// DON'T DO THIS
 fun <A, B> Iterable<A>.pmapOld(f: suspend (A) -> B): List<B> = runBlocking {
 	map { async { f(it) } }.awaitAll()
 }
 //sampleEnd
 </xmp>
 
-And the description said:
+As [Gildor][8] pointed out in the comments, [this a very bad idea][9]. By default [`runBlocking` uses a dispatcher that is confined to the invoker thread][10]. Which means we are forcefully blocking the thread until the execution of `pmap` finishes, instead of letting the caller decide how the execution should go. 
 
-> Then we have the `runBlocking` which lets us bridge the blocking code with the coroutine world. As the name suggests **this will block the current thread until everything inside the block finishes executing**. Which is exactly what we want.
+Note that the same would happen if we simply wrap our `pmap` call with `runBlocking`. 
 
-Fortunately [Gildor][8] commented on why [this a bad idea][9]. First, we were not using [Structured Concurrency][10], so an invocation of `f` could fail and all other executions would continue unfazed. And also we were not playing nice with the rest of the code. By using `runBlocking` we were forcefully blocking the thread until the whole execution of `pmap` finishes, instead of letting the caller decide how the execution should go.
+<xmp class="kotlin-code" data-highlight-only theme="darcula">
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.awaitAll
+
+
+suspend fun <A, B> Iterable<A>.pmap(f: suspend (A) -> B): List<B> = coroutineScope {
+	map { async { f(it) } }.awaitAll()
+}
+
+//sampleStart
+// DON'T DO THIS
+fun main() = runBlocking<Unit> {
+	(1..100).pmap { fibonnaci(it.toBigInteger()) }
+}
+//sampleEnd
+
+</xmp>
+
+This is because `coroutineScope` basically inherits the caller’s context. So again we’d be running in the single thread confined Dispatcher `runBlocking` gets by default. Which may, or may not, be OK depending on your use case. Remember that you can always change the Dispatcher used by `runBlocking` by passing one: `runBlocking(Dispatchers.IO)`.
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
@@ -122,4 +144,4 @@ Fortunately [Gildor][8] commented on why [this a bad idea][9]. First, we were no
 [7]:	https://blog.jetbrains.com/kotlin/2018/04/embedding-kotlin-playground/
 [8]:	https://disqus.com/by/disqus_VE5B5eZQX9/
 [9]:	http://disq.us/p/1zbc6a7
-[10]:	https://medium.com/@elizarov/structured-concurrency-722d765aa952
+[10]:	https://kotlinlang.org/docs/reference/coroutines/coroutine-context-and-dispatchers.html#unconfined-vs-confined-dispatcher
