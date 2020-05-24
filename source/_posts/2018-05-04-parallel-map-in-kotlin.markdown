@@ -133,6 +133,8 @@ fun main() = runBlocking<Unit> {
 
 This is because `coroutineScope` basically inherits the caller’s context. So again we’d be running in the single thread confined Dispatcher `runBlocking` gets by default. Which may, or may not, be OK depending on your use case. Remember that you can always change the Dispatcher used by `runBlocking` by passing one: `runBlocking(Dispatchers.IO)`.
 
+{% img right-fill /images/signatures/signature10.png 200 ‘My signature’ %} 
+
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
 [1]:	https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html
