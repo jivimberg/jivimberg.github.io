@@ -20,7 +20,7 @@ The whiteboard code interview is a poor predictor of candidate performance becau
 
 We make candidates write code on a whiteboard where refactoring is virtually impossible. We don’t allow them to look stuff up on Google or bounce ideas off a teammate. They’re supposed to have all the knowledge required to solve the problem in their head and come up with a good solution on the spot. To make matters worse, they’re placed under an artificial time constraint with the added stress of being watched perform.
 
-At their best whiteboard interviews can testify to a good level of puzzle solving, some knowledge of data structures, and the ability to retain multiple indexes in your head to simulate a whiteboard code execution. All skills specifically [learned and practiced for the occasion][1]. A whole industry has spawned around helping engineers ace the whiteboard interview: [books][2], [platforms][3], [talks][4]. And don’t get me wrong, they really work!
+At their best whiteboard interviews can testify to a good level of puzzle-solving, some knowledge of data structures, and the ability to retain multiple indexes in your head to simulate a whiteboard code execution. All skills specifically [learned and practiced for the occasion][1]. A whole industry has spawned around helping engineers ace the whiteboard interview: [books][2], [platforms][3], [talks][4]. And don’t get me wrong, they really work!
 
 But whiteboarding fails to test for things that more closely correlate to _good_ software development. It says nothing about whether the candidate can write clean code. It doesn’t tell you if they can navigate a project and introduce changes. If they’re good at refactoring code and working at the right level of abstraction.  If they know how to design and evolve an API. If they’re proficient at troubleshooting and debugging issues. In essence, whiteboarding fails at telling us whether the candidate can write maintainable code that will last longer than the 40 minutes of the typical coding interview. 
 
@@ -28,9 +28,9 @@ But whiteboarding fails to test for things that more closely correlate to _good_
 
 ## Then why do we do it?
 
-Some would say the witheboard interview is a rite of passage people need to go through before joining the company. _“I went through this experience and did good so the new candidate should do it too”_. For the most part I don’t believe that’s the main reason. I think we just repeat what we’ve seen from other engineers/companies without stopping to think why we do it this way.
+Some would say the whiteboard interview is a rite of passage people need to go through before joining the company. _“I went through this experience and did well so the new candidate should do it too”_. For the most part, I don’t believe that’s the main reason. I think we just repeat what we’ve seen from other engineers/companies without stopping to think why we do it this way.
 
-I don't know a single engineer that enjoys interviewing. I’d go as far as to say that some of us dread the task. So whenever we’re assigned with evaluating a candidate on their code skills we take the easy way out. We look up some clever interview questions, we study the answers and possible followups, and we roll with it. Thus perpetuating the tradition of whiteboard interviews. To make matters worse, most of the time we are neither trained for nor evaluated on how we conduct the interview. And since the impact tends to be long-term and hard to measure people are not really motivated in investing time to improve the process.
+I don't know a single engineer that enjoys interviewing. I’d go as far as to say that some of us dread the task. So whenever we’re assigned with evaluating a candidate on their code skills we take the easy way out. We look up some clever interview questions, we study the answers and possible followups, and we roll with it. Thus perpetuating the tradition of whiteboard interviews. To make matters worse, most of the time we are neither trained nor evaluated on how we conduct the interview. And since the impact tends to be long-term and hard to measure people are not really motivated in investing time to improve the process.
 
 ## What should we do instead?
 
@@ -38,7 +38,7 @@ I don't know a single engineer that enjoys interviewing. I’d go as far as to s
 
 For example, [Pivotal Labs][5] have the candidate spend a full day pair-programming with the interviewer. No tricky algorithmic puzzle, no whiteboard. A real task at hand and dev-to-dev collaboration.
 
-Another option is to provide a take home exercise. There’s no artificial time constraint, they can use any 3rd party library and Google whatever they need. Afterwards, you can use the submitted code as a starting point for the on-site and ask the candidate to iterate on the solution, either by building a new feature, improving the performance or working around some limitation.
+Another option is to provide a take-home exercise. There’s no artificial time constraint, they can use any 3rd party library and Google whatever they need. Afterward, you can use the submitted code as a starting point for the on-site and ask the candidate to iterate on the solution, either by building a new feature, improving the performance, or working around some limitations.
 
 Yet another option is to give the candidate some code and ask them to refactor it to introduce a new functionality.
 
@@ -48,7 +48,7 @@ The ideal scenario, of course, is to have the candidate work with the team for a
 
 ---- 
 
-Improving the coding interview takes time. But it’s hard to think of a better way investment than something that’ll help you hire great software engineers. Hopefully with time we’ll see less and less whiteboard interviews.
+Improving the coding interview takes time. But it’s hard to think of a better way investment than something that’ll help you hire great software engineers. Hopefully, with time we’ll see fewer and fewer whiteboard interviews.
 
  {% img right-fill /images/signatures/signature4.png 200 ‘My signature’ %} 
 
