@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Queues | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/queues/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2020-06-11T20:17:57-07:00</updated>
+  <updated>2020-06-12T17:21:40-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jivimberg.github.io/blog/2020/05/30/working-with-queues/"/>
     <updated>2020-05-30T19:29:39-07:00</updated>
     <id>http://jivimberg.github.io/blog/2020/05/30/working-with-queues</id>
-    <content type="html"><![CDATA[<p>Queues are a powerful tool for building reliables systems. In this article, I’ll describe some of the tips and tricks I came across when working with queues.</p>
+    <content type="html"><![CDATA[<p>Queues are a powerful tool for building reliable systems. In this article, I’ll describe some of the tips and tricks I came across when working with queues.</p>
 
 <p>Some of the advice is specific to Amazon SQS queues because that’s what I’ve been using the most lately. And also because some of them come from <a href="https://aws.amazon.com/builders-library/avoiding-insurmountable-queue-backlogs/">this amazing article</a> from the <a href="https://aws.amazon.com/builders-library/">Amazon Builders’ Library</a>.</p>
 
@@ -27,7 +27,7 @@
 
 <h2>The trade-off</h2>
 
-<p>Queues can be used to increase our system’s availability by accepting new messages even if our service is down. When using systems like SQS, we also get a durability guarantee, because we know messages published won’t be lost if our system fails as they are persisted in the queue. Additionally, we get an increase in reliability since we can configure our system to retry the processing of a message in case of failure.</p>
+<p>Queues can be used to increase the system’s availability by accepting new messages even if our service is down. They help us decouple producers from consumers. When using systems like SQS, we also get a durability guarantee, because we know messages published won’t be lost if our system fails as they are persisted in the queue. Additionally, we get an increase in reliability since we can configure our system to retry the processing of a message in case of failure.</p>
 
 <p><img class="center" src="/images/posts/2020-06-07/Availability.png" title="‘Example of how queues can increase availability’" ></p>
 
@@ -37,7 +37,7 @@
 
 <p>Let’s go over some of the things we can do to prevent or mitigate these risks.</p>
 
-<h3>2. Wrapping your queues</h3>
+<h3>1. Wrapping your queues</h3>
 
 <p>Instead of exposing the queues to clients, you can wrap them with an ordering API. This way, we maintain more control over what’s published in the queue. Wrapping queues have many benefits:</p>
 
@@ -53,7 +53,7 @@
 
 <p>The downside of wrapping the queues is that we turn an asynchronous call into synchronous. Now our system has to be up to process new messages. We’re trading the availability improvements for more control.</p>
 
-<h3>3. Dealing with a backlog</h3>
+<h3>2. Dealing with a backlog</h3>
 
 <p>The price of increased availability is having to deal with the backlog of messages that occur in a surge or after a failure. One way to do so is by dropping old messages.  When consuming a new message, we can compare the current time with the time the message was published and discard the message if it is greater than some value. Of course, this only works if the systems can tolerate this type of message loss.</p>
 
@@ -67,7 +67,7 @@
 
 <p>One of the challenges of having multiple customers is having to guarantee fairness. That is, making sure one client is not exhausting all the available resources, creating significant latencies on other clients’ messages. This is especially true in multi-tenant environments where clients might not be aware they’re sharing resources with other people.</p>
 
-<p>One possible solution is to have different customers publish to different queues, and have the system consume in a round-robin fashion. This is a simple solution, but it does not scale well. If we had thousands of customers, we’d have to manage and poll thousands of queues. Instead, we can have a fixed number of queues and hash each customer to a small number of them. Whenever we receive a message, we retrieve the queues assigned to that customer and put the message on the queue with the shortest backlog. That way, if a client is producing lots of messages on their queues, other workflows are automatically routed to less utilized queues.</p>
+<p>One possible solution is to have different customers publish to different queues, and have the system consume in a round-robin fashion. This is a simple solution, but it does not scale well. If we had thousands of customers, we’d have to manage and poll thousands of queues. Instead, we can have a fixed number of queues and hash each customer to a small number of them. Whenever we receive a message, we retrieve the queues assigned to that customer and put the message on the queue with the shortest backlog. That way, if a client is producing lots of messages on their queues, other workflows are automatically routed to less utilized queues. One caveat worth considering, is that message order is not preserved in this model.</p>
 
 <p><img class="center" src="/images/posts/2020-06-07/Sharding.gif" title="‘Animation of multi-tenant system using sharing’" ></p>
 
