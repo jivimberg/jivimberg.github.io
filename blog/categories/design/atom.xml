@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Design | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/design/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2020-06-12T17:21:40-07:00</updated>
+  <updated>2020-07-05T19:30:50-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -18,9 +18,9 @@
     <link href="http://jivimberg.github.io/blog/2019/09/15/book-recommendations-shape-up/"/>
     <updated>2019-09-15T10:51:31-07:00</updated>
     <id>http://jivimberg.github.io/blog/2019/09/15/book-recommendations-shape-up</id>
-    <content type="html"><![CDATA[<p>I love reading about how people do creative work. Be it <a href="https://en.wikipedia.org/wiki/On_Writing:_A_Memoir_of_the_Craft">writing books</a> or <a href="http://the-witness.net/news/">designing video games</a>, there’s something magical about peaking behind the curtain and learning how the pros do their thing.</p>
+    <content type="html"><![CDATA[<p>I love reading about how people do creative work. Be it <a href="https://en.wikipedia.org/wiki/On_Writing:_A_Memoir_of_the_Craft">writing books</a> or <a href="http://the-witness.net/news/">designing video games</a>, there’s something magical about peeking behind the curtain and learning how the pros do their thing.</p>
 
-<p>Today I’m reviewing <a href="https://basecamp.com/shapeup">Shape Up</a>. A book about the process of writing software at Basecamp.</p>
+<p>Today I’m reviewing <a href="https://basecamp.com/shapeup">Shape Up</a>, a book about the process of writing software at Basecamp.</p>
 
 <!--more-->
 
@@ -41,19 +41,19 @@
 
 <p><blockquote><p>Now that our process is fully formed, documented, and ready to go, we’re here to share it with all those curious enough to listen to a new way of doing things. Explorers, pioneers, those who don’t care what everyone else is doing. Those who want to work better than the rest.</p><footer><strong>Jason Fried</strong> <cite>Basecamp CEO</cite></footer></blockquote></p>
 
-<p>Also it doesn’t hurt that it is short, well-written and has real life examples and stick-figure drawings. <strong>Oh! and it’s free!! 💸</strong></p>
+<p>Also, it doesn’t hurt that it is short, well-written, and has real-life examples and stick-figure drawings. <strong>Oh! and it’s free!! 💸</strong></p>
 
-<h1>So, what did your learn?</h1>
+<h1>So, what did you learn?</h1>
 
-<p>A bunch of things! I’m not going to cover everything because I wouldn’t be able to do it justice. Instead I’ll focus on a couple of nuggets of wisdom. If you find them interesting go check the book! Getting a better sense on how the whole process is structured shines a new light on the bits you’ll find described here.</p>
+<p>A bunch of things! I’m not going to cover everything because I wouldn’t be able to do it justice. Instead, I’ll focus on a couple of nuggets of wisdom. If you find them interesting, go check the book! Getting a better sense of how the whole process is structured shines a new light on the bits you’ll find described here.</p>
 
 <h2>The shape of your task</h2>
 
-<p>A big part of the book is about what happens before the developer starts coding. It is about choosing and defining what’s going to be build. This is what Basecamp calls <a href="https://basecamp.com/shapeup/1.1-chapter-02"><em>”Shaping”</em></a>, and it is so integral to their process that it’s right there on the book’s title. I found this refreshing, since more often than not books will focus on the execution of tasks instead of how to shape those tasks.</p>
+<p>A big part of the book is about what happens before the developer starts coding. It is about choosing and defining what’s going to be built. This is what Basecamp calls <a href="https://basecamp.com/shapeup/1.1-chapter-02"><em>”Shaping”</em></a>, and it is so integral to their process that it’s right there on the book’s title. I found this refreshing since, more often than not, books will focus on the execution of tasks instead of how to come up with them.</p>
 
-<p>Basecamp uses cycles of 6 weeks.  While the developers are busy delivering features, a group of senior staff members<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> work on defining what’s going to come next. If the project is approved (more on this later), a team of developers will use this spec to make it happen on the next cycle.</p>
+<p>Basecamp uses cycles of six weeks.  While the developers are busy delivering features, a group of senior staff members<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> works on defining what’s going to come next. If the project is approved (more on this later), a team of developers will use this spec to make it happen on the next cycle.</p>
 
-<p>They key for shaping to work, is that it has to happen at <strong>the proper level of abstraction</strong>. Go too abstract and the dev team might end up building the wrong thing. Go too concrete and they have no wiggle room to workaround a technical pitfall or revise a design choice.</p>
+<p>The key to Shaping is that it has to happen at <strong>the proper level of abstraction</strong>. Go too abstract, and the dev team might end up building the wrong thing. Go too concrete, and they have no wiggle room to work around a technical pitfall or revise a design choice.</p>
 
 <p><img class="right" src="/images/posts/2019-09-29/knob.png" width="400" title="‘Abstraction knob’" ></p>
 
@@ -63,7 +63,7 @@
 
 <p><img class="left" src="/images/posts/2019-09-29/fatMarker.png" width="150" title="‘Fat marker sketch’" ></p>
 
-<p>Only once shaping is complete they’d take it to the <a href="https://basecamp.com/shapeup/2.2-chapter-08#the-betting-table"><em>“betting table“</em></a> where they decide if this is something they want to bet the next 6 weeks on. If the pitch is accepted it goes into the next cycle. If it’s not then nothing happens. There’s no centralized backlog or list of rejected ideas. If somebody considers it important, or thinks that a better solution can be found, then they’d lobby for it again 6 weeks later.</p>
+<p>Only once shaping is complete, they’d take it to the <a href="https://basecamp.com/shapeup/2.2-chapter-08#the-betting-table"><em>“betting table“</em></a> where they decide if this is something they want to bet the next six weeks on. If the pitch is , it goes into the next cycle. If it’s not, then nothing happens. There’s no centralized backlog or list of rejected ideas. If somebody considers it important or thinks that a better solution can be found, they’ll lobby for it again six weeks later.</p>
 
 <h2>Evaluating new ideas and user requests</h2>
 
@@ -71,7 +71,7 @@
 
 <p><img class="center" src="/images/posts/2019-09-29/interesting.png" width="400" title="‘Interesting! Maybe some time’" ></p>
 
-<p>Basecamp believes an idea needs to go through the shaping process detailed above before they’re ready to bet on it.  When a new request comes in, they’d first try to identify what’s the user need (which sometimes might be quite different from what the user is asking for). Then, they see how they can solve the need with the minimal amount of effort. They acknowledge there’s always a better, more complete solution if you have infinite time at your disposal. The trick here is to find a good solution that works under the given constrains (in their case, that it can be built by a small team of engineers and designers in no more than 6 weeks)</p>
+<p>Basecamp believes an idea needs to go through the shaping process detailed above before they’re ready to bet on it.  When a new request comes in, they’d first try to identify what’s the user need (which sometimes might be quite different from what the user is asking for). Then, they see how they can solve the requirement with a minimal amount of effort. They acknowledge there’s always a better, more complete solution if you have infinite time at your disposal. The trick here is to find a good solution that works under the given constraints (in their case, that it can be built by a small team of engineers and designers in no more than six weeks)</p>
 
 <p>If they’re not able to narrow down the problem and it’s not critical, they simply let it rest and wait to see if the same problem shows up again, so they can get a better sense of what they’re solving for. <strong>Grab-bags such as: “Redesign profile page” or “Refactor engine” are a no-go</strong>. The scope has to be well-defined before they’re ready to bet on an idea.</p>
 
@@ -81,9 +81,9 @@
 
 <p><img class="center" src="/images/posts/2019-09-29/scrum.jpg" width="700" title="‘Wall full of post-it notes’" ></p>
 
-<p>The problem with this approach is that it only works if all required tasks are known up-front. And let’s face, 99% of the time that’s not the case. Most of the time you’d start coding the first task only to discover a new component needs to be added, and you’ll have to fix a few connections this change will introduce.</p>
+<p>The problem with this approach is that it only works if all required tasks are known up-front. And let’s face, 99% of the time, that’s not the case. Most of the time, you’d start coding the first task only to discover that a new component needs to be added, and you’ll have to fix a few connections this change will introduce.</p>
 
-<p>The book acknowledges this exploration phase as an inherent part of the developers work. It makes the distinction between 2 different types of tasks:</p>
+<p>The book acknowledges this exploration phase as an inherent part of the developers' work. It makes the distinction between 2 different types of tasks:</p>
 
 <ul>
 <li><strong>Imagined tasks</strong>: Those thought about before you start coding</li>
@@ -91,7 +91,7 @@
 </ul>
 
 
-<p>The tool they came up with to communicate progress are <a href="https://basecamp.com/features/hill-charts">Hill Charts</a> and they look like this:</p>
+<p>The tool they came up with to communicate progress are <a href="https://basecamp.com/features/hill-charts">Hill Charts</a>, and they look like this:</p>
 
 <p><img class="center" src="/images/posts/2019-09-29/hillChart1.png" width="600" title="‘Hill Chart’" ></p>
 
@@ -99,13 +99,13 @@
 
 <p><img class="center" src="/images/posts/2019-09-29/hillChart2.png" width="600" title="‘Hill Chart 2’" ></p>
 
-<p>A good way of gaining confidence at the start of a project is to begin with the pieces that present the most uncertainty and move them to the top of the hill first. Doing this before finishing the downhill stuff reduces the chances the project will be late.</p>
+<p>A good way of gaining confidence at the start of a project is to begin with the pieces that present the most uncertainty, and move them to the top of the hill first. Doing this before finishing the downhill stuff reduces the chances the project will be late.</p>
 
 <hr />
 
 <p>That’s all…</p>
 
-<p>If you enjoyed the review you’ll love the book. <a href="https://basecamp.com/shapeup">Go check it out!!</a></p>
+<p>If you enjoyed the review, you’ll love the book. <a href="https://basecamp.com/shapeup">Go check it out!!</a></p>
 
 <p> <img class="right-fill" src="/images/signatures/signature5.png" width="200" title="‘My signature’" ></p>
 <div class="footnotes">
