@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tests | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/tests/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2020-07-06T20:57:48-07:00</updated>
+  <updated>2020-07-12T13:33:41-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Effective Testing - Test Structure]]></title>
+    <link href="http://jivimberg.github.io/blog/2020/07/10/effective-testing-test-structure/"/>
+    <updated>2020-07-10T23:53:38-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2020/07/10/effective-testing-test-structure</id>
+    <content type="html"><![CDATA[<p>One way to make sure your tests are readable is to have them all adhere to the same structure.</p>
+
+<!--more-->
+
+
+<p>By far, the most common structure is <strong>&ldquo;Given - When - Then”</strong> (aka <em>“Arrange, Act, Assert”</em>). It goes like this:</p>
+
+<ol>
+<li><strong>On Given</strong>: We create the objects and set up the needed state.</li>
+<li><strong>On When</strong>: We perform the action we want to test.</li>
+<li><strong>On Then</strong>: We validate the state changed as expected.</li>
+</ol>
+
+
+<p>For example:</p>
+
+<p><img class="center" src="/images/posts/2020-07-10/exampleJunit.png" width="700" title="‘Example of the proposed structure using JUnit’" ></p>
+
+<p>The comments explaining each section are optional, and can be omitted on trivial scenarios like the one shown here.</p>
+
+<p>Note how we use whitespace to clearly separate each section. Anybody familiar with the structure will be able to easily identify each section at a glance.</p>
+
+<p><img class="center" src="/images/posts/2020-07-10/sections.jpg" width="700" title="‘Colored sections on test’" ></p>
+
+<p>Some testing libraries like <a href="https://github.com/kotest/kotest/">Kotest</a> support a style that already includes the <em>Given</em>, <em>When</em> and <em>Then</em> keywords, making the structure explicit.</p>
+
+<p><img class="center" src="/images/posts/2020-07-10/exampleKotest.png" width="700" title="‘Example of the proposed structure using Kotest’" ></p>
+
+<hr />
+
+<p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
+
+<p> <img class="right-fill" src="/images/signatures/signature13.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Use Descriptive Test Names]]></title>
@@ -61,6 +102,8 @@
 <p>You can read more about test naming in Chapter 12 of <a href="https://www.amazon.com/Software-Engineering-Google-Lessons-Programming/dp/1492082791/ref=sr_1_2?dchild=1&amp;keywords=software+engineering+at+google&amp;link_code=qs&amp;qid=1594020903&amp;sr=8-2&amp;tag=wwwcanoniccom-20">Software Engineering at Google</a>.</p>
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
+
+<p> <img class="right-fill" src="/images/signatures/signature14.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
