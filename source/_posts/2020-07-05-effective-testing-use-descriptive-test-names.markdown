@@ -28,7 +28,7 @@ Now the issue is obvious. **You can immediately tell which part of the code is n
 
 Test names are the first (and often only) piece of information we see about a test. Using a descriptive test name can help us identify what’s broken at a glance. Furthermore, it helps us keep the test focused on validating one specific behavior, discouraging us from inflating the test with other unrelated assertions. 
 
-## How 
+## How
 
 Instead of just using the name of the method being tested, try focusing on the behavior you want to validate. **Describe the state of the system, the action performed, and the expected output.** More often than not, you’ll end up with a huge name, something you probably wouldn’t use on production code, but that’s ok.
 
@@ -47,6 +47,8 @@ Some testing libraries like [Kotest][5], also [support nesting tests][6]:
 You can read more about test naming in Chapter 12 of [Software Engineering at Google][7].
 
 This post is part of the [Effective Testing Series][8].
+
+ {% img right-fill /images/signatures/signature14.png 200 ‘My signature’ %} 
 
 [1]:	https://kotlinlang.org/docs/reference/coding-conventions.html#function-names
 [2]:	https://junit.org/junit5/docs/current/user-guide/
