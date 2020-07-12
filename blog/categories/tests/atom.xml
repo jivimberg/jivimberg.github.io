@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tests | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/tests/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2020-07-12T13:33:41-07:00</updated>
+  <updated>2020-07-12T13:40:54-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -40,7 +40,7 @@
 
 <p>Note how we use whitespace to clearly separate each section. Anybody familiar with the structure will be able to easily identify each section at a glance.</p>
 
-<p><img class="center" src="/images/posts/2020-07-10/sections.jpg" width="700" title="‘Colored sections on test’" ></p>
+<p><img class="center" src="/images/posts/2020-07-10/testSections.jpg" width="700" title="‘Colored sections on test’" ></p>
 
 <p>Some testing libraries like <a href="https://github.com/kotest/kotest/">Kotest</a> support a style that already includes the <em>Given</em>, <em>When</em> and <em>Then</em> keywords, making the structure explicit.</p>
 
