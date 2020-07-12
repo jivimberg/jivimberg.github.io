@@ -24,7 +24,7 @@ The comments explaining each section are optional, and can be omitted on trivial
 
 Note how we use whitespace to clearly separate each section. Anybody familiar with the structure will be able to easily identify each section at a glance. 
 
-{% img center /images/posts/2020-07-10/sections.JPG 700 ‘Colored sections on test’ %}
+{% img center /images/posts/2020-07-10/testSections.jpg 700 ‘Colored sections on test’ %}
 
 Some testing libraries like [Kotest][1] support a style that already includes the _Given_, _When_ and _Then_ keywords, making the structure explicit.
 
