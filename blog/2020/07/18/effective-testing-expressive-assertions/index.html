@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Effective Testing - Expressive Assertions - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Effective Testing - Expressive Assertions written July 18, 2020 in assertions, effective-testing-series, testing, tests Using expressive assertions &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2020/07/18/effective-testing-expressive-assertions">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49016076-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Effective Testing - Expressive Assertions</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2020-07-18T11:58:34-07:00" pubdate data-updated="true">July 18, 2020</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/assertions/'>assertions</a>, <a class='category' href='/blog/categories/effective-testing-series/'>effective-testing-series</a>, <a class='category' href='/blog/categories/testing/'>testing</a>, <a class='category' href='/blog/categories/tests/'>tests</a>
+  
+</span>
+
+
+        </div>
+        <p>Using expressive assertions can help us figure out why a test fails without having to go through the code.</p>
+
+<!--more-->
+
+
+<p>Let&rsquo;s start with an example. Here&rsquo;s a test making sure our recipe has tomatoes 🍅</p>
+
+<p><img class="center" src="/images/posts/2020-07-19/badAssertion.png" width="700" title="‘A test with a non-descriptive assertion’" ></p>
+
+<p>At first glance, everything looks ok. The test passes, it is easy to read, and it follows <a href="https://jivimberg.io/blog/2020/07/10/effective-testing-test-structure/">the <em>”Given - When - Then”</em>  structure</a>.</p>
+
+<p>Some months go by, and one day our test starts failing.</p>
+
+<p><img class="center" src="/images/posts/2020-07-19/badAssertionOutput.png" width="700" title="‘The output of a test with a non-descriptive assertion’" ></p>
+
+<p>At this point, we&rsquo;ve probably forgotten everything about the recipe, and we’re not sure what’s causing the failure. <a href="https://jivimberg.io/blog/2020/07/05/effective-testing-use-descriptive-test-names/">The test name is not helping us much either</a>.</p>
+
+<p>To avoid this situation, we can include a message that will be displayed whenever the assertion fails.</p>
+
+<p><img class="center" src="/images/posts/2020-07-19/withMessage.png" width="700" title="‘Assertion with explicit message’" ></p>
+
+<p><img class="center" src="/images/posts/2020-07-19/withMessageOutput.png" width="700" title="‘Output of a test with an assertion with explicit message’" ></p>
+
+<p>Now the failure is obvious. There is no 🍅 on the recipe. <strong>We can immediately tell what’s wrong without even looking at the test code.</strong> But we can do better…</p>
+
+<h2>Assertion libraries</h2>
+
+<p>Let&rsquo;s face it, writing this kind of detailed message for every assertion would be a pain in the ass. Fortunately, we don’t have to. Instead, <strong>we can use an <a href="https://blog.frankel.ch/comparison-assertion-libraries/">expressive assertion library</a> to do the heavy lifting for us.</strong> This is how our code would look like using <a href="https://strikt.io/">Strikt</a>:</p>
+
+<p><img class="center" src="/images/posts/2020-07-19/strikt.png" width="700" title="‘Example using Strikt’" ></p>
+
+<p>We&rsquo;re using <a href="https://kotlinlang.org/docs/reference/functions.html#infix-notation">Kotlin infix notation</a> to make the code more readable. This a stylistic decision, you don’t have to use it if you don’t like it.</p>
+
+<p>You might notice we&rsquo;re calling the <code>contains</code> method on the assertion itself. This is possible because Strikt can tell that the type we’re asserting on, is a <em>String</em>, and thus, it can provide methods explicitly tailored to Strings. This is what the error message would look like in this case:</p>
+
+<p><img class="center" src="/images/posts/2020-07-19/outputStrikt.png" width="700" title="‘Output of the basic Strikt example’" ></p>
+
+<p><strong>Almost the same information we got from writing our own message, but without the boilerplate.</strong></p>
+
+<p>Assertion libraries are like swiss army knives; they provide all kinds of assertions for different types of objects. I suggest learning a few of the core ones through the documentation, and then letting the IDE guide you with auto-suggestions to discover new ones.</p>
+
+<p>Here are some more examples of type-specific assertions:</p>
+
+<p><img class="center" src="/images/posts/2020-07-19/collectionAssertion.png" width="700" title="‘Collection specific assertions’" ></p>
+
+<p><img class="center" src="/images/posts/2020-07-19/assertingExceptions.png" width="700" title="‘Asserting exceptions’" ></p>
+
+<h2>Asserting on objects</h2>
+
+<p>When validating properties on objects, you might be tempted to write something like this:</p>
+
+<p><img class="center" src="/images/posts/2020-07-19/badObjectAssertions.png" width="700" title="‘Manually asserting properties on object’" ></p>
+
+<p>You can probably tell why this is bad. By the time we see the failure, we no longer have context on what property we’re asserting.</p>
+
+<p><img class="center" src="/images/posts/2020-07-19/objectAssertionOutput.png" width="700" title="‘Using data classes for assertions’" ></p>
+
+<p>Was it checking the <code>title</code>, the <code>author</code>, or something else?</p>
+
+<p>Instead, you can take advantage of the fact that Data Classes automatically get <code>equals</code> and <code>toString</code> implementations. So we can use an <code>assertEquals</code> and get a nice looking message showing us both instances.</p>
+
+<p><img class="center" src="/images/posts/2020-07-19/dataClasses.png" width="700" title="‘Using data classes for assertions’" ></p>
+
+<p><img class="center" src="/images/posts/2020-07-19/dataClassesOutput.png" width="700" title="‘Using data classes test output’" ></p>
+
+<p>If we don&rsquo;t care about comparing all properties we can use <a href="https://strikt.io/wiki/traversing-subjects/">Strikt to assert only specific fields</a>:</p>
+
+<p><img class="center" src="/images/posts/2020-07-19/traversingObjects.png" width="700" title="‘Using Strikt to traverse objects on assertions’" ></p>
+
+<p><img class="center" src="/images/posts/2020-07-19/traversingObjectsOutput.png" width="700" title="‘Strikt object traversal test output’" ></p>
+
+<p>The <a href="https://strikt.io/wiki/assertion-styles/">block assertion style</a> means that even though the <em>title</em> assertion failed Strikt will still check for <em>page count</em> and <strong>it’ll provide output for all the assertions in the block.</strong></p>
+
+<hr />
+
+<p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
+
+<p> <img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.github.io/blog/2020/07/18/effective-testing-expressive-assertions/';
+        var disqus_url = 'http://jivimberg.github.io/blog/2020/07/18/effective-testing-expressive-assertions/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2020/07/10/effective-testing-test-structure/" title="Previous Post: Effective testing - Test structure">&laquo; Previous: Effective testing - Test structure</a>
+        
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

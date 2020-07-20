@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2020-07-12T13:40:54-07:00</updated>
+  <updated>2020-07-19T20:20:42-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Effective Testing - Expressive Assertions]]></title>
+    <link href="http://jivimberg.github.io/blog/2020/07/18/effective-testing-expressive-assertions/"/>
+    <updated>2020-07-18T11:58:34-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2020/07/18/effective-testing-expressive-assertions</id>
+    <content type="html"><![CDATA[<p>Using expressive assertions can help us figure out why a test fails without having to go through the code.</p>
+
+<!--more-->
+
+
+<p>Let&rsquo;s start with an example. Here&rsquo;s a test making sure our recipe has tomatoes 🍅</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/badAssertion.png" width="700" title="‘A test with a non-descriptive assertion’" ></p>
+
+<p>At first glance, everything looks ok. The test passes, it is easy to read, and it follows <a href="https://jivimberg.io/blog/2020/07/10/effective-testing-test-structure/">the <em>”Given - When - Then”</em>  structure</a>.</p>
+
+<p>Some months go by, and one day our test starts failing.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/badAssertionOutput.png" width="700" title="‘The output of a test with a non-descriptive assertion’" ></p>
+
+<p>At this point, we&rsquo;ve probably forgotten everything about the recipe, and we’re not sure what’s causing the failure. <a href="https://jivimberg.io/blog/2020/07/05/effective-testing-use-descriptive-test-names/">The test name is not helping us much either</a>.</p>
+
+<p>To avoid this situation, we can include a message that will be displayed whenever the assertion fails.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/withMessage.png" width="700" title="‘Assertion with explicit message’" ></p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/withMessageOutput.png" width="700" title="‘Output of a test with an assertion with explicit message’" ></p>
+
+<p>Now the failure is obvious. There is no 🍅 on the recipe. <strong>We can immediately tell what’s wrong without even looking at the test code.</strong> But we can do better…</p>
+
+<h2>Assertion libraries</h2>
+
+<p>Let&rsquo;s face it, writing this kind of detailed message for every assertion would be a pain in the ass. Fortunately, we don’t have to. Instead, <strong>we can use an <a href="https://blog.frankel.ch/comparison-assertion-libraries/">expressive assertion library</a> to do the heavy lifting for us.</strong> This is how our code would look like using <a href="https://strikt.io/">Strikt</a>:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/strikt.png" width="700" title="‘Example using Strikt’" ></p>
+
+<p>We&rsquo;re using <a href="https://kotlinlang.org/docs/reference/functions.html#infix-notation">Kotlin infix notation</a> to make the code more readable. This a stylistic decision, you don’t have to use it if you don’t like it.</p>
+
+<p>You might notice we&rsquo;re calling the <code>contains</code> method on the assertion itself. This is possible because Strikt can tell that the type we’re asserting on, is a <em>String</em>, and thus, it can provide methods explicitly tailored to Strings. This is what the error message would look like in this case:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/outputStrikt.png" width="700" title="‘Output of the basic Strikt example’" ></p>
+
+<p><strong>Almost the same information we got from writing our own message, but without the boilerplate.</strong></p>
+
+<p>Assertion libraries are like swiss army knives; they provide all kinds of assertions for different types of objects. I suggest learning a few of the core ones through the documentation, and then letting the IDE guide you with auto-suggestions to discover new ones.</p>
+
+<p>Here are some more examples of type-specific assertions:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/collectionAssertion.png" width="700" title="‘Collection specific assertions’" ></p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/assertingExceptions.png" width="700" title="‘Asserting exceptions’" ></p>
+
+<h2>Asserting on objects</h2>
+
+<p>When validating properties on objects, you might be tempted to write something like this:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/badObjectAssertions.png" width="700" title="‘Manually asserting properties on object’" ></p>
+
+<p>You can probably tell why this is bad. By the time we see the failure, we no longer have context on what property we’re asserting.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/objectAssertionOutput.png" width="700" title="‘Using data classes for assertions’" ></p>
+
+<p>Was it checking the <code>title</code>, the <code>author</code>, or something else?</p>
+
+<p>Instead, you can take advantage of the fact that Data Classes automatically get <code>equals</code> and <code>toString</code> implementations. So we can use an <code>assertEquals</code> and get a nice looking message showing us both instances.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/dataClasses.png" width="700" title="‘Using data classes for assertions’" ></p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/dataClassesOutput.png" width="700" title="‘Using data classes test output’" ></p>
+
+<p>If we don&rsquo;t care about comparing all properties we can use <a href="https://strikt.io/wiki/traversing-subjects/">Strikt to assert only specific fields</a>:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/traversingObjects.png" width="700" title="‘Using Strikt to traverse objects on assertions’" ></p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/traversingObjectsOutput.png" width="700" title="‘Strikt object traversal test output’" ></p>
+
+<p>The <a href="https://strikt.io/wiki/assertion-styles/">block assertion style</a> means that even though the <em>title</em> assertion failed Strikt will still check for <em>page count</em> and <strong>it’ll provide output for all the assertions in the block.</strong></p>
+
+<hr />
+
+<p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Test Structure]]></title>
@@ -2700,68 +2786,6 @@ class SubscriptionsResolverImpl(
 
 
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Book Recommendations: Radical Candor]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/09/30/book-recommendations-radical-candor/"/>
-    <updated>2018-09-30T11:28:59-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/09/30/book-recommendations-radical-candor</id>
-    <content type="html"><![CDATA[<p>Last week I finished <a href="https://www.amazon.com/Radical-Candor-Kim-Scott/dp/B01MY574EE/ref=sr_1_1?ie=UTF8&amp;qid=1538332470&amp;sr=8-1&amp;keywords=radical+candor">Radical Candor</a> a book by <a href="https://www.kimmalonescott.com/">Kim Scott</a> about <em>how to be a good boss without being an asshole</em>. Here’s what I learned.</p>
-
-<!--more-->
-
-
-
-
-<iframe type="text/html" width="336" height="550" frameborder="0" allowfullscreen style="margin: auto; display: block; max-width:100%" src="https://read.amazon.com/kp/card?asin=B01KTIEFEE&preview=inline&linkCode=kpe&ref_=cm_sw_r_kb_dp_IcxSBbZDBE91M" ></iframe>
-
-
-<h1>1.  Be honest. Specially when it’s hard</h1>
-
-<blockquote><p>“From the time we learn to speak, we’re told that if you don’t have anything nice to say, don’t say anything at all. When you become a manager, it’s your job to say it--and your obligation.”</p><footer><strong>Kim Scott</strong> <cite>Radical Candor</cite></footer></blockquote>
-
-
-<p>If somebody’s work is subpar and you let it pass and pretend is good, <strong>you’re doing everybody a disservice</strong>. You’re hurting the team because either you or somebody else, will have to cover up for the guy and redo the work. And at the same time you’re setting a precedent that it is OK to deliver poor work.</p>
-
-<p>But even more importantly <strong>you’re not giving that person the chance to improve by pointing out what he/she needs to work on!</strong> So if you care about your team, speak up! Be <em>honest</em>, be <em>direct</em> and be <em>specific</em>.</p>
-
-<h1>2. How to be direct without being a dick</h1>
-
-<p>Kim’s advise is to <em>care personally™</em>, which to me means: <strong>care for the other person, but seriously</strong>.</p>
-
-<p>It’s not enough to remember you employees partner’s name, or to ask about his hobbies every now and then. To make radical candor work you have to build and actual relationship with your direct reports. Get to know them. <strong>Understand where they come from and what drives them</strong>.</p>
-
-<p>So, how to put this in practice? The book has a ton of useful <strong>tips on how to criticize without discouraging</strong>. For example:</p>
-
-<ol>
-<li><strong>Start by asking for feedback before giving it</strong>. Show that you’re open to criticism and make sure you reward people that takes the time and effort to correct you. This is the only way you can build of culture of radical candor.</li>
-<li><strong>Don’t make it personal</strong>. When pointing out things that can be improved make it clear that it’s not about the person but about the work done. Be specific! And present it as an opportunity for improvement and <em>offering help and guidance to fix the problem</em>.</li>
-</ol>
-
-
-<h1>3. Not everybody is looking for  a promotion</h1>
-
-<p>This one is about how we value and judge ambition. As the book points out <strong>not everybody on your team is eager to jump to a new position or wants to be a manager</strong>. You’ll probably have some team members that are content with their current position and, for whatever reason, are not looking for a change. And that’s ok!</p>
-
-<p>The book calls this people <em>”Rockstars”</em> because they are the rock that brings stability to the team. An uses the term <em>“Superstars”</em> for the more ambitious kind that are looking for new opportunities to shine. I think the names are stupid. But what’s not stupid is the realization that <strong>you need both kinds of people in your team</strong>.</p>
-
-<p>If your team is only composed of <em>”Superstars”</em> then if they succeed (and it’s your job to help them succeed!) then you’ll end up without team because everybody has moved to a new thing. On the other hand if your team is all <em>“Rockstars”</em> then you run the risk of stagnation as you’ll lack your main agents of innovation. You’ll need to get the right mix of <em>“Rockstars”</em> and <em>“Superstars”</em> for your team to be successful.</p>
-
-<p>It’s worth pointing out that <strong>this “labels” are not permanent</strong>. People will move between the two kinds based on their priorities, values and things on their personal life. And it’s your job as manager to figure out what each team member is aiming for, and help them get there.</p>
-
-<p>Remember that promotions are just one way of recognizing people’s work, and it might not be the best reward for everybody.</p>
-
-<h1>4. On culture</h1>
-
-<p>I found quite interesting the observation that, when left unchecked, <strong>the team’s culture tends to reflect it’s leaders strengths and short-comings</strong>. Kim explains  how every action, big or small, has an impact on the team culture. So for example, if you’re working on improving the product quality and attention to detail you shouldn’t send emails with spelling mistakes. <strong>You have to lead by example and inspire people to follow</strong>.</p>
-
-<p>The only way of creating a long-lasting culture is by inspiring people and letting them contribute with their own ideas.</p>
-
-<hr />
-
-<p>I’m just scratching the surface here. The book expands on the mentioned topics with good real-world examples. The second portion of the book focuses on the details on how to put the theory in practice. It covers from things like <em>how to schedule and conduct your one-on-ones</em> to <em>hiring techniques to avoid biases</em>. <strong>So go read it!</strong> I’m sure you’ll find something useful.</p>
 ]]></content>
   </entry>
   
