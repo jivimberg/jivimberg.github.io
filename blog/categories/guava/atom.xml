@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Guava | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/guava/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2020-07-19T20:20:42-07:00</updated>
+  <updated>2020-07-27T22:42:59-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying/"/>
     <updated>2014-07-17T14:22:07-07:00</updated>
     <id>http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying</id>
-    <content type="html"><![CDATA[<p>We were having a <a href="http://en.wikipedia.org/wiki/Race_condition#Software">race condition</a> on a server which was &ldquo;fixed&rdquo; by adding an sleep to the thread to check again later. Yes, it sucked, so I decided to make something more sophisticated and went looking for a library to handle retryies with multiple strategies. That&rsquo;s when I first read about <a href="https://github.com/rholder/guava-retrying">Guava Retrying</a></p>
+    <content type="html"><![CDATA[<p>We were having a <a href="http://en.wikipedia.org/wiki/Race_condition#Software">race condition</a> on a server which was &ldquo;fixed&rdquo; by adding an sleep to the thread to check again later. Yes, it sucked, so I decided to make something more sophisticated and went looking for a library to handle retries with multiple strategies. That&rsquo;s when I first read about <a href="https://github.com/rholder/guava-retrying">Guava Retrying</a>.</p>
 
 <!--more-->
 
@@ -27,15 +27,17 @@
 
 <blockquote><p>Guava-Retrying is a small extension to Google&rsquo;s Guava library to allow for the creation of configurable retrying strategies for an arbitrary function call, such as something that talks to a remote service with flaky uptime.</p></blockquote>
 
-<p>Simply put give it a taks and it will retry it until success&hellip; or until a given condition is met, or after X attempts, or until it does not throw exception, or&hellip; well you get the point: <strong>flexibility</strong>.</p>
-
 <h3>Quick example</h3>
 
-<p>Let&rsquo;s say we want to execute a task that will:
-* Retry if the result is null
-* Retry if an exception of type IOException is thrown
-* Wait 300 miliseconds to try again.
-* Stop after 5 attempts</p>
+<p>Let&rsquo;s say we want to execute a task that will:</p>
+
+<ul>
+<li>Retry if the result is <code>null</code></li>
+<li>Retry if an exception of type IOException is thrown</li>
+<li>Wait 300 milliseconds to try again.</li>
+<li>Stop after 5 attempts</li>
+</ul>
+
 
 <p>Then we would do something like:</p>
 
@@ -48,7 +50,7 @@
 Retryer&lt;Boolean&gt; retryer = RetryerBuilder.&lt;Boolean&gt;newBuilder()
         .retryIfResult(Predicates.&lt;Boolean&gt;isNull())
         .retryIfExceptionOfType(IOException.class)
-        .withWaitStrategy(WaitStrategies.fixedWait(300,                                                                             TimeUnit.MILLISECONDS))
+        .withWaitStrategy(WaitStrategies.fixedWait(300, TimeUnit.MILLISECONDS))
         .withStopStrategy(StopStrategies.stopAfterAttempt(5))
         .build();
 
@@ -61,11 +63,13 @@ try {
 }
 </code></pre>
 
-<p>After attempting 5 times it will throw a <code>RetryException</code> with information about the last attempt. Any other exception thrown by your task will be wrapped and rethrown in a <code>ExecutionException</code></p>
+<p>After attempting 5 times it will throw a <code>RetryException</code> with information about the last attempt. Any other exception thrown by your task will be wrapped and re-thrown in a <code>ExecutionException</code>.</p>
 
-<p>Other <strong>wait strategies</strong> supported: Random backoff, Incremental backoff, Exponential backoff, Fibonacci backoff</p>
+<p>Other <strong>wait strategies</strong> supported are: <a href="http://rholder.github.io/guava-retrying/javadoc/2.0.0/com/github/rholder/retry/WaitStrategies.html#randomWait(long,%20java.util.concurrent.TimeUnit)">Random</a>, <a href="http://rholder.github.io/guava-retrying/javadoc/2.0.0/com/github/rholder/retry/WaitStrategies.html#incrementingWait(long,%20java.util.concurrent.TimeUnit,%20long,%20java.util.concurrent.TimeUnit)">Incremental</a>, <a href="http://rholder.github.io/guava-retrying/javadoc/2.0.0/com/github/rholder/retry/WaitStrategies.html#exponentialWait()">Exponential</a>, <a href="fibonacciWait">Fibonacci</a>.</p>
 
-<p>Other <strong>stop strategies</strong> supported: never stop, stop after delay.</p>
+<p>Other <strong>stop strategies</strong> supported are: <a href="http://rholder.github.io/guava-retrying/javadoc/2.0.0/com/github/rholder/retry/StopStrategies.html#neverStop()">never stop</a>, <a href="http://rholder.github.io/guava-retrying/javadoc/2.0.0/com/github/rholder/retry/StopStrategies.html#stopAfterDelay(long,%20java.util.concurrent.TimeUnit)">stop after delay</a>.</p>
+
+<p> <img class="right-fill" src="/images/signatures/signature4.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
