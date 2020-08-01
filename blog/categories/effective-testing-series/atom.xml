@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Effective-testing-series | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/effective-testing-series/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2020-07-27T22:42:59-07:00</updated>
+  <updated>2020-07-31T22:11:32-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,78 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Effective Testing - Reducing Non-determinism to Avoid Flaky Tests]]></title>
+    <link href="http://jivimberg.github.io/blog/2020/07/27/effective-testing-reducing-non-determinism/"/>
+    <updated>2020-07-27T22:00:54-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2020/07/27/effective-testing-reducing-non-determinism</id>
+    <content type="html"><![CDATA[<p>Flaky tests are those that randomly fail for no apparent reason. If you have a flaky test, you might re-run it, over and over, until it succeeds. If you have a <em>couple</em> of them, the chances of all passing at the same time are slim, so maybe you ignore the failures. You know, just this one time… Soon enough, you’re not paying attention to failures on this test suite. Congratulations! Your tests are now worthless.</p>
+
+<!--more-->
+
+
+<h2>Prefer smaller tests</h2>
+
+<p>Non-determinism is often introduced as a consequence of relying on external services. For example, let’s say our test needs to read data from a database, the test might fail if the database is down, or the data is not present, or has changed.</p>
+
+<p>You&rsquo;ve probably seen the <a href="https://martinfowler.com/bliki/TestPyramid.html">Test Pyramid</a> before. Tests are classified by scope, and the recommendation is to favor tests with reduced scopes (i.e. Unit Tests).</p>
+
+<p><img class="center" src="/images/posts/2020-07-31/TestingPyramid.jpg" width="700" title="‘Using data classes for assertions’" ></p>
+
+<p>At Google they came up with a new dimension: <em>Test Size</em><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Tests are grouped in categories <strong>based on the resources a test needs to run</strong> (memory, processes, time, etc.).</p>
+
+<ul>
+<li><strong>X-Small</strong> tests are limited to a single thread or coroutine. They are not allowed to sleep, do I/O operations, or make network calls.</li>
+<li><strong>Small</strong> tests run on a single process. All other X-Small restrictions still apply.</li>
+<li><strong>Medium</strong> tests are confined to a single machine. Can’t make network calls to anywhere other than <code>localhost</code>.</li>
+<li><strong>Large</strong> tests can span multiple machines. They&rsquo;re allowed to do everything.</li>
+</ul>
+
+
+<p><em>Scope</em> and <em>Size</em> are related, but independent. You could have an end-to-end test of a CLI tool that runs in a single process.</p>
+
+<p>How does this tie back to our crusade against flaky tests? Simple, <strong>the smaller the test, the more deterministic it’ll be.</strong> As a bonus perk, they also tend to be faster.</p>
+
+<p><img class="center" src="/images/posts/2020-07-31/TestSizes.jpg" width="700" title="‘Test sizes’" ></p>
+
+<p>Google went the extra mile and built infrastructure to enforce these constraints. For example, a test marked as <em>Small</em> would fail if it tried to do I/O.</p>
+
+<h2>How to make your test small</h2>
+
+<p>Some ways you can reduce the size of your test:</p>
+
+<ol>
+<li>Use <a href="https://martinfowler.com/bliki/TestDouble.html">Test Doubles</a> to avoid making calls to external services.</li>
+<li>Use an <a href="https://www.baeldung.com/spring-boot-h2-database">in-memory Database</a>.</li>
+<li>Use an <a href="https://github.com/google/jimfs">in-memory filesystem</a>.</li>
+<li>Design your classes so that <a href="https://github.com/google/guava/wiki/CachesExplained#testing-timed-eviction">test can provide a custom time source</a> instead of relying on the system clock.</li>
+<li>Use <a href="https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test">kotlinx-coroutines-test</a> to virtually advance time without having to make your test wait.</li>
+<li>Use <a href="https://www.testcontainers.org/">Testcontainers</a> to turn a <em>Large</em> test into a <em>Medium</em> one.</li>
+</ol>
+
+
+<h2>The trade-off</h2>
+
+<p>The downside of artificially isolating your tests is that they lose <em>Fidelity</em>. Meaning, what you end up testing is further away from what will run in production. <a href="https://jivimberg.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null/">I’ve been bitten by this in the past</a>.</p>
+
+<p>The trick is to have a test distribution similar to the one proposed by the Test Pyramid. We should have lots of <em>Small</em> and <em>X-Small</em> tests, some <em>Medium</em> tests, and only a few <em>Large</em> tests.</p>
+
+<hr />
+
+<p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
+
+<p> <img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>The name is unfortunate as it’s not immediately obvious what Size refers to.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Expressive Assertions]]></title>
