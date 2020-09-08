@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Testing | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2020-07-31T22:11:32-07:00</updated>
+  <updated>2020-09-07T22:55:54-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Effective Testing - Show What's Important, Hide the Rest]]></title>
+    <link href="http://jivimberg.github.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest/"/>
+    <updated>2020-09-07T18:05:00-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest</id>
+    <content type="html"><![CDATA[<p>What we include in a test is as important as what we leave out. Having the right amount of information helps us understand what the test is doing at a glance.</p>
+
+<!--more-->
+
+
+<p>Let&rsquo;s say we need to check our Restaurants are behaving correctly. We want to validate two things:</p>
+
+<ol>
+<li>That a restaurants can only cook a <code>Recipe</code> if they have all the necessary ingredients.</li>
+<li>That vegan restaurants do not serve non-vegan food</li>
+</ol>
+
+
+<p><img class="center" src="/images/posts/2020-09-07/restaurantTestsBefore.png" width="700" title="‘Repetitive tests’" ></p>
+
+<p>This works fine, but writing a new <code>Recipe</code> for every single test gets repetitive pretty fast. More importantly, most lines of the test are spent creating the <code>Recipe</code> object. By having to spell out every single property, we lose track of what’s important for each specific test.</p>
+
+<p>Luckily, we can use <a href="https://kotlinlang.org/docs/reference/functions.html#default-arguments">Kotlin default arguments</a> to make the tests better. We could introduce default values directly on the <code>Recipe</code> class, but that would mean we’d have to pick sensible defaults for Recipes in production. We probably don’t want to allow for this flexibility, as we want to force users to specify those properties for each recipe defined. Instead, we will write a <a href="https://phauer.com/2018/best-practices-unit-testing-kotlin/#use-helper-functions-with-default-arguments-to-ease-object-creation"><em>helper function</em></a> with default arguments to handle the <code>Recipe</code> creation. We’ll make it <code>private</code> so that it’s only accessible in the test class.</p>
+
+<p><img class="center" src="/images/posts/2020-09-07/helperFunction.png" width="700" title="‘Helper function’" ></p>
+
+<p>Now we can re-write our tests to make use of the helper function:</p>
+
+<p><img class="center" src="/images/posts/2020-09-07/restaurantTestsAfter.png" width="700" title="‘Improved tests’" ></p>
+
+<p>On each test, we only specify the property that the test cares about and leave out all the other ones. This way, somebody glancing at the test can immediately identify what we’re checking, and it’s not distracted by the details on how to create a <code>Recipe</code> object.</p>
+
+<p>Note that this is a simplified example. In real life, the object being created could have multiple nested objects and require many steps to be initialized. All that code would be hidden in our helper function instead of bloating every test.</p>
+
+<p>We could have written the test for vegan recipes without specifying any property, and it would still pass.</p>
+
+<p><img class="center" src="/images/posts/2020-09-07/notExplicit.png" width="700" title="‘Not explicit enough tests’" ></p>
+
+<p>By default <code>isVegan</code> is true, so we&rsquo;re not required to define it. However, <strong>we opted for explicitly specifying it in the test</strong>, just so that somebody reading the test would know that the value of <code>isVegan</code>  is important for this test. As an extra benefit, the test will not break if, in the future, somebody decides to change the default value for <code>isVegan</code>.</p>
+
+<hr />
+
+<p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
+
+<p> <img class="right-fill" src="/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Reducing Non-determinism to Avoid Flaky Tests]]></title>
@@ -262,148 +310,6 @@
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
 <p> <img class="right-fill" src="/images/signatures/signature14.png" width="200" title="‘My signature’" ></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using PowerMock + TestNG to Mock a Static Class]]></title>
-    <link href="http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class/"/>
-    <updated>2016-04-03T08:38:47-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class</id>
-    <content type="html"><![CDATA[<p>￼
-This week I needed to test a class that depended on a method from an static class. I saw we were using <a href="https://github.com/jayway/powermock" title="PowerMock">PowerMock</a> and thought to myself: <em>“Well this sounds pretty common, I bet it’s easy to accomplish”</em>. But of course I ran into half a dozen issues before I was able to make it work. Here’s my two cents to make your experience easier than mine.</p>
-
-<!--more-->
-
-
-<h2>Setup</h2>
-
-<p>Let’s start with the ingredients. To mock static methods you’ll need a couple of libraries:</p>
-
-<ul>
-<li><a href="http://easymock.org/">EasyMock</a> for the mocking<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></li>
-<li><a href="https://github.com/jayway/powermock">PowerMock</a></li>
-<li><a href="http://testng.org/">TestNG</a> for the test</li>
-</ul>
-
-
-<p>When choosing your library version you’ll need to make sure <strong>PowerMock</strong> and <strong>TestNG</strong> versions are compatible. You can do so by comparing your versions with the ones specified <a href="https://github.com/jayway/powermock/wiki/TestNG_usage">here</a>.</p>
-
-<p>Also, if you’re not using <strong>Maven</strong> to include PowerMock in your project make sure you also add it’s dependencies. You’ll find a zip file containing everything you need <a href="https://github.com/jayway/powermock/wiki/GettingStarted">here</a>.</p>
-
-<h2>Writing the test</h2>
-
-<p>To have the test working you’ll need to do 3 things:</p>
-
-<ol>
-<li>Configure <strong>TestNG</strong> to use the PowerMock object factory</li>
-<li>Use <code>@PrepareForTest</code> annotation to prepare the static class</li>
-<li><strong>Mock</strong> the static class method</li>
-<li><strong>Write the rest</strong> of the test</li>
-</ol>
-
-
-<p>Let’s go one by one:</p>
-
-<h4>1. Configure TestNG to use the PowerMock object factory</h4>
-
-<p>There are a bunch of ways of doing this, namely:</p>
-
-<ul>
-<li>Configure it on the <code>suite.xml</code> file</li>
-<li>Extending your test class with <code>PowerMockTestCase</code></li>
-<li>Or by adding a method like this to your test</li>
-</ul>
-
-
-<pre><code class="java">@ObjectFactory
-public IObjectFactory getObjectFactory() {
-    return new org.powermock.modules.testng.PowerMockObjectFactory();
-}
-</code></pre>
-
-<p>I choose to go with the latter because I don’t use the <code>suite.xml</code> file and adding an annotated method is less restrictive than extending a class. But feel free to use whatever works for you.</p>
-
-<h4>2. @PrepareForTest</h4>
-
-<p>You’ll need to prepare your static class for mocking. You can do so with the <code>@PrepareForTest</code> annotation like this:</p>
-
-<pre><code class="java">@PrepareForTest(StaticHelper.class)
-public class MyTest {
-    ...
-}
-</code></pre>
-
-<p>Note that you can pass an array of classes to the annotation if you need to prepare multiple classes.</p>
-
-<h4>3. Mocking</h4>
-
-<p>Now you’re ready to mock the static method like this:</p>
-
-<pre><code class="java">@Test
-public void test() throws Exception {
-    // mocking static method
-    PowerMock.mockStatic(StaticHelper.class);
-    EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello world”)).anyTimes();
-    PowerMock.replay(StaticHelper.class);
-    ...
-} 
-</code></pre>
-
-<h4>4. Writing the rest</h4>
-
-<p>Ok let’s put everything together and write the rest of the test</p>
-
-<pre><code class="java">@PrepareForTest(StaticHelper.class)
-public class MyTest {
-
-    @ObjectFactory
-    public IObjectFactory getObjectFactory() {
-        return new org.powermock.modules.testng.PowerMockObjectFactory();
-    }
-
-    @Test
-    public void test() throws Exception {
-        // mocking static method
-        PowerMock.mockStatic(StaticHelper.class);
-        EasyMock.expect(StaticHelper.doSomething()).andReturn(“hello world”)).anyTimes();
-        PowerMock.replay(StaticHelper.class);
-
-        // test
-        Assert.assertEquals(“hello world” ” StaticHelper.doSomething());
-    }
-
-}
-</code></pre>
-
-<p>Of course this is an oversimplified example. The cool thing about mocking static methods is that <strong>the static call you may need to mock may be hidden under several layers of abstraction</strong>. Using this approach you are able to mock the static call and test your classes without changing a single line of production code.</p>
-
-<h2>Some things to watch out for</h2>
-
-<p>There are a few things to keep in mind when initializing the mock:</p>
-
-<ol>
-<li>You cannot create mocks during <strong>field initialization</strong>.</li>
-<li>You cannot create mocks inside <strong>before static methods</strong>.</li>
-</ol>
-
-
-<p>Finally I also run into the following error when running my test:</p>
-
-<pre><code>java.lang.VerifyError: Expecting a stackmap frame at branch target 71 in method com.abc.domain.myPackage.MyClass$JaxbAccessorM_getDescription_setDescription_java_lang_String.get(Ljava/lang/Object;)Ljava/lang/Object; at offset 20_
-</code></pre>
-
-<p>Turns out that, as explained <a href="http://stackoverflow.com/questions/15122890/java-lang-verifyerror-expecting-a-stackmap-frame-at-branch-target-jdk-1-7">here</a> Java 7 introduced a stricter verification and changed the class format. The byte code generation library PowerMock uses is generating code that does not comply with the new verification. But worry not, <strong>this validation can be disabled</strong> by passing <code>-noverify</code> as argument to the JVM.</p>
-
-<p>If you&rsquo;re running you&rsquo;re using Maven to run your tests remember to add the argument to your plugin configuration.</p>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>This guide uses <strong>EasyMock</strong> but you can also use <strong>Mockito</strong><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
 ]]></content>
   </entry>
   
