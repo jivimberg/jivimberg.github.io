@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Documentation | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/documentation/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2020-12-27T17:54:04-08:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Documenting Decisions]]></title>
+    <link href="http://jivimberg.github.io/blog/2020/12/26/documenting-decisions/"/>
+    <updated>2020-12-26T13:51:06-08:00</updated>
+    <id>http://jivimberg.github.io/blog/2020/12/26/documenting-decisions</id>
+    <content type="html"><![CDATA[<p>It’s Monday morning. You’re sitting at your desk with your steaming cup of Joe, ready to sink your teeth into that new feature you have to develop. The <code>git pull</code> downloads months worth of changes, and you dive into the code. Piece by piece, you start building a mental model of the system, trying to make sense of the different components. But something doesn’t feel right. Why was it built this way? It feels weird, it feels so obviously wrong, so poorly designed, so suboptimal.</p>
+
+<p>You realize you need help. Whoever wrote this mess should be able to provide some context. You run <code>git blame</code> and your own name hits you in the face like a brick. You start thinking that maybe it’s no so wrong. That you probably had your reasons. If you could only go back in time and ask your past self…</p>
+
+<!--more-->
+
+
+<h2>Architecture Decision Logs</h2>
+
+<p>Good developers write code that is easy to understand and use comments to provide additional context. Great teams write documentation explaining how the system is designed and how it is supposed to work. But even if you are blessed with both, there’s still a piece that is usually missing. <strong>Something that can answer the question: <em>How did we end up here?</em>.</strong> Something that can provide context on why the system was designed this way, on what other options were considered and rejected, on why we picked this particular technology or pattern.</p>
+
+<p>That’s exactly what an <a href="https://github.com/joelparkerhenderson/architecture_decision_record">Architecture Decision Log (ADR)</a> is for.</p>
+
+<blockquote><p>An <strong>Architecture Decision Record (ADR)</strong> is a document that captures an important architectural decision made along with its context and consequences.</p>
+
+<p>An <strong>Architecture Decision Log (ADL)</strong> is the collection of all ADRs created and maintained for a particular project (or organization).</p></blockquote>
+
+<p>An Architecture Decision Log can help us capture the context, motivations, and assumptions behind a decision. We are basically doing a brain dump of all the things that were considered before making a final call on something.</p>
+
+<p><img class="center" src="/images/posts/2020-12-26/architecture.gif" width="500"></p>
+
+<p>If one thing is constant about developing software is change. New features are requested, the app grows and it has to support an increasing number of requests, people leave the team and new developers join. By keeping an Architecture Decision Log, we capture the thought process that goes into a decision, <strong>so that future maintainers can understand why something is the way it is, and use this information to evaluate new changes.</strong>  Maybe an assumption made about how users would use the app turned out not to be true. Or perhaps a requirement about the size of stored data has changed, and the existing database can’t scale accordingly.</p>
+
+<p>And that’s not all! ADLs can also provide information about the path not taken. We can document what other alternatives were considered and why they didn’t fly. If some possible solution was initially considered, chances are it’ll come up again as a suggestion in the future. By documenting the research, we avoid new team members wasting their time going down the same rabbit holes explored in the past. Or at least we provide a starting point for a potential re-evaluation.</p>
+
+<h2>The Template</h2>
+
+<p>There are a bunch of templates you can follow in this <a href="https://github.com/joelparkerhenderson/architecture_decision_record#adr-example-templates">GitHub repo</a>. But to be honest, the template doesn’t really matter as much as actually writing them. I usually go with something like this:</p>
+
+<ul>
+<li><strong>Information:</strong> This is like a header where you can include the date, the topic, and who’s writing. Most of this metadata can be obtained from the history if you’re versioning your documentation (as you should), but I think it’s worth repeating it at the start of the document for clarity.</li>
+<li><strong>Problem Context:</strong> A brief description of what you’re trying to solve and why. <em>Don’t forget the why</em>, it might be obvious to you at the time of writing, but it won’t be to someone else in a couple of months/years.</li>
+<li><strong>Details:</strong> This is usually the longest part. Here you can describe all the alternative solutions explored and detail the pros and cons of each approach.</li>
+<li><strong>What was decided:</strong> In this section, you document the final decision as well as the rationale on why one option was picked over the others. Usually, you’ll be making some guess or assumption about how the system will evolve in the future, make sure to include those too.</li>
+</ul>
+
+
+<p>If you’re curious about what they look like, you can see some ADR examples <a href="https://github.com/joelparkerhenderson/architecture_decision_record/tree/master/examples">here</a>.</p>
+
+<h2>Tooling</h2>
+
+<p>You can start your Architecture Decision Log as a new section of your documentation. <strong>I favor keeping documentation as close to the code as possible. Ideally, in the same repository.</strong> Why? Because it’s easier to keep them in sync that way. For example, you can submit your code and documentation changes as part of the same PR. It also makes it more discoverable, as searching for a term in the IDE will bring up results on both code and documentation.</p>
+
+<p>Whatever tool you use, make sure your documentation is searchable and, above all, easy to edit. Ideally, it should also be versioned. I think <a href="https://www.mkdocs.org/">MkDocs</a> fits the bill pretty well, and it’s easy to setup.</p>
+
+<h2>How to write a good ADRs</h2>
+
+<p>Some advice on how to write a good Architecture Decision Record:</p>
+
+<ol>
+<li><strong>Write everything down, even if it’s obvious.</strong> The document you are writing might need to be read by somebody new to the team years from now. Try to paint a complete picture.</li>
+<li><strong>It’s not just about the technical stuff.</strong> Many factors that contribute to a design decision. It might be the team size, the team knowledge of a specific technology or some deadline that needs to be met.</li>
+<li><strong>Keep it honest.</strong> Engineering is about cutting corners. There’s no shame in taking shortcuts, so don’t try to hide it. If some decision was taken because of time constraints or the team resorted to a technology only because it’s what they know best, then better to be upfront about it.</li>
+<li><strong>Keep it short or include a TL;DR.</strong> Keep it easily digestible. If you are including all of the research done, you might want to consider adding it as an appendix. If the document is too long, make sure there’s a good summary on the top so that somebody not interested in the details can still get an overview of the decision.</li>
+<li><strong>ADRs are immutable.</strong> You’re capturing a snapshot of a decision, so there’s no need to update ADRs after time has passed. If new things come up, you can always create a new document and link it to the previous one.</li>
+<li><strong>You can write ADRs even if you don’t have code.</strong> I had tasks that ended up being just an ADR. Maybe you start exploring some performance improvement only to realize it is not feasible. Instead of just scrapping all the code, make sure to include an ADR detailing what the idea was, and why it didn’t succeed. That way, the next time somebody suggests it, they can learn from your attempt instead of falling into the same pitfalls.</li>
+<li><strong>Make it fun.</strong> Just because it’s documentation doesn’t mean it has to be boring. Tell a story. Make it fun! include pictures, diagrams, memes. Use emojis! 😄</li>
+</ol>
+
+
+<h2>The future (hopefully)</h2>
+
+<p>I believe there’s plenty of room for improvement and innovation in the area of documentation tooling. <strong>One thing I’d love to see are smart ADRs that would trigger a notification when one of the assumptions documented breaks.</strong> For example, let’s say your team chose to keep some information in memory for every request because the payload size is expected to be small. They made the call, implemented the code and wrote the appropriate ADR. It’d be great if they could also include a metric as part of the documentation that would monitor that the assumption holds. That way, the team would get notified if, at some point, the expectation is no longer valid. The alert would link to the ADR including context about what system decisions are affected by this violation, and what other facts need to be considered if a change is required.</p>
+
+<hr />
+
+<p> <img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+</feed>

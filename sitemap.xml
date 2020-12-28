@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2020/12/26/documenting-decisions/</loc>
+<lastmod>2020-12-26T13:51:06-08:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest/</loc>
 <lastmod>2020-09-07T18:05:00-07:00</lastmod>
 </url>
@@ -645,5 +649,8 @@
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/categories/builder/</loc>
+</url>
+<url>
+<loc>http://jivimberg.github.io/blog/categories/documentation/</loc>
 </url>
 </urlset>
