@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2020-12-27T17:54:04-08:00</updated>
+  <updated>2021-01-27T08:57:19-08:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,112 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[About Deploying on Fridays]]></title>
+    <link href="http://jivimberg.github.io/blog/2021/01/22/about-deploying-on-fridays/"/>
+    <updated>2021-01-22T08:55:35-08:00</updated>
+    <id>http://jivimberg.github.io/blog/2021/01/22/about-deploying-on-fridays</id>
+    <content type="html"><![CDATA[<p>Common knowledge says that you don’t deploy on Friday if you want to have a peaceful weekend. Yet, some people will tell you that if you’re not comfortable deploying every day of the week, you’re doing it wrong. They’ll say that deploying shouldn’t be scary and that you probably don’t have enough tests. So, which one is it?</p>
+
+<!--more-->
+
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-01-22/homer-deploying.png" width="350"></p>
+
+<h2>The problem with Fridays</h2>
+
+<p>Fridays are the last day of the working week, and for many teams, it might also be the end of the sprint/cycle/iteration. Explicit or not, there’s a deadline looming between the developer and the weekend. We invested long hours on this new feature, and we just want to push it out the door, close the ticket, and come back to a clean slate on Monday. Nobody likes heading into the weekend feeling like a fraud because they couldn’t complete the planned tasks in time. The bigger the task, the more eager we are to close it.</p>
+
+<p>So what do we do? We rush it. Maybe we skip testing in a staging environment or turn a blind eye to that flaky test that always fails, and <em>we ship it</em>. We feel the weight being lifted off our shoulders as we click deploy, and we head out the door smiling, ready to enjoy the weekend.</p>
+
+<p>Only somebody will have to clean up our mess when things go south.</p>
+
+<h2>When is a task completed?</h2>
+
+<p>To understand how to combat the danger of Fridays, let’s consider the <em>software lifecycle</em>. That is, the things that happen between <em>“I have to implement feature X”</em> and  <em>“<em>people using it in production</em>”</em>.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-01-22/software-lifecycle1.jpeg" width="700"></p>
+
+<p>From the developer&rsquo;s point of view, when would you say that feature X is <em>Done</em>? Is it once the branch is merged? Is it after the code is deployed? The answer depends on what your team considers the developer’s responsibility. On teams doing <a href="https://netflixtechblog.com/full-cycle-developers-at-netflix-a08c31f83249">Full Cycle Development</a>, the same person writing the code is the one that will test, operate and deploy the service. Which means that <strong>the feature can only be marked as Done once it’s being used in production.</strong></p>
+
+<p>Deploying is only one step, after which you <strong>release</strong> the change to some (or all) of your users and <strong>observe</strong> that it is working as intended. <em><em>Spoiler Alert</em></em> Sometimes it won’t be, and you’ll have to go back to the code and add little fixes here and there.</p>
+
+<p>Treating deployments as just another phase of the software lifecycle enables <a href="https://www.infoq.com/articles/observability-driven-development/">Observability Driven Development</a>. Letting developers <em>see</em> how their code behaves in production before closing the task.</p>
+
+<h2>Optimizing the feedback loops</h2>
+
+<p>The software lifecycle diagram shown above is an over-simplification. In reality, the flow is never a straight line. Every step can send you back to a previous step: Started coding and found a flaw in the design, go back to design  🔙, a test started failing, go back to develop 🔙, etc.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-01-22/software-lifecycle2.jpeg" width="700"></p>
+
+<p><a href="https://martinfowler.com/articles/developer-effectiveness.html">The secret sauce to a highly efficient team is keeping these feedback loops as short as possible</a>. If your tests take thirty minutes to run, by the time you see the failure, you’re already deep in some other task (or worse, on your 9th YouTube video).</p>
+
+<p>Deploying is no different. If it takes months for your code to reach production, by the time your users start using your new feature (and uncovering bugs), you have already moved on to something else. You no longer have the context fresh on your mind, and you barely recall the details and the design decisions taken at the time (which is why <a href="https://jivimberg.io/blog/2020/12/26/documenting-decisions/">you should be documenting those decisions</a>).</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-01-22/software-lifecycle3.jpeg" width="700"></p>
+
+<h2>How to make deployments less scary</h2>
+
+<p><strong>The single most important change you can make to have less scary deployments, is to deploy small changes. Ideally, deploying one change at a time. One Pull Request ➡️ one Deploy.</strong> This will inevitably lead to more deployments because now you might have to do ten deployments to match your big dump releases of the past. This is good! The more you deploy, the less scary it is.</p>
+
+<p>Deploying small changes also gives you better visibility into how your code is affecting the service. <strong>By releasing one change at a time, developers can use telemetry to observe how the code behaves in production and spot bugs before your users do</strong>. In contrast, if you batch multiple PRs in a single deploy, you might have a harder time figuring out which of the changes caused the issue. You might even have to convince the developer that what caused the issue is indeed their commit and not somebody else’s bundled together in the same release. You can avoid all this hassle by following the “one PR ➡️ one Deploy” rule.</p>
+
+<p>And the benefits don’t end there! Smaller changes also mean shorter code reviews. It’s easier for developers reviewing your code to spot bugs in a small PR than in a huge one that modifies hundreds of lines. This is another way in which smaller changes bring better code quality.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-01-22/huge-pr.jpeg" width="400"></p>
+
+<p>Last but not least, smaller PRs produce short-lived branches, reducing the number of merge conflicts one has to deal with.</p>
+
+<h2>Deploying != Releasing</h2>
+
+<p>For this approach to work, you need to trust devs with the keys to production. Depending on how your team operates, this might sound risky. <em>Are you saying developers can put code in production whenever they want?</em> Yes! That’s exactly what we’re advocating for. As pointed out earlier, this will mean more deploys, but it’s generally safer than the humongous release approach. Even if it feels like you lose control of what goes out the door. Yes, you’ll be deploying bugs from time to time, but the blast radius is limited, and the change is easier to rollback.</p>
+
+<p><strong>Now, this doesn’t mean that all users are immediately able to see the new changes as soon as you deploy.</strong> The terms <em>deploy</em> and <em>release</em> are sometimes used interchangeably, so let’s define how we’ll use them here:</p>
+
+<ul>
+<li><strong>Deploy:</strong> Put a new version of the code in production.</li>
+<li><strong>Release:</strong> Make some functionality available to users.</li>
+</ul>
+
+
+<p>You can (and should) still control at what rate new functionality is released to users. You might use a rollout strategy where only a subset of power-users get to see what you’re working on and provide feedback before the feature is released to a broader audience. Or, you might want to start by observing how it works on a small percentage of users and then gradually roll out to everyone else. You can achieve this by hiding the new code behind <a href="https://martinfowler.com/articles/feature-toggles.html">Feature Flags</a> and have it conditionally enabled. This provides the extra benefit of being able to enable and disable the code with a simple configuration change (without requiring a deploy), should a critical bug be found.</p>
+
+<h2>It’s not about testing</h2>
+
+<p>One common argument from the <em>“deploy on Fridays”</em> camp is about testing. It goes like this:</p>
+
+<blockquote><p>If you’re scared of deploying on a Friday, it means you either don’t have enough tests or your tests are not good enough.</p></blockquote>
+
+<p>I don’t buy it.</p>
+
+<p>No matter how many tests you have, how good your coverage is, you can’t be sure you’re not releasing a bug. In the words of Dijkstra: <em> Program testing can be used to show the presence of bugs, but never to show their absence.</em></p>
+
+<p>Most automated tests are about validating the scenarios the dev can come up with during development. They don’t account for things we can’t predict<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. So most testing is limited by the imagination of the person writing the test.</p>
+
+<p>Furthermore, our tests usually run in a fake environment where many of the components are mocked. From service stubs to in-memory databases, we use every trick in the book to <a href="https://jivimberg.io/blog/2020/07/27/effective-testing-reducing-non-determinism/">reduce non-determinism from our tests</a>, but this comes at the cost of test fidelity. Our tests no longer accurately represent what happens in production. This is why we need observability and <a href="https://copyconstruct.medium.com/testing-in-production-the-safe-way-18ca102d0ef1">testing in production</a>. This is why we need to <em>deploy</em> and <em>observe</em> to ensure our code is working as intended.</p>
+
+<h2>Conclusion</h2>
+
+<p>To sum up, deploying is just an additional step of the software lifecycle. <strong>You should deploy any day of the week, providing you’re willing to stick around to observe how your code behaves in production. </strong> If you just want to deploy, and run home to start the weekend, then maybe <em>don’t</em>. Because no matter how many tests you have, you haven’t seen your code running in a real environment yet. In the future, we might have DevOps AI to observe and rollback our changes automatically if something looks weird. Until then, though, you’re on the hook for making sure your code is working as intended. <em>Especially on Fridays.</em></p>
+
+<p>Piecemeal deployments will help you release faster and will improve your code quality. The idea is counter-intuitive, but it works: you have to do the scary thing over and over until it becomes an uninteresting event. Releasing frequently will help you catch bugs sooner and will make your team more efficient.</p>
+
+<hr />
+
+<p>Many of the ideas in this post are inspired by the podcasts <a href="https://www.heavybit.com/library/podcasts/o11ycast/">Oll1cast</a> and <a href="https://maintainable.fm/">Maintainable</a>, as well as the books <a href="https://www.amazon.com/Software-Engineering-Google-Lessons-Programming/dp/1492082791">Software Engineering at Google</a> and <a href="https://www.oreilly.com/library/view/distributed-tracing-in/9781492056621/">Distributed Tracing in Practice</a>. If you enjoy these topics, go check them out.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature7.png" width="200" title="‘My signature’" ></p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>That’s what exploratory testing is for, and it’s a creative endeavor that doesn’t scale linearly with code.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Documenting Decisions]]></title>
@@ -2505,130 +2611,6 @@ private suspend fun processMsg(message: Message) = withContext(Dispatchers.Defau
 <p>Ok. The thing that terrified me…<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 <li id="fn:2">
 <p>Go read this article if you haven’t. Peter Welch is hilarious.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to Prepare for the Silicon Valley Interview - Part 1]]></title>
-    <link href="http://jivimberg.github.io/blog/2019/01/06/how-to-prepare-for-the-silicon-valley-interview-part-1/"/>
-    <updated>2019-01-06T14:04:22-08:00</updated>
-    <id>http://jivimberg.github.io/blog/2019/01/06/how-to-prepare-for-the-silicon-valley-interview-part-1</id>
-    <content type="html"><![CDATA[<p>For the past few months, I’ve been interviewing with different companies on the Valley, from some of the well-known giants to promising startups. Over the next couple of weeks I&rsquo;ll be publishing <a href="https://jivimberg.io/blog/categories/interview-series/">a series of articles</a> about the things I learned in the journey. This is Part 1.</p>
-
-<!--more-->
-
-
-<h2>Interview process, the big picture</h2>
-
-<p>This is an overview of what the whole process entails:</p>
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-01-06/processTimeline.png" width="750" title="‘Process timeline’" ></p>
-
-<p>I found that dividing the whole process in parts helped me build a schedule and create deadlines for the different phases.</p>
-
-<p>This article will cover the first two phases:</p>
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-01-06/timelineFocusPart1.png" width="750" title="‘Process timeline focus part 1’" ></p>
-
-<p>But before we jump to the first phase let&rsquo;s talk about the interview timeline.</p>
-
-<h2>The timeline</h2>
-
-<p><em>How much time do you need to go through all of this?</em></p>
-
-<p>Well, it depends&hellip; For me it took around four months but YMMV. If you search online you’ll find <a href="https://www.quora.com/How-should-I-prepare-for-my-Google-interview-if-I-have-1-month-left-and-I%E2%80%99m-applying-for-a-software-engineer-role">plenty of</a> <a href="https://www.linkedin.com/pulse/average-googler-four-weeks-study-plan-milad-naseri/">study plans</a> <a href="https://www.quora.com/Can-I-crack-the-Google-interview-in-just-1-month-of-preparation-If-yes-then-how-I-just-know-the-basics-of-C-and-C++">to follow</a>. But I think the best thing you can do is to take it at your own pace.</p>
-
-<p>Here are some tips I used to set up my interviewing schedule:</p>
-
-<ul>
-<li><strong> Divide the preparation in phases</strong> just like I did on my timeline. Then <a href="https://support.google.com/calendar/answer/37095?hl=en">Create a new calendar on Google Calendar</a> and use it to <strong>set reminders and deadlines for each of the phases</strong> of the preparation. This will give you a nice visual overview of where you stand in the process and how much time you&rsquo;ve left before moving to the next phase.</li>
-<li>I also used <strong><a href="https://trello.com">Trello</a></strong> to create a list of tasks to complete. I&rsquo;d sort them by priority and grab a few to tackle each day. The trick is to try to <strong>break them down small enough so you can complete each of them in one sit</strong>.</li>
-</ul>
-
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-01-06/trello.png" width="750" title="‘Trello screenshot’" ></p>
-
-<h2>Updating your resume</h2>
-
-<p>Sooner or later you’ll have to sit down and face the dreadful task of updating your resume.</p>
-
-<p>There’s a ton of advice online on how to write a good resume. Instead of trying to sum it all up I’m going to give you <strong>the 3 tips that helped me the most</strong>:</p>
-
-<ol>
-<li><strong>Show your accomplishments.</strong> Your bullet points for each role should focus on your achievements. For example: _&ldquo;Improved project loading performance on web-app by 5x by introducing hints on the
-persistence layer to handle transactions more efficiently&rdquo;_</li>
-<li><strong>Don’t include everything.</strong> You’re not writing your autobiography, there’s <em>no need to include every single task you&rsquo;ve ever worked on</em>. Adding extra information only decreases the <a href="https://en.wikipedia.org/wiki/Signal-to-noise_ratio">signal to noise ratio</a>. Trim down your resume to only keep the best of the best. <strong>One or two pages max!</strong></li>
-<li><strong>Make it look awesome</strong>. <em>You don’t get a free pass on style just because you’re a developer and not a designer</em>. Making a pretty resume is going to take you longer, but believe me: recruiters do notice it and appreciate the effort. Going the extra mile will set you apart. For an easy to use graphic-design tool try <strong><a href="https://www.canva.com/">Canva</a></strong>, <strong>I can’t recommend it enough</strong>.</li>
-</ol>
-
-
-<p>As an example this is what my resume currently looks like:</p>
-
-<p><a href="https://drive.google.com/file/d/12FKryxTfewr_QtvQtTDMJf-NwmuySY2k/view?usp=sharing"><img class="center" src="http://jivimberg.github.io/images/posts/2019-01-06/resume-1.png" width="500" title="‘My resume page 1’" > </a></p>
-
-<p>As with any piece of good writing <strong>it’ll take many iterations to get there</strong>. Start with a <a href="https://www.goodreads.com/quotes/288933-almost-all-good-writing-begins-with-terrible-first-efforts-you">shitty first draft</a> and share it with your friends and recruiters to get feedback and make improvements.</p>
-
-<h2>Behavioral questions</h2>
-
-<p>Since you&rsquo;re working on your resume you&rsquo;ll want to start preparing for the behavioral questions too. These are the questions that get asked before the coding interview. Their purpose is to give the interviewer a better sense of the accomplishments listed on your resume, and to assess whether you&rsquo;re a good fit with the company culture. There are 3 parts to the behavioral questions preparation:</p>
-
-<p>The first thing you should prepare is a <strong>two-minute introduction of yourself.</strong> <strong>This is your resume condensed to an elevator pitch</strong>. Cover a little bit about your <em>background</em>, your <em>current job responsibilities</em> and any <em>side-project</em> worth mentioning. If you&rsquo;re curious <a href="https://docs.google.com/document/d/1bX3Vpr9icGCMbJvHMuWb3Q9GmKORf3W2DJ_fziV8Wtk/edit?usp=sharing">this is what my introduction looked like</a>.</p>
-
-<p>The second thing is to prepare for the typical interview questions such as <em>&ldquo;Why are you leaving your current job?&rdquo;</em> or <em>&ldquo;What are your strengths and weaknesses?&rdquo;</em>.</p>
-
-<p>Finally, you should prepare a couple of <strong>stories</strong> for questions like: <em>&ldquo;Tell me about a time you made a mistake&rdquo;</em> or <em>&ldquo;Tell me about a time when you had conflicts interacting with one of your coworkers and how you handled it&rdquo;</em>. Following the advice in <a href="http://www.crackingthecodinginterview.com/">Cracking the Coding Interview</a><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> I created a table like this:</p>
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-01-06/storiesTable.png" width="750" title="‘stories table’" ></p>
-
-<p><strong>Pro-tip:</strong> You can create a document with all this stuff and use it as a cheat-sheet during your phone call interviews. Believe me, after a few calls you&rsquo;ll not even need it.</p>
-
-<p>The best advice I came across for Behavioral questions was from <a href="http://www.crackingthecodinginterview.com/">Cracking the Coding Interview</a> and <a href="https://www.amazon.com/Cracking-Tech-Career-Insider-Microsoft-ebook/dp/B00MFPZ9X6">Cracking the Tech Career</a> both by <em><a href="http://www.gayle.com/">Gayle Laakmann McDowell</a></em>. You can check a condensed version of the behavioral question section of the book in this <a href="http://www.crackingthecodinginterview.com/uploads/6/5/2/8/6528028/cracking_the_soft_skills_-_v6.pdf">Soft Skills Cheatsheet</a>.</p>
-
-<h2>Where to look for new roles</h2>
-
-<p>So you’re ready to move on to greener pastures, <em>where do you start looking?</em></p>
-
-<p>The first obvious answer is <strong>LinkedIn</strong>. Just make your profile as sexy as possible (make sure you <a href="https://www.dailydot.com/debug/how-to-update-linkedin-without-notifications/">disable notifications if you want to be discrete</a>) and wait for recruiters to start pinging you.</p>
-
-<p>If you’re looking <strong>for a job at a startup, <a href="https://angel.co/">Angel List</a></strong> is a great place to start. <strong>To learn specifics</strong> about a particular startup head to <strong><a href="https://www.crunchbase.com">Crunchbase</a></strong> where you’ll find information about the <em>funding rounds</em> the company has been through, <em>the investors</em>, <em>the team</em>, etc.</p>
-
-<p><strong>If you already have a good sense of what you’re looking for,</strong> I can recommend using <strong><a href="https://woo.io/">Woo.io</a></strong>. You&rsquo;ll need to create a profile (you can import most of it from <em>LinkedIn</em>) and set your job expectations (role, technologies, company size, location, etc.). The site will magically find jobs that match your search and send them to you on a daily basis. You can then review the openings, and if they’re not of your liking, you can reject them (optionally) including a <em>reason</em> why it’s not a good fit. <strong>Woo will learn from your feedback and refine the search for future approaches.</strong></p>
-
-<p>On the other hand, <strong>if you’re unsure about what you want to do next</strong> you can try this trick: Pick a hiring site and skim through the job postings. <strong>Play it by gut;</strong> when something catches your eye, try to reflect on why. <em>Was it the technology stack?</em> <em>The company values?</em> <em>Maybe the location?</em> <strong>Don’t worry if you can&rsquo;t put your finger on it, just keep going</strong>. Repeat this enough times and you’ll start getting a sense of what makes you tick.</p>
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-01-06/JobSearchFlowDiagram.png" title="‘Process timeline’" ></p>
-
-<h2>Research the company and team</h2>
-
-<p>Your next job is where you&rsquo;ll spend most of your waking hours for the next few years. You&rsquo;ll probably end up spending more time with your colleagues than with some of your family members. And yet we put more effort into reading reviews about some new gadget we plan to buy, than learning about our next employer.</p>
-
-<p>To make things harder, trying to learn about the culture of a company might prove to be a challenge. While most companies include something about culture and values along with their job postings, more often than not it&rsquo;s just some generic marketing <em>lorem ipsum</em>. Too abstract to actually give us any clue about how the company values are present in the day-to-day tasks.</p>
-
-<p>By far, the best way to discover what a company is really like, is by getting a first hand account from somebody working there. <strong>Tap into your network!</strong> See if any of your contacts knows somebody and can help you with the introductions (<a href="https://www.linkedin.com/help/linkedin/answer/110/your-network-and-degrees-of-connection?lang=en">LinedkIn Degrees of Connection</a> is perfect for this kind of thing).</p>
-
-<p>If you don&rsquo;t happen to know anybody, you can try reaching out to the developers that write the company&rsquo;s tech blog.  <strong>Tech conferences<sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup> and Meetups also provide an excellent opportunity to talk to engineers</strong> and get a first-hand impression of what the culture is like.</p>
-
-<p>Finally, you can always fall back to sites like <strong><a href="https://www.glassdoor.com/index.htm">Glassdoor</a><sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup></strong> and <strong><a href="https://www.teamblind.com/articles/Topics">Blind</a></strong>; just take comments with a grain of salt.</p>
-
-<hr />
-
-<p>That&rsquo;s all for today, hope you found it useful! On my next article I&rsquo;ll talk about how to prepare and practice for the coding interview. Stay tuned!</p>
-
-<p><img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature13.png" width="200" title="‘My signature’" ></p>
-
-<p><em>Special thanks to: <a href="https://twitter.com/rcruzjo">@rcruzjo</a>, <a href="https://twitter.com/patriciob">@patriciob</a>, <a href="https://twitter.com/pgveiga">@pgveiga</a> and <a href="https://www.instagram.com/luketua">@luketua</a> for helping me edit and improve this series.</em></p>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>I&rsquo;m going to talk more about this book in the next article. For now the only thing you need to know is that if you only have money for <strong>one</strong> interview book, then this is the one.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-<li id="fn:2">
-<p>You don’t have to pay full price for the conference if you’re only going to network. Many big conferences offer some kind of <em>Discovery pass</em> that will grant you access to the <em>Exhibition halls</em> where the companies set up their booths.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
-<li id="fn:3">
-<p>Pro-tip: If the company is big, filter reviews by job title to get a more accurate sense of the culture.<a href="#fnref:3" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 

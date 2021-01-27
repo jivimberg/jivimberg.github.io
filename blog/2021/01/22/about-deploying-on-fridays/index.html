@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>About Deploying on Fridays - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="About Deploying on Fridays written January 22, 2021 in ci/cd, deploy, deployment, o11y, observability, release Common knowledge says that you don’t &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2021/01/22/about-deploying-on-fridays">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49016076-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>About Deploying on Fridays</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2021-01-22T08:55:35-08:00" pubdate data-updated="true">January 22, 2021</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/ci-slash-cd/'>ci/cd</a>, <a class='category' href='/blog/categories/deploy/'>deploy</a>, <a class='category' href='/blog/categories/deployment/'>deployment</a>, <a class='category' href='/blog/categories/o11y/'>o11y</a>, <a class='category' href='/blog/categories/observability/'>observability</a>, <a class='category' href='/blog/categories/release/'>release</a>
+  
+</span>
+
+
+        </div>
+        <p>Common knowledge says that you don’t deploy on Friday if you want to have a peaceful weekend. Yet, some people will tell you that if you’re not comfortable deploying every day of the week, you’re doing it wrong. They’ll say that deploying shouldn’t be scary and that you probably don’t have enough tests. So, which one is it?</p>
+
+<!--more-->
+
+
+<p><img class="center" src="/images/posts/2021-01-22/homer-deploying.png" width="350"></p>
+
+<h2>The problem with Fridays</h2>
+
+<p>Fridays are the last day of the working week, and for many teams, it might also be the end of the sprint/cycle/iteration. Explicit or not, there’s a deadline looming between the developer and the weekend. We invested long hours on this new feature, and we just want to push it out the door, close the ticket, and come back to a clean slate on Monday. Nobody likes heading into the weekend feeling like a fraud because they couldn’t complete the planned tasks in time. The bigger the task, the more eager we are to close it.</p>
+
+<p>So what do we do? We rush it. Maybe we skip testing in a staging environment or turn a blind eye to that flaky test that always fails, and <em>we ship it</em>. We feel the weight being lifted off our shoulders as we click deploy, and we head out the door smiling, ready to enjoy the weekend.</p>
+
+<p>Only somebody will have to clean up our mess when things go south.</p>
+
+<h2>When is a task completed?</h2>
+
+<p>To understand how to combat the danger of Fridays, let’s consider the <em>software lifecycle</em>. That is, the things that happen between <em>“I have to implement feature X”</em> and  <em>“<em>people using it in production</em>”</em>.</p>
+
+<p><img class="center" src="/images/posts/2021-01-22/software-lifecycle1.jpeg" width="700"></p>
+
+<p>From the developer&rsquo;s point of view, when would you say that feature X is <em>Done</em>? Is it once the branch is merged? Is it after the code is deployed? The answer depends on what your team considers the developer’s responsibility. On teams doing <a href="https://netflixtechblog.com/full-cycle-developers-at-netflix-a08c31f83249">Full Cycle Development</a>, the same person writing the code is the one that will test, operate and deploy the service. Which means that <strong>the feature can only be marked as Done once it’s being used in production.</strong></p>
+
+<p>Deploying is only one step, after which you <strong>release</strong> the change to some (or all) of your users and <strong>observe</strong> that it is working as intended. <em><em>Spoiler Alert</em></em> Sometimes it won’t be, and you’ll have to go back to the code and add little fixes here and there.</p>
+
+<p>Treating deployments as just another phase of the software lifecycle enables <a href="https://www.infoq.com/articles/observability-driven-development/">Observability Driven Development</a>. Letting developers <em>see</em> how their code behaves in production before closing the task.</p>
+
+<h2>Optimizing the feedback loops</h2>
+
+<p>The software lifecycle diagram shown above is an over-simplification. In reality, the flow is never a straight line. Every step can send you back to a previous step: Started coding and found a flaw in the design, go back to design  🔙, a test started failing, go back to develop 🔙, etc.</p>
+
+<p><img class="center" src="/images/posts/2021-01-22/software-lifecycle2.jpeg" width="700"></p>
+
+<p><a href="https://martinfowler.com/articles/developer-effectiveness.html">The secret sauce to a highly efficient team is keeping these feedback loops as short as possible</a>. If your tests take thirty minutes to run, by the time you see the failure, you’re already deep in some other task (or worse, on your 9th YouTube video).</p>
+
+<p>Deploying is no different. If it takes months for your code to reach production, by the time your users start using your new feature (and uncovering bugs), you have already moved on to something else. You no longer have the context fresh on your mind, and you barely recall the details and the design decisions taken at the time (which is why <a href="https://jivimberg.io/blog/2020/12/26/documenting-decisions/">you should be documenting those decisions</a>).</p>
+
+<p><img class="center" src="/images/posts/2021-01-22/software-lifecycle3.jpeg" width="700"></p>
+
+<h2>How to make deployments less scary</h2>
+
+<p><strong>The single most important change you can make to have less scary deployments, is to deploy small changes. Ideally, deploying one change at a time. One Pull Request ➡️ one Deploy.</strong> This will inevitably lead to more deployments because now you might have to do ten deployments to match your big dump releases of the past. This is good! The more you deploy, the less scary it is.</p>
+
+<p>Deploying small changes also gives you better visibility into how your code is affecting the service. <strong>By releasing one change at a time, developers can use telemetry to observe how the code behaves in production and spot bugs before your users do</strong>. In contrast, if you batch multiple PRs in a single deploy, you might have a harder time figuring out which of the changes caused the issue. You might even have to convince the developer that what caused the issue is indeed their commit and not somebody else’s bundled together in the same release. You can avoid all this hassle by following the “one PR ➡️ one Deploy” rule.</p>
+
+<p>And the benefits don’t end there! Smaller changes also mean shorter code reviews. It’s easier for developers reviewing your code to spot bugs in a small PR than in a huge one that modifies hundreds of lines. This is another way in which smaller changes bring better code quality.</p>
+
+<p><img class="center" src="/images/posts/2021-01-22/huge-pr.jpeg" width="400"></p>
+
+<p>Last but not least, smaller PRs produce short-lived branches, reducing the number of merge conflicts one has to deal with.</p>
+
+<h2>Deploying != Releasing</h2>
+
+<p>For this approach to work, you need to trust devs with the keys to production. Depending on how your team operates, this might sound risky. <em>Are you saying developers can put code in production whenever they want?</em> Yes! That’s exactly what we’re advocating for. As pointed out earlier, this will mean more deploys, but it’s generally safer than the humongous release approach. Even if it feels like you lose control of what goes out the door. Yes, you’ll be deploying bugs from time to time, but the blast radius is limited, and the change is easier to rollback.</p>
+
+<p><strong>Now, this doesn’t mean that all users are immediately able to see the new changes as soon as you deploy.</strong> The terms <em>deploy</em> and <em>release</em> are sometimes used interchangeably, so let’s define how we’ll use them here:</p>
+
+<ul>
+<li><strong>Deploy:</strong> Put a new version of the code in production.</li>
+<li><strong>Release:</strong> Make some functionality available to users.</li>
+</ul>
+
+
+<p>You can (and should) still control at what rate new functionality is released to users. You might use a rollout strategy where only a subset of power-users get to see what you’re working on and provide feedback before the feature is released to a broader audience. Or, you might want to start by observing how it works on a small percentage of users and then gradually roll out to everyone else. You can achieve this by hiding the new code behind <a href="https://martinfowler.com/articles/feature-toggles.html">Feature Flags</a> and have it conditionally enabled. This provides the extra benefit of being able to enable and disable the code with a simple configuration change (without requiring a deploy), should a critical bug be found.</p>
+
+<h2>It’s not about testing</h2>
+
+<p>One common argument from the <em>“deploy on Fridays”</em> camp is about testing. It goes like this:</p>
+
+<blockquote><p>If you’re scared of deploying on a Friday, it means you either don’t have enough tests or your tests are not good enough.</p></blockquote>
+
+<p>I don’t buy it.</p>
+
+<p>No matter how many tests you have, how good your coverage is, you can’t be sure you’re not releasing a bug. In the words of Dijkstra: <em> Program testing can be used to show the presence of bugs, but never to show their absence.</em></p>
+
+<p>Most automated tests are about validating the scenarios the dev can come up with during development. They don’t account for things we can’t predict<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. So most testing is limited by the imagination of the person writing the test.</p>
+
+<p>Furthermore, our tests usually run in a fake environment where many of the components are mocked. From service stubs to in-memory databases, we use every trick in the book to <a href="https://jivimberg.io/blog/2020/07/27/effective-testing-reducing-non-determinism/">reduce non-determinism from our tests</a>, but this comes at the cost of test fidelity. Our tests no longer accurately represent what happens in production. This is why we need observability and <a href="https://copyconstruct.medium.com/testing-in-production-the-safe-way-18ca102d0ef1">testing in production</a>. This is why we need to <em>deploy</em> and <em>observe</em> to ensure our code is working as intended.</p>
+
+<h2>Conclusion</h2>
+
+<p>To sum up, deploying is just an additional step of the software lifecycle. <strong>You should deploy any day of the week, providing you’re willing to stick around to observe how your code behaves in production. </strong> If you just want to deploy, and run home to start the weekend, then maybe <em>don’t</em>. Because no matter how many tests you have, you haven’t seen your code running in a real environment yet. In the future, we might have DevOps AI to observe and rollback our changes automatically if something looks weird. Until then, though, you’re on the hook for making sure your code is working as intended. <em>Especially on Fridays.</em></p>
+
+<p>Piecemeal deployments will help you release faster and will improve your code quality. The idea is counter-intuitive, but it works: you have to do the scary thing over and over until it becomes an uninteresting event. Releasing frequently will help you catch bugs sooner and will make your team more efficient.</p>
+
+<hr />
+
+<p>Many of the ideas in this post are inspired by the podcasts <a href="https://www.heavybit.com/library/podcasts/o11ycast/">Oll1cast</a> and <a href="https://maintainable.fm/">Maintainable</a>, as well as the books <a href="https://www.amazon.com/Software-Engineering-Google-Lessons-Programming/dp/1492082791">Software Engineering at Google</a> and <a href="https://www.oreilly.com/library/view/distributed-tracing-in/9781492056621/">Distributed Tracing in Practice</a>. If you enjoy these topics, go check them out.</p>
+
+<p> <img class="right-fill" src="/images/signatures/signature7.png" width="200" title="‘My signature’" ></p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>That’s what exploratory testing is for, and it’s a creative endeavor that doesn’t scale linearly with code.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.github.io/blog/2021/01/22/about-deploying-on-fridays/';
+        var disqus_url = 'http://jivimberg.github.io/blog/2021/01/22/about-deploying-on-fridays/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2020/12/26/documenting-decisions/" title="Previous Post: Documenting Decisions">&laquo; Previous: Documenting Decisions</a>
+        
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>
