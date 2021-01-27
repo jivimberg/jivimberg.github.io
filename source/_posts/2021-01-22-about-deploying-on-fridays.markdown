@@ -23,7 +23,7 @@ Only somebody will have to clean up our mess when things go south.
 
 ## When is a task completed?
 
-To understand how to fight this urge, let’s consider the _software lifecycle_. That is, the things that happen between _“I have to implement feature X”_ and  _“*people using it in production*”_. 
+To understand how to combat the danger of Fridays, let’s consider the _software lifecycle_. That is, the things that happen between _“I have to implement feature X”_ and  _“*people using it in production*”_. 
 
 {% img center /images/posts/2021-01-22/software-lifecycle1.jpeg 700 %}
 
