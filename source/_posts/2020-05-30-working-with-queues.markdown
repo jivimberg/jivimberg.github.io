@@ -4,6 +4,8 @@ title: "Working with Queues"
 date: 2020-05-30 19:29:39 -0700
 comments: true
 categories: architecture queues amazon aws sqs patterns
+description: Queues are a powerful tool for building reliable systems. Here are some tricks to consider when working with queues.
+image: /images/posts/2020-06-07/Availability.png
 ---
 
 Queues are a powerful tool for building reliable systems. In this article, I’ll describe some of the tips and tricks I came across when working with queues. 
