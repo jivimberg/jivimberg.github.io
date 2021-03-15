@@ -4,6 +4,8 @@ title: "About deploying on Fridays"
 date: 2021-01-22 08:55:35 -0800
 comments: true
 categories: deploy deployment ci/cd o11y observability release
+description: Common knowledge says that you don’t deploy on Friday if you want to have a peaceful weekend. Yet, some people will tell you that if you’re not comfortable deploying every day of the week, you’re doing it wrong. So which one is it?
+image: /images/posts/2021-01-22/homer-deploying.png
 ---
 
 Common knowledge says that you don’t deploy on Friday if you want to have a peaceful weekend. Yet, some people will tell you that if you’re not comfortable deploying every day of the week, you’re doing it wrong. They’ll say that deploying shouldn’t be scary and that you probably don’t have enough tests. So, which one is it?
