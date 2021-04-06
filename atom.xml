@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2021-03-14T21:13:50-07:00</updated>
+  <updated>2021-04-06T09:16:00-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,73 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Google Docs Could Be So Much Better!]]></title>
+    <link href="http://jivimberg.github.io/blog/2021/03/07/google-docs-could-be-so-much-better/"/>
+    <updated>2021-03-07T18:50:06-08:00</updated>
+    <id>http://jivimberg.github.io/blog/2021/03/07/google-docs-could-be-so-much-better</id>
+    <content type="html"><![CDATA[<p>Lots of businesses run on Google Docs. It&rsquo;s how we write memos, define strategies, discuss proposals, document decisions, write tutorials, and plenty of other things.</p>
+
+<p>Google Docs is a fantastic piece of technology. I almost can&rsquo;t imagine how we worked before it (<em>productStrategy-Jun-2004-version13.docx</em> anyone?). And yet, I sometimes feel like it could be so much more! Like we&rsquo;ll look back in 10 years and think: <em>“My god! I can’t believe we were working that way!”</em>. Improving Docs has the potential of completely overhauling the way information flows through an organization. Here are some ideas on how Google could improve it.</p>
+
+<!--more-->
+
+
+<h2>Smart Summaries</h2>
+
+<p>It’s early in the morning, and you’re checking your emails. You notice your boss shared the new strategy memo. You still have 15’ minutes to your next meeting, so you think: <em>“I’ll catch up on this one real quick”</em>. You start reading and, in the first paragraph, you found a reference to another doc you were not aware of. So you open the link on a new tab and keep going. As you tread through the doc, you find more and more links to review. Before you know your browser looks like this:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/tabs.png" width="700"></p>
+
+<p>What you thought would take five minutes ends up being an endeavor that takes you the whole morning.</p>
+
+<p>There’s probably no good way around this problem if you need to absorb every detail. But more often than not, all you need is a high level overview of the referenced content. The further away you move from your starting doc, the less detail you probably want.</p>
+
+<p>Wouldn’t it be nice if Docs could automagically generate that summary by using a bit of AI? We could read the auto-generated summary and decide if we need to go deeper down the rabbit hole. The experience would be similar to the <a href="https://www.youtube.com/watch?v=AAeloLXO8T0">Link Preview feature</a> released in 2020.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/link-preview.gif"></p>
+
+<h2>Discovery and Navigation</h2>
+
+<p>Google Docs favors a filesystem-like organization. You can sort your docs into folders and browse them in a tree view, just like you would navigate files on your local machine.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/folders.png" width="200"></p>
+
+<p>It’s a well-known pattern that we are all familiar with, and it works great when there’s a centralized authority dictating how things are supposed to be organized. But that’s not how knowledge works. Our brain likes to connect thoughts and ideas in the most unintuitive ways, making connections that at first would look random. Some note-taking apps recognized this need and built experiences around the concept of navigating documents based on how they relate to each other. If the idea sounds strange, just think about how web pages work by links that point to other pages. Imagine if we could capture this relationship <strong>on both ends, and list all outgoing and incoming connections</strong>. This is exactly how <a href="https://collectednotes.com/blog/zettelkasten">Collected Notes</a> works.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/collected-notes.jpeg" width="650"></p>
+
+<p>This paradigm lets us navigate the relationship in both directions! Let’s say we wrote a thoughtful memo on <a href="https://jivimberg.io/blog/2020/05/09/the-whiteboard-interview-is-broken/">”why we should stop asking people to invert a binary tree as part of the interview process”</a>. People seemed to like it and start sharing it around. Soon it gains traction, and everybody in the company is talking about it. With bi-directional links, we’d be able to see how our ideas are referenced on other documents. We can keep an eye on any proposals (or refutals) that are inspired by the original post.</p>
+
+<p>From these links, we could create new visualizations to represent how documents relate to each other. This can help us identify the most popular docs at a glance and discover patterns like high-level strategy docs linked by more specific implementation docs. <a href="https://roamresearch.com/">Roam Research</a> has a view called <a href="https://roamresearch.com/#/app/help/graph">“Graph Overview”</a> to serve this purpose. Each dot represents a note, and each line is a reference. The bigger the dot, the more connections it has.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/roam.png" width="500"></p>
+
+<h2>Consuming content</h2>
+
+<p>We all know Google Docs is an <em>amazing</em> tool for producing content. For consuming it? Not so much 😒👎🏼 Yet the time we spend reading documents is far greater than the time we spend writing them. Improving the reading experience would make everybody a more effective collaborator.</p>
+
+<blockquote><p>Learning is more effective when it is an active rather than a passive process.</p><footer><strong>Kurt Lewin</strong></footer></blockquote>
+
+
+<p>To comprehend something more easily, we need to work with the content. We need to highlight important parts, scratch things out, scribble notes and comments on the margins, etc. In other words, we need to pour our ideas on the doc and make it our own. My favorite app to do this kind of interactive reading is <a href="https://www.liquidtext.net/">LiquidText</a>, it works especially well on an iPad with the Apple Pencil.  I use it to read docs, articles, papers, and sometimes even books.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/liquid-text.jpeg" width="700"></p>
+
+<p>Imagine if we could get a similar experience <em>within</em> Google Docs. What if we could have a private view of the doc where we’d be able to mark it and comment it to our heart’s content. Of course, you can get halfway there today by copying the doc before reading it, but that’d totally break the collaborative features since the copy will never get the updates/comments the original will receive.</p>
+
+<p>The fact that these notes would be private doesn’t mean that we can’t mine them for insight. It’d be pretty easy to leverage the private highlights to power the AI summary mentioned above, or to provide an auto-highlighting feature alla Kindle.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/highlight.jpeg" width="500"></p>
+
+<hr />
+
+<p>What do you think? Do these features sound helpful to you? I’d love to hear <em>your ideas</em> on how to improve Docs. Drop me a comment below  👇</p>
+
+<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature6.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[About Deploying on Fridays]]></title>
@@ -2436,181 +2503,6 @@ private suspend fun processMsg(message: Message) = withContext(Dispatchers.Defau
 <ol>
 <li id="fn:1">
 <p>Check his blog: [Codex Transforma][3]<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-</ol>
-</div>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to Prepare for the Silicon Valley Interview - Part 2]]></title>
-    <link href="http://jivimberg.github.io/blog/2019/01/10/how-to-prepare-for-the-silicon-valley-interview-part-2/"/>
-    <updated>2019-01-10T22:42:31-08:00</updated>
-    <id>http://jivimberg.github.io/blog/2019/01/10/how-to-prepare-for-the-silicon-valley-interview-part-2</id>
-    <content type="html"><![CDATA[<p>Welcome to the second part of the <a href="https://jivimberg.io/blog/categories/interview-series/">Interviewing Series</a>! It’s time to cover the thing that terrifies most candidates<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>: <strong>the technical questions</strong>. We’ll see what different types of questions there are, and how we can prepare for them. We have a lot of ground to cover so let’s jump right into it.</p>
-
-<!--more-->
-
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-01-10/processFocus2.png" width="750" title="‘Process timeline focus part 1’" ></p>
-
-<h1>Programming questions</h1>
-
-<p>Programming questions are the heart of the technical interview and thus what you’ll spend more time preparing.</p>
-
-<p>Some people believe that <a href="https://www.stilldrinking.org/interviewing-is-broken"><em>the technical interview model is completely broken</em></a><sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup>. I don’t really know if technical interviews work or not, I just know that <strong>they&rsquo;re part of the game, so you&rsquo;d better prepare for it</strong>. Having said that, if you are really against <em>&ldquo;whiteboard interviews&rdquo;</em> <a href="https://github.com/poteto/hiring-without-whiteboards">check this list</a> of companies that don’t rely on these kind of questions. Just keep in mind that <em>you might be limiting your options</em>.</p>
-
-<p>Regardless the type of interview, one thing is certain: you’re better off preparing for it in advance. So let’s start by talking about some of the resources I used to practice.</p>
-
-<h2>Cracking the coding interview (6th edition)</h2>
-
-<p>I’ve mentioned this book in <a href="https://jivimberg.io/blog/2019/01/06/how-to-prepare-for-the-silicon-valley-interview-part-1/">my previous article</a>. <a href="https://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/0984782850">Cracking the coding interview 6th edition</a> (CTCI from now onwards) by <em><a href="http://www.gayle.com/">Gayle Laakmann McDowell</a></em> is the <strong>holy bible of interviewing</strong>.</p>
-
-<p><a href="https://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/0984782850"><img class="center" src="http://jivimberg.github.io/images/posts/2019-01-10/ctci-cover.jpg" width="300" title="‘Cracking the coding interview 6th edition’" ></a></p>
-
-<p>I like it because <strong>it’s remarkably complete</strong>. It includes a description of the different interview processes at some of the big companies (Apple, Google, Facebook, etc.), it provides tips on how to set up a good resume, it covers the basics on Big O notation and <em><a href="http://www.crackingthecodinginterview.com/contents.html">much, much more…</a></em></p>
-
-<p>The technical exercises are organized by topic. Each chapter includes a <em>brief introduction</em> of the topic at hand (around 3 pages) and a <em>list of problems </em>sorted from easy to hard. This organization is nice because if you don’t have much time or don’t want to focus on a particular area you can simply skip that chapter altogether. I, for example, glossed over the <em>”Java”</em> and <em>”Databases”</em> chapters (Chapters 13 and 14 respectively) and skipped the <em>“C and C++”</em> chapter (Chapter 12).</p>
-
-<p>One of the best things about this book is that <strong>each exercise comes with a series of hints in case you get stuck</strong>. I love this because it mimics what would happen in a real interview, where the interviewer nudges you in the right direction to unblock you. Also in some of the more complex problems <strong>the book presents multiple solutions and compares the different approaches</strong>. Again, something that would probably come up in a real interview.</p>
-
-<p><strong>Pro-tip:</strong> If you live in the Bay Area your local library might have <a href="https://smcl.bibliocommons.com/item/show/2387102076">a copy of the CTCI</a>. Having said that, if you have the money this is one of the best investments you can make for your career.</p>
-
-<h2>LeetCode</h2>
-
-<p>The other thing I used to practice daily was <strong><a href="https://leetcode.com/">LeetCode</a></strong>. There are a number of sites you can use to practice (here’s a <a href="https://www.youtube.com/watch?v=J267bz_G7xE">video comparing the most well-known</a>); I went with LeetCode because it was <strong>explicitly designed for technical interviews</strong> and it has support for <a href="https://kotlinlang.org/">Kotlin</a>.</p>
-
-<p>One thing I like about LeetCode is that it <em>provides tests results after submission</em> so you can figure out what you did wrong. Another useful feature is that it ranks your submission based on performance so you can see how well you did, compared to other solutions.</p>
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-01-10/leetcode-submission.png" width="750" title="‘Leetcode submission comparison’" ></p>
-
-<p>Where it falls short is in the solution explanation. <strong>Only a small fraction of the problems have <a href="https://leetcode.com/articles/remove-duplicates-from-sorted-list/">official articles covering the solution</a> and the different alternative implementations.</strong> For the rest of them, you’ll have to resort to the discussion forum, in the hopes that somebody there posted his/her answer, and the code is readable.</p>
-
-<p>I didn’t pay for the premium account and didn’t try the <em>System Design</em> questions, so can’t comment on that.</p>
-
-<h2>Practice tips</h2>
-
-<h3>Use a whiteboard</h3>
-
-<p>You want your practice to be as close to the real thing as possible. That means you’ll have to resist the temptation of using your favorite IDE and go full whiteboard. It will be weird at first. Everything will take more time, you’ll run out of space and <em>end up using * and arrows all over the place to add extra variables</em>. But guess what? <strong>That&rsquo;s going to happen in the real interview too</strong>. So you&rsquo;d better get some practice on whiteboard coding before going in.</p>
-
-<p>Don’t worry, nobody expects you to memorize all <a href="https://docs.oracle.com/javase/8/docs/api/java/util/stream/Collectors.html">Java Collectors</a>. It’s OK to ask the interviewer for the details of a particular method signature.</p>
-
-<p>Having no IDE also <strong>prevents you from writing automated tests for your problems</strong>. Which (<em>for once</em>) is a good thing! You won’t have the luxury of unit testing your code during the interview either. Having said that you should still THINK about the tests you’d write, and even <em>whiteboard-debug</em>  some of them (see below 👇).</p>
-
-<h3>Build the habit</h3>
-
-<p>Sometimes you’ll find it hard to sit down and practice. Here are some things that helped me:</p>
-
-<ol>
-<li><strong>Find a time of the day that works for you and stick to it</strong>. For example, I’m a morning person. I’d <em>wake up one hour earlier</em> each day and practice before breakfast.</li>
-<li><strong>Avoid distractions</strong>. Apart from waking up before everyone else <em>I made sure my phone stayed in airplane mode</em> at least until I&rsquo;d finished one full problem.</li>
-<li><strong>Prepare things beforehand</strong>. Before going to bed <em>I’d set things up so that everything was ready in the morning</em>. Waking up to a clean whiteboard, the computer charged and <a href="http://www.gayle.com/">CTCI</a> opened in the right page gives you <em>fewer chances to slack or make excuses</em>.</li>
-<li><strong>Set yourself achievable goals</strong>. I found that not finishing my morning practice goal made me anxious during the day 😰. So I figured it was best to set realistic goals, so that <em>after completing the morning exercise I could feel good about myself for the rest of the day</em>.</li>
-<li><strong>Know when to stop</strong>. Don’t get too caught up on one problem. If you get stuck, just drop it for the time being, or move to another exercise. <a href="https://twitter.com/SashaLaundy/status/936661004137635840"><em>”The best debugger ever made is a good night&rsquo;s sleep.”</em></a></li>
-</ol>
-
-
-<p>Problems might seem hard at first, but I promise that once you get the knack of it they’ll flow more easily. To the point where you can eyeball a problem and have a pretty good idea of how you’d solve it.</p>
-
-<h2>While solving the exercise</h2>
-
-<h3>CTCI Cheatsheet</h3>
-
-<p>The best advice I could find on how to tackle a problem is from <a href="https://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/0984782850">Cracking the coding interview</a>. Luckily, they’ve put together this amazing cheat-sheet with a step by step guide:</p>
-
-<p><a href="http://www.crackingthecodinginterview.com/resources.html"><img class="center" src="http://jivimberg.github.io/images/posts/2019-01-10/ctci-cheatsheet-1.png" width="750" title="‘CTCI cheatsheet’" ></a></p>
-
-<p><em>(It’s also a great example on how  <strong>NOT</strong> to lay out an ordered list of items)</em></p>
-
-<h3>Talk through the problem</h3>
-
-<p>The whole point of having you solve an exercise during an interview is to provide the chance for the interviewer to evaluate how you approach a problem. So the best thing you can do to help your interviewer&rsquo;s job is to <strong>speak through your thought process</strong>.</p>
-
-<p>It&rsquo;ll probably feel odd at first because usually, this happens as an internal monologue in your head, so make sure you practice this even when you’re solving problems on your own.</p>
-
-<p>On the real interview, start by listening to the problem carefully and <strong>asking clarifying questions</strong> (<em>does the input fit into memory?</em> <em>how often is this code going to be executed?</em> etc.). Then walk your interviewer through each of the steps you take to arrive at the solution. If you’re going to <em>start by trying an example</em> say it so, if you’re coming up with a <em>brute force solution first</em> make that explicit, if you think the code could be refactored to be more legible express it. You’ll get extra points for mentioning these things, and in some cases, you <em>might be told not to focus on that</em>, and you’ll benefit from not wasting your time in a detail that was not meaningful to the interviewer.</p>
-
-<blockquote><p>It is ok to be in silence only when you’re thinking. The rest of the time you should be explaining what you’re doing. <strong>Especially while coding</strong>.</p></blockquote>
-
-<h3>Problem checklist</h3>
-
-<p>There are a number of things you should consider on every problem you face:</p>
-
-<ul>
-<li>Are you handling nulls properly?</li>
-<li>Have you handled border cases? (empty collections, empty strings, negative integers, etc.)</li>
-<li>Have you considered overflow on arithmetic operations?</li>
-<li>Is the input sorted?</li>
-<li>If it is a collection: can it have duplicates?</li>
-<li>Does the input fit in memory?</li>
-<li>Can a better solution be found or have you achieved the best possible runtime?</li>
-<li>Can you trade space for time? (Think: HashMaps and <a href="https://en.wikipedia.org/wiki/Memoization">memoization</a>)</li>
-<li>Can you pre-calculate something to speed things up?</li>
-<li>Can you split the problem in smaller parts?</li>
-<li>Is your solution thread safe? If not, how can you make it?</li>
-<li>Is there any state you can save to make future runs faster?</li>
-</ul>
-
-
-<h3>Whiteboard debugging</h3>
-
-<p>On <a href="http://www.crackingthecodinginterview.com/uploads/6/5/2/8/6528028/cracking_the_coding_skills_-_v6.pdf">CTCI cheat-sheet</a> step #7 is <em>Test</em>. What I like to do for testing my solutions is what I call <em>&ldquo;whiteboard-debugging&rdquo;</em>. This is how it goes:</p>
-
-<ol>
-<li>Choose a good input example to work with (not too big, not trivial, not a corner case, etc.).</li>
-<li>Now <em>step through the code step by step</em> as if you were debugging it.</li>
-<li>Use a color marker to <em>write down the variable values</em> as comments just like your IDE would do.</li>
-</ol>
-
-
-<p>It should look something like this:</p>
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-01-10/isPalindrome.png" width="600" title="‘Whiteboard debugging example’" ></p>
-
-<p>For this technique to work the only trick is to <strong>suppress your instinct to jump ahead</strong>. With the interviewer watching you&rsquo;ll get anxious and will want to speed things up by skipping a <em>&ldquo;trivial loop&rdquo;</em> or just jumping to the result. DON&rsquo;T DO IT! Step through the code one line at a time just like the compiler would do. This is the only way you&rsquo;ll find 🐞 in your code.</p>
-
-<p>And of course pay extra attention to hot spots like <em>arithmetic expressions</em>, <em>null nodes</em> and <em>loop conditions</em> (always check for off-by-one errors!).</p>
-
-<h3>Stick to one language</h3>
-
-<p>It&rsquo;s no secret that I&rsquo;m super hooked with <a href="https://kotlinlang.org/">Kotlin</a> (some of my friends would even say I&rsquo;m a fanboy), so I figured I&rsquo;d practice the programming questions in Kotlin too. The problem was that Kotlin is not that widespread (<a href="https://pusher.com/state-of-kotlin">yet</a>), so <strong>most of my interviews required me to write code in Java</strong>. Kotlin and Java are fairly similar languages and yet I noticed that writing solutions in Java was taking me longer because of small things like having to look up the exact method I wanted to use. In one of my on-sites, for example, I mixed up the Java <code>switch</code> syntax with Kotlin&rsquo;s <code>when</code>. And while this isn&rsquo;t a huge mistake, it did raise a valid flag for the interviewer.</p>
-
-<p><strong>That&rsquo;s why my advice is to pick one mainstream language and stick with it for both: practice and interviews.</strong></p>
-
-<h1>Open problems</h1>
-
-<p>In my experience, open problems <em>are not that common</em>. When you&rsquo;re presented with one of these questions your main focus should be on clarifying the goal. <strong>Ask as many followup questions as you can and don&rsquo;t make any assumptions</strong> (or if you do validate them with the interviewer). <em>Don&rsquo;t just jump to the answer!</em> Usually, this kind of exercises are more about seeing how the candidate approaches the problem rather than getting an actual solution.</p>
-
-<h1>Language trivia</h1>
-
-<p>To my surprise, I <em>did</em> find a fair share of language trivia questions. Things like <a href="https://stackoverflow.com/questions/223918/iterating-through-a-collection-avoiding-concurrentmodificationexception-when-mo">removing an item while iterating a collection</a> or <a href="https://stackoverflow.com/questions/4818699/practical-uses-for-atomicinteger">when to use <code>AtomicInteger</code></a>.</p>
-
-<p>As you can tell, these are knowledge-based questions, so either you know the answer or you don&rsquo;t. <strong>If you don&rsquo;t just be frank about it</strong>, trying to guess the answer might backfire and make you look like a fraud.</p>
-
-<p>If you&rsquo;re proficient with the language you&rsquo;ll have no problems answering these kind questions. If you want some practice CTCI has one chapter on <em>Java</em> and another one on <em>C</em> and <em>C++</em>.</p>
-
-<h1>System design questions</h1>
-
-<blockquote><p>The system design interview is an <b>open-ended conversation</b>. You are expected to lead it.</p><footer><strong>The System Design Primer</strong></footer></blockquote>
-
-
-<p>The best resource I know to prepare for the System Design interview is <a href="https://github.com/donnemartin/system-design-primer">The System Design Primer</a> (thanks <em>Pablius</em> for the tip!). Additionally, you should <strong>regularly read engineering blogs</strong> to learn how different challenges are solved in different companies. Some of the best ones are: <a href="https://medium.com/netflix-techblog">Netflix Tech Blog</a>, <a href="http://highscalability.com/">highscalability.com</a> and <a href="https://githubengineering.com/">Github engineering</a>. You can find a <a href="https://github.com/kilimchoi/engineering-blogs">full list of company blogs here</a>.</p>
-
-<hr />
-
-<p>That’s all I’ve got to say about practicing for the technical interview. On the third and final part of <a href="https://jivimberg.io/blog/categories/interview-series/">the series</a> I’ll talk about the on-site and what happens afterwards (a job offer or rejection). See you next time!</p>
-
-<p><img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature8.png" width="200" title="‘My signature’" ></p>
-
-<p><em>Special thanks to: <a href="https://twitter.com/rcruzjo">@rcruzjo</a>, <a href="https://twitter.com/patriciob">@patriciob</a>, <a href="https://twitter.com/pgveiga">@pgveiga</a> and <a href="https://www.instagram.com/luketua">@luketua</a> for helping me edit and improve this series.</em></p>
-<div class="footnotes">
-<hr/>
-<ol>
-<li id="fn:1">
-<p>Ok. The thing that terrified me…<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
-<li id="fn:2">
-<p>Go read this article if you haven’t. Peter Welch is hilarious.<a href="#fnref:2" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 
