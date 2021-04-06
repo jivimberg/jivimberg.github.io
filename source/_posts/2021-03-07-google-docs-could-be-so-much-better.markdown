@@ -4,6 +4,8 @@ title: "Google Docs could be so much better!"
 date: 2021-03-07 18:50:06 -0800
 comments: true
 categories: 
+description: Improving Docs has the potential of completely overhauling the way information flows through an organization. Here are some ideas on how it could be improved.
+image: /images/posts/2021-03-29/roam.png
 ---
 
 Lots of businesses run on Google Docs. It's how we write memos, define strategies, discuss proposals, document decisions, write tutorials, and plenty of other things.
@@ -12,7 +14,7 @@ Google Docs is a fantastic piece of technology. I almost can't imagine how we wo
 
 <!--more-->
 
-##  Smart Summaries
+## Smart Summaries
 
 It’s early in the morning, and you’re checking your emails. You notice your boss shared the new strategy memo. You still have 15’ minutes to your next meeting, so you think: _“I’ll catch up on this one real quick”_. You start reading and, in the first paragraph, you found a reference to another doc you were not aware of. So you open the link on a new tab and keep going. As you tread through the doc, you find more and more links to review. Before you know your browser looks like this:
 
