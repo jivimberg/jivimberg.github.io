@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Sampling | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/sampling/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2021-08-01T10:06:56-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sifter: Scalable Sampling for Distributed Tracing]]></title>
+    <link href="http://jivimberg.github.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces/"/>
+    <updated>2021-07-28T08:39:37-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces</id>
+    <content type="html"><![CDATA[<p>Distributed tracing can be ridiculously expensive if you try to trace a hundred percent of requests. A common technique to reduce costs is to sample only a small portion of the traffic. But naive sampling techniques like <em>uniform sampling</em> will inevitably capture more common-case executions and might miss the more interesting edge cases. Instead, <strong><a href="https://dl.acm.org/doi/10.1145/3357223.3362736">Sifter’s approach</a> is to bias sampling decisions towards outliers and anomalous traces.</strong> This way, anomalous traces have a higher chance of being sampled, and the more uninteresting traces are discarded.</p>
+
+<!--more-->
+
+
+<h2>How it works</h2>
+
+<p>Sifter uses the incoming stream of traces to <strong>builds a model that approximates the system’s common-case behavior</strong>. To make a sampling decision, it checks how well the model matches the incoming trace. Sampling is biased toward traces that are <em>not</em> well approximated (outliers and anomalous traces).</p>
+
+<p><img class="center" src="/images/posts/2021-07-28/full-pipeline.png"></p>
+
+<h3>The model</h3>
+
+<p>Sifter uses a 2-layer neural network that models the probability of an event occurring given its immediate predecessors and successors. To create this model, they first extract all <em>N</em>-length paths for each trace.</p>
+
+<p><img class="center" src="/images/posts/2021-07-28/paths.png"></p>
+
+<p>For a given path (p_0<em>, …, p_N</em>), the neural network predicts the probability of p_N/2_ given its surrounding events p_0<em>, … , p_N</em> (excluding  p_N/2_). The model gives better predictions for paths that are seeing more frequently in the input dataset.</p>
+
+<p><img class="center" src="/images/posts/2021-07-28/neural-network.png"></p>
+
+<h3>Sampling</h3>
+
+<p>To make a sampling decision, Sifter first extracts all <em>N</em>-length paths from traces and feeds that into the model. It then uses the output to calculate the prediction&rsquo;s <em>loss</em>, that is the difference between the predicted and actual events. <strong>The higher the loss, the more “interesting” the trace is.</strong></p>
+
+<p>The <em>loss</em> is then weighted against the loss of the <em>k</em> most recent traces.</p>
+
+<p><img class="center" src="/images/posts/2021-07-28/formula-loss.png"></p>
+
+<p>If all traces have the same <em>loss</em>, then the trace is sampled uniformly at random with probability <em>α</em>. Otherwise, the probability is calculated using this formula:</p>
+
+<p><img class="center" src="/images/posts/2021-07-28/formula-sampling.png"></p>
+
+<p>Traces with the lowest <em>loss</em> will have a sampling probability of zero. Traces with the highest loss will have the highest sampling probability.</p>
+
+<h3>Updating the model</h3>
+
+<p>Sifter does a gradient descent back-propagation pass on the model for every trace seen to keep the model up-to-date. It also adds the trace’s loss into the window of <em>k</em> most recent traces and pops the oldest value. Note that <strong>this happens on every trace regardless of whether it is sampled or not.</strong></p>
+
+<h2>Sifter’s Properties</h2>
+
+<p>The following list is a summary of Sifter’s design choices and their consequences:</p>
+
+<ul>
+<li><strong>Sifter’s operates online over a continuous stream of traces.</strong>  The overhead added by sampling is in the order of milliseconds. This latency is affected only by the trace size and the number of unique events in a trace. It is independent of the workload volume and the number of previously sampled traces.</li>
+<li><strong>Sifter is not feature-based.</strong> The model used to identify interesting traces does not require any feature engineering from developers. As a consequence, Sifter’s approach is not limited to what developers consider interesting a priori. Instead, interesting features on the sampled traces can be discovered rather than engineered.</li>
+<li>As a corollary to the previous point, <strong>Sifter can automatically adapt to changes in traffic over time.</strong> The model is updated with every incoming trace, and the sampling probability is adjusted as the workload distribution changes.</li>
+<li>The amount of memory needed to keep Sifter’s model is a function of <em>N</em> the path size, <em>E</em> the label vocabulary, and <em>k</em> the number of most recently seen traces we consider. The total size is constant with respect to the workload volume and the number of sampling traces.</li>
+<li><strong>Sifter does not require any pre-training or manual configuration before operation.</strong> On bootstrap, it’ll start making random sampling decisions while learning the model’s system behavior with every new trace.</li>
+<li>Sifter’s model converts traces into a <em>directed acyclic graph</em> of labels based on event origin, i.e. source file and line number. It does not consider other span features like timing, tags, annotations, etc.</li>
+</ul>
+
+
+<p> <img class="right-fill" src="/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+</feed>
