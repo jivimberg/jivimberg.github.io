@@ -4,6 +4,8 @@ title: "Adding Context to Extension Functions"
 date: 2021-08-21 20:24:14 -0700
 comments: true
 categories: kotlin idioms extension-functions
+description: Kotlin idiom to limit extension function usage based on context
+image: /images/posts/2021-08-21/wrong-suggestion.png
 ---
 
 Extension functions are great! But if you define them all over the place, it can get confusing pretty quickly. So here’s a cool idiom to limit extension function usage to a specific context.
