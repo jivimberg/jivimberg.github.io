@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Kotlin | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/kotlin/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2021-08-01T10:06:56-07:00</updated>
+  <updated>2021-09-26T11:46:44-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,296 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Adding Context to Extension Functions]]></title>
+    <link href="http://jivimberg.github.io/blog/2021/08/21/adding-context-to-extension-functions/"/>
+    <updated>2021-08-21T20:24:14-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2021/08/21/adding-context-to-extension-functions</id>
+    <content type="html"><![CDATA[<p>Extension functions are great! But if you define them all over the place, it can get confusing pretty quickly. So here’s a cool idiom to limit extension function usage to a specific context.</p>
+
+<!--more-->
+
+
+<p>Last week I needed to write some code to generate <a href="https://github.com/Netflix/atlas/wiki/Stack-Language">Atlas Stack Language (ASL)</a> queries. ASL is loosely based on <a href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">Reverse Polish Notation</a>, so you first specify the parameters and then the operation. The query I was trying to generate looked something like this:</p>
+
+<p> <code>appName,myapp,:eq,userName,juan,:eq,:and</code></p>
+
+<p>I already had methods for the <code>appName</code> and <code>userName</code> parts and was trying to write the method for the <code>:and</code> operator. So I started by writing the tests:</p>
+
+<div class="kotlin-code" data-target-platform="junit" theme="darcula">
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+internal class ASLQueryBuilderTestV1 {
+
+    //sampleStart
+
+    // Tests will fail because `and` hasn't been implemented yet
+
+    @Test
+    fun `and should return correct expr if neither param is null`() {
+        val expr = and("one", "two")
+        assertEquals("one,two,:and", expr)
+    }
+
+    @Test
+    fun `and should return first param if second param is null`() {
+        val expr = and("one", null)
+        assertEquals("one", expr)
+    }
+
+    @Test
+    fun `and should return second param if receiver is null`() {
+        val expr = and(null, "two")
+        assertEquals("two", expr)
+    }
+
+    @Test
+    fun `and should return null if both params are null`() {
+        val expr = and(null, null)
+        assertNull(expr)
+    }
+    //sampleEnd
+}
+</div>
+
+
+<p>Ok, that’s a lie 🙈 I didn’t really start with the tests, as <a href="https://en.wikipedia.org/wiki/Test-driven_development">TDD</a> suggests. But let’s pretend I did for this example because the test does a good job at explaining the behavior I was going for. Note that the <code>:and</code> operator is only applied if both expressions are not <em>null</em>.</p>
+
+<p>So here&rsquo;s a straightforward implementation that makes all the tests go ✅:</p>
+
+<div class="kotlin-code" data-target-platform="junit" theme="darcula">
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+internal class ASLQueryBuilderTestV1 {
+
+    @Test
+    fun `and should return correct expr if neither param is null`() {
+        val expr = and("one", "two")
+        assertEquals("one,two,:and", expr)
+    }
+
+    @Test
+    fun `and should return first param if second param is null`() {
+        val expr = and("one", null)
+        assertEquals("one", expr)
+    }
+
+    @Test
+    fun `and should return second param if receiver is null`() {
+        val expr = and(null, "two")
+        assertEquals("two", expr)
+    }
+
+    @Test
+    fun `and should return null if both params are null`() {
+        val expr = and(null, null)
+        assertNull(expr)
+    }
+}
+
+//sampleStart
+fun and(expr1: String?, expr2: String?): String? {
+    return when {
+        expr1 != null && expr2 != null -> "$expr1,$expr2,:and"
+        expr1 != null && expr2 == null -> expr1
+        expr1 == null && expr2 != null -> expr2
+        else -> null
+    }
+}
+//sampleEnd
+</div>
+
+
+<p>My <code>and()</code> method was working, but it was not beautiful. Every time I read it, I had to do some mental gymnastics to understand what was going on 🧠🏋</p>
+
+<p>Here, judge for yourself:</p>
+
+<div class="kotlin-code" theme="darcula" data-highlight-only>
+val expr = and(appNameEquals("myapp"), userNameEquals("juan"))
+//      🤔 <- me thinking 
+// expr means      (appName == myapp) AND (userName == juan)"
+// expr generated  "appName,myapp,:eq,userName,juan,:eq,:and"
+</div>
+
+
+<p>So I had an idea, what if I write it as an <a href="https://kotlinlang.org/docs/functions.html#infix-notation"><code>infix</code> function</a>? Infix functions can only take a single parameter, and I need to receive two expressions, so my only option was to make <code>and</code> an extension function. And that’s what I did:</p>
+
+<div class="kotlin-code" data-target-platform="junit" theme="darcula">
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+internal class ASLQueryBuilderTestV1 {
+
+    @Test
+    fun `and should return correct expr if neither param is null`() {
+        val expr = "one" and "two"
+        assertEquals("one,two,:and", expr)
+    }
+
+    @Test
+    fun `and should return first param if second param is null`() {
+        val expr = "one" and null
+        assertEquals("one", expr)
+    }
+
+    @Test
+    fun `and should return second param if receiver is null`() {
+        val expr = null and "two"
+        assertEquals("two", expr)
+    }
+
+    @Test
+    fun `and should return null if both params are null`() {
+        val expr = null and null
+        assertNull(expr)
+    }
+}
+
+//sampleStart
+infix fun String?.and(other: String?): String? {
+    return when {
+        this != null && other != null -> "$this,$other,:and"
+        this != null && other == null -> this
+        this == null && other != null -> other
+        else -> null
+    }
+}
+//sampleEnd
+</div>
+
+
+<p>Ahh! This reads almost like English. <em>Me like it very much!</em></p>
+
+<p>Except for one thing&hellip;</p>
+
+<p><code>String?</code> is a pretty basic type, and <code>and()</code> is a pretty common function name. Months from now, somebody will be writing some code and IntelliJ will suggest this:</p>
+
+<p><img class="center" src="/images/posts/2021-08-21/wrong-suggestion.png"></p>
+
+<p>😱 Watch out unsuspecting coder! That <code>and</code> function doesn&rsquo;t do what you think it does!</p>
+
+<p>Leaving this extension function around might be dangerous. So, how can we restrict callers to use it only when writing ASL queries?</p>
+
+<h2>Extension member functions to the rescue!</h2>
+
+<p>The trick is to create a new class named <code>AslQueryBuilder</code> and make <code>and()</code> a member function of this class. By doing so, we make sure the extension function can only be called from an instance of <code>AslQueryBuilder</code>. Nobody will confuse <code>AslQueryBuilder.and()</code> with <code>String.plus()</code>.</p>
+
+<div class="kotlin-code" theme="darcula" data-highlight-only>
+class ASLQueryBuilder {
+    infix fun String?.and(other: String?): String? {
+        return when {
+            this != null && other != null -> "$this,$other,:and"
+            this != null && other == null -> this
+            this == null && other != null -> other
+            else -> null
+        }
+    }
+}
+</div>
+
+
+<p>IntelliJ will no longer suggest <code>and()</code> to any random <code>String?</code> unless AslQueryBuilder is in scope. Problem solved! 💪</p>
+
+<p>We can use Kotlin&rsquo;s <code>with()</code> function to put an instance of <code>AslQueryBuilder</code> in scope to call <code>and()</code>.</p>
+
+<div class="kotlin-code" data-target-platform="junit" theme="darcula">
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+internal class ASLQueryBuilderTestV3 {
+    //sampleStart
+    private val aslQueryBuilder = ASLQueryBuilder()
+
+    @Test
+    fun `and should return correct expr if neither param is null`() {
+        val expr = with(aslQueryBuilder) { "one" and "two" }
+        expectThat(expr).isEqualTo("one,two,:and")
+    }
+
+    @Test
+    fun `and should return first param if second param is null`() {
+        val expr = with(aslQueryBuilder) { "one" and null }
+        expectThat(expr).isEqualTo("one")
+    }
+
+    @Test
+    fun `and should return second param if receiver is null`() {
+        val expr = with(aslQueryBuilder) { null and "two" }
+        expectThat(expr).isEqualTo("two")
+    }
+
+    @Test
+    fun `and should return null if both params are null`() {
+        val expr = with(aslQueryBuilder) { null and null }
+        expectThat(expr).isNull()
+    }
+    //sampleEnd
+}
+
+infix fun String?.and(other: String?): String? {
+    return when {
+        this != null && other != null -> "$this,$other,:and"
+        this != null && other == null -> this
+        this == null && other != null -> other
+        else -> null
+    }
+}
+</div>
+
+
+<h2>Putting it all together</h2>
+
+<p>Now that we have an <code>ASLQueryBuilder</code> class, let&rsquo;s add the other two required methods in there too:</p>
+
+<div class="kotlin-code" theme="darcula">
+class ASLQueryBuilder {
+
+    infix fun String?.and(other: String?): String? {
+        return when {
+            this != null && other != null -> "$this,$other,:and"
+            this != null && other == null -> this
+            this == null && other != null -> other
+            else -> null
+        }
+    }
+
+    fun appNameEquals(appName: String?): String? {
+        return appName?.let { ":appName,$it,eq" }
+    }
+
+    fun userNameEquals(userName: String?): String? {
+        return userName?.let { ":userName,$userName,eq" }
+    }
+}
+
+fun main() {
+    val aslQueryBuilder = ASLQueryBuilder()
+    val finalExpression = with(aslQueryBuilder) {
+        appNameEquals("myApp") and userNameEquals("juan")
+    }
+    print(finalExpression) // :appName,myApp,eq,:userName,juan,eq,:and
+}
+</div>
+
+
+<p>And that’s it! The query generation code reads nicely and is easy to understand, and <strong>developers can&rsquo;t call the functions without the explicit <code>ASLQueryBuilder</code> context instance, so nobody will use them accidentally</strong>. With this technique we can add any extensions we want to common types without worrying it might pollute the auto-complete and be misused.</p>
+
+<hr />
+
+<p>That’s all for today! If you liked this approach, make sure to check <a href="https://proandroiddev.com/an-introduction-context-oriented-programming-in-kotlin-2e79d316b0a2">An introduction to context-oriented programming in Kotlin</a> and <a href="https://github.com/Kotlin/KEEP/blob/context-receivers/proposals/context-receivers.md#contextual-functions-and-property-accessors">KEEP-259</a> for what might come in future versions of Kotlin.</p>
+
+<p><img class="right-fill" src="/images/signatures/signature13.png" width="200" title="‘My signature’" ></p>
+
+<p><script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"\></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mockk All the Things]]></title>
@@ -913,110 +1203,6 @@ class Celeb(
 <p>You can find all the <strong>code samples</strong> for this post on <strong><a href="https://github.com/jivimberg/spring-data-uuid-example">this GitHub repo</a></strong>.</p>
 
 <p><img class="right-fill" src="/images/signatures/signature1.png" width="200" title="‘My signature’" ></p>
-
-<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
-
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Reactive GraphQL Subscriptions From Kafka]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka/"/>
-    <updated>2018-10-23T07:58:14-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka</id>
-    <content type="html"><![CDATA[<p>In this post I’ll be exploring how to implement <a href="https://github.com/facebook/graphql/blob/master/rfcs/Subscriptions.md">GraphQL subscriptions</a> <em>reactively</em> on a Spring Boot application using <a href="https://kafka.apache.org/">Kafka</a>.</p>
-
-<!--more-->
-
-
-<h1>The use case</h1>
-
-<p>So, <em>what are we trying to achieve?</em> We want to provide <strong>a way for clients to get notified</strong> whenever an event occurs in the application.</p>
-
-<p>The GraphQL way of doing this is through a <a href="https://github.com/facebook/graphql/blob/master/rfcs/Subscriptions.md">Subscription</a>. For the application events we’re using Kafka. So all we are trying to do is to tie those 2 things so that <strong>whenever an event pops up in Kafka all clients with an active subscription get notified</strong>.</p>
-
-<p><img class="center" src="/images/posts/2018-10-24/SubscriptionFlow.png" width="700" title="‘Subscription flow diagram’" ></p>
-
-<h1>The setup</h1>
-
-<p>Let’s introduce the different pieces of the puzzle:</p>
-
-<ol>
-<li>I have a <a href="https://spring.io/guides/gs/spring-boot/">Spring Boot application</a> that has some business logic.</li>
-<li>Using <a href="https://github.com/graphql-java-kickstart/graphql-spring-boot"><code>graphql-spring-boot-starter</code></a> I’m exposing my service through a GraphQL API. <strong>One of those endpoints it’s going to be a Subscription endpoint.</strong> It’s schema definition looks something like this:</li>
-</ol>
-
-
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">type</span> <span class="n">Subscription</span> <span class="o">{</span>
-</span><span class='line'> <span class="nl">event:</span> <span class="n">EventMessage</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<ol>
-<li>On the other end I have a <a href="https://kafka.apache.org/documentation/#intro_topics">Kafka topic</a> with events that a user might be interested in. We plan to use <a href="https://github.com/reactor/reactor-kafka">Reactor Kafka</a> to <strong>consume the events through a reactive stream</strong>.</li>
-</ol>
-
-
-<p><img class="center" src="/images/posts/2018-10-24/Setup.png" width="800" title="’Setup diagram’" ></p>
-
-<p>So the challenge is: <em>how do we connect all this pieces together?</em></p>
-
-<h1>Reactive all the way</h1>
-
-<p>To implement the resolver <a href="https://github.com/graphql-java-kickstart/graphql-java-tools">GraphQL Java Tools</a> <strong>requires that we implement a function that returns a <code>Publisher&lt;T&gt;</code></strong>. Where <em>T</em> is the type of event to be pushed to the subscriber. From <a href="https://github.com/graphql-java/graphql-java">GraphQL Java</a> documentation:</p>
-
-<blockquote><p>What is special is that the initial result of a subscription query is a <strong>reactive-streams Publisher object</strong> which you need to use to get the future values.</p></blockquote>
-
-<p>On the other end <strong>we can use <a href="https://github.com/reactor/reactor-kafka">Reactor Kafka</a> to create a reactive Receiver</strong> to consume the events from the topic. Then all that’s left is <strong>obtaining a <code>Publisher</code> from this receiver so that clients can subscribe to it</strong>. This is all the code we need:</p>
-
-<xmp class="kotlin-code" theme="darcula" data-highlight-only>
-import graphql.schema.DataFetchingEnvironment
-import org.reactivestreams.Publisher
-import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Component
-import reactor.core.publisher.Flux
-import reactor.kafka.receiver.KafkaReceiver
-import reactor.kafka.receiver.ReceiverOptions
-
-@Component
-class SubscriptionsResolverImpl(
-    receiverOptions: ReceiverOptions<String, EntityUpdated>                 // Receiver configuration. Injected by Spring
-) : SubscriptionsResolver {
-
-    private val logger = LoggerFactory.getLogger(javaClass)
-
-    private val kafkaReceiver: Flux<GraphqlEvents.Update> by lazy {         // Use lazy to delay KafkaReceiver initialization
-        KafkaReceiver.create(receiverOptions).receive()                     // Create Kafka reactive receiver
-            .map { GraphqlEvents.Update.fromEvent(it.value()) }             // Map from Kafka event to Graphql Event
-            .doFinally { logger.info("Closing with signal: ${it.name}") }   // Log message on stream closure
-            .publish()                                                      // Get a ConnectableFlux. Turns stream to hot
-            .autoConnect()                                                  // Connect to upstream on first subscription
-    }
-
-    override fun event(env: DataFetchingEnvironment): Publisher<GraphqlEvents.Update> {
-        logger.info("GraphQL 'event' subscription called")                  // Log message on each new subscription
-        return kafkaReceiver                                                // Returns kafkaReceiver for GraphQL to subscribe to it
-    }
-}
-</xmp>
-
-
-<p>Just to recap. We are <strong>creating a Kafka Receiver</strong> for the topic we care about (the topic configuration is part of the <code>receiverOptions</code> object, not shown in the snippet).</p>
-
-<p>We are <strong>mapping the event</strong> from the <em>Kafka model</em> to the <em>GraphQL model</em> through the <code>map()</code> method.</p>
-
-<p>Then we are turning the receiver into a hot stream by calling <code>publish()</code>. We are doing this because <strong>we want new subscribers to only see events that happened after they subscribed to the <code>Publisher</code></strong>. And that’s exactly what <code>publish()</code> does. In fact if you pay close attention to the marble diagram of the <a href="https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html#publish--">method documentation</a> you’ll notice how <strong>it looks pretty similar to our use case flow diagram.</strong></p>
-
-<p><img class="center" src="/images/posts/2018-10-24/publish.png" width="500" title="‘Publish marble diagram’" ></p>
-
-<p>We’re calling <code>autoConnect()</code> so that it connects to the upstream source as soon as the first <code>Subscriber</code> subscribes.</p>
-
-<p>Finally we’re implementing the <code>event</code> function <strong>by simply returning the reference to our hot stream of events</strong>. Whenever a new client calls the Subscription endpoint <strong>GraphQL Java will subscribe to this stream</strong> and send a message for every new event that shows up in the configured Kafka topic.</p>
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 

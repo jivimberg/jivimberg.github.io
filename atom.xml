@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2021-08-01T10:06:56-07:00</updated>
+  <updated>2021-09-26T11:46:44-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,296 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Adding Context to Extension Functions]]></title>
+    <link href="http://jivimberg.github.io/blog/2021/08/21/adding-context-to-extension-functions/"/>
+    <updated>2021-08-21T20:24:14-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2021/08/21/adding-context-to-extension-functions</id>
+    <content type="html"><![CDATA[<p>Extension functions are great! But if you define them all over the place, it can get confusing pretty quickly. So here’s a cool idiom to limit extension function usage to a specific context.</p>
+
+<!--more-->
+
+
+<p>Last week I needed to write some code to generate <a href="https://github.com/Netflix/atlas/wiki/Stack-Language">Atlas Stack Language (ASL)</a> queries. ASL is loosely based on <a href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">Reverse Polish Notation</a>, so you first specify the parameters and then the operation. The query I was trying to generate looked something like this:</p>
+
+<p> <code>appName,myapp,:eq,userName,juan,:eq,:and</code></p>
+
+<p>I already had methods for the <code>appName</code> and <code>userName</code> parts and was trying to write the method for the <code>:and</code> operator. So I started by writing the tests:</p>
+
+<div class="kotlin-code" data-target-platform="junit" theme="darcula">
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+internal class ASLQueryBuilderTestV1 {
+
+    //sampleStart
+
+    // Tests will fail because `and` hasn't been implemented yet
+
+    @Test
+    fun `and should return correct expr if neither param is null`() {
+        val expr = and("one", "two")
+        assertEquals("one,two,:and", expr)
+    }
+
+    @Test
+    fun `and should return first param if second param is null`() {
+        val expr = and("one", null)
+        assertEquals("one", expr)
+    }
+
+    @Test
+    fun `and should return second param if receiver is null`() {
+        val expr = and(null, "two")
+        assertEquals("two", expr)
+    }
+
+    @Test
+    fun `and should return null if both params are null`() {
+        val expr = and(null, null)
+        assertNull(expr)
+    }
+    //sampleEnd
+}
+</div>
+
+
+<p>Ok, that’s a lie 🙈 I didn’t really start with the tests, as <a href="https://en.wikipedia.org/wiki/Test-driven_development">TDD</a> suggests. But let’s pretend I did for this example because the test does a good job at explaining the behavior I was going for. Note that the <code>:and</code> operator is only applied if both expressions are not <em>null</em>.</p>
+
+<p>So here&rsquo;s a straightforward implementation that makes all the tests go ✅:</p>
+
+<div class="kotlin-code" data-target-platform="junit" theme="darcula">
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+internal class ASLQueryBuilderTestV1 {
+
+    @Test
+    fun `and should return correct expr if neither param is null`() {
+        val expr = and("one", "two")
+        assertEquals("one,two,:and", expr)
+    }
+
+    @Test
+    fun `and should return first param if second param is null`() {
+        val expr = and("one", null)
+        assertEquals("one", expr)
+    }
+
+    @Test
+    fun `and should return second param if receiver is null`() {
+        val expr = and(null, "two")
+        assertEquals("two", expr)
+    }
+
+    @Test
+    fun `and should return null if both params are null`() {
+        val expr = and(null, null)
+        assertNull(expr)
+    }
+}
+
+//sampleStart
+fun and(expr1: String?, expr2: String?): String? {
+    return when {
+        expr1 != null && expr2 != null -> "$expr1,$expr2,:and"
+        expr1 != null && expr2 == null -> expr1
+        expr1 == null && expr2 != null -> expr2
+        else -> null
+    }
+}
+//sampleEnd
+</div>
+
+
+<p>My <code>and()</code> method was working, but it was not beautiful. Every time I read it, I had to do some mental gymnastics to understand what was going on 🧠🏋</p>
+
+<p>Here, judge for yourself:</p>
+
+<div class="kotlin-code" theme="darcula" data-highlight-only>
+val expr = and(appNameEquals("myapp"), userNameEquals("juan"))
+//      🤔 <- me thinking 
+// expr means      (appName == myapp) AND (userName == juan)"
+// expr generated  "appName,myapp,:eq,userName,juan,:eq,:and"
+</div>
+
+
+<p>So I had an idea, what if I write it as an <a href="https://kotlinlang.org/docs/functions.html#infix-notation"><code>infix</code> function</a>? Infix functions can only take a single parameter, and I need to receive two expressions, so my only option was to make <code>and</code> an extension function. And that’s what I did:</p>
+
+<div class="kotlin-code" data-target-platform="junit" theme="darcula">
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+internal class ASLQueryBuilderTestV1 {
+
+    @Test
+    fun `and should return correct expr if neither param is null`() {
+        val expr = "one" and "two"
+        assertEquals("one,two,:and", expr)
+    }
+
+    @Test
+    fun `and should return first param if second param is null`() {
+        val expr = "one" and null
+        assertEquals("one", expr)
+    }
+
+    @Test
+    fun `and should return second param if receiver is null`() {
+        val expr = null and "two"
+        assertEquals("two", expr)
+    }
+
+    @Test
+    fun `and should return null if both params are null`() {
+        val expr = null and null
+        assertNull(expr)
+    }
+}
+
+//sampleStart
+infix fun String?.and(other: String?): String? {
+    return when {
+        this != null && other != null -> "$this,$other,:and"
+        this != null && other == null -> this
+        this == null && other != null -> other
+        else -> null
+    }
+}
+//sampleEnd
+</div>
+
+
+<p>Ahh! This reads almost like English. <em>Me like it very much!</em></p>
+
+<p>Except for one thing&hellip;</p>
+
+<p><code>String?</code> is a pretty basic type, and <code>and()</code> is a pretty common function name. Months from now, somebody will be writing some code and IntelliJ will suggest this:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-08-21/wrong-suggestion.png"></p>
+
+<p>😱 Watch out unsuspecting coder! That <code>and</code> function doesn&rsquo;t do what you think it does!</p>
+
+<p>Leaving this extension function around might be dangerous. So, how can we restrict callers to use it only when writing ASL queries?</p>
+
+<h2>Extension member functions to the rescue!</h2>
+
+<p>The trick is to create a new class named <code>AslQueryBuilder</code> and make <code>and()</code> a member function of this class. By doing so, we make sure the extension function can only be called from an instance of <code>AslQueryBuilder</code>. Nobody will confuse <code>AslQueryBuilder.and()</code> with <code>String.plus()</code>.</p>
+
+<div class="kotlin-code" theme="darcula" data-highlight-only>
+class ASLQueryBuilder {
+    infix fun String?.and(other: String?): String? {
+        return when {
+            this != null && other != null -> "$this,$other,:and"
+            this != null && other == null -> this
+            this == null && other != null -> other
+            else -> null
+        }
+    }
+}
+</div>
+
+
+<p>IntelliJ will no longer suggest <code>and()</code> to any random <code>String?</code> unless AslQueryBuilder is in scope. Problem solved! 💪</p>
+
+<p>We can use Kotlin&rsquo;s <code>with()</code> function to put an instance of <code>AslQueryBuilder</code> in scope to call <code>and()</code>.</p>
+
+<div class="kotlin-code" data-target-platform="junit" theme="darcula">
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+internal class ASLQueryBuilderTestV3 {
+    //sampleStart
+    private val aslQueryBuilder = ASLQueryBuilder()
+
+    @Test
+    fun `and should return correct expr if neither param is null`() {
+        val expr = with(aslQueryBuilder) { "one" and "two" }
+        expectThat(expr).isEqualTo("one,two,:and")
+    }
+
+    @Test
+    fun `and should return first param if second param is null`() {
+        val expr = with(aslQueryBuilder) { "one" and null }
+        expectThat(expr).isEqualTo("one")
+    }
+
+    @Test
+    fun `and should return second param if receiver is null`() {
+        val expr = with(aslQueryBuilder) { null and "two" }
+        expectThat(expr).isEqualTo("two")
+    }
+
+    @Test
+    fun `and should return null if both params are null`() {
+        val expr = with(aslQueryBuilder) { null and null }
+        expectThat(expr).isNull()
+    }
+    //sampleEnd
+}
+
+infix fun String?.and(other: String?): String? {
+    return when {
+        this != null && other != null -> "$this,$other,:and"
+        this != null && other == null -> this
+        this == null && other != null -> other
+        else -> null
+    }
+}
+</div>
+
+
+<h2>Putting it all together</h2>
+
+<p>Now that we have an <code>ASLQueryBuilder</code> class, let&rsquo;s add the other two required methods in there too:</p>
+
+<div class="kotlin-code" theme="darcula">
+class ASLQueryBuilder {
+
+    infix fun String?.and(other: String?): String? {
+        return when {
+            this != null && other != null -> "$this,$other,:and"
+            this != null && other == null -> this
+            this == null && other != null -> other
+            else -> null
+        }
+    }
+
+    fun appNameEquals(appName: String?): String? {
+        return appName?.let { ":appName,$it,eq" }
+    }
+
+    fun userNameEquals(userName: String?): String? {
+        return userName?.let { ":userName,$userName,eq" }
+    }
+}
+
+fun main() {
+    val aslQueryBuilder = ASLQueryBuilder()
+    val finalExpression = with(aslQueryBuilder) {
+        appNameEquals("myApp") and userNameEquals("juan")
+    }
+    print(finalExpression) // :appName,myApp,eq,:userName,juan,eq,:and
+}
+</div>
+
+
+<p>And that’s it! The query generation code reads nicely and is easy to understand, and <strong>developers can&rsquo;t call the functions without the explicit <code>ASLQueryBuilder</code> context instance, so nobody will use them accidentally</strong>. With this technique we can add any extensions we want to common types without worrying it might pollute the auto-complete and be misused.</p>
+
+<hr />
+
+<p>That’s all for today! If you liked this approach, make sure to check <a href="https://proandroiddev.com/an-introduction-context-oriented-programming-in-kotlin-2e79d316b0a2">An introduction to context-oriented programming in Kotlin</a> and <a href="https://github.com/Kotlin/KEEP/blob/context-receivers/proposals/context-receivers.md#contextual-functions-and-property-accessors">KEEP-259</a> for what might come in future versions of Kotlin.</p>
+
+<p><img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature13.png" width="200" title="‘My signature’" ></p>
+
+<p><script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"\></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Sifter: Scalable Sampling for Distributed Tracing]]></title>
@@ -2400,28 +2690,6 @@ private suspend fun processMsg(message: Message) = withContext(Dispatchers.Defau
 
 
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Guice at a Glance]]></title>
-    <link href="http://jivimberg.github.io/blog/2019/02/08/guice-at-a-glance/"/>
-    <updated>2019-02-08T15:12:32-08:00</updated>
-    <id>http://jivimberg.github.io/blog/2019/02/08/guice-at-a-glance</id>
-    <content type="html"><![CDATA[<p>A visual overview of <a href="https://github.com/google/guice">Google’s Guice</a> model.</p>
-
-<!--more-->
-
-
-<p>A couple of weeks ago I started learning Guice. This cheat-sheet is a visual guide of how the different pieces that conform the framework fit together. I created it in the hope it helps beginners (like me) build a <a href="https://en.wikipedia.org/wiki/Mental_model">mental model</a> of how the framework works.</p>
-
-<p><a href="http://jivimberg.github.io/images/posts/2019-02-08/guice.png"><img class="center" src="http://jivimberg.github.io/images/posts/2019-02-08/guice.png" width="800" title="‘Guice cheat-sheet’" ></a></p>
-
-<p><a href="http://jivimberg.github.io/images/posts/2019-02-08/guice.png"><em>(click for full size image)</em></a></p>
-
-<p>If you want to learn more about how <a href="https://github.com/google/guice">Guice</a> works head to their <a href="https://github.com/google/guice/wiki">oficial documentation</a>.</p>
-
-<p><img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2021/08/21/adding-context-to-extension-functions/</loc>
+<lastmod>2021-08-21T20:24:14-07:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces/</loc>
 <lastmod>2021-07-28T08:39:37-07:00</lastmod>
 </url>
@@ -693,18 +697,9 @@
 <loc>http://jivimberg.github.io/blog/categories/sampling/</loc>
 </url>
 <url>
-<loc>http://jivimberg.github.io/blog/posts/2/</loc>
+<loc>http://jivimberg.github.io/blog/categories/idioms/</loc>
 </url>
 <url>
-<loc>http://jivimberg.github.io/blog/posts/3/</loc>
-</url>
-<url>
-<loc>http://jivimberg.github.io/blog/posts/4/</loc>
-</url>
-<url>
-<loc>http://jivimberg.github.io/blog/posts/5/</loc>
-</url>
-<url>
-<loc>http://jivimberg.github.io/blog/posts/6/</loc>
+<loc>http://jivimberg.github.io/blog/categories/extension-functions/</loc>
 </url>
 </urlset>
