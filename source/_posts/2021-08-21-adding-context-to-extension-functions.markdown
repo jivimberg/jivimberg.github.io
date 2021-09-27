@@ -260,7 +260,7 @@ class ASLQueryBuilder {
     }
 
     fun userNameEquals(userName: String?): String? {
-        return userName?.let { ":userName,$userName,eq" }
+        return userName?.let { ":userName,$it,eq" }
     }
 }
 
