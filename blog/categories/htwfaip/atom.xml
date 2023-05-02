@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Htwfaip | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/htwfaip/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2021-09-27T11:57:19-07:00</updated>
+  <updated>2023-03-06T13:22:46-08:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -27,7 +27,7 @@
 
 <p>It is always easier to listen to unpleasant things after we have heard some praise of our good points. This is also sometimes refered as the <a href="http://lifehacker.com/297247/give-constructive-criticism">&ldquo;sandwich rule&rdquo;</a>.</p>
 
-<p><img class="center" src="/images/posts/2015-06-15/SandwichRule.jpg" width="250" title="&lsquo;Sandwich Rule&rsquo;" ></p>
+<p>{% img center /images/posts/2015-06-15/SandwichRule.jpg 250 &lsquo;Sandwich Rule&rsquo; %}</p>
 
 <h3>How to Criticize: Call attention to people’s mistakes indirectly</h3>
 

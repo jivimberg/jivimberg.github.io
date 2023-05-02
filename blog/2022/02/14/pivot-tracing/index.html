@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Pivot Tracing - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Pivot Tracing written February 14, 2022 in distributed-tracing, observability, papers Pivot Tracing lets users define arbitrary metrics over trace &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.github.io/blog/2022/02/14/pivot-tracing">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<!-- Twitter card configuration from: https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image -->
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@jivimberg">
+  <meta name="twitter:creator" content="@jivimberg">
+  <meta name="twitter:title" content="Pivot Tracing">
+  <meta name="twitter:description" content="Pivot Tracing written February 14, 2022 in distributed-tracing, observability, papers Pivot Tracing lets users define arbitrary metrics over trace data at runtime. It does so by combining two &hellip;">
+  <meta name="twitter:image" content="https://jivimberg.io/images/background.jpg">
+
+
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-49016076-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Pivot Tracing</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2022-02-14T23:02:52-08:00" pubdate data-updated="true">February 14, 2022</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/distributed-tracing/'>distributed-tracing</a>, <a class='category' href='/blog/categories/observability/'>observability</a>, <a class='category' href='/blog/categories/papers/'>papers</a>
+  
+</span>
+
+
+        </div>
+        <p>Pivot Tracing lets users define arbitrary metrics over trace data at runtime. It does so by combining two powerful techniques:</p>
+
+<ol>
+<li>The ability to <strong>dynamically instrument code</strong> without having to redeploy.</li>
+<li>A <strong>Happen-Before operator</strong> that allows users to perform queries based on the causal relationship of the events.</li>
+</ol>
+
+
+<!--more-->
+
+
+<h2>How it works</h2>
+
+<p>Say we have an instrumented system we want to troubleshoot:</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/pt1.jpg" width="700"></p>
+
+<p>The first step is to define <strong>Tracepoints</strong> ⓵. Tracepoints are pointers to the source code where the code will be instrumented to collect metrics. They are instructions on <em>where</em> and <em>how</em> to modify the system to extract the required information. You can think of them as <a href="https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/aop.html"><em>pointcuts</em> from aspect-oriented programming</a>. They can refer to any arbitrary interface or method signature and can also be inserted at specific line numbers.</p>
+
+<p>Tracepoints export variables that can be used to write the queries, such as method arguments or local variables. Some default variables are provided out-of-the-box such as: <em>host</em>, <em>timestamp</em>, <em>process id</em>, <em>process name</em>, etc.</p>
+
+<p>The cool thing about Tracepoints is that <strong>they don’t need to be defined a priori</strong>. And since defining a Tracepoint involves no code modification, <strong>new ones can be created at no cost</strong>.</p>
+
+<p>Tracepoints are created by someone with good knowledge of the system (such as developers or operators). They <strong>define the vocabulary users will use to write the queries</strong>.</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/pt2.jpg" width="700"></p>
+
+<p>The next step is to write a query using the terms introduced by the tracepoints ⓶. A query might look something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">From</span> <span class="n">incr</span> <span class="k">In</span> <span class="n">DataNodeMetrics</span><span class="p">.</span><span class="n">incrBytesRead</span>
+</span><span class='line'><span class="k">Join</span> <span class="n">cl</span> <span class="k">In</span> <span class="k">First</span><span class="p">(</span><span class="n">ClientProtocols</span><span class="p">)</span> <span class="k">On</span> <span class="n">cl</span> <span class="o">-&gt;</span> <span class="n">incr</span>
+</span><span class='line'><span class="n">GroupBy</span> <span class="n">cl</span><span class="p">.</span><span class="n">procName</span>
+</span><span class='line'><span class="k">Select</span> <span class="n">cl</span><span class="p">.</span><span class="n">procName</span><span class="p">,</span> <span class="k">SUM</span><span class="p">(</span><span class="n">incr</span><span class="p">.</span><span class="n">delta</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this example a Tracepoint exists for the method <code>DataNodeMetrics. incrBytesRead(int delta)</code>  and another one for the class <code>ClientProtocols</code>. The shown query sums the values of <code>incr.delta</code> grouped by ClientProtocol’s <code>procName</code>. The clause <code>On cl -&gt; incr</code> establishes that we’re interested in only capturing <code>cl</code> events that happened before a <code>incr</code> event. <strong>The cool thing is that these two tracepoints belong to two different services! Pivot tracing will know how to propagate the required context needed to do the join and evaluate the happens-before clause.</strong></p>
+
+<p>Once the user submits the query, Pivot Tracing frontend compiles it to something called <strong>Advice</strong> ⓷. An Advice contains the instructions that need to be executed when a request passes through a Tracepoint to answer the query. These are the operations that can be executed as part of an Advice:</p>
+
+<ul>
+<li><strong>Observe:</strong> Creates a tuple from variables defined by a tracepoint.</li>
+<li><strong>Filter:</strong> Evaluates a predicate on all tuples.</li>
+<li><strong>Pack:</strong> Makes tuples available for use by later Advice</li>
+<li><strong>Unpack:</strong> Retrieves one or more tuples from prior Advice</li>
+<li><strong>Emit:</strong>Outputs a tuple for global aggregation.</li>
+</ul>
+
+
+<p>The Frontend creates these Advices and notifies the PT Agents to install them in the corresponding Tracepoints ⓸.</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/pt3.jpg" width="700"></p>
+
+<p>This is done by <em>weaving</em> generated code that gets executed every time a requests passes through the Tracepoint.</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/weaving.png" width="700"></p>
+
+<p>For the query shown above Advices A1 and A2 would be generated:</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/generatedAdvices.png" width="700"></p>
+
+<p>To do the happens-before join required by the query shown above Pivot Tracing needs to propagate the variables captured at <code>ClientProtocols Tracepoint</code> to the  <code>DataNodeMetrics Tracepoint</code>. This is done through something called <em>baggage</em> (if you’re familiar with <a href="https://opentelemetry.io/docs/concepts/signals/baggage/">OTel’s baggage</a> it’s basically the same thing).  When the request gets to the <code>ClientProtocols Tracepoint</code> the Advice A1 <em>Observes</em> the variables and <em>Packs</em> them as part of the request baggage ⓹. Later, when the code gets to the <code>DataNodeMetrics Tracepoint</code> the Advice A2 <em>Unpacks</em> the variables, <em>Observes</em> the value of <code>delta</code> and <em>Emits</em> a joined tuple ⓺.</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/pt4.jpg" width="700"></p>
+
+<p>The tuples emitted by <code>DataNodeMetrics Tracepoint</code> ⓺ are aggregated locally and then streamed to the client over the message bus ⓻.</p>
+
+<p>Finally, Pivot Tracing Frontend uses this tuples to answer the user’s query ⓼. And that’s how the whole thing works.</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/pt5.jpg" width="700"></p>
+
+<h2>The power of Happens-Before</h2>
+
+<h2>The pros and cons of Dynamic Instrumentation</h2>
+
+<p>Talk about:
+*  Dynamic Instrumentation.
+* Happens Before. Typical example of grouping metrics of service B by tags provided on service A (here A -> B)</p>
+
+<hr />
+
+<p>TODO</p>
+
+<p><img class="right-fill" src="/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.github.io/blog/2022/02/14/pivot-tracing/';
+        var disqus_url = 'http://jivimberg.github.io/blog/2022/02/14/pivot-tracing/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2021/08/21/adding-context-to-extension-functions/" title="Previous Post: Adding Context to Extension Functions">&laquo; Previous: Adding Context to Extension Functions</a>
+        
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

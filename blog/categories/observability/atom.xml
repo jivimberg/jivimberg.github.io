@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Observability | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/observability/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2021-09-27T11:57:19-07:00</updated>
+  <updated>2023-03-06T13:17:11-08:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,97 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Pivot Tracing]]></title>
+    <link href="http://jivimberg.github.io/blog/2022/02/14/pivot-tracing/"/>
+    <updated>2022-02-14T23:02:52-08:00</updated>
+    <id>http://jivimberg.github.io/blog/2022/02/14/pivot-tracing</id>
+    <content type="html"><![CDATA[<p>Pivot Tracing lets users define arbitrary metrics over trace data at runtime. It does so by combining two powerful techniques:</p>
+
+<ol>
+<li>The ability to <strong>dynamically instrument code</strong> without having to redeploy.</li>
+<li>A <strong>Happen-Before operator</strong> that allows users to perform queries based on the causal relationship of the events.</li>
+</ol>
+
+
+<!--more-->
+
+
+<h2>How it works</h2>
+
+<p>Say we have an instrumented system we want to troubleshoot:</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/pt1.jpg" width="700"></p>
+
+<p>The first step is to define <strong>Tracepoints</strong> ⓵. Tracepoints are pointers to the source code where the code will be instrumented to collect metrics. They are instructions on <em>where</em> and <em>how</em> to modify the system to extract the required information. You can think of them as <a href="https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/aop.html"><em>pointcuts</em> from aspect-oriented programming</a>. They can refer to any arbitrary interface or method signature and can also be inserted at specific line numbers.</p>
+
+<p>Tracepoints export variables that can be used to write the queries, such as method arguments or local variables. Some default variables are provided out-of-the-box such as: <em>host</em>, <em>timestamp</em>, <em>process id</em>, <em>process name</em>, etc.</p>
+
+<p>The cool thing about Tracepoints is that <strong>they don’t need to be defined a priori</strong>. And since defining a Tracepoint involves no code modification, <strong>new ones can be created at no cost</strong>.</p>
+
+<p>Tracepoints are created by someone with good knowledge of the system (such as developers or operators). They <strong>define the vocabulary users will use to write the queries</strong>.</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/pt2.jpg" width="700"></p>
+
+<p>The next step is to write a query using the terms introduced by the tracepoints ⓶. A query might look something like this:</p>
+
+<pre><code class="sql">From incr In DataNodeMetrics.incrBytesRead
+Join cl In First(ClientProtocols) On cl -&gt; incr
+GroupBy cl.procName
+Select cl.procName, SUM(incr.delta)
+</code></pre>
+
+<p>In this example a Tracepoint exists for the method <code>DataNodeMetrics. incrBytesRead(int delta)</code>  and another one for the class <code>ClientProtocols</code>. The shown query sums the values of <code>incr.delta</code> grouped by ClientProtocol’s <code>procName</code>. The clause <code>On cl -&gt; incr</code> establishes that we’re interested in only capturing <code>cl</code> events that happened before a <code>incr</code> event. <strong>The cool thing is that these two tracepoints belong to two different services! Pivot tracing will know how to propagate the required context needed to do the join and evaluate the happens-before clause.</strong></p>
+
+<p>Once the user submits the query, Pivot Tracing frontend compiles it to something called <strong>Advice</strong> ⓷. An Advice contains the instructions that need to be executed when a request passes through a Tracepoint to answer the query. These are the operations that can be executed as part of an Advice:</p>
+
+<ul>
+<li><strong>Observe:</strong> Creates a tuple from variables defined by a tracepoint.</li>
+<li><strong>Filter:</strong> Evaluates a predicate on all tuples.</li>
+<li><strong>Pack:</strong> Makes tuples available for use by later Advice</li>
+<li><strong>Unpack:</strong> Retrieves one or more tuples from prior Advice</li>
+<li><strong>Emit:</strong>Outputs a tuple for global aggregation.</li>
+</ul>
+
+
+<p>The Frontend creates these Advices and notifies the PT Agents to install them in the corresponding Tracepoints ⓸.</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/pt3.jpg" width="700"></p>
+
+<p>This is done by <em>weaving</em> generated code that gets executed every time a requests passes through the Tracepoint.</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/weaving.png" width="700"></p>
+
+<p>For the query shown above Advices A1 and A2 would be generated:</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/generatedAdvices.png" width="700"></p>
+
+<p>To do the happens-before join required by the query shown above Pivot Tracing needs to propagate the variables captured at <code>ClientProtocols Tracepoint</code> to the  <code>DataNodeMetrics Tracepoint</code>. This is done through something called <em>baggage</em> (if you’re familiar with <a href="https://opentelemetry.io/docs/concepts/signals/baggage/">OTel’s baggage</a> it’s basically the same thing).  When the request gets to the <code>ClientProtocols Tracepoint</code> the Advice A1 <em>Observes</em> the variables and <em>Packs</em> them as part of the request baggage ⓹. Later, when the code gets to the <code>DataNodeMetrics Tracepoint</code> the Advice A2 <em>Unpacks</em> the variables, <em>Observes</em> the value of <code>delta</code> and <em>Emits</em> a joined tuple ⓺.</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/pt4.jpg" width="700"></p>
+
+<p>The tuples emitted by <code>DataNodeMetrics Tracepoint</code> ⓺ are aggregated locally and then streamed to the client over the message bus ⓻.</p>
+
+<p>Finally, Pivot Tracing Frontend uses this tuples to answer the user’s query ⓼. And that’s how the whole thing works.</p>
+
+<p><img class="center" src="/images/posts/2022-02-14/pt5.jpg" width="700"></p>
+
+<h2>The power of Happens-Before</h2>
+
+<h2>The pros and cons of Dynamic Instrumentation</h2>
+
+<p>Talk about:
+*  Dynamic Instrumentation.
+* Happens Before. Typical example of grouping metrics of service B by tags provided on service A (here A -> B)</p>
+
+<hr />
+
+<p>TODO</p>
+
+<p><img class="right-fill" src="/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Sifter: Scalable Sampling for Distributed Tracing]]></title>
