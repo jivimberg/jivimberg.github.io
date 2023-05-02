@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Release Management | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/release-management/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2023-03-06T13:22:46-08:00</updated>
+  <updated>2023-05-01T19:42:54-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -23,9 +23,7 @@
 <!-- more -->
 
 
-<p>{%ribbonp warning Disclamer%}
-This article is HEAVILY based on Martin Fowler&rsquo;s FeatureToggle (<a href="http://martinfowler.com/bliki/FeatureToggle.html">http://martinfowler.com/bliki/FeatureToggle.html</a>). Feel free to refer to the original article for further detail.
-{%endribbonp%}</p>
+<p><p class='info warning' data-title='Disclamer'>This article is HEAVILY based on Martin Fowler&rsquo;s FeatureToggle (<a href="http://martinfowler.com/bliki/FeatureToggle.html">http://martinfowler.com/bliki/FeatureToggle.html</a>). Feel free to refer to the original article for further detail.</p></p>
 
 <p>The basic idea of Feature Flags is to have a <strong>configuration file</strong> that defines a bunch of toggles for various features you are working on. The running application then uses these toggles in order to decide whether or not to show the new feature.</p>
 

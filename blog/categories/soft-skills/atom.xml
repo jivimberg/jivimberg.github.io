@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Soft Skills | Coding Forest]]></title>
+  <title><![CDATA[Category: Soft-skills | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/soft-skills/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2023-03-06T13:22:46-08:00</updated>
+  <updated>2023-05-01T19:42:54-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -14,172 +14,153 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Be a Leader (HTWFAIP - Part 4)]]></title>
-    <link href="http://jivimberg.github.io/blog/2015/06/15/be-a-leader-htwfaip-part-4/"/>
-    <updated>2015-06-15T07:37:31-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2015/06/15/be-a-leader-htwfaip-part-4</id>
-    <content type="html"><![CDATA[<p>Last installment of the <a href="http://localhost:4000/blog/categories/htwfaip/">series</a>. 9 Tips to become the leader you&rsquo;d like to follow.</p>
+    <title type="html"><![CDATA[How to Craft Effective Presentations]]></title>
+    <link href="http://jivimberg.github.io/blog/2020/03/13/how-to-create-effective-presentations/"/>
+    <updated>2020-03-13T15:17:29-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2020/03/13/how-to-create-effective-presentations</id>
+    <content type="html"><![CDATA[<p>This is a compilation of all the things I learned for creating effective presentations.</p>
 
-<!-- more -->
+<!--more-->
 
 
-<h3>Begin with praise and honest appreciation</h3>
+<h2>The golden rule: <strong>NO BULLET POINTS </strong></h2>
 
-<p>It is always easier to listen to unpleasant things after we have heard some praise of our good points. This is also sometimes refered as the <a href="http://lifehacker.com/297247/give-constructive-criticism">&ldquo;sandwich rule&rdquo;</a>.</p>
+<p>If you can only take one thing from this article let it be this: <em>DO NOT use bullet-points on your slides</em>.</p>
 
-<p>{% img center /images/posts/2015-06-15/SandwichRule.jpg 250 &lsquo;Sandwich Rule&rsquo; %}</p>
+<p>There&rsquo;s a simple reason for this: Humans brains are really dumb. They can’t process spoken and written words at the same time. <strong>People will either read the slides or listen to you, but not both.</strong> And since you’re presenting my guess is you want them paying attention to you. So drop all that extra text so people can focus on what you’re saying.</p>
 
-<h3>How to Criticize: Call attention to people’s mistakes indirectly</h3>
+<p><img class="center" src="/images/posts/2020-04-23/badExample.png" width="600" title="‘Slide with a lot of text’" ></p>
 
-<p>Change the word &lsquo;but&rsquo; to &lsquo;and&rsquo;. For example: a man carefully polished a sermon and showed it to his wife, instead of talking about its many faults, she said she thought it would be a great article for some journal. Be subtle about criticism.</p>
+<p>The first step to a bullet-free slide is breaking your content into smaller chunks. <strong>Each slide should focus on a single idea that can be expressed in one or two sentences</strong> (no more than 20 words). Less is more. The rest of the content, the things that you’d normally put in the bullet points, can be spoken. There’s no limit to the number of slides you can use, just make sure you’re only adding the key points on text and speaking the rest.</p>
 
-<h3>Talk about your own mistakes before criticizing</h3>
+<p>You&rsquo;ll soon find out that doing this kind of breakdown is hard. Condensing each topic to a single line takes time. But I promise you, once you do this you’ll be halfway through to creating a great presentation.</p>
 
-<p>In order to build rapport with the person you are criticising, start by talking about your own mistakes. You can use phrases like: &ldquo;When I was your age, I too struggled with&hellip;&rdquo; or &ldquo;When I was at your level of experience, I too thought that&hellip;&rdquo;.</p>
+<p>Now that you have your central ideas, let&rsquo;s talk about styling. The main goal is to keep it simple so viewers are not distracted. Choose a sans-serif typeface (the ones without the ornaments) and make your text HUGE.</p>
 
-<h3>Ask questions instead of giving direct orders</h3>
+<p><img class="center" src="/images/posts/2020-04-23/serif-vs-sans-serif.jpg" width="400" title="‘Example of serif and sans serif fonts’" ></p>
 
-<p>Gave suggestions, not orders. Let people do things for themselves and make their own mistakes. Asking questions not only makes an order more palatable; it often stimulates the creativity of the persons whom you ask. <strong>People are more likely to accept an order if they have had a part in the decision that caused the order to be issued.</strong></p>
+<p>Big letters are important because everybody in the room should be able to read it, and it’ll help you stay under the 20 words limit. Pick contrasting colors for text and background. You can use <a href="https://colorhunt.co/">Color Hunt</a> to find a cool palette for your deck.  Finally, place the text in the upper left corner. You can add an image or graph if needed, but don’t put something just because you have the space. Make sure it’s meaningful. Keep it short, keep it simple.</p>
 
-<h3>Let the other person save face</h3>
+<p><img class="center" src="/images/posts/2020-04-23/bigText.png" width="600" title="‘Big text is easier to read’" ></p>
 
-<p>A few minutes’ thought, a considerate word or two, or a genuine understanding of the other person’s attitude can go a long way to alleviating the sting of criticism. Antoine de Saint-Exupery once said: <em>“I have no right to say or do anything that diminishes a man in his own eyes. What matters is not what I think of him, but what he thinks of himself. Hurting a man in his dignity is a crime.”</em></p>
+<p style='text-align: center;'>
+(Yes, this is the whole slide)
+</p>
 
-<h3>Praise every improvement, no matter how slight</h3>
 
-<p>Take every chance you&rsquo;ve got to sincerly praise someone. Everybody likes to be praised, but when praise is specific, it comes across as sincere – not something the other person may be saying just to make one feel good. <strong>Nobody wants flattery!</strong></p>
+<h2>The handout</h2>
 
-<h3>Give the person a fine reputation to live up to</h3>
+<p>You might be worried that, by removing text from the slides, people won’t get the full context when going through your deck after the presentation. The solution is to create 2 different artifacts: a presentation and a handout.</p>
 
-<p>In short, if you want to improve a person in a certain respect, act as though that particular trait were already one of his or her outstanding characteristics. Give them a fine reputation to live up to, and they will make prodigious efforts rather than see you disillusioned.</p>
+<p>All you have to do is move the text from the slides to the presenter notes.</p>
 
-<h3>Make a fault seem easy to correct</h3>
+<p><img class="center" src="/images/posts/2020-04-23/presenterNotes.png" width="600" title="‘Handout example’" ></p>
 
-<p>Make the thing seem easy to do, let the other person know that you have faith in his ability to do it, that he has an undeveloped flair for it – and he will practise until the dawn comes in the window in order to excel.</p>
+<p>Then, to email your presentation just select <em>Print settings and preview</em> and choose <em>1 slide with notes</em>. Now you have a PDF handout to send after the presentation that includes all the context needed to understand each slide. As a bonus you also get notes you can use while presenting.</p>
 
-<h3>Make the other person happy about doing what you suggest</h3>
+<h2>Guiding the audience focus</h2>
 
-<p>When you make your request, put it in a form that will convey to the other person the idea that he personally will benefit. <em>&lsquo;He had a delightful way of putting things; he created the impression that by accepting this great honour I would be doing him a favour.&rsquo;</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Win People to Your Way of Thinking (HTWFAIP - Part 3)]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/12/21/win-people-to-your-way-of-thinking-htwfaip-part-3/"/>
-    <updated>2014-12-21T18:53:16-08:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/12/21/win-people-to-your-way-of-thinking-htwfaip-part-3</id>
-    <content type="html"><![CDATA[<p>Third post of the <a href="http://localhost:4000/blog/categories/htwfaip/">series</a>. Today: some advice on how to convince people to your way of thinking. This is a long, but juicy post.</p>
+<p>Now that we have trimmed the fat from the content it’s time to deal with other sources of distraction. Every single thing not contributing to the message is noise and should go.</p>
 
-<!-- more -->
+<p>First, avoid cluttered templates. They might look cute on page but they can distract the audience.</p>
 
+<p><img class="center" src="/images/posts/2020-04-23/clutteredTemplates.png" width="600" title="‘Example of a slide with a cluttered template’" ></p>
 
-<h3>1. You can’t win an argument</h3>
+<p>Also, get rid of all the cheese transitions. The only animations you should need is <em>appear </em>and<em> disappear</em> to reveal content as you talk. You can also color and opacity on text or images to guide the audience attention. To achieve this you simply duplicate the slide and apply the appropriate changes.</p>
 
-<p>If you argue and rankle and contradict, you may achieve a victory sometimes; but it will be an empty victory because you will never get your opponent’s good will (&ldquo;You have made him feel inferior. You have hurt his pride. He will resent your triumph.&rdquo;). Distrust your first instinctive impression. Our first natural reaction in a disagreeable situation is to be defensive. Be careful. Listen first. Give your opponents a chance to talk. Let them finish. Do not resist, defend or debate. This only raises barriers. Try to build bridges of understanding. Don’t build higher barriers of misunderstanding. Look for areas of agreement. When you have heard your opponents out, dwell first on the points and areas on which you agree. Be honest. Look for areas where you can admit error and say so. Apologize for your mistakes. It will help disarm your opponents and reduce defensiveness. Thank your opponents sincerely for their interest. Anyone who takes the time to disagree with you is interested in the same things you are. Think of them as people who really want to help you, and you may turn your opponents into friends.</p>
+<p><img class="center" src="/images/posts/2020-04-23/focus.gif" width="600" title="‘Example of using color and opacity to guide audience focus’" ></p>
 
-<h3>2. Show respect for the other person’s opinions</h3>
+<p>The only exception to the &ldquo;no animation rule&rdquo; is if your animation is needed to express the slide’s idea. For example, you might animate a pointer to represent the order of execution on a snippet of code, as I did here:</p>
 
-<p>Never say, “You’re wrong.”: Never begin by announcing ‘I am going to prove so-and-so to you.’ That’s bad. Do it so subtly, so adroitly, that no one will feel that you are doing it. You will never get into trouble by admitting that you may be wrong. That will stop all argument and inspire your opponent to be just as fair and open and broad-minded as you are. It will make him want to admit that he, too, may be wrong.</p>
+<p><img class="center" src="/images/posts/2020-04-23/animationExample2.gif" title="‘Example of a valid use of animation in a slide’" ></p>
 
-<h3>3. When wrong, admit it quickly and emphatically</h3>
+<p style='text-align: center;'>
+(I used Magic Move on  Keynote to create this)
+</p>
 
-<p>Say about yourself all the derogatory things you know the other  person is thinking or wants to say—and say them before that person has a chance to. The chances are a hundred to one that a generous, forgiving attitude will be taken and your mistakes will be minimised.</p>
 
-<h3>4. Begin in a friendly way</h3>
+<p>The same rule applies to all other elements of your slide: layout, image size and placement, color, etc. People will infer meaning from all these things, so make sure they’re reinforcing your message and not working against it. For example if you’re talking about three things that happened one after the other align them horizontally and sort them left to right. If you mention a big number make the text big. If you’re comparing two similar things make them the same size and place them side by side. Note how in the “elements of design” slide shown above, the text placement emphasizes the words’ meaning.</p>
 
-<p>Gentleness and friendliness were always stronger than fury and force.</p>
+<p>Finally, if you have gifs on you presentation, <strong>make sure to stop them after one or two repetitions</strong>. Anything, blinking or moving on the screen is competing with you for attention. <a href="https://davidwalsh.name/prevent-gif-loop">https://davidwalsh.name/prevent-gif-loop</a></p>
 
-<h3>5. Get the other person saying “yes, yes”</h3>
+<h2>Start with a hook</h2>
 
-<p>Begin by emphasising – and keep on emphasising – the things on which you agree. Keep emphasising, if possible, that you are both striving for the same end and that your only difference is one of method and not of purpose. The skillful speaker gets, at the outset, a number of ‘Yes’ responses.</p>
+<blockquote><p>Humans think in stories, and we try to make sense of the world by telling stories. <em>Yuval Noah Harari</em></p></blockquote>
 
-<h3>6. Let the other person do lots of the talking</h3>
+<p>You know how most presentations start with: &ldquo;My name is Juan and I’m professional turtle trainer, today I’ll talk about depression in turtles“? People already showed up, so they either know who you are or care about the topic you’ll be presenting about, or both. So instead of opening with a boring introduction try using a hook.</p>
 
-<p>Let the other people talk themselves out. They know more about their business and problems than you do. So ask them questions. Let them tell you a few things. Almost every successful person likes to reminisce about his early struggles.</p>
+<p>Review Start your presentation with a story, a joke or an anecdote related to the topic. Grab the attention of the audience from your first line. Once they’re  hooked in and paying attention you can introduce yourself. You see this all the time on TED talks like this one:</p>
 
-<h3>7. Let the other person feel ownership of the idea</h3>
+<div style="max-width:600px;margin:30px auto"><div style="position:relative;height:0;padding-bottom:56.25%"><iframe src="https://embed.ted.com/talks/shawn_achor_the_happy_secret_to_better_work" width="854" height="480" style="position:absolute;left:0;top:0;width:100%;height:100%" frameborder="0" scrolling="no" allowfullscreen></iframe></div></div>
 
-<p>No one likes to feel that he or she is being sold something or told to do a thing. We much prefer to feel that we are buying of our own accord or acting on our own ideas. We like to be consulted about our wishes, our wants, our thoughts.</p>
 
-<h3>8. Try honestly to see things from the other  person’s point of view</h3>
+<h2>Repeat, Repeat, Repeat</h2>
 
-<p>Success in dealing with people depends on a sympathetic grasp of the other person’s viewpoint. ‘I would rather walk the sidewalk in front of a person’s office for two hours before an interview,’ said Dean Donham of the Harvard business school, ‘than step into that office without a perfectly clear idea of what I was going to say and what that person – from my knowledge of his or her interests and motives – was likely to answer.’</p>
+<p>If you want your message to stick <strong>say it multiple times</strong>. The trick to avoid boring your audience is to say the same thing in many different ways. Paraphrase, use an image, present an example or a counter-example, make a rethorical question, use a conversational style… Get creative!</p>
 
-<h3>9. Be sympathetic towards the other person’s ideas and desires</h3>
+<p>This works because different people prefer different styles of communication. Some of us are more visually inclined, some like specific examples over generalizations, etc. Also, by repeating the mains ideas you’re signaling the audience what’s important. You’re separating the wheat from the chaff. Last but not least, it also works because people get distracted and they might have missed the point the first time.</p>
 
-<p>The magic words: “I don’t blame you one iota for feeling as you do. If I were you I’d undoubtedly feel the same.” And mean it!</p>
+<p>When possible try to evoke some emotion. As the <a href="https://en.wikipedia.org/wiki/Head_First_(book_series)">Head First Series</a> taught us: <em>“brains are tuned to pay attention to the biochemistry of emotions”</em>. Share a personal anecdote, make them laugh with a joke or pique their curiosity with a controversial claim and you can guarantee they’ll be paying attention.</p>
 
-<h3>10. Appeal to the nobler motives</h3>
+<h2>The slides</h2>
 
-<p>If you have no other evidence, assume that a customer is honest, truthful, and willing to pay the charges if they are convinced that they are correct.Even those who aren’t naturally honest will often react well if you show that you consider them to be honest and fair.</p>
+<p>Let&rsquo;s go over some of the most common types of slides and how to improve them.</p>
 
-<h3>11. Dramatize your idea</h3>
+<h3>The title slide</h3>
 
-<p>Merely stating a truth isn’t enough. The truth has to be made vivid, interesting, dramatic. You have to use showmanship.</p>
+<p>Most of the time the title slide includes just the title of the talk. Instead, consider providing some context on what’s going to be covered in the presentation as a full sentence. If you’re opening with a hook you can have visuals on your title slide to get right into it.</p>
 
-<h3>12. Throw down a challenge</h3>
+<p><img class="center" src="/images/posts/2020-04-23/titleSlides.png" width="700" title="‘Example of title slides’" ></p>
 
-<p>People love the work they are doing, and being great at it.Charles Schwab: “The way to get things done is to stimulate competition. I do not mean in a sordid, money-getting way, but in the desire to excel.”</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to Make People Like You (HTWFAIP - Part 2)]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/11/15/how-to-make-people-like-you-htwfaip-part-2/"/>
-    <updated>2014-11-15T18:57:40-08:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/11/15/how-to-make-people-like-you-htwfaip-part-2</id>
-    <content type="html"><![CDATA[<p>Second post of the <a href="http://localhost:4000/blog/categories/htwfaip/">series</a> on the book <a href="http://www.amazon.com/How-Win-Friends-Influence-People/dp/0671027034">&ldquo;How to Win Friends and Influence People&rdquo;</a> by <a href="http://en.wikipedia.org/wiki/Dale_Carnegie">Dale Carnegie</a>. I know, <strong>How to make people like you</strong> sounds soooo lame, but stick with me, this is a good chapter.</p>
+<h3>The intro slide</h3>
 
-<!-- more -->
+<p>Consider using a blank screen for your introduction. This way you guarantee the attention will be on you and not your slides. Another option is to use a personal photo, related to the topic at hand. Either way, remember that it’s best to open with a hook instead of your introduction.</p>
 
+<h3>The agenda slide</h3>
 
-<h3>1. Become genuinely interested in other people</h3>
+<p>Most of the time you don&rsquo;t really need an agenda slide. Just jump straight to the content. But if you do include one, make sure you use a small number of sections. Three or four is the sweet spot. You can use images and colors as visual representation of each section.</p>
 
-<p>You can make more friends in two months by becoming interested in other people than you can in two years by trying to get other people interested in you.</p>
+<h3>The quote slide</h3>
 
-<h3>2. Smile!</h3>
+<p>You should have the quote on your slide, only if you’re going to read it word by word. If what you’re saying doesn’t match the text on the screen people will get confused. Another option is to simply blank the screen while reading the quote (here you get to paraphrase if you want).</p>
 
-<p>Like a dog, show that you are happy to see people. Smile even when talking on the phone. Happiness doesn’t depend on outward conditions. It depends on inner conditions. ‘A man without a smiling face must not open a shop.’</p>
+<h3>The image slide</h3>
 
-<h3>3. Remember that a person’s name is to that person the sweetest sound in any language</h3>
+<p>When using images go big. Don&rsquo;t worry about breaking the template if you’re using one. Take an empty slide and set the image as background. Don’t put text on it unless you really need to. And if you do use contrasting colors, or place the text over a box with a transparent background to make it readable.</p>
 
-<p>Napoleon’s advice on remembering names: If he didn’t get the name distinctly, he said, “So sorry. I didn’t get the name clearly.” Then, if it was an unusual name, he would say, “How is it spelled?” During the conversation, he took the trouble to repeat the name several times, and tried to associate it in his mind with the person’s features, expression and general appearance.</p>
+<p><img class="center" src="/images/posts/2020-04-23/imageSlides.png" width="700" title="‘Examples of image slides’" ></p>
 
-<h3>4. Be a good listener</h3>
+<h3>The code slide</h3>
 
-<p>Encourage others to talk about themselves: &ldquo;She didn’t want to hear me talk about my travels. All she wanted was an interested listener, so she could expand her ego and tell about where she had been.&rdquo; Exclusive attention to the person who is speaking to you is very important. Nothing else is so flattering as that. Ask questions that the other  person will enjoy answering. A friend often doesn’t want advice, but just a friendly, sympathetic listener. A person’s toothache means more to that person than a famine in China which kills a million people, think of that the next time you start a conversation.</p>
+<p>Make sure to use syntax highlighting to make the code more readable. Copy and paste from your favorite IDE or use an online syntax highlighting tool to get a color palette that works with your background.</p>
 
-<h3>5. Talk in terms of the other person’s interests</h3>
+<p><strong>Remove all boilerplate</strong>. If it’s obvious it can be omitted. For example, if you’re showing  a Java class remove all getters, setters and constructors. Don’t worry if the code on the slide doesn’t really compile. You can include the actual code in the handout or link to a public repo or gist.</p>
 
-<p>Whenever Roosevelt expected a visitor, he sat up late the night before, reading up on the subject in which he knew his guest was particularly interested.</p>
+<p>If the code has multiple parts you&rsquo;ll be talking about, highlight only the section you’re focusing on and gray out all the rest.</p>
 
-<h3>6. Make the other person feel important—and do it sincerely</h3>
+<p><img class="center" src="/images/posts/2020-04-23/codeSlide.gif" width="600" title="‘Example of using color and opacity to guide audience focus’" ></p>
 
-<p>Little phrases such as ‘I’m sorry to trouble you,’ ‘Would you be so kind as to – ?’ ‘Won’t you please?’ ‘Would you mind?’ ‘Thank you’ – little courtesies like these oil the cogs of the monotonous grind of everyday life – and incidentally, they are the hallmark of good breeding. The unvarnished truth is that almost all the people you meet feel themselves superior to you in some way, and a sure way to their hearts is to let them realise in some subtle way that you realise their importance, and recognise it sincerely. ‘Talk to people about themselves and they will listen for hours.’</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Handling People (HTWFAIP - Part 1)]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/11/02/handling-people-htwfaip-part-1/"/>
-    <updated>2014-11-02T18:50:13-03:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/11/02/handling-people-htwfaip-part-1</id>
-    <content type="html"><![CDATA[<p>This is the first of a <a href="http://localhost:4000/blog/categories/htwfaip/">series of posts</a> on the book <a href="http://www.amazon.com/How-Win-Friends-Influence-People/dp/0671027034">&ldquo;How to Win Friends and Influence People&rdquo;</a> by <a href="http://en.wikipedia.org/wiki/Dale_Carnegie">Dale Carnegie</a>. Today: <strong>Handling People</strong>.</p>
+<p>Consider using pseudo code so people don&rsquo;t need to be familiar with your language of choice to understand the slide.</p>
 
-<!-- more -->
+<p>Finally, if you like living on the edge and want to do live coding on the stage, you can open your code in full screen on a different workspace and have a separator slide to transition to the editor. Some IDEs have a <a href="https://www.jetbrains.com/help/idea/ide-viewing-modes.html">presentation mode</a> you can use to make the font huge and remove all other distractions. Just make sure to have a plan B because demos always fail.</p>
 
+<h3>The &ldquo;Thank You&rdquo; slide</h3>
 
-<h3>1. Don&rsquo;t criticize condemn or complain</h3>
+<p>Many times this is the slide that stays on screen for the most time. Don’t just write “Thank you” or “Q &amp; A”. Use it to present a summary of the main ideas on your presentation. Make sure to include your social handles in case somebody from the audience wants to reach out to you.</p>
 
-<p>Criticism is futile because it puts a person on the defensive and usually makes him strive to justify himself. Criticism is dangerous, because it wounds a person’s precious pride, hurts his sense of importance, and arouses resentment.</p>
+<h2>Bonus: Blanking out the screen</h2>
 
-<h3>2. Give sincere and honest appreciation</h3>
+<p>In this article I mention using an empty slide or blanking out the screen for some sections like the introduction or the quote slide. Having nothing on the screen means all eyes are on you. There’s nothing competing for the audience attention. You’ll be surprised with how well this works.</p>
 
-<p>Everyone wants to feel important. We usually spend about 95 percent of our time thinking about ourselves. Be hearty in your approbation and lavish in your praise. Think of the other person’s good points, so you won’t have to resort to flattery. Try leaving a friendly trail of little sparks of gratitude on your daily trips.</p>
+<p>To achieve this you can either user an empty slide with a black background, or use one of the <a href="https://support.google.com/docs/answer/1696717?co=GENIE.Platform=Desktop&amp;hl=en">keyboard shortcuts</a> in any part of your presentation.</p>
 
-<h3>3. Arouse in the other person an eager want</h3>
+<hr />
 
-<p> Talk about what they want and show them how to get it. Henry Ford: “If there is any one secret of success, it lies in the ability to get the other person’s point of view and see things from that person’s angle as well as from your own.”</p>
+<h2>Acknowledgements</h2>
+
+<p>Some of these things I learned from <a href="https://zachholman.com/talks">Zach Holman writings</a> (check his website <a href="https://speaking.io/">speaking.io</a>). More recently I attended a course from <a href="http://christinehaasconsulting.com/services/">Christine Haas Consulting</a> which really helped me polish my presentation skills. The rest comes from years of watching great presenters and practicing. That’s the only way to improve, right?</p>
+
+<p> <img class="right-fill" src="/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   

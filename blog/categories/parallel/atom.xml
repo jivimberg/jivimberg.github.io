@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Parallel | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/parallel/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2023-03-06T13:22:46-08:00</updated>
+  <updated>2023-05-01T19:42:54-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -261,7 +261,7 @@ fun main() = runBlocking<Unit> {
 
 <p>This is because <code>coroutineScope</code> basically inherits the caller’s context. So again we’d be running in the single thread confined Dispatcher <code>runBlocking</code> gets by default. Which may, or may not, be OK depending on your use case. Remember that you can always change the Dispatcher used by <code>runBlocking</code> by passing one: <code>runBlocking(Dispatchers.IO)</code>.</p>
 
-<p>{% img right-fill /images/signatures/signature10.png 200 ‘My signature’ %}</p>
+<p><img class="right-fill" src="/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
