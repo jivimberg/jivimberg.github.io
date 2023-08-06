@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Platform | Coding Forest]]></title>
+  <link href="http://jivimberg.github.io/blog/categories/platform/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-08-06T10:26:16-03:00</updated>
+  <id>http://jivimberg.github.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[How Platform Teams Get Shit Done]]></title>
+    <link href="http://jivimberg.github.io/blog/2023/07/28/how-platform-teams-get-shit-done/"/>
+    <updated>2023-07-28T00:43:59-03:00</updated>
+    <id>http://jivimberg.github.io/blog/2023/07/28/how-platform-teams-get-shit-done</id>
+    <content type="html"><![CDATA[<p><a href="https://thepete.net/">Pete Hodgson</a> explored the different ways in which a Platform team works with other teams to get shit done in <a href="https://martinfowler.com/articles/platform-teams-stuff-done.html">this article</a>. I thought it was interesting to see how collaboration changes based on the type of work, so I put together this visual summary to compare and contrast each type of interaction.</p>
+
+<!--more-->
+
+
+<p><a href="/images/posts/2023-07-28/how-platform-teams.png"><img class="center" src="/images/posts/2023-07-28/how-platform-teams.png" width="600"></a>
+<em class="img-caption">Click image to enlarge</em></p>
+
+<p>I added a few things here and there, but most of the stuff is taken from the <a href="https://martinfowler.com/articles/platform-teams-stuff-done.html">original article</a>, so if you care about this topic I recommend you check it out!</p>
+
+<p>I found particularly interesting the realization that migrations are hard because <strong>the team that owns the code that needs changing is not the one driving the migration.</strong> This creates a situation of misaligned incentives and makes it a socio-technical problem. The article describes the different ways the teams can collaborate to get it done, but it’s also important to understand the tools a platform team has to remove this friction in the first place, things like <a href="https://medium.com/nerd-for-tech/microservice-design-pattern-sidecar-sidekick-pattern-dbcea9bed783">sidecars</a>, <a href="https://konghq.com/learning-center/service-mesh/what-is-a-service-mesh#:~:text=Service%20mesh%20is%20a%20technology,it%20can%20be%20managed%20independently.">meshes</a> and <a href="https://blog.thepete.net/blog/2020/09/25/service-templates-service-chassis/">service chasis</a>.</p>
+
+<p>I also included a section on how Google does Large-Scale Changes (LSC). They created a tool that allows anybody to submit Large-Scale Changes that are applied across the whole codebase. They advocate for the approach of centralizing the migration, to the point where most changes are reviewed by a single expert, and local teams hold no veto power over the LSC. They rely on code analysis and transformation tools to write the LSC and have a test infrastructure to automatically run all tests that a given change might affect in an efficient manner. To read more about their approach refer to <a href="https://www.amazon.com/Software-Engineering-Google-Lessons-Programming/dp/1492082791">Software Engineering at Google</a> Chapter 14.</p>
+
+<p><img class="right-fill" src="/images/signatures/signature7.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+</feed>
