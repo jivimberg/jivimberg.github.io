@@ -4,7 +4,7 @@
   <title><![CDATA[Coding Forest]]></title>
   <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2023-08-06T10:26:16-03:00</updated>
+  <updated>2023-08-22T00:19:33-03:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,51 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[On Graceful Degradation of Service]]></title>
+    <link href="http://jivimberg.github.io/blog/2023/08/14/on-graceful-degradation-of-service/"/>
+    <updated>2023-08-14T20:29:04-03:00</updated>
+    <id>http://jivimberg.github.io/blog/2023/08/14/on-graceful-degradation-of-service</id>
+    <content type="html"><![CDATA[<p>This is the door to my in-laws’ apartment.</p>
+
+<!--more-->
+
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2023-08-15/door.jpg" width="450"></p>
+
+<p>You can safely ignore the puppy; it’s only there for SEO purposes. Focus instead on that thing on the wall, marked by the orange arrow. That is a motion-sensor light switch, the kind that turns the light on when you walk by. Only this one doesn’t because it works like shit. You must wave your hand in front of it, almost touching it, for the lights to come on.</p>
+
+<p>As you can see in the picture, this sensor is roughly placed at the same level a light switch would be. Because of this, when people reach out in the dark, they end up activating the malfunctioning sensor. This is what we call graceful degradation of service. The sensor is essentially being used as a touch button. <strong>The motion-sensing functionality doesn’t work, but the system as a whole still works: people are able to turn on the lights when they need them.</strong> If the sensor had been placed somewhere else, such as at knee level or on the ceiling, the system would not have degraded gracefully. Things would work as long as the sensor is functioning correctly, but as soon as it’s busted, there’d be no way of turning on the lights. People would reach out in the dark and find nothing. Placing the sensor on the ceiling would also make the whole system harder to maintain, as you’d need a ladder every time you need to service it.</p>
+
+<p>I don’t think anybody thought about graceful degradation when installing the switch. The motion sensor was most likely retrofitted after the fact, repurposing the hole previously used for a regular light switch. We could say that, in this case, the property of graceful degradation comes from leveraging a pre-existing user behavior. We could distill this learning into a product design rule that reads:</p>
+
+<blockquote><p>When introducing a new feature, leverage existing user workflows instead of disrupting them.</p></blockquote>
+
+<p>Let’s illustrate this with an example. Not too long ago, Google launched their <a href="https://support.google.com/mail/answer/9116836?hl=en&amp;co=GENIE.Platform%3DDesktop">Smart Compose</a> feature for Gmail. The way it works is you start writing your email and suddenly a grayed-out text appears, trying to guess your next few words. If you like the suggestion, you press <code>tab</code>, and the caret jumps to the end of the line saving you a few keystrokes and leaving you wondering what sort of witchcraft Google is using to read your mind.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2023-08-15/gmail-smart-compose.gif"></p>
+
+<p>Now, Google could have designed this feature in many different ways. It could, for example, open a popup menu with multiple options letting the user select the best one from the list the way <a href="https://presage.sourceforge.io/">this tool</a> does:</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2023-08-15/gprompter.jpg"></p>
+
+<p>This approach might seem more powerful at first glance because it gives the user multiple options instead of just one. But it has a huge disadvantage: it disrupts the user workflow. Picture this: You’re redacting an essay. You think of a sentence and start writing. Midway through a menu pops up designed to look like it’s on top of what you’re doing. Your hands stop typing. Your eyes dart through the popup content, read the first one, jump to the next line, read the second one, etc. You consider all the options and decide to go with the 4th one. Your hands jump to the arrow keys, and you click click click until the one you want is highlighted, then click once more to select it. All of this happens in a matter of milliseconds. And yet it is enough to break your flow. By contrast, Google’s design, users are offered a single option presented inline, as if the text were already written. With the grayed-out text shown in our visual pathway, the eyes naturally flow to the end of the sentence. We can accept the suggestion with just a single keystroke; if we do, our eyes are already in the right place to continue writing.</p>
+
+<p>You might think Google’s design choice is obviously better and that I’m just cherry-picking a needlessly convoluted example as a straw man. And maybe you’re right. <strong>But keep in mind that design, when done right, is invisible.</strong> And what might seem like an obvious solution once you’ve seen it can be hard to come up with when you’re thinking a feature from scratch.</p>
+
+<p>Figuring out the right way to introduce new functionality without disrupting user workflows takes dedication and practice. Often we developers get worked up about the new capability we’re introducing and forget to consider how it fits into the existing user journey. This happened to me not so long ago at Netflix. We were working on a new tool that’d let users discover and analyze correlated system failures that could be causally related. That is, if service A is going <em>Boop!</em> and service B is also going <em>Boop!</em> and we know service A calls service B then there’s a good chance those two events might be related. In some cases, we can even venture that one symptom might be caused by the other, establishing a causal relationship between the signals based on the requests’ call paths. We were super excited to put this new functionality in users’ hands. We were so bullish about it that we envisioned it being the first step in the troubleshooting journey. Users would start by analyzing their service anomalous metric in the context of the overall system health. We created a new tool to surface this kind of relationship between services and took a few iterations to design how we would overlay service health data on this new visualization. What we failed to realize is that we were introducing a whole new way of troubleshooting an incident. <strong>Asking users to learn a new way of doing things is always a tough sell.</strong> Especially when there’s an outage and things are on fire, users would systematically trust their muscle memory and revert to their battle-tested tools and dashboards.</p>
+
+<p>Instead, we should have emulated the guy that installed that motion sensor in my in-laws' apartment. Rather than introducing a whole new tool, present whatever insight we can gather as part of the existing user workflow. For example, if a developer receives an alert from a failing metric on Service A, we could include any other metrics we think might be related in that same alert. Enriching the alert with additional context giving users a hint on where to look next. Or if they’re looking at a dashboard and notice an anomalous metric, we could then surface a message saying: “Hey, by the way, Service B is also failing in a similar way; you may want to check it”.</p>
+
+<p><img class="center" src="http://jivimberg.github.io/images/posts/2023-08-15/grafana_clippy.png" width="700">
+<em class="img-caption"> What if Clippy was the peak of UX design? </em></p>
+
+<p>Instead of adopting an <em>“If you build it, they will come”</em> approach we should have <a href="https://medium.com/mule-design/meeting-users-where-they-are-624bc0caa83a">met users where they were at</a>. Presenting key insights in the context of their troubleshooting session and letting them jump to the new tool if they want to dig deeper. <strong>A system built this way would degrade gracefully</strong>: If the correlation service is down or the suggestion is not good, users can still keep troubleshooting the same way they do today.</p>
+
+<p><img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How Platform Teams Get Shit Done]]></title>
@@ -2149,330 +2194,6 @@ fun <T, R> Flow<T>.parallelMap(
 <p><strong>Tip 3:</strong> Befriend graphic designers. Ask them what tools they use. Watch them work. Take note on how they dress.</p>
 
 <p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
-
-<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
-
-
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mockk All the Things]]></title>
-    <link href="http://jivimberg.github.io/blog/2019/05/09/mockk-features-rundown/"/>
-    <updated>2019-05-09T07:57:47-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2019/05/09/mockk-features-rundown</id>
-    <content type="html"><![CDATA[<p>Over the last few years Mockk has been gaining ground as the go-to mocking library in KotlinWorld ™. Just recently, it was listed as <em>“adopt”</em> in the <a href="https://www.thoughtworks.com/radar/languages-and-frameworks/mockk">ThoughtWorks technology Radar</a>. Want to know what all the fuss is about?</p>
-
-<!--more-->
-
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-05-18/mockkAllTheThings.gif" title="‘Channels animation’" ></p>
-
-<h2>Regular mocking</h2>
-
-<p>Let’s start with the basics. You can <em>mock</em>, <em>spy</em> and <em>verify</em> using this <a href="https://mockk.io/#dsl-tables">cute little DSL</a></p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
-import org.junit.jupiter.api.Test
-
-class ClockTest {
-
-//sampleStart
-    @Test
-    fun `regular mock`() {
-        val clock = mockk<Clock>()
-        every { clock.currentTime() } returns "7:20"
-    
-        clock.currentTime()
-    
-        verify { clock.currentTime() }
-    }
-    
-    @Test
-    fun `regular spy`() {
-        val clock = spyk<Clock>()
-    
-        clock.currentTime()
-    
-        verify { clock.currentTime() }
-    }
-    //sampleEnd
-}
-</xmp>
-
-
-<h2>Mocks with behavior</h2>
-
-<p>No need to settle for just one fixed return value. You can add complex behavior to your mocks like this:</p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-class ClockTest {
-    //sampleStart
-    @Test
-    fun `mock with complex behavior`() {
-        val clock = mockk<Clock>()
-        every { clock.currentTime() } answers { dateFormat.format(Calendar.getInstance()) }
-    
-        // ...
-    }
-    
-    companion object {
-        val dateFormat = SimpleDateFormat("HH:mm")
-    }
-    //sampleEnd
-}
-</xmp>
-
-
-<p>There are a bunch of utility functions and properties you can use inside the <code>answers</code> lambda to do things like calculate the response based on the function arguments. Full list <a href="http://mockk.io/#answer-scope">here</a>.</p>
-
-<h2>Mock chained calls</h2>
-
-<p>You can easily mock a chain of calls</p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-class ClockTest {
-    //sampleStart
-    @Test
-    fun `mocking chained calls`() {
-        val oven = mockk<Oven>()
-        every { oven.clock.currentTime() } returns "7:20"
-    
-        //...
-    }
-    //sampleEnd
-}
-</xmp>
-
-
-<h2>Mock hierarchies</h2>
-
-<p>You can achieve the same result using hierarchical mocking</p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-class ClockTest {
-    //sampleStart
-    @Test
-    fun `hierarchical mocking`() {
-        val oven = mockk<Oven>()
-        every { oven.clock } returns mockk {
-            every { currentTime() } returns "7:20"
-        }
-    
-        //...
-    }
-    //sampleEnd
-}
-</xmp>
-
-
-<p>This is especially useful when mocking complex structures and to return collections of mocking objects, like in <a href="https://mockk.io/#hierarchical-mocking">this example</a>.</p>
-
-<h2>Mock objects</h2>
-
-<p>You can mock Objects as easily as you mock regular classes</p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-class ClockTest {
-    //sampleStart
-    @Test
-    fun `object mocking`() {
-        mockkObject(UrlHelper)
-        every { UrlHelper.getBaseUrl() } returns URL("http://mockUrl.com")
-    
-        //...
-    }
-    //sampleEnd
-}
-</xmp>
-
-
-<h2>Mock Unit</h2>
-
-<p>You can mock functions that return <code>Unit</code> using <code>just Runs</code></p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-class ClockTest {
-    //sampleStart
-    @Test
-    fun `mocking functions that return Unit`() {
-        val clock = mockk<Clock>()
-        every { clock.changeBatteries() } just Runs
-    
-        //...
-    }
-    //sampleEnd
-}
-</xmp>
-
-
-<h2>Mock Nothing</h2>
-
-<p>Or functions that return Nothing. In which case you have to throw an exception as behavior (because a function that returns <code>Nothing</code> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-nothing.html">never returns</a> and can only end by throwing an exception, remember?)</p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-class ClockTest {
-    //sampleStart
-    @Test
-    fun `mocking functions that return Nothing`() {
-        val clock = mockk<Clock>()
-        every { clock.runForever() } throws Exception("called runForever")
-    
-        //...
-    }
-    //sampleEnd
-}
-</xmp>
-
-
-<h2>Mock extensions functions</h2>
-
-<p>You can mock extensions functions as well:</p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-class ClockTest {
-    //sampleStart
-    @Test
-    fun `mocking functions extension functions`() {
-        with(mockk<Clock>()) {
-            every { Duration.ofMinutes(5).startTimer() } returns true
-    
-            //...
-        }
-    }
-    //sampleEnd
-}
-</xmp>
-
-
-<p>This works If the extension functions is defined on a class or an object. If it’s defined as a top level function instead, you can still mock it by following the advise in the next point 👇</p>
-
-<h2>Mocking top level functions</h2>
-
-<p>Got a top level function to mock? We’ve got you covered.</p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-   class ClockTest {
-   //sampleStart
-    @Test
-    fun `mocking top level functions`() {
-        mockkStatic("mockk.ModelsKt")
-        every { resolve(any()) } returns URL("http://mockk.com/users/1")
-    
-        //...
-    }
-    //sampleEnd
-}
-</xmp>
-
-
-<p>Ok, you might need to check your classes to know exactly what to use as argument for <code>mockkStatic</code>, but it’s no big deal.</p>
-
-<h2>Mock private functions</h2>
-
-<p>Yep, you can mock private functions by name.</p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-class ClockTest {
-    //sampleStart
-    @Test
-    fun `mocking private functions`() {
-        val oven = mockk<Oven>()
-        every { oven["lockDoor"]() } returns true
-        
-        //...
-    }
-    //sampleEnd
-}
-</xmp>
-
-
-<p>You can even verify calls to private function by using <code>recordPrivateCalls = true</code></p>
-
-<h2>Mock varargs</h2>
-
-<p>There’s also support for mocking functions that use varargs:</p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-class VarargsTest {
-    //sampleStart
-    interface Calculator {
-        fun sumEverything(vararg num: Int): Int
-    }
-
-    @Test
-    fun `mocking varargs`() {
-        val calculator = mockk<Calculator>()
-        every { calculator.sumEverything(1, 2, 4) } returns 7
-
-        //...
-
-        every { calculator.sumEverything(1, *anyIntVararg(), 4) } returns 12
-
-        //...
-
-        every { calculator.sumEverything(1, *varargAllInt { it < 5 }) } returns 10
-
-        //...
-    }
-    //sampleEnd
-}
-</xmp>
-
-
-<p>And it’s not only the basics either. As you can see in the example you can do all kind of complex matchings.</p>
-
-<h2>Mock constructor</h2>
-
-<p>You can mock constructors. Useful for those times when you don’t actually control the object creation, but want to still be able to mock it.</p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-class ClockTest {
-    //sampleStart
-    @Test
-    fun `mocking constructor`() {
-        mockkConstructor(Clock::class)
-
-        every { anyConstructed<Clock>().currentTime() } returns "7:40"
-
-        assertEquals("7:40", Clock().currentTime())
-    }
-    //sampleEnd
-}
-</xmp>
-
-
-<h2>Mock coroutines</h2>
-
-<p>If you’re working with coroutines and want to mock a suspending function you simply use <code>coEvery</code>. In this example <code>startTimer</code> is a suspending function:</p>
-
-<xmp class="kotlin-code" data-highlight-only theme="darcula">
-class ClockTest {
-    //sampleStart
-    @Test
-    fun `mocking suspending functions`() {
-        val clock = mockk<Clock>()
-        coEvery { clock.startTimer() } returns RUNNING
-
-        // ...
-    }
-    //sampleEnd
-}
-</xmp>
-
-
-<p>Along with <code>coEvery</code> there’s a whole family of <code>co...</code> functions (<code>coAnswers</code>, <code>coVerify</code>, <code>coAssert</code>, etc.) for working with coroutines.</p>
-
-<hr />
-
-<p>This is by no means a comprehensive guide. My intention was just to showcase same of the things that Mockk can do for you. For an in-depth introduction I recommend checking the <a href="https://blog.kotlin-academy.com/search?q=mockk"><em>“Mocking is not rocket science”</em> series in Kotlin Academy</a>.</p>
-
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
