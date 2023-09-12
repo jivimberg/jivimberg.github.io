@@ -6,7 +6,5 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
-      - run: ls -la
-        shell: bash
       - run: .github/scripts/octopress-deploy.sh "${{inputs.ssh_key}}" "jivimberg@gmail.com" "jivimberg"
         shell: bash
