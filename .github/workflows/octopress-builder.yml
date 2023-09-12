@@ -1,7 +1,5 @@
 name: Octopress Deploy
-on: 
-  workflow_run:
-    branches: [source]
+on: [workflow_dispatch]
 jobs:
   deploy-site: 
     runs-on: macos-latest
