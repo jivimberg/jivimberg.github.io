@@ -6,5 +6,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.7.2' # Matching .ruby-version
       - run: .github/scripts/octopress-deploy.sh "${{inputs.ssh_key}}" "jivimberg@gmail.com" "jivimberg"
         shell: bash
