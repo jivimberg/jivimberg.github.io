@@ -5,5 +5,5 @@ jobs:
   deploy-site:
     runs-on: macos-latest
     steps:
-      - run: ${GITHUB_WORKSPACE}/scripts/octopress-deploy.sh "${{inputs.ssh_key}}" "jivimberg@gmail.com" "jivimberg"
+      - run: ${{github.action_path}}/octopress-deploy.sh "${{inputs.ssh_key}}" "jivimberg@gmail.com" "jivimberg"
         shell: bash
