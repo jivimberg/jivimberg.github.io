@@ -17,7 +17,6 @@ execute bundle install
 execute gem update rake
 execute rake integrate
 
-chcp 65001
 execute rake generate --trace
 
 execute mkdir -p ~/.ssh

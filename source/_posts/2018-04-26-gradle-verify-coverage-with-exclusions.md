@@ -3,7 +3,7 @@ layout: post
 title: "Jacoco & Gradle - How to verify coverage with exclusions"
 date: 2018-04-26 08:49:52 -0700
 comments: true
-categories: gradle jacoco verify test coverage exclusions jacocoTestCoverageVerification
+categories: gradle jacoco test coverage
 ---
 
 A post about how to add exclusions to your Jacoco test coverage verification in Gradle.
