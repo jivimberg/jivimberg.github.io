@@ -9,5 +9,6 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ## ruby-version: '2.7.2' # Takes version from .ruby-version
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - run: .github/scripts/octopress-deploy.sh "${{inputs.ssh_key}}" "jivimberg@gmail.com" "jivimberg"
         shell: bash
