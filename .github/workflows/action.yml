@@ -1,0 +1,9 @@
+name: 'Octopress Deploy Action'
+on: [workflow_dispatch]
+
+jobs:
+  deploy-site:
+    runs-on: macos-latest
+    steps:
+      - run: ${{github.action_path}}/octopress-deploy.sh "${{inputs.ssh_key}}" "jivimberg@gmail.com" "jivimberg"
+        shell: bash
