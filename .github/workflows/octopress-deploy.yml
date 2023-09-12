@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with:
-          ## ruby-version: '2.7.2' # Takes version from .ruby-version
+          ruby-version: '2.7.2'
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - uses: gabrielfalcao/pyenv-action@v11
         with:
