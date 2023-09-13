@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Planning | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/planning/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:18:17+00:00</updated>
+  <updated>2023-09-13T06:30:37+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -25,7 +25,7 @@
 <!--more-->
 
 
-<p><a href="https://basecamp.com/shapeup"><img class="center" src="/images/posts/2019-09-29/shapeUpCover.png" width="700" title="‘Book cover’" ></a></p>
+<p><a href="https://basecamp.com/shapeup">{% img center /images/posts/2019-09-29/shapeUpCover.png 700 ‘Book cover’ %}</a></p>
 
 <p>(<em>I promise those potato shapes ☝️ will make sense by the time you finish the book</em>)</p>
 
@@ -39,7 +39,9 @@
 
 <p>Coming from the people that wrote <a href="https://basecamp.com/books/remote">Remote</a> and <a href="https://basecamp.com/books/calm">It doesn’t have to be crazy at work</a>, you know this is a company that’s not afraid to innovate.</p>
 
-<p><blockquote><p>Now that our process is fully formed, documented, and ready to go, we’re here to share it with all those curious enough to listen to a new way of doing things. Explorers, pioneers, those who don’t care what everyone else is doing. Those who want to work better than the rest.</p><footer><strong>Jason Fried</strong> <cite>Basecamp CEO</cite></footer></blockquote></p>
+<p>{% blockquote Jason Fried, Basecamp CEO %}
+ Now that our process is fully formed, documented, and ready to go, we’re here to share it with all those curious enough to listen to a new way of doing things. Explorers, pioneers, those who don’t care what everyone else is doing. Those who want to work better than the rest.
+{% endblockquote %}</p>
 
 <p>Also, it doesn’t hurt that it is short, well-written, and has real-life examples and stick-figure drawings. <strong>Oh! and it’s free!! 💸</strong></p>
 
@@ -55,13 +57,13 @@
 
 <p>The key to Shaping is that it has to happen at <strong>the proper level of abstraction</strong>. Go too abstract, and the dev team might end up building the wrong thing. Go too concrete, and they have no wiggle room to work around a technical pitfall or revise a design choice.</p>
 
-<p><img class="right" src="/images/posts/2019-09-29/knob.png" width="400" title="‘Abstraction knob’" ></p>
+<p>{% img right /images/posts/2019-09-29/knob.png 400 ‘Abstraction knob’ %}</p>
 
 <p>For example, they’d use fat marker drawings instead of wireframes, to avoid delving too deep into the UI design details.</p>
 
 <p>You want to end up with a good definition of the problem and a rough sketch of the solution. A clear sense of what’s part of the solution and what’s out of scope. A set of elements and how they connect to each other, but no comprehensive list of tasks or high-res mockups. Those things will come later when the dev team takes over and starts exploring the solution.</p>
 
-<p><img class="left" src="/images/posts/2019-09-29/fatMarker.png" width="150" title="‘Fat marker sketch’" ></p>
+<p>{% img left /images/posts/2019-09-29/fatMarker.png  150 ‘Fat marker sketch’ %}</p>
 
 <p>Only once shaping is complete, they’d take it to the <a href="https://basecamp.com/shapeup/2.2-chapter-08#the-betting-table"><em>“betting table“</em></a> where they decide if this is something they want to bet the next six weeks on. If the pitch is , it goes into the next cycle. If it’s not, then nothing happens. There’s no centralized backlog or list of rejected ideas. If somebody considers it important or thinks that a better solution can be found, they’ll lobby for it again six weeks later.</p>
 
@@ -69,7 +71,7 @@
 
 <p>Every single new idea and feature request gets the same answer:</p>
 
-<p><img class="center" src="/images/posts/2019-09-29/interesting.png" width="400" title="‘Interesting! Maybe some time’" ></p>
+<p>{% img center /images/posts/2019-09-29/interesting.png 400 ‘Interesting! Maybe some time’ %}</p>
 
 <p>Basecamp believes an idea needs to go through the shaping process detailed above before they’re ready to bet on it.  When a new request comes in, they’d first try to identify what’s the user need (which sometimes might be quite different from what the user is asking for). Then, they see how they can solve the requirement with a minimal amount of effort. They acknowledge there’s always a better, more complete solution if you have infinite time at your disposal. The trick here is to find a good solution that works under the given constraints (in their case, that it can be built by a small team of engineers and designers in no more than six weeks)</p>
 
@@ -79,7 +81,7 @@
 
 <p>This is how we track progress in our industry:</p>
 
-<p><img class="center" src="/images/posts/2019-09-29/scrum.jpg" width="700" title="‘Wall full of post-it notes’" ></p>
+<p>{% img center /images/posts/2019-09-29/scrum.jpg  700 ‘Wall full of post-it notes’ %}</p>
 
 <p>The problem with this approach is that it only works if all required tasks are known up-front. And let’s face, 99% of the time, that’s not the case. Most of the time, you’d start coding the first task only to discover that a new component needs to be added, and you’ll have to fix a few connections this change will introduce.</p>
 
@@ -93,11 +95,11 @@
 
 <p>The tool they came up with to communicate progress are <a href="https://basecamp.com/features/hill-charts">Hill Charts</a>, and they look like this:</p>
 
-<p><img class="center" src="/images/posts/2019-09-29/hillChart1.png" width="600" title="‘Hill Chart’" ></p>
+<p>{% img center /images/posts/2019-09-29/hillChart1.png  600 ‘Hill Chart’ %}</p>
 
 <p>As you can tell, it’s not (only) a function of pending tasks, but also of confidence in that all remaining tasks have been discovered.</p>
 
-<p><img class="center" src="/images/posts/2019-09-29/hillChart2.png" width="600" title="‘Hill Chart 2’" ></p>
+<p>{% img center /images/posts/2019-09-29/hillChart2.png 600 ‘Hill Chart 2’ %}</p>
 
 <p>A good way of gaining confidence at the start of a project is to begin with the pieces that present the most uncertainty, and move them to the top of the hill first. Doing this before finishing the downhill stuff reduces the chances the project will be late.</p>
 
@@ -107,7 +109,7 @@
 
 <p>If you enjoyed the review, you’ll love the book. <a href="https://basecamp.com/shapeup">Go check it out!!</a></p>
 
-<p> <img class="right-fill" src="/images/signatures/signature5.png" width="200" title="‘My signature’" ></p>
+<p> {% img right-fill /images/signatures/signature5.png 200 ‘My signature’ %}</p>
 <div class="footnotes">
 <hr/>
 <ol>

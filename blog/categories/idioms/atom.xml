@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Idioms | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/idioms/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:18:17+00:00</updated>
+  <updated>2023-09-13T06:30:37+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -182,7 +182,7 @@ infix fun String?.and(other: String?): String? {
 
 <p><code>String?</code> is a pretty basic type, and <code>and()</code> is a pretty common function name. Months from now, somebody will be writing some code and IntelliJ will suggest this:</p>
 
-<p><img class="center" src="/images/posts/2021-08-21/wrong-suggestion.png"></p>
+<p>{% img center /images/posts/2021-08-21/wrong-suggestion.png %}</p>
 
 <p>😱 Watch out unsuspecting coder! That <code>and</code> function doesn&rsquo;t do what you think it does!</p>
 
@@ -297,7 +297,7 @@ fun main() {
 
 <p>That’s all for today! If you liked this approach, make sure to check <a href="https://proandroiddev.com/an-introduction-context-oriented-programming-in-kotlin-2e79d316b0a2">An introduction to context-oriented programming in Kotlin</a> and <a href="https://github.com/Kotlin/KEEP/blob/context-receivers/proposals/context-receivers.md#contextual-functions-and-property-accessors">KEEP-259</a> for what might come in future versions of Kotlin.</p>
 
-<p><img class="right-fill" src="/images/signatures/signature13.png" width="200" title="‘My signature’" ></p>
+<p>{% img right-fill /images/signatures/signature13.png 200 ‘My signature’ %}</p>
 
 <p><script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"\></p>
 ]]></content>

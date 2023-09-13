@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ci/cd | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/ci-slash-cd/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:18:17+00:00</updated>
+  <updated>2023-09-13T06:30:37+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -23,7 +23,7 @@
 <!--more-->
 
 
-<p><img class="center" src="/images/posts/2021-01-22/homer-deploying.png" width="350"></p>
+<p>{% img center /images/posts/2021-01-22/homer-deploying.png  350 %}</p>
 
 <h2>The problem with Fridays</h2>
 
@@ -37,7 +37,7 @@
 
 <p>To understand how to combat the danger of Fridays, let’s consider the <em>software lifecycle</em>. That is, the things that happen between <em>“I have to implement feature X”</em> and  <em>“<em>people using it in production</em>”</em>.</p>
 
-<p><img class="center" src="/images/posts/2021-01-22/software-lifecycle1.jpeg" width="700"></p>
+<p>{% img center /images/posts/2021-01-22/software-lifecycle1.jpeg 700 %}</p>
 
 <p>From the developer&rsquo;s point of view, when would you say that feature X is <em>Done</em>? Is it once the branch is merged? Is it after the code is deployed? The answer depends on what your team considers the developer’s responsibility. On teams doing <a href="https://netflixtechblog.com/full-cycle-developers-at-netflix-a08c31f83249">Full Cycle Development</a>, the same person writing the code is the one that will test, operate and deploy the service. Which means that <strong>the feature can only be marked as Done once it’s being used in production.</strong></p>
 
@@ -49,13 +49,13 @@
 
 <p>The software lifecycle diagram shown above is an over-simplification. In reality, the flow is never a straight line. Every step can send you back to a previous step: Started coding and found a flaw in the design, go back to design  🔙, a test started failing, go back to develop 🔙, etc.</p>
 
-<p><img class="center" src="/images/posts/2021-01-22/software-lifecycle2.jpeg" width="700"></p>
+<p>{% img center /images/posts/2021-01-22/software-lifecycle2.jpeg 700 %}</p>
 
 <p><a href="https://martinfowler.com/articles/developer-effectiveness.html">The secret sauce to a highly efficient team is keeping these feedback loops as short as possible</a>. If your tests take thirty minutes to run, by the time you see the failure, you’re already deep in some other task (or worse, on your 9th YouTube video).</p>
 
 <p>Deploying is no different. If it takes months for your code to reach production, by the time your users start using your new feature (and uncovering bugs), you have already moved on to something else. You no longer have the context fresh on your mind, and you barely recall the details and the design decisions taken at the time (which is why <a href="https://jivimberg.io/blog/2020/12/26/documenting-decisions/">you should be documenting those decisions</a>).</p>
 
-<p><img class="center" src="/images/posts/2021-01-22/software-lifecycle3.jpeg" width="700"></p>
+<p>{% img center /images/posts/2021-01-22/software-lifecycle3.jpeg 700 %}</p>
 
 <h2>How to make deployments less scary</h2>
 
@@ -65,7 +65,7 @@
 
 <p>And the benefits don’t end there! Smaller changes also mean shorter code reviews. It’s easier for developers reviewing your code to spot bugs in a small PR than in a huge one that modifies hundreds of lines. This is another way in which smaller changes bring better code quality.</p>
 
-<p><img class="center" src="/images/posts/2021-01-22/huge-pr.jpeg" width="400"></p>
+<p>{% img center /images/posts/2021-01-22/huge-pr.jpeg 400 %}</p>
 
 <p>Last but not least, smaller PRs produce short-lived branches, reducing the number of merge conflicts one has to deal with.</p>
 
@@ -107,7 +107,7 @@
 
 <p>Many of the ideas in this post are inspired by the podcasts <a href="https://www.heavybit.com/library/podcasts/o11ycast/">Oll1cast</a> and <a href="https://maintainable.fm/">Maintainable</a>, as well as the books <a href="https://www.amazon.com/Software-Engineering-Google-Lessons-Programming/dp/1492082791">Software Engineering at Google</a> and <a href="https://www.oreilly.com/library/view/distributed-tracing-in/9781492056621/">Distributed Tracing in Practice</a>. If you enjoy these topics, go check them out.</p>
 
-<p> <img class="right-fill" src="/images/signatures/signature7.png" width="200" title="‘My signature’" ></p>
+<p> {% img right-fill /images/signatures/signature7.png 200 ‘My signature’ %}</p>
 <div class="footnotes">
 <hr/>
 <ol>

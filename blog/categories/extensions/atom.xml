@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Extensions | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/extensions/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:18:17+00:00</updated>
+  <updated>2023-09-13T06:30:37+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -43,17 +43,7 @@ fun main(args: Array<String>) {
 
 <p>A quick search showed me I was not alone. <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/take-while.html"><em>matklad</em></a> already had a simple implementation working for <code>Sequence</code>:</p>
 
-<p><div><script src='https://gist.github.com/54776705250e3b375618f59a8247a237.js'></script>
-<noscript><pre><code>fun &lt;T&gt; Sequence&lt;T&gt;.takeWhileInclusive(pred: (T) -&gt; Boolean): Sequence&lt;T&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = pred(it)
-        result
-    }
-}
-</code></pre></noscript></div>
-</p>
+<p>{% gist 54776705250e3b375618f59a8247a237 %}</p>
 
 <p>Using <strong>extension functions</strong> we are able to add a new function to the standard library type <code>Sequence</code>. If this is your first encounter with an extension function I’d encourage you to read more about them <a href="https://kotlinlang.org/docs/reference/extensions.html#extension-functions">here</a> and then play with them <a href="https://try.kotlinlang.org/#/Kotlin%20Koans/Introduction/Extension%20functions/Task.kt">here</a>.</p>
 
@@ -90,156 +80,7 @@ fun main(args: Array<String>) {
 
 <p>Here’s the end result, ready to be dropped on your project:</p>
 
-<p><div><script src='https://gist.github.com/ff5aad3f5c6315deb420fd508a145c61.js'></script>
-<noscript><pre><code>// kotlin.collections
-
-inline fun &lt;T&gt; Array&lt;out T&gt;.takeWhileInclusive(
-        predicate: (T) -&gt; Boolean
-): List&lt;T&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun ByteArray.takeWhileInclusive(
-        predicate: (Byte) -&gt; Boolean
-): List&lt;Byte&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun ShortArray.takeWhileInclusive(
-        predicate: (Short) -&gt; Boolean
-): List&lt;Short&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun IntArray.takeWhileInclusive(
-        predicate: (Int) -&gt; Boolean
-): List&lt;Int&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun LongArray.takeWhileInclusive(
-        predicate: (Long) -&gt; Boolean
-): List&lt;Long&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun FloatArray.takeWhileInclusive(
-        predicate: (Float) -&gt; Boolean
-): List&lt;Float&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun DoubleArray.takeWhileInclusive(
-        predicate: (Double) -&gt; Boolean
-): List&lt;Double&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun BooleanArray.takeWhileInclusive(
-        predicate: (Boolean) -&gt; Boolean
-): List&lt;Boolean&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun CharArray.takeWhileInclusive(
-        predicate: (Char) -&gt; Boolean
-): List&lt;Char&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun &lt;T&gt; Iterable&lt;T&gt;.takeWhileInclusive(
-        predicate: (T) -&gt; Boolean
-): List&lt;T&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-// kotlin.sequences
-
-fun &lt;T&gt; Sequence&lt;T&gt;.takeWhileInclusive(
-        predicate: (T) -&gt; Boolean
-): Sequence&lt;T&gt; {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-// kotlin.text
-
-inline fun CharSequence.takeWhileInclusive(
-        predicate: (Char) -&gt; Boolean
-): CharSequence {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}
-
-inline fun String.takeWhileInclusive(
-        predicate: (Char) -&gt; Boolean
-): String {
-    var shouldContinue = true
-    return takeWhile {
-        val result = shouldContinue
-        shouldContinue = predicate(it)
-        result
-    }
-}</code></pre></noscript></div>
-</p>
+<p>{% gist ff5aad3f5c6315deb420fd508a145c61 %}</p>
 
 <p>Hope you find this useful!</p>
 

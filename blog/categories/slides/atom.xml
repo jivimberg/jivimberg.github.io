@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Slides | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/slides/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:18:17+00:00</updated>
+  <updated>2023-09-13T06:30:37+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -29,7 +29,7 @@
 
 <p>There&rsquo;s a simple reason for this: Humans brains are really dumb. They can’t process spoken and written words at the same time. <strong>People will either read the slides or listen to you, but not both.</strong> And since you’re presenting my guess is you want them paying attention to you. So drop all that extra text so people can focus on what you’re saying.</p>
 
-<p><img class="center" src="/images/posts/2020-04-23/badExample.png" width="600" title="‘Slide with a lot of text’" ></p>
+<p>{% img center /images/posts/2020-04-23/badExample.png 600 ‘Slide with a lot of text’ %}</p>
 
 <p>The first step to a bullet-free slide is breaking your content into smaller chunks. <strong>Each slide should focus on a single idea that can be expressed in one or two sentences</strong> (no more than 20 words). Less is more. The rest of the content, the things that you’d normally put in the bullet points, can be spoken. There’s no limit to the number of slides you can use, just make sure you’re only adding the key points on text and speaking the rest.</p>
 
@@ -37,11 +37,11 @@
 
 <p>Now that you have your central ideas, let&rsquo;s talk about styling. The main goal is to keep it simple so viewers are not distracted. Choose a sans-serif typeface (the ones without the ornaments) and make your text HUGE.</p>
 
-<p><img class="center" src="/images/posts/2020-04-23/serif-vs-sans-serif.jpg" width="400" title="‘Example of serif and sans serif fonts’" ></p>
+<p>{% img center /images/posts/2020-04-23/serif-vs-sans-serif.jpg 400 ‘Example of serif and sans serif fonts’ %}</p>
 
 <p>Big letters are important because everybody in the room should be able to read it, and it’ll help you stay under the 20 words limit. Pick contrasting colors for text and background. You can use <a href="https://colorhunt.co/">Color Hunt</a> to find a cool palette for your deck.  Finally, place the text in the upper left corner. You can add an image or graph if needed, but don’t put something just because you have the space. Make sure it’s meaningful. Keep it short, keep it simple.</p>
 
-<p><img class="center" src="/images/posts/2020-04-23/bigText.png" width="600" title="‘Big text is easier to read’" ></p>
+<p>{% img center /images/posts/2020-04-23/bigText.png 600 ‘Big text is easier to read’ %}</p>
 
 <p style='text-align: center;'>
 (Yes, this is the whole slide)
@@ -54,7 +54,7 @@
 
 <p>All you have to do is move the text from the slides to the presenter notes.</p>
 
-<p><img class="center" src="/images/posts/2020-04-23/presenterNotes.png" width="600" title="‘Handout example’" ></p>
+<p>{% img center /images/posts/2020-04-23/presenterNotes.png 600 ‘Handout example’ %}</p>
 
 <p>Then, to email your presentation just select <em>Print settings and preview</em> and choose <em>1 slide with notes</em>. Now you have a PDF handout to send after the presentation that includes all the context needed to understand each slide. As a bonus you also get notes you can use while presenting.</p>
 
@@ -64,15 +64,15 @@
 
 <p>First, avoid cluttered templates. They might look cute on page but they can distract the audience.</p>
 
-<p><img class="center" src="/images/posts/2020-04-23/clutteredTemplates.png" width="600" title="‘Example of a slide with a cluttered template’" ></p>
+<p>{% img center /images/posts/2020-04-23/clutteredTemplates.png 600 ‘Example of a slide with a cluttered template’ %}</p>
 
 <p>Also, get rid of all the cheese transitions. The only animations you should need is <em>appear </em>and<em> disappear</em> to reveal content as you talk. You can also color and opacity on text or images to guide the audience attention. To achieve this you simply duplicate the slide and apply the appropriate changes.</p>
 
-<p><img class="center" src="/images/posts/2020-04-23/focus.gif" width="600" title="‘Example of using color and opacity to guide audience focus’" ></p>
+<p>{% img center /images/posts/2020-04-23/focus.gif  600 ‘Example of using color and opacity to guide audience focus’ %}</p>
 
 <p>The only exception to the &ldquo;no animation rule&rdquo; is if your animation is needed to express the slide’s idea. For example, you might animate a pointer to represent the order of execution on a snippet of code, as I did here:</p>
 
-<p><img class="center" src="/images/posts/2020-04-23/animationExample2.gif" title="‘Example of a valid use of animation in a slide’" ></p>
+<p>{% img center /images/posts/2020-04-23/animationExample2.gif ‘Example of a valid use of animation in a slide’ %}</p>
 
 <p style='text-align: center;'>
 (I used Magic Move on  Keynote to create this)
@@ -110,7 +110,7 @@
 
 <p>Most of the time the title slide includes just the title of the talk. Instead, consider providing some context on what’s going to be covered in the presentation as a full sentence. If you’re opening with a hook you can have visuals on your title slide to get right into it.</p>
 
-<p><img class="center" src="/images/posts/2020-04-23/titleSlides.png" width="700" title="‘Example of title slides’" ></p>
+<p>{% img center /images/posts/2020-04-23/titleSlides.png 700 ‘Example of title slides’ %}</p>
 
 <h3>The intro slide</h3>
 
@@ -128,7 +128,7 @@
 
 <p>When using images go big. Don&rsquo;t worry about breaking the template if you’re using one. Take an empty slide and set the image as background. Don’t put text on it unless you really need to. And if you do use contrasting colors, or place the text over a box with a transparent background to make it readable.</p>
 
-<p><img class="center" src="/images/posts/2020-04-23/imageSlides.png" width="700" title="‘Examples of image slides’" ></p>
+<p>{% img center /images/posts/2020-04-23/imageSlides.png 700 ‘Examples of image slides’ %}</p>
 
 <h3>The code slide</h3>
 
@@ -138,7 +138,7 @@
 
 <p>If the code has multiple parts you&rsquo;ll be talking about, highlight only the section you’re focusing on and gray out all the rest.</p>
 
-<p><img class="center" src="/images/posts/2020-04-23/codeSlide.gif" width="600" title="‘Example of using color and opacity to guide audience focus’" ></p>
+<p>{% img center /images/posts/2020-04-23/codeSlide.gif  600 ‘Example of using color and opacity to guide audience focus’ %}</p>
 
 <p>Consider using pseudo code so people don&rsquo;t need to be familiar with your language of choice to understand the slide.</p>
 
@@ -160,7 +160,7 @@
 
 <p>Some of these things I learned from <a href="https://zachholman.com/talks">Zach Holman writings</a> (check his website <a href="https://speaking.io/">speaking.io</a>). More recently I attended a course from <a href="http://christinehaasconsulting.com/services/">Christine Haas Consulting</a> which really helped me polish my presentation skills. The rest comes from years of watching great presenters and practicing. That’s the only way to improve, right?</p>
 
-<p> <img class="right-fill" src="/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
+<p> {% img right-fill /images/signatures/signature3.png 200 ‘My signature’ %}</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Reactive | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/reactive/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:18:17+00:00</updated>
+  <updated>2023-09-13T06:30:37+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -29,7 +29,7 @@
 
 <p>The GraphQL way of doing this is through a <a href="https://github.com/facebook/graphql/blob/master/rfcs/Subscriptions.md">Subscription</a>. For the application events we’re using Kafka. So all we are trying to do is to tie those 2 things so that <strong>whenever an event pops up in Kafka all clients with an active subscription get notified</strong>.</p>
 
-<p><img class="center" src="/images/posts/2018-10-24/SubscriptionFlow.png" width="700" title="‘Subscription flow diagram’" ></p>
+<p>{% img center /images/posts/2018-10-24/SubscriptionFlow.png 700 ‘Subscription flow diagram’ %}</p>
 
 <h1>The setup</h1>
 
@@ -41,20 +41,18 @@
 </ol>
 
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">type</span> <span class="n">Subscription</span> <span class="o">{</span>
-</span><span class='line'> <span class="nl">event:</span> <span class="n">EventMessage</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:java %}
+type Subscription {
+ event: EventMessage
+}
+{% endcodeblock %}</p>
 
 <ol>
 <li>On the other end I have a <a href="https://kafka.apache.org/documentation/#intro_topics">Kafka topic</a> with events that a user might be interested in. We plan to use <a href="https://github.com/reactor/reactor-kafka">Reactor Kafka</a> to <strong>consume the events through a reactive stream</strong>.</li>
 </ol>
 
 
-<p><img class="center" src="/images/posts/2018-10-24/Setup.png" width="800" title="’Setup diagram’" ></p>
+<p>{% img center /images/posts/2018-10-24/Setup.png 800 ’Setup diagram’ %}</p>
 
 <p>So the challenge is: <em>how do we connect all this pieces together?</em></p>
 
@@ -104,7 +102,7 @@ class SubscriptionsResolverImpl(
 
 <p>Then we are turning the receiver into a hot stream by calling <code>publish()</code>. We are doing this because <strong>we want new subscribers to only see events that happened after they subscribed to the <code>Publisher</code></strong>. And that’s exactly what <code>publish()</code> does. In fact if you pay close attention to the marble diagram of the <a href="https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html#publish--">method documentation</a> you’ll notice how <strong>it looks pretty similar to our use case flow diagram.</strong></p>
 
-<p><img class="center" src="/images/posts/2018-10-24/publish.png" width="500" title="‘Publish marble diagram’" ></p>
+<p>{% img center /images/posts/2018-10-24/publish.png 500 ‘Publish marble diagram’ %}</p>
 
 <p>We’re calling <code>autoConnect()</code> so that it connects to the upstream source as soon as the first <code>Subscriber</code> subscribes.</p>
 

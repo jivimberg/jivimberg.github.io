@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Jacoco | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/jacoco/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:18:17+00:00</updated>
+  <updated>2023-09-13T06:30:37+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -29,41 +29,63 @@
 
 <hr />
 
-<p><img class="center" src="/images/posts/2018-08-12/JaCoCo-before.png" width="720" title="’JaCoCo before’" ></p>
+<p>{% img center /images/posts/2018-08-12/JaCoCo-before.png 720 ’JaCoCo before’ %}</p>
 
-<p><blockquote><p>What!? I didn’t even write those functions! There’s no way I’m writing tests for them. I’m pretty sure the compiler knows what it’s doing…</p><footer><strong>Me</strong> <cite>Every Time I Saw the Coverage Report</cite></footer></blockquote></p>
+<p>{% blockquote Me, Every time I saw the coverage report %}
+What!? I didn’t even write those functions! There’s no way I’m writing tests for them. I’m pretty sure the compiler knows what it’s doing…
+{% endblockquote %}</p>
 
 <p>Good news is that this <a href="https://github.com/goodwinnk">has been fixed</a> in the latest JaCoCo release (thanks to <a href="https://github.com/goodwinnk">goodwink</a>). Bad news is that <strong>0.8.2 is not out yet</strong> 😞</p>
 
 <p>If you are like me, and can’t wait to get this working, you can <strong>use the SNAPSHOT version of JaCoCo</strong> making this changes on your <code>build.gradle</code>:</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='kotlin'><span class='line'><span class="n">repositories</span> <span class="p">{</span>
-</span><span class='line'>    <span class="err">…</span>
-</span><span class='line'>    <span class="n">maven</span><span class="p">(&amp;</span><span class="n">ldquo</span><span class="p">;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="p">=</span><span class="s">&quot;https://oss.sonatype.org/content/repositories/snapshots&quot;</span><span class="p">&gt;</span><span class="n">https</span><span class="p">:</span><span class="c1">//oss.sonatype.org/content/repositories/snapshots&lt;/a&gt;&amp;rdquo;)</span>
-</span><span class='line'><span class="p">}&lt;/</span><span class="n">p</span><span class="p">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">&lt;</span><span class="n">p</span><span class="p">&gt;</span><span class="n">jacoco</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">toolVersion</span> <span class="p">=</span> <span class="p">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="m">0.8</span><span class="p">.</span><span class="m">2</span><span class="p">-</span><span class="n">SNAPSHOT</span><span class="p">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
-</span><span class='line'><span class="p">}&lt;/</span><span class="n">p</span><span class="p">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">&lt;</span><span class="n">p</span><span class="p">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:kotlin %}
+repositories {
+    …
+    maven(&ldquo;<a href="https://oss.sonatype.org/content/repositories/snapshots">https://oss.sonatype.org/content/repositories/snapshots</a>&rdquo;)
+}</p>
+
+<p>jacoco {
+    toolVersion = &ldquo;0.8.2-SNAPSHOT&rdquo;
+}</p>
+
+<p>{% endcodeblock %}</p>
 
 <p><em>(I’m using <a href="https://github.com/gradle/kotlin-dsl">Gradle with Kotlin DSL</a> in this example)</em></p>
 
 <p>Now you can finally take your Kotlin coverage to 100% without having to write tests for <code>component1()</code> and <code>component2()</code>.</p>
 
-<p><img class="center" src="/images/posts/2018-08-12/JaCoCo-after.png" width="720" title="’JaCoCo after’" ></p>
+<p>{% img center /images/posts/2018-08-12/JaCoCo-after.png 720 ’JaCoCo after’ %}</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Jacoco & Gradle - How to Verify Coverage With Exclusions]]></title>
+    <link href="http://jivimberg.io/blog/2018/04/26/gradle-verify-coverage-with-exclusions/"/>
+    <updated>2018-04-26T08:49:52-07:00</updated>
+    <id>http://jivimberg.io/blog/2018/04/26/gradle-verify-coverage-with-exclusions</id>
+    <content type="html"><![CDATA[<p>A post about how to add exclusions to your Jacoco test coverage verification in Gradle.</p>
+
+<!--more-->
+
+
+<p>This is how you setup Jacoco to fail when the code doesn’t meet the expected coverage threshold:</p>
+
+<p>{% gist ea79614ce9b80c29b03be8326586f238 %}</p>
+
+<p>See that <code>rule</code>?  I’m not setting any particular <code>element</code> so <a href="https://docs.gradle.org/current/javadoc/org/gradle/testing/jacoco/tasks/rules/JacocoViolationRule.html#getElement--">by default it’ll set <em>BUNDLE</em></a>. <strong>This is just what I want as I’d like to set a threshold for the coverage of the entire module.</strong></p>
+
+<p>So if I need to exclude certain <strong>packages</strong> or <strong>files</strong> from the count this is what I do:</p>
+
+<p>{% gist 3ee0beaa9ab8b20b48e4273378dcd30e %}</p>
+
+<h3>Why <em>exclude</em> doesn’t work</h3>
+
+<p>My first approach was setting the <code>excludes</code> property on the rule like this:</p>
+
+<p>{% gist 0962942885d4db41a9dad890aba5d225 %}</p>
+
+<p>The reason this doesn’t work is that <code>excludes</code> works on objects of the type defined with the <code>element</code> property. In this case the type is <em>BUNDLE</em> whereas the thing we want to exclude are <strong>packages</strong> and <strong>files</strong>.</p>
 ]]></content>
   </entry>
   

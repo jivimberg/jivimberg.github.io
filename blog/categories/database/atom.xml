@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Database | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/database/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:18:17+00:00</updated>
+  <updated>2023-09-13T06:30:37+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -31,7 +31,7 @@
 
 <p>Maybe you’ve read about the <a href="http://microservices.io/patterns/data/database-per-service.html">“Database per service”</a> pattern and now you’re wondering what your requirements are on <a href="https://en.wikipedia.org/wiki/Consistency_(database_systems)">data consistency</a>. Or somebody told you about <a href="https://martinfowler.com/bliki/CQRS.html">CQRS</a> but you don’t know it’s advantages and disadvantages.</p>
 
-<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/"><img class="center" src="/images/posts/2018-05-26/MigratingToMicroservicesDatabases.png" title="’Migrating to Micro-services databases book cover’" ></a></p>
+<p><a href="https://developers.redhat.com/promotions/migrating-to-microservice-databases/">{% img center /images/posts/2018-05-26/MigratingToMicroservicesDatabases.png ’Migrating to Micro-services databases book cover’ %}</a></p>
 
 <p>Edson’s book opens with a brief recap of the micro-service world. Going from <em>“Why microservices”</em> to <a href="https://en.wikipedia.org/wiki/A/B_testing">A/B testing</a> and <a href="https://martinfowler.com/bliki/CanaryRelease.html">Canary deployment</a>, the book provides a <strong>super-quick explanation of each concept without going into many details.</strong></p>
 

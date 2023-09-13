@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Spring | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/spring/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:18:17+00:00</updated>
+  <updated>2023-09-13T06:30:37+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -31,7 +31,7 @@
 
 <p>The business core interacts with other components through ports and adapters. This way, we can change the underlying technologies without having to modify the application core.</p>
 
-<p><img class="center" src="/images/posts/2020-02-01/HexagonalArchitecture-generic.png" width="700" title="‘Generic Hexagonal Architecture diagram’" ></p>
+<p>{% img center /images/posts/2020-02-01/HexagonalArchitecture-generic.png 700 ‘Generic Hexagonal Architecture diagram’ %}</p>
 
 <h2>Application Core</h2>
 
@@ -39,52 +39,30 @@
 
 <p>Let&rsquo;s start with the domain model. Its main responsibility is to model the business rules. It also verifies that the objects are always in a valid state:</p>
 
-<p><figure class='code'><figcaption><span>BankAccount.java </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccount</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="kd">private</span> <span class="n">Long</span> <span class="n">id</span><span class="o">;</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="n">BigDecimal</span> <span class="n">balance</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Constructor</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">if</span><span class="o">(</span><span class="n">balance</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">amount</span><span class="o">)</span> <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">balance</span> <span class="o">=</span> <span class="n">balance</span><span class="o">.</span><span class="na">subtract</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
-</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">balance</span> <span class="o">=</span> <span class="n">balance</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:java BankAccount.java %}
+public class BankAccount {</p>
+
+<pre><code>    private Long id;
+    private BigDecimal balance;
+
+    // Constructor
+
+    public boolean withdraw(BigDecimal amount) {
+        if(balance.compareTo(amount) &lt; 0) {
+            return false;
+        }
+
+        balance = balance.subtract(amount);
+        return true;
+    }
+
+    public void deposit(BigDecimal amount) {
+        balance = balance.add(amount);
+    }
+</code></pre>
+
+<p>}
+{% endcodeblock %}</p>
 
 <p>The domain model should have no dependency on any specific technology. That&rsquo;s the reason why you&rsquo;ll find no Spring annotations here.</p>
 
@@ -94,118 +72,74 @@
 
 <p>First, let&rsquo;s define 2 incoming ports. <strong>These are used by external components to call our application</strong>. In this case, we&rsquo;ll have one per use case. One for <em>Deposit</em>:</p>
 
-<p><figure class='code'><figcaption><span>DepositUseCase.java </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">DepositUseCase</span> <span class="o">{</span>
-</span><span class='line'>        <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:java DepositUseCase.java %}
+public interface DepositUseCase {
+        void deposit(Long id, BigDecimal amount);
+}
+{% endcodeblock %}</p>
 
 <p>And one for <em>Withdraw</em>:</p>
 
-<p><figure class='code'><figcaption><span>WithdrawUseCase.java </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">WithdrawUseCase</span> <span class="o">{</span>
-</span><span class='line'>        <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:java WithdrawUseCase.java %}
+public interface WithdrawUseCase {
+        boolean withdraw(Long id, BigDecimal amount);
+}
+{% endcodeblock %}</p>
 
 <p>Similarly, we&rsquo;ll also have 2 outgoing ports. <strong>These are for our application to interact with the database</strong>. Once again, we&rsquo;ll have one per use case. One for <em>Loading</em> the Account:</p>
 
-<p><figure class='code'><figcaption><span>LoadAccountPort.java </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">LoadAccountPort</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">Optional</span><span class="o">&lt;</span><span class="n">BankAccount</span><span class="o">&gt;</span> <span class="nf">load</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:java LoadAccountPort.java %}
+public interface LoadAccountPort {
+        Optional<BankAccount> load(Long id);
+}
+{% endcodeblock %}</p>
 
 <p>And one for <em>Saving</em> it:</p>
 
-<p><figure class='code'><figcaption><span>SaveAccountPort.java </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SaveAccountPort</span> <span class="o">{</span>
-</span><span class='line'>        <span class="kt">void</span> <span class="nf">save</span><span class="o">(</span><span class="n">BankAccount</span> <span class="n">bankAccount</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:java SaveAccountPort.java %}
+public interface SaveAccountPort {
+        void save(BankAccount bankAccount);
+}
+{% endcodeblock %}</p>
 
 <h3>Service</h3>
 
 <p>Next, we&rsquo;ll create a service to tie all the pieces together and drive the execution:</p>
 
-<p><figure class='code'><figcaption><span>BankAccountService.java </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountService</span> <span class="kd">implements</span> <span class="n">DepositUseCase</span><span class="o">,</span> <span class="n">WithdrawUseCase</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="kd">private</span> <span class="n">LoadAccountPort</span> <span class="n">loadAccountPort</span><span class="o">;</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="n">SaveAccountPort</span> <span class="n">saveAccountPort</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Constructor</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nd">@Override</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">BankAccount</span> <span class="n">account</span> <span class="o">=</span> <span class="n">loadAccountPort</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">orElseThrow</span><span class="o">(</span><span class="nl">NoSuchElementException:</span><span class="o">:</span><span class="k">new</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">account</span><span class="o">.</span><span class="na">deposit</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="n">saveAccountPort</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">account</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nd">@Override</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">BankAccount</span> <span class="n">account</span> <span class="o">=</span> <span class="n">loadAccountPort</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">orElseThrow</span><span class="o">(</span><span class="nl">NoSuchElementException:</span><span class="o">:</span><span class="k">new</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="kt">boolean</span> <span class="n">hasWithdrawn</span> <span class="o">=</span> <span class="n">account</span><span class="o">.</span><span class="na">withdraw</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">if</span><span class="o">(</span><span class="n">hasWithdrawn</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">saveAccountPort</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">account</span><span class="o">);</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">hasWithdrawn</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:java BankAccountService.java %}
+public class BankAccountService implements DepositUseCase, WithdrawUseCase {</p>
+
+<pre><code>    private LoadAccountPort loadAccountPort;
+    private SaveAccountPort saveAccountPort;
+
+    // Constructor
+
+    @Override
+    public void deposit(Long id, BigDecimal amount) {
+        BankAccount account = loadAccountPort.load(id)
+                .orElseThrow(NoSuchElementException::new);
+
+        account.deposit(amount);
+
+        saveAccountPort.save(account);
+    }
+
+    @Override
+    public boolean withdraw(Long id, BigDecimal amount) {
+        BankAccount account = loadAccountPort.load(id)
+                .orElseThrow(NoSuchElementException::new);
+
+        boolean hasWithdrawn = account.withdraw(amount);
+
+        if(hasWithdrawn) {
+            saveAccountPort.save(account);
+        }
+        return hasWithdrawn;
+    }
+</code></pre>
+
+<p>}
+{% endcodeblock %}</p>
 
 <p>Note how the service implements the incoming ports. On each method, it uses the <em>Load</em> port to fetch the account from the database. Then, it performs the changes on the domain model. And finally, it saves those changes through the <em>Save</em> port.</p>
 
@@ -217,52 +151,29 @@
 
 <p>For the incoming interactions, we&rsquo;ll create a REST controller:</p>
 
-<p><figure class='code'><figcaption><span>BankAccountController.java </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@RestController</span>
-</span><span class='line'><span class="nd">@RequestMapping</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;/</span><span class="n">account</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;)</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountController</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">DepositUseCase</span> <span class="n">depositUseCase</span><span class="o">;</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">WithdrawUseCase</span> <span class="n">withdrawUseCase</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Constructor</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/{id}/deposit/{amount}&quot;</span><span class="o">)</span>
-</span><span class='line'>    <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">depositUseCase</span><span class="o">.</span><span class="na">deposit</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">amount</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/{id}/withdraw/{amount}&quot;</span><span class="o">)</span>
-</span><span class='line'>    <span class="kt">void</span> <span class="nf">withdraw</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">withdrawUseCase</span><span class="o">.</span><span class="na">withdraw</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">amount</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:java BankAccountController.java %}
+@RestController
+@RequestMapping(&ldquo;/account&rdquo;)
+public class BankAccountController {</p>
+
+<pre><code>    private final DepositUseCase depositUseCase;
+    private final WithdrawUseCase withdrawUseCase;
+
+    // Constructor
+
+    @PostMapping(value = "/{id}/deposit/{amount}")
+    void deposit(@PathVariable final Long id, @PathVariable final BigDecimal amount) {
+        depositUseCase.deposit(id, amount);
+    }
+
+    @PostMapping(value = "/{id}/withdraw/{amount}")
+    void withdraw(@PathVariable final Long id, @PathVariable final BigDecimal amount) {
+        withdrawUseCase.withdraw(id, amount);
+    }
+}
+</code></pre>
+
+<p>{% endcodeblock %}</p>
 
 <p>The controller uses the defined ports to make calls to the application core.</p>
 
@@ -270,86 +181,52 @@
 
 <p>For the persistence layer, we&rsquo;ll use Mongo DB through Spring Data:</p>
 
-<p><figure class='code'><figcaption><span>SpringDataBankAccountRepository.java </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SpringDataBankAccountRepository</span> <span class="kd">extends</span> <span class="n">MongoRepository</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">BankAccount</span><span class="o">,</span> <span class="n">Long</span><span class="o">&gt;</span> <span class="o">{</span> <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:java SpringDataBankAccountRepository.java %}
+public interface SpringDataBankAccountRepository extends MongoRepository&lt;BankAccount, Long> { }
+{% endcodeblock %}</p>
 
 <p>Also, we&rsquo;ll create a <em>BankAccountRepository</em> class that connects the outgoing ports with the <em>SpringDataBankAccountRepository</em>:</p>
 
-<p><figure class='code'><figcaption><span>BankAccountRepository.java </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Component</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountRepository</span> <span class="kd">implements</span> <span class="n">LoadAccountPort</span><span class="o">,</span> <span class="n">SaveAccountPort</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="kd">private</span> <span class="n">SpringDataBankAccountRepository</span> <span class="n">repository</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Constructor</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nd">@Override</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="n">Optional</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">BankAccount</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">load</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nd">@Override</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">save</span><span class="o">(</span><span class="n">BankAccount</span> <span class="n">bankAccount</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">repository</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">bankAccount</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:java BankAccountRepository.java %}
+@Component
+public class BankAccountRepository implements LoadAccountPort, SaveAccountPort {</p>
+
+<pre><code>    private SpringDataBankAccountRepository repository;
+
+    // Constructor
+
+    @Override
+    public Optional&lt;BankAccount&gt; load(Long id) {
+        return repository.findById(id);
+    }
+
+    @Override
+    public void save(BankAccount bankAccount) {
+        repository.save(bankAccount);
+    }
+</code></pre>
+
+<p>}</p>
+
+<p>{% endcodeblock %}</p>
 
 <h3>Infrastructure</h3>
 
 <p>Finally, we need to tell Spring to expose the <em>BankAccountService</em> as a bean, so it can be injected in the controller:</p>
 
-<p><figure class='code'><figcaption><span>BeanConfiguration.java </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
-</span><span class='line'><span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">basePackageClasses</span> <span class="o">=</span> <span class="n">HexagonalApplication</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BeanConfiguration</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="nd">@Bean</span>
-</span><span class='line'>    <span class="n">BankAccountService</span> <span class="nf">bankAccountService</span><span class="o">(</span><span class="n">BankAccountRepository</span> <span class="n">repository</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nf">BankAccountService</span><span class="o">(</span><span class="n">repository</span><span class="o">,</span> <span class="n">repository</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:java BeanConfiguration.java %}
+@Configuration
+@ComponentScan(basePackageClasses = HexagonalApplication.class)
+public class BeanConfiguration {</p>
+
+<pre><code>    @Bean
+    BankAccountService bankAccountService(BankAccountRepository repository) {
+        return new BankAccountService(repository, repository);
+    }
+</code></pre>
+
+<p>}
+{% endcodeblock %}</p>
 
 <p>Defining the beans in the Adapters layer helps us maintain the infrastructure code decoupled from the business logic.</p>
 
@@ -357,7 +234,7 @@
 
 <p>In this article, we&rsquo;ve seen how to implement an application using Hexagonal Architecture and Spring Boot. This is what the system ends up looking like:</p>
 
-<p><img class="center" src="/images/posts/2020-02-01/HexagonalArchitecture-impl.png" width="700" title="‘Generic Hexagonal Architecture Spring Boot example’" ></p>
+<p>{% img center /images/posts/2020-02-01/HexagonalArchitecture-impl.png 700 ‘Generic Hexagonal Architecture Spring Boot example’ %}</p>
 
 <p>The code for this example is <a href="https://github.com/jivimberg/hexagonal-architecture">available on Github</a>.</p>
 
@@ -365,7 +242,7 @@
 
 <p>This article is based on the <em>highly recommendable</em> <a href="https://leanpub.com/get-your-hands-dirty-on-clean-architecture">&ldquo;Get Your Hands Dirty on Clean Architecture</a> by <a href="https://twitter.com/TomHombergs">Tom Hombergs</a>, and <a href="https://www.baeldung.com/hexagonal-architecture-ddd-spring">this Baeldung article</a> by <a href="https://www.baeldung.com/author/lukasz-rys/">Łukasz Ryś</a>.</p>
 
-<p> <img class="right-fill" src="/images/signatures/signature9.png" width="200" title="‘My signature’" ></p>
+<p> {% img right-fill /images/signatures/signature9.png 200 ‘My signature’ %}</p>
 ]]></content>
   </entry>
   
@@ -379,7 +256,7 @@
 <!--more-->
 
 
-<p><img class="center" src="/images/posts/2018-11-07/uuid.png" title="‘uuid key’" ></p>
+<p>{% img center /images/posts/2018-11-07/uuid.png ‘uuid key’ %}</p>
 
 <h1>Why UUIDs?</h1>
 
@@ -429,7 +306,7 @@ class Artist(
 
 <p>As mentioned we’re using <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA</a> for our Repository layer. Now there’s a small detail we have to take into account when <strong>using application provided ids with Spring Data</strong>. If you do a <code>artistRepository.save(Artist(name = "David Bowie"))</code> you might get an output like this:</p>
 
-<p><img class="center" src="/images/posts/2018-11-07/2sql.png" title="‘persist logs’" ></p>
+<p>{% img center /images/posts/2018-11-07/2sql.png ‘persist logs’ %}</p>
 
 <p>If you pay close attention to the log you’ll notice that <strong>Hibernate is actually executing 2 SQL queries</strong>: one <code>select</code> followed by one <code>insert</code>. Not quite what we were expecting.</p>
 
@@ -523,7 +400,7 @@ class Artist(
 
 <p>And now if we do a <code>save()</code> on a new entity <strong>we get one single SQL statement</strong> as we were expecting.</p>
 
-<p><img class="center" src="/images/posts/2018-11-07/1sql.png" width="600" title="‘persist logs with abstractEntity’" ></p>
+<p>{% img center /images/posts/2018-11-07/1sql.png 600 ‘persist logs with abstractEntity’ %}</p>
 
 <hr />
 
@@ -570,7 +447,7 @@ class Celeb(
 
 <p>You can find all the <strong>code samples</strong> for this post on <strong><a href="https://github.com/jivimberg/spring-data-uuid-example">this GitHub repo</a></strong>.</p>
 
-<p><img class="right-fill" src="/images/signatures/signature1.png" width="200" title="‘My signature’" ></p>
+<p>{% img right-fill /images/signatures/signature1.png 200 ‘My signature’ %}</p>
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
@@ -595,7 +472,7 @@ class Celeb(
 
 <p>The GraphQL way of doing this is through a <a href="https://github.com/facebook/graphql/blob/master/rfcs/Subscriptions.md">Subscription</a>. For the application events we’re using Kafka. So all we are trying to do is to tie those 2 things so that <strong>whenever an event pops up in Kafka all clients with an active subscription get notified</strong>.</p>
 
-<p><img class="center" src="/images/posts/2018-10-24/SubscriptionFlow.png" width="700" title="‘Subscription flow diagram’" ></p>
+<p>{% img center /images/posts/2018-10-24/SubscriptionFlow.png 700 ‘Subscription flow diagram’ %}</p>
 
 <h1>The setup</h1>
 
@@ -607,20 +484,18 @@ class Celeb(
 </ol>
 
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">type</span> <span class="n">Subscription</span> <span class="o">{</span>
-</span><span class='line'> <span class="nl">event:</span> <span class="n">EventMessage</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+<p>{% codeblock lang:java %}
+type Subscription {
+ event: EventMessage
+}
+{% endcodeblock %}</p>
 
 <ol>
 <li>On the other end I have a <a href="https://kafka.apache.org/documentation/#intro_topics">Kafka topic</a> with events that a user might be interested in. We plan to use <a href="https://github.com/reactor/reactor-kafka">Reactor Kafka</a> to <strong>consume the events through a reactive stream</strong>.</li>
 </ol>
 
 
-<p><img class="center" src="/images/posts/2018-10-24/Setup.png" width="800" title="’Setup diagram’" ></p>
+<p>{% img center /images/posts/2018-10-24/Setup.png 800 ’Setup diagram’ %}</p>
 
 <p>So the challenge is: <em>how do we connect all this pieces together?</em></p>
 
@@ -670,7 +545,7 @@ class SubscriptionsResolverImpl(
 
 <p>Then we are turning the receiver into a hot stream by calling <code>publish()</code>. We are doing this because <strong>we want new subscribers to only see events that happened after they subscribed to the <code>Publisher</code></strong>. And that’s exactly what <code>publish()</code> does. In fact if you pay close attention to the marble diagram of the <a href="https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html#publish--">method documentation</a> you’ll notice how <strong>it looks pretty similar to our use case flow diagram.</strong></p>
 
-<p><img class="center" src="/images/posts/2018-10-24/publish.png" width="500" title="‘Publish marble diagram’" ></p>
+<p>{% img center /images/posts/2018-10-24/publish.png 500 ‘Publish marble diagram’ %}</p>
 
 <p>We’re calling <code>autoConnect()</code> so that it connects to the upstream source as soon as the first <code>Subscriber</code> subscribes.</p>
 
@@ -707,7 +582,7 @@ class SubscriptionsResolverImpl(
 
 <p>The second reason for making the transition was IDE support. Groovy is a dynamically typed language, which makes it harder for the IDE to provide accurate code completion and script validity through type checks. Kotlin being statically typed doesn’t suffer from the same problems</p>
 
-<p><img class="center" src="/images/posts/2018-09-11/kotlin-code-completion.png" title="‘Kotlin code completion’" ></p>
+<p>{% img center /images/posts/2018-09-11/kotlin-code-completion.png ‘Kotlin code completion’ %}</p>
 
 <h2>3. Interoperability</h2>
 
@@ -715,7 +590,7 @@ class SubscriptionsResolverImpl(
 
 <p>This interoperability let us <strong><a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy_2">call Groovy code from Kotlin</a> and <a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy">viceversa</a></strong>. Which effectively means that you can have <strong>a mix of both Groovy and Kotlin scripts working together in the same project</strong>. So no need to migrate all your build scripts at once, or to push stubborn <em>“Wally”</em> to learn Kotlin DSL.</p>
 
-<p><img class="center" src="/images/posts/2018-09-11/wally2.png" title="‘Wally’" ></p>
+<p>{% img center /images/posts/2018-09-11/wally2.png ‘Wally’ %}</p>
 
 <h1>The exodus</h1>
 
@@ -723,7 +598,7 @@ class SubscriptionsResolverImpl(
 
 <p>You’ll just have to <strong>push through that first moment</strong> when nothing seems to be working, your project doesn’t compile at all, and you know you’re a <code>⌘ + Z</code> away from a pristine working copy. <em>But you can&rsquo;t make an omelet without breaking a few eggs, can you?</em></p>
 
-<p><img class="center" src="/images/posts/2018-09-11/panic.png" title="‘Panic!’" ></p>
+<p>{% img center /images/posts/2018-09-11/panic.png ‘Panic!’ %}</p>
 
 <p><strong>I just wish there was some kind of automatic migration action in IntelliJ.</strong> Even if it’s a best effort that leaves you half way there, I’d greatly appreciate it. Ideally it should work just like when you paste some Java code into a Kotlin file: <code>⌘ + V</code> + ✨<em>fairy dust</em>✨ and you have your <code>build.gradle.kts</code> ready to go.</p>
 
@@ -744,7 +619,7 @@ class SubscriptionsResolverImpl(
 
 <h2>1. <em>“I can’t just copy-past things from Stack Overflow”</em></h2>
 
-<p><img class="center" src="/images/posts/2018-09-11/copy-paste.jpg" width="250" title="‘Copy paste from Stack Overflow’" ></p>
+<p>{% img center /images/posts/2018-09-11/copy-paste.jpg 250 ‘Copy paste from Stack Overflow’ %}</p>
 
 <p>This is <strong>by far the biggest drawback</strong>. In my experience most teams have one or two <em>”build tool experts”</em>. The rest of the team just use a few tasks and maybe add a dependency every now and then. This casual user might have a harder time using Kotlin DSL because <strong>copy-pasting pieces of code from the web will not work out of the box</strong>. Converting this snippets to Kotlin DSL is not rocket-science, but in some cases it might require some basic level of understanding of how Kotlin DSL works.</p>
 
@@ -776,7 +651,7 @@ class SubscriptionsResolverImpl(
 
 <p>Let’s start by <em>setting the stage</em>, for this particular project I was working with the following stack:</p>
 
-<p><img class="center" src="/images/posts/2018-06-23/Stack.png" width="720" title="’Spring + Data + Kotlin + Oracle’" ></p>
+<p>{% img center /images/posts/2018-06-23/Stack.png 720 ’Spring + Data + Kotlin + Oracle’ %}</p>
 
 <h2>The problem</h2>
 
@@ -810,7 +685,9 @@ data class Person(
 
 
 <p>That’s when I discovered:
-<blockquote><p>This is because Oracle internally changes empty string to NULL values. Oracle simply won&rsquo;t let insert an empty string.</p><footer><strong>Some guy on Stack Overflow <a href="https://stackoverflow.com/a/13278879/1499171">https://stackoverflow.com/a/13278879/1499171</a></strong></footer></blockquote></p>
+{% blockquote Some guy on Stack Overflow <a href="https://stackoverflow.com/a/13278879/1499171">https://stackoverflow.com/a/13278879/1499171</a> %}
+This is because Oracle internally changes empty string to NULL values. Oracle simply won&rsquo;t let insert an empty string.
+{% endblockquote %}</p>
 
 <p>So when the data was mapped back to my <code>Person</code> object I ended up with a <code>null</code> value for <em>name</em>. This is probably only possible because <strong>Hibernate is using reflection to set the field value</strong> in runtime, thus breaking Kotlin’s <a href="https://kotlinlang.org/docs/reference/null-safety.html">null safety</a>.</p>
 

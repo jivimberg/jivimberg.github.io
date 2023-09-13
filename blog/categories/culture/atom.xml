@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Culture | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/culture/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:18:17+00:00</updated>
+  <updated>2023-09-13T06:30:37+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -37,7 +37,7 @@
 
 <p>An Architecture Decision Log can help us capture the context, motivations, and assumptions behind a decision. We are basically doing a brain dump of all the things that were considered before making a final call on something.</p>
 
-<p><img class="center" src="/images/posts/2020-12-26/architecture.gif" width="500"></p>
+<p>{% img center /images/posts/2020-12-26/architecture.gif 500 %}</p>
 
 <p>If one thing is constant about developing software is change. New features are requested, the app grows and it has to support an increasing number of requests, people leave the team and new developers join. By keeping an Architecture Decision Log, we capture the thought process that goes into a decision, <strong>so that future maintainers can understand why something is the way it is, and use this information to evaluate new changes.</strong>  Maybe an assumption made about how users would use the app turned out not to be true. Or perhaps a requirement about the size of stored data has changed, and the existing database can’t scale accordingly.</p>
 
@@ -84,7 +84,7 @@
 
 <hr />
 
-<p> <img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+<p> {% img right-fill /images/signatures/signature2.png 200 ‘My signature’ %}</p>
 ]]></content>
   </entry>
   
@@ -131,7 +131,7 @@
 
 <p>The answers to these questions will become the kernel of every decision taken. So, don&rsquo;t fall for generic marketing 💩. Be really specific on what your key differentiator is, and drop everything else. If you&rsquo;re not willing to center all your business in, say, <em>customer satisfaction</em> just don&rsquo;t mention it.</p>
 
-<p><img class="center" src="/images/posts/2019-08-11/dunder-mifflin.jpg" title="‘Dunder Mifflin mission statement’" ></p>
+<p>{% img center /images/posts/2019-08-11/dunder-mifflin.jpg ‘Dunder Mifflin mission statement’ %}</p>
 
 <p>Bottomline, if your answers sound like <a href="https://dundermifflinpaper.com/">Dunder Mifflin</a>&rsquo;s mission statement you&rsquo;re doing it wrong.</p>
 
@@ -167,7 +167,7 @@
 
 <p>To be honest I didn&rsquo;t find much <em>new</em> knowledge on the meetings topic. But maybe that&rsquo;s only because I was familiar with the author&rsquo;s book on the subject: <a href="https://www.amazon.com/Death-Meeting-Leadership-Solving-Business/dp/0787968056">Death by meetings</a>.</p>
 
-<p> <img class="right-fill" src="/images/signatures/signature11.png" width="200" title="‘My signature’" ></p>
+<p> {% img right-fill /images/signatures/signature11.png 200 ‘My signature’ %}</p>
 <div class="footnotes">
 <hr/>
 <ol>

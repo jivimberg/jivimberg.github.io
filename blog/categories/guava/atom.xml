@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Guava | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/guava/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:18:17+00:00</updated>
+  <updated>2023-09-13T06:30:37+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -69,7 +69,7 @@ try {
 
 <p>Other <strong>stop strategies</strong> supported are: <a href="http://rholder.github.io/guava-retrying/javadoc/2.0.0/com/github/rholder/retry/StopStrategies.html#neverStop()">never stop</a>, <a href="http://rholder.github.io/guava-retrying/javadoc/2.0.0/com/github/rholder/retry/StopStrategies.html#stopAfterDelay(long,%20java.util.concurrent.TimeUnit)">stop after delay</a>.</p>
 
-<p> <img class="right-fill" src="/images/signatures/signature4.png" width="200" title="‘My signature’" ></p>
+<p> {% img right-fill /images/signatures/signature4.png 200 ‘My signature’ %}</p>
 ]]></content>
   </entry>
   
