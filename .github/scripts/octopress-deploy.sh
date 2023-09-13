@@ -17,6 +17,9 @@ execute bundle install
 execute gem update rake
 execute rake integrate
 
+# Setup github pages
+printf 'git@github.com:jivimberg/jivimberg.github.io.git' | rake setup_github_pages
+
 execute rake generate --trace
 
 execute mkdir -p ~/.ssh
@@ -28,5 +31,10 @@ execute chmod 600 ~/.ssh/known_hosts
 
 execute git config --global user.email "$git_user_email"
 execute git config --global user.name "$git_user_name"
+
+cd _deploy
+git pull origin master --rebase
+
+cd -
 
 execute rake deploy
