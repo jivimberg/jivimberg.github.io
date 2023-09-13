@@ -17,6 +17,9 @@ execute bundle install
 execute gem update rake
 execute rake integrate
 
+# Setup github pages
+printf 'git@github.com:jivimberg/jivimberg.github.io.git' | rake setup_github_pages
+
 execute rake generate --trace
 
 execute mkdir -p ~/.ssh
