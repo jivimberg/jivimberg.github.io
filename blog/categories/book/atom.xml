@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Book | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/book/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2023-09-12T20:50:49-07:00</updated>
-  <id>http://jivimberg.github.io/</id>
+  <link href="http://jivimberg.io/blog/categories/book/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-13T05:40:48+00:00</updated>
+  <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Book Recommendations: Shape Up]]></title>
-    <link href="http://jivimberg.github.io/blog/2019/09/15/book-recommendations-shape-up/"/>
+    <link href="http://jivimberg.io/blog/2019/09/15/book-recommendations-shape-up/"/>
     <updated>2019-09-15T10:51:31-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2019/09/15/book-recommendations-shape-up</id>
+    <id>http://jivimberg.io/blog/2019/09/15/book-recommendations-shape-up</id>
     <content type="html"><![CDATA[<p>I love reading about how people do creative work. Be it <a href="https://en.wikipedia.org/wiki/On_Writing:_A_Memoir_of_the_Craft">writing books</a> or <a href="http://the-witness.net/news/">designing video games</a>, there’s something magical about peeking behind the curtain and learning how the pros do their thing.</p>
 
 <p>Today I’m reviewing <a href="https://basecamp.com/shapeup">Shape Up</a>, a book about the process of writing software at Basecamp.</p>
@@ -121,9 +121,9 @@
   
   <entry>
     <title type="html"><![CDATA[Book Recommendations: The Advantage]]></title>
-    <link href="http://jivimberg.github.io/blog/2019/08/11/book-recommendations-the-advantage/"/>
+    <link href="http://jivimberg.io/blog/2019/08/11/book-recommendations-the-advantage/"/>
     <updated>2019-08-11T20:09:32-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2019/08/11/book-recommendations-the-advantage</id>
+    <id>http://jivimberg.io/blog/2019/08/11/book-recommendations-the-advantage</id>
     <content type="html"><![CDATA[<p>Today I’m reviewing <a href="https://read.amazon.com/kp/embed?asin=B006ORWT3Y&amp;preview=newtab&amp;linkCode=kpe&amp;ref_=cm_sw_r_kb_dp_CFpuDbJQRH32R">The Advantage</a> by <a href="https://twitter.com/patricklencioni">Patrick Lencioni</a>. A book written for leaders looking to build a healthy organization.</p>
 
 <!--more-->
@@ -212,9 +212,9 @@
   
   <entry>
     <title type="html"><![CDATA[Book Recommendations: Radical Candor]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/09/30/book-recommendations-radical-candor/"/>
+    <link href="http://jivimberg.io/blog/2018/09/30/book-recommendations-radical-candor/"/>
     <updated>2018-09-30T11:28:59-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/09/30/book-recommendations-radical-candor</id>
+    <id>http://jivimberg.io/blog/2018/09/30/book-recommendations-radical-candor</id>
     <content type="html"><![CDATA[<p>Last week I finished <a href="https://www.amazon.com/Radical-Candor-Kim-Scott/dp/B01MY574EE/ref=sr_1_1?ie=UTF8&amp;qid=1538332470&amp;sr=8-1&amp;keywords=radical+candor">Radical Candor</a> a book by <a href="https://www.kimmalonescott.com/">Kim Scott</a> about <em>how to be a good boss without being an asshole</em>. Here’s what I learned.</p>
 
 <!--more-->
@@ -273,9 +273,9 @@
   
   <entry>
     <title type="html"><![CDATA[Book Recommendations: Migrating to Cloud-Native Application Architectures]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/07/24/book-recommendations-migrating-to-cloud-native-application-architectures/"/>
+    <link href="http://jivimberg.io/blog/2018/07/24/book-recommendations-migrating-to-cloud-native-application-architectures/"/>
     <updated>2018-07-24T16:18:45-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/07/24/book-recommendations-migrating-to-cloud-native-application-architectures</id>
+    <id>http://jivimberg.io/blog/2018/07/24/book-recommendations-migrating-to-cloud-native-application-architectures</id>
     <content type="html"><![CDATA[<p>Complementing <a href="https://jivimberg.io/blog/2018/05/25/book-recomendations-migrating-to-microservices-databases/">my last book recommendation</a> on <em> Migrating to microservices databases</em> by <a href="https://twitter.com/yanaga">Edson Yanaga</a> now I present <a href="https://content.pivotal.io/ebooks/migrating-to-cloud-native-application-architectures"><em>Migrating to Cloud-Native Application Architectures</em></a> by <a href="@mstine">Matt Stine</a>.</p>
 
 <!--more-->
@@ -299,9 +299,9 @@
   
   <entry>
     <title type="html"><![CDATA[Book Recomendations: Migrating to Microservices Databases]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/05/25/book-recomendations-migrating-to-microservices-databases/"/>
+    <link href="http://jivimberg.io/blog/2018/05/25/book-recomendations-migrating-to-microservices-databases/"/>
     <updated>2018-05-25T07:32:00-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/05/25/book-recomendations-migrating-to-microservices-databases</id>
+    <id>http://jivimberg.io/blog/2018/05/25/book-recomendations-migrating-to-microservices-databases</id>
     <content type="html"><![CDATA[<p>Just finished reading <em> Migrating to microservices databases</em> by <a href="https://twitter.com/yanaga">Edson Yanaga</a>. If you can relate to the 3 nouns in the title then you’ll want to check it out.</p>
 
 <!--more-->

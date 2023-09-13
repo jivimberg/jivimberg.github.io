@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2023-09-12T20:50:49-07:00</updated>
-  <id>http://jivimberg.github.io/</id>
+  <link href="http://jivimberg.io/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-13T05:40:48+00:00</updated>
+  <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,76 +15,30 @@
   
   <entry>
     <title type="html"><![CDATA[Hello World]]></title>
-    <link href="http://jivimberg.github.io/blog/2023/09/12/hello-world/"/>
+    <link href="http://jivimberg.io/blog/2023/09/12/hello-world/"/>
     <updated>2023-09-12T10:04:02-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2023/09/12/hello-world</id>
-    <content type="html"><![CDATA[<!--more-->
-
-
-<p><img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature1.png" width="200" title="‘My signature’" ></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pulling an Inverse Conway Maneuver at Netflix]]></title>
-    <link href="http://jivimberg.github.io/blog/2023/09/04/the-inverse-conway-maneuver/"/>
-    <updated>2023-09-04T10:07:02-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2023/09/04/the-inverse-conway-maneuver</id>
-    <content type="html"><![CDATA[<p>When I joined Netflix Platform team, a few years ago, the Observability offering was composed of many different applications. There was Atlas for metrics, Edgar for tracing, Radar for Logs and Alerts, Lumen for dashboards, Telltale for app health, to name a few. It was a portfolio of about 20 different apps, ranging from high-level business specific tools to analyze streaming sessions to low-level tools for CPU profiling.</p>
+    <id>http://jivimberg.io/blog/2023/09/12/hello-world</id>
+    <content type="html"><![CDATA[<p>It&rsquo;s alive! 🎉
+whaaat!</p>
 
 <!--more-->
 
 
-<p>The Observability org was composed of three different teams of about a dozen ICs each. Teams had a mix of <em>front-end</em>, <em>back-end</em> and <em>full-stack</em> engineers, and there was one <em>designer</em> and one <em>PM</em> shared across the three teams. Each team was responsible for handful of applications, and it was common practice to form sub-teams . My team, for example owned Edgar and Telltale among a few other business specific tools.  [Talk about subteams inside each team]</p>
-
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2018-06-10/Darcula.png" width="720" title="`Darcula theme`" ></p>
-
-<p>It is no coincidence that this org structure produced <em>a set of independent apps</em> to achieve its goal of serving the observability needs of the company. The force at play here is known as Conway&rsquo;s Law</p>
-
-<blockquote><p>Organizations, who design systems, are constrained to produce designs which are copies of the communication structures of these organizations. <em>Melvin E. Conway</em></p></blockquote>
-
-<p>In true Netflix fashion we operated as highly aligned, loosely coupled teams with a high level of independence. ICs owned the roadmap (which was aligned with the org&rsquo;s goals) and had final say in all technology and architecture decisions. Teams owned the full software lifecycle for each of the applications they maintained XXX</p>
-
-<p>[Talk about team independence. Different PR practices, different deployment strategy, testing, support hour, different tech stacks, different ticketing system, etc.]</p>
-
-<p><img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature1.png" width="200" title="‘My signature’" ></p>
-
-<hr />
-
-<p>“inverse Conway maneuver” (or reverse Conway maneuver), whereby an organization focuses on organizing team structures to match the architecture they want the system to exhibit rather than expecting teams to follow a mandated architecture design.10 — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=505">505</a> ^ref-26718</p>
-
-<p>“If the architecture of the system and the architecture of the organization are at odds, the architecture of the organization wins.” — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=602">602</a> ^ref-30562</p>
-
-<p>Communication paths (along formal reporting lines or not) within an organization effectively restrict the kinds of solutions that the organization can devise. — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=612">612</a> ^ref-39678</p>
-
-<p>There is a logical implication of Conway’s law here, in the words of Ruth Malan: “if we have managers deciding &hellip; which services will be built, by which teams, we implicitly have managers deciding on the system architecture.” — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=696">696</a> ^ref-4372</p>
-
-<p>(This makes me think bout hoa observability tem is designed to achieve the explore gol but not the bbckend unification through wide events. Which in my opinion is what we should be investing in, instead of just combining signAls on the front end.)</p>
-
-<p>One key implication of Conway’s law is that not all communication and collaboration is good. Thus it is important to define “team interfaces” to set expectations around what kind of work requires strong collaboration and what doesn’t. Many organizations assume that more communication is always better, but this is not really the case. — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=713">713</a> ^ref-5352</p>
-
-<p>“managers should focus their efforts on understanding the causes of unaddressed design interfaces &hellip; and unpredicted team interactions &hellip; across modular systems.” — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=717">717</a></p>
-
-<p>Fast flow requires restricting communication between teams. Team collaboration is important for gray areas of development, where discovery and expertise is needed to make progress. But in areas where execution prevails—not discovery—communication becomes an unnecessary overhead. — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=797">797</a> ^ref-42424</p>
-
-<p>The danger of allowing multiple teams to change the same system or subsystem is that no one owns either the changes made or the resulting mess. However, when a single team owns the system or subsystem, and the team has the autonomy to plan their own work, then that team can make sensible decisions about short-term fixes with the knowledge that they will be removing any dirty fixes in the next few weeks. — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=906">906</a> ^ref-8835
-(This is why ownership is important)</p>
-
-<p>Instead, teams should view themselves as stewards or caretakers as opposed to private owners. Think of code as gardening, not policing. — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=915">915</a> ^ref-65338</p>
+<p><img class="right-fill" src="http://jivimberg.io/images/signatures/signature1.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[On Graceful Degradation of Service]]></title>
-    <link href="http://jivimberg.github.io/blog/2023/08/14/on-graceful-degradation-of-service/"/>
+    <link href="http://jivimberg.io/blog/2023/08/14/on-graceful-degradation-of-service/"/>
     <updated>2023-08-14T20:29:04-03:00</updated>
-    <id>http://jivimberg.github.io/blog/2023/08/14/on-graceful-degradation-of-service</id>
+    <id>http://jivimberg.io/blog/2023/08/14/on-graceful-degradation-of-service</id>
     <content type="html"><![CDATA[<p>This is the door to my in-laws’ apartment.</p>
 
 <!--more-->
 
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2023-08-15/door.jpg" width="450"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2023-08-15/door.jpg" width="450"></p>
 
 <p>You can safely ignore the puppy; it’s only there for SEO purposes. Focus instead on that thing on the wall, marked by the orange arrow. That is a motion-sensor light switch, the kind that turns the light on when you walk by. Only this one doesn’t because it works like shit. You must wave your hand in front of it, almost touching it, for the lights to come on.</p>
 
@@ -96,11 +50,11 @@
 
 <p>Let’s illustrate this with an example. Not too long ago, Google launched their <a href="https://support.google.com/mail/answer/9116836?hl=en&amp;co=GENIE.Platform%3DDesktop">Smart Compose</a> feature for Gmail. The way it works is you start writing your email and suddenly a grayed-out text appears, trying to guess your next few words. If you like the suggestion, you press <code>tab</code>, and the caret jumps to the end of the line saving you a few keystrokes and leaving you wondering what sort of witchcraft Google is using to read your mind.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2023-08-15/gmail-smart-compose.gif"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2023-08-15/gmail-smart-compose.gif"></p>
 
 <p>Now, Google could have designed this feature in many different ways. It could, for example, open a popup menu with multiple options letting the user select the best one from the list the way <a href="https://presage.sourceforge.io/">this tool</a> does:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2023-08-15/gprompter.jpg"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2023-08-15/gprompter.jpg"></p>
 
 <p>This approach might seem more powerful at first glance because it gives the user multiple options instead of just one. But it has a huge disadvantage: it disrupts the user workflow. Picture this: You’re redacting an essay. You think of a sentence and start writing. Midway through a menu pops up designed to look like it’s on top of what you’re doing. Your hands stop typing. Your eyes dart through the popup content, read the first one, jump to the next line, read the second one, etc. You consider all the options and decide to go with the 4th one. Your hands jump to the arrow keys, and you click click click until the one you want is highlighted, then click once more to select it. All of this happens in a matter of milliseconds. And yet it is enough to break your flow. By contrast, Google’s design, users are offered a single option presented inline, as if the text were already written. With the grayed-out text shown in our visual pathway, the eyes naturally flow to the end of the sentence. We can accept the suggestion with just a single keystroke; if we do, our eyes are already in the right place to continue writing.</p>
 
@@ -110,26 +64,26 @@
 
 <p>Instead, we should have emulated the guy that installed that motion sensor in my in-laws' apartment. Rather than introducing a whole new tool, present whatever insight we can gather as part of the existing user workflow. For example, if a developer receives an alert from a failing metric on Service A, we could include any other metrics we think might be related in that same alert. Enriching the alert with additional context giving users a hint on where to look next. Or if they’re looking at a dashboard and notice an anomalous metric, we could then surface a message saying: “Hey, by the way, Service B is also failing in a similar way; you may want to check it”.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2023-08-15/grafana_clippy.png" width="700">
+<p><img class="center" src="http://jivimberg.io/images/posts/2023-08-15/grafana_clippy.png" width="700">
 <em class="img-caption"> What if Clippy was the peak of UX design? </em></p>
 
 <p>Instead of adopting an <em>“If you build it, they will come”</em> approach we should have <a href="https://medium.com/mule-design/meeting-users-where-they-are-624bc0caa83a">met users where they were at</a>. Presenting key insights in the context of their troubleshooting session and letting them jump to the new tool if they want to dig deeper. <strong>A system built this way would degrade gracefully</strong>: If the correlation service is down or the suggestion is not good, users can still keep troubleshooting the same way they do today.</p>
 
-<p><img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
+<p><img class="right-fill" src="http://jivimberg.io/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[How Platform Teams Get Shit Done]]></title>
-    <link href="http://jivimberg.github.io/blog/2023/07/28/how-platform-teams-get-shit-done/"/>
+    <link href="http://jivimberg.io/blog/2023/07/28/how-platform-teams-get-shit-done/"/>
     <updated>2023-07-28T00:43:59-03:00</updated>
-    <id>http://jivimberg.github.io/blog/2023/07/28/how-platform-teams-get-shit-done</id>
+    <id>http://jivimberg.io/blog/2023/07/28/how-platform-teams-get-shit-done</id>
     <content type="html"><![CDATA[<p><a href="https://thepete.net/">Pete Hodgson</a> explored the different ways in which a Platform team works with other teams to get shit done in <a href="https://martinfowler.com/articles/platform-teams-stuff-done.html">this article</a>. I thought it was interesting to see how collaboration changes based on the type of work, so I put together this visual summary to compare and contrast each type of interaction.</p>
 
 <!--more-->
 
 
-<p><a href="http://jivimberg.github.io/images/posts/2023-07-28/how-platform-teams.png"><img class="center" src="http://jivimberg.github.io/images/posts/2023-07-28/how-platform-teams.png" width="600"></a>
+<p><a href="http://jivimberg.io/images/posts/2023-07-28/how-platform-teams.png"><img class="center" src="http://jivimberg.io/images/posts/2023-07-28/how-platform-teams.png" width="600"></a>
 <em class="img-caption">Click image to enlarge</em></p>
 
 <p>I added a few things here and there, but most of the stuff is taken from the <a href="https://martinfowler.com/articles/platform-teams-stuff-done.html">original article</a>, so if you care about this topic I recommend you check it out!</p>
@@ -138,15 +92,15 @@
 
 <p>I also included a section on how Google does Large-Scale Changes (LSC). They created a tool that allows anybody to submit Large-Scale Changes that are applied across the whole codebase. They advocate for the approach of centralizing the migration, to the point where most changes are reviewed by a single expert, and local teams hold no veto power over the LSC. They rely on code analysis and transformation tools to write the LSC and have a test infrastructure to automatically run all tests that a given change might affect in an efficient manner. To read more about their approach refer to <a href="https://www.amazon.com/Software-Engineering-Google-Lessons-Programming/dp/1492082791">Software Engineering at Google</a> Chapter 14.</p>
 
-<p><img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature7.png" width="200" title="‘My signature’" ></p>
+<p><img class="right-fill" src="http://jivimberg.io/images/signatures/signature7.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Pivot Tracing]]></title>
-    <link href="http://jivimberg.github.io/blog/2022/02/14/pivot-tracing/"/>
+    <link href="http://jivimberg.io/blog/2022/02/14/pivot-tracing/"/>
     <updated>2022-02-14T23:02:52-08:00</updated>
-    <id>http://jivimberg.github.io/blog/2022/02/14/pivot-tracing</id>
+    <id>http://jivimberg.io/blog/2022/02/14/pivot-tracing</id>
     <content type="html"><![CDATA[<p>Pivot Tracing lets users define arbitrary metrics over trace data at runtime. It does so by combining two powerful techniques:</p>
 
 <ol>
@@ -162,7 +116,7 @@
 
 <p>Say we have an instrumented system we want to troubleshoot:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2022-02-14/pt1.jpg" width="700"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/pt1.jpg" width="700"></p>
 
 <p>The first step is to define <strong>Tracepoints</strong> ⓵. Tracepoints are pointers to the source code where the code will be instrumented to collect metrics. They are instructions on <em>where</em> and <em>how</em> to modify the system to extract the required information. You can think of them as <a href="https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/aop.html"><em>pointcuts</em> from aspect-oriented programming</a>. They can refer to any arbitrary interface or method signature or be inserted at specific line numbers.</p>
 
@@ -172,7 +126,7 @@
 
 <p>Tracepoints are created by someone with good system knowledge (such as developers or operators). They <strong>define the vocabulary users will use to write the queries</strong>.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2022-02-14/pt2.jpg" width="700"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/pt2.jpg" width="700"></p>
 
 <p>The next step is to write a query using the terms introduced by the tracepoints ⓶. A query might look something like this:</p>
 
@@ -202,25 +156,25 @@
 
 <p>The Frontend creates these Advice and notifies the PT Agents to install them in the corresponding Tracepoints ⓸.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2022-02-14/pt3.jpg" width="700"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/pt3.jpg" width="700"></p>
 
 <p>This is done by <em>weaving</em> generated code that gets executed every time a request passes through the Tracepoint.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2022-02-14/weaving.png" width="700"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/weaving.png" width="700"></p>
 
 <p>For the query shown above, Advice A1 and A2 would be generated:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2022-02-14/generatedAdvices.png" width="700"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/generatedAdvices.png" width="700"></p>
 
 <p>To do the happens-before join required by the query shown above Pivot Tracing needs to propagate the variables captured at <code>ClientProtocols Tracepoint</code> to the  <code>DataNodeMetrics Tracepoint</code>. This is done through something called <em>baggage</em> (if you’re familiar with <a href="https://opentelemetry.io/docs/concepts/signals/baggage/">OTel’s baggage</a> it’s basically the same thing).  When the request gets to the <code>ClientProtocols Tracepoint</code>, the Advice A1 <em>Observes</em> the variables and <em>Packs</em> them as part of the request baggage ⓹. Later, when the code gets to the <code>DataNodeMetrics Tracepoint</code>, the Advice A2 <em>Unpacks</em> the variables, <em>Observes</em> the value of <code>delta</code>, and <em>Emits</em> a joined tuple ⓺.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2022-02-14/pt4.jpg" width="700"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/pt4.jpg" width="700"></p>
 
 <p>The tuples emitted by <code>DataNodeMetrics Tracepoint</code> ⓺ are aggregated locally and then streamed to the client over the message bus ⓻.</p>
 
 <p>Finally, Pivot Tracing Frontend uses these tuples to answer the user’s query ⓼. And that’s how the whole thing works.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2022-02-14/pt5.jpg" width="700"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/pt5.jpg" width="700"></p>
 
 <h2>The power of Happens-Before</h2>
 
@@ -230,7 +184,7 @@
 
 <p>Pivot Tracing not only supports this, but it also does it in a cost-efficient manner by only propagating just enough context to answer a given user query. This is only possible thanks to their use of Dynamic Instrumentation.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2022-02-14/happens-before.jpeg" width="500"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/happens-before.jpeg" width="500"></p>
 
 <p>So far, we’ve used a straightforward request path for our examples: Service A -> Service B. It’s worth noting that the requests call graphs tend to be much more complex in real life. The tracepoints the user might be interested in querying could be N levels removed. The image above shows which tuples are captured by each query based on the execution graph.</p>
 
@@ -265,7 +219,7 @@
 
 <p>This is a typical example of a happens-before query. The clause <code>cl -&gt; incr</code> means we only care about <code>incr</code> events if the request first passes through <code>cl</code>. A user without knowledge of how Pivot Tracing works might think that the cost of this query is proportional to the number of requests it matches, but this would be completely wrong. To answer this query, Pivot Tracing must pack <em>Advice</em> in all requests that go through <code>cl</code>. This baggage is then transmitted across <em>all</em> services downstream from <code>cl</code>. This needs to be done because the system doesn’t know a priori which of those requests will then go through <code>incr</code>.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2022-02-14/instrumentation-comp.jpeg" width="700"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/instrumentation-comp.jpeg" width="700"></p>
 
 <p>Any given query might affect the baggage content passed across <em>N</em> number of services, and there’s no way of knowing which services will be affected at query time.</p>
 
@@ -277,15 +231,15 @@
 
 <p>Despite all these pitfalls, I still believe Dynamic Instrumentation is a valuable tool and, I’d love to see it adopted in mainstream distributed tracing frameworks. The ability to write queries about any part of the code without having to manually instrument it’s just too good to pass on. We shouldn’t treat it as the primary instrumentation strategy but as a secondary method of answering complex, more specific queries crafted to troubleshoot particular incidents. Engineers designing these tools need to take extra care and put the proper safeguards in place to avoid users shooting themselves in the foot.</p>
 
-<p><img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
+<p><img class="right-fill" src="http://jivimberg.io/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Adding Context to Extension Functions]]></title>
-    <link href="http://jivimberg.github.io/blog/2021/08/21/adding-context-to-extension-functions/"/>
+    <link href="http://jivimberg.io/blog/2021/08/21/adding-context-to-extension-functions/"/>
     <updated>2021-08-21T20:24:14-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2021/08/21/adding-context-to-extension-functions</id>
+    <id>http://jivimberg.io/blog/2021/08/21/adding-context-to-extension-functions</id>
     <content type="html"><![CDATA[<p>Extension functions are great! But if you define them all over the place, it can get confusing pretty quickly. So here’s a cool idiom to limit extension function usage to a specific context.</p>
 
 <!--more-->
@@ -450,7 +404,7 @@ infix fun String?.and(other: String?): String? {
 
 <p><code>String?</code> is a pretty basic type, and <code>and()</code> is a pretty common function name. Months from now, somebody will be writing some code and IntelliJ will suggest this:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-08-21/wrong-suggestion.png"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-08-21/wrong-suggestion.png"></p>
 
 <p>😱 Watch out unsuspecting coder! That <code>and</code> function doesn&rsquo;t do what you think it does!</p>
 
@@ -565,7 +519,7 @@ fun main() {
 
 <p>That’s all for today! If you liked this approach, make sure to check <a href="https://proandroiddev.com/an-introduction-context-oriented-programming-in-kotlin-2e79d316b0a2">An introduction to context-oriented programming in Kotlin</a> and <a href="https://github.com/Kotlin/KEEP/blob/context-receivers/proposals/context-receivers.md#contextual-functions-and-property-accessors">KEEP-259</a> for what might come in future versions of Kotlin.</p>
 
-<p><img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature13.png" width="200" title="‘My signature’" ></p>
+<p><img class="right-fill" src="http://jivimberg.io/images/signatures/signature13.png" width="200" title="‘My signature’" ></p>
 
 <p><script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"\></p>
 ]]></content>
@@ -573,9 +527,9 @@ fun main() {
   
   <entry>
     <title type="html"><![CDATA[Sifter: Scalable Sampling for Distributed Tracing]]></title>
-    <link href="http://jivimberg.github.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces/"/>
+    <link href="http://jivimberg.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces/"/>
     <updated>2021-07-28T08:39:37-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces</id>
+    <id>http://jivimberg.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces</id>
     <content type="html"><![CDATA[<p>Distributed tracing can be ridiculously expensive if you try to trace a hundred percent of requests. A common technique to reduce costs is to sample only a small portion of the traffic. But naive sampling techniques like <em>uniform sampling</em> will inevitably capture more common-case executions and might miss the more interesting edge cases. Instead, <strong><a href="https://dl.acm.org/doi/10.1145/3357223.3362736">Sifter’s approach</a> is to bias sampling decisions towards outliers and anomalous traces.</strong> This way, anomalous traces have a higher chance of being sampled, and the more uninteresting traces are discarded.</p>
 
 <!--more-->
@@ -585,17 +539,17 @@ fun main() {
 
 <p>Sifter uses the incoming stream of traces to <strong>builds a model that approximates the system’s common-case behavior</strong>. To make a sampling decision, it checks how well the model matches the incoming trace. Sampling is biased toward traces that are <em>not</em> well approximated (outliers and anomalous traces).</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-07-28/full-pipeline.png"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-07-28/full-pipeline.png"></p>
 
 <h3>The model</h3>
 
 <p>Sifter uses a 2-layer neural network that models the probability of an event occurring given its immediate predecessors and successors. To create this model, they first extract all <em>N</em>-length paths for each trace.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-07-28/paths.png"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-07-28/paths.png"></p>
 
 <p>For a given path (p_0<em>, …, p_N</em>), the neural network predicts the probability of p_N/2_ given its surrounding events p_0<em>, … , p_N</em> (excluding  p_N/2_). The model gives better predictions for paths that are seeing more frequently in the input dataset.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-07-28/neural-network.png"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-07-28/neural-network.png"></p>
 
 <h3>Sampling</h3>
 
@@ -603,11 +557,11 @@ fun main() {
 
 <p>The <em>loss</em> is then weighted against the loss of the <em>k</em> most recent traces.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-07-28/formula-loss.png"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-07-28/formula-loss.png"></p>
 
 <p>If all traces have the same <em>loss</em>, then the trace is sampled uniformly at random with probability <em>α</em>. Otherwise, the probability is calculated using this formula:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-07-28/formula-sampling.png"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-07-28/formula-sampling.png"></p>
 
 <p>Traces with the lowest <em>loss</em> will have a sampling probability of zero. Traces with the highest loss will have the highest sampling probability.</p>
 
@@ -629,15 +583,15 @@ fun main() {
 </ul>
 
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Google Docs Could Be So Much Better!]]></title>
-    <link href="http://jivimberg.github.io/blog/2021/03/07/google-docs-could-be-so-much-better/"/>
+    <link href="http://jivimberg.io/blog/2021/03/07/google-docs-could-be-so-much-better/"/>
     <updated>2021-03-07T18:50:06-08:00</updated>
-    <id>http://jivimberg.github.io/blog/2021/03/07/google-docs-could-be-so-much-better</id>
+    <id>http://jivimberg.io/blog/2021/03/07/google-docs-could-be-so-much-better</id>
     <content type="html"><![CDATA[<p>Lots of businesses run on Google Docs. It&rsquo;s how we write memos, define strategies, discuss proposals, document decisions, write tutorials, and plenty of other things.</p>
 
 <p>Google Docs is a fantastic piece of technology. I almost can&rsquo;t imagine how we worked before it (<em>productStrategy-Jun-2004-version13.docx</em> anyone?). And yet, I sometimes feel like it could be so much more! Like we&rsquo;ll look back in 10 years and think: <em>“My god! I can’t believe we were working that way!”</em>. Improving Docs has the potential of completely overhauling the way information flows through an organization. Here are some ideas on how Google could improve it.</p>
@@ -649,7 +603,7 @@ fun main() {
 
 <p>It’s early in the morning, and you’re checking your emails. You notice your boss shared the new strategy memo. You still have 15’ minutes to your next meeting, so you think: <em>“I’ll catch up on this one real quick”</em>. You start reading and, in the first paragraph, you found a reference to another doc you were not aware of. So you open the link on a new tab and keep going. As you tread through the doc, you find more and more links to review. Before you know your browser looks like this:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/tabs.png" width="700"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/tabs.png" width="700"></p>
 
 <p>What you thought would take five minutes ends up being an endeavor that takes you the whole morning.</p>
 
@@ -657,23 +611,23 @@ fun main() {
 
 <p>Wouldn’t it be nice if Docs could automagically generate that summary by using a bit of AI? We could read the auto-generated summary and decide if we need to go deeper down the rabbit hole. The experience would be similar to the <a href="https://www.youtube.com/watch?v=AAeloLXO8T0">Link Preview feature</a> released in 2020.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/link-preview.gif"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/link-preview.gif"></p>
 
 <h2>Discovery and Navigation</h2>
 
 <p>Google Docs favors a filesystem-like organization. You can sort your docs into folders and browse them in a tree view, just like you would navigate files on your local machine.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/folders.png" width="200"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/folders.png" width="200"></p>
 
 <p>It’s a well-known pattern that we are all familiar with, and it works great when there’s a centralized authority dictating how things are supposed to be organized. But that’s not how knowledge works. Our brain likes to connect thoughts and ideas in the most unintuitive ways, making connections that at first would look random. Some note-taking apps recognized this need and built experiences around the concept of navigating documents based on how they relate to each other. If the idea sounds strange, just think about how web pages work by links that point to other pages. Imagine if we could capture this relationship <strong>on both ends, and list all outgoing and incoming connections</strong>. This is exactly how <a href="https://collectednotes.com/blog/zettelkasten">Collected Notes</a> works.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/collected-notes.jpeg" width="650"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/collected-notes.jpeg" width="650"></p>
 
 <p>This paradigm lets us navigate the relationship in both directions! Let’s say we wrote a thoughtful memo on <a href="https://jivimberg.io/blog/2020/05/09/the-whiteboard-interview-is-broken/">”why we should stop asking people to invert a binary tree as part of the interview process”</a>. People seemed to like it and start sharing it around. Soon it gains traction, and everybody in the company is talking about it. With bi-directional links, we’d be able to see how our ideas are referenced on other documents. We can keep an eye on any proposals (or refutals) that are inspired by the original post.</p>
 
 <p>From these links, we could create new visualizations to represent how documents relate to each other. This can help us identify the most popular docs at a glance and discover patterns like high-level strategy docs linked by more specific implementation docs. <a href="https://roamresearch.com/">Roam Research</a> has a view called <a href="https://roamresearch.com/#/app/help/graph">“Graph Overview”</a> to serve this purpose. Each dot represents a note, and each line is a reference. The bigger the dot, the more connections it has.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/roam.png" width="500"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/roam.png" width="500"></p>
 
 <h2>Consuming content</h2>
 
@@ -684,33 +638,33 @@ fun main() {
 
 <p>To comprehend something more easily, we need to work with the content. We need to highlight important parts, scratch things out, scribble notes and comments on the margins, etc. In other words, we need to pour our ideas on the doc and make it our own. My favorite app to do this kind of interactive reading is <a href="https://www.liquidtext.net/">LiquidText</a>, it works especially well on an iPad with the Apple Pencil.  I use it to read docs, articles, papers, and sometimes even books.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/liquid-text.jpeg" width="700"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/liquid-text.jpeg" width="700"></p>
 
 <p>Imagine if we could get a similar experience <em>within</em> Google Docs. What if we could have a private view of the doc where we’d be able to mark it and comment it to our heart’s content. Of course, you can get halfway there today by copying the doc before reading it, but that’d totally break the collaborative features since the copy will never get the updates/comments the original will receive.</p>
 
 <p>The fact that these notes would be private doesn’t mean that we can’t mine them for insight. It’d be pretty easy to leverage the private highlights to power the AI summary mentioned above, or to provide an auto-highlighting feature alla Kindle.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-03-29/highlight.jpeg" width="500"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/highlight.jpeg" width="500"></p>
 
 <hr />
 
 <p>What do you think? Do these features sound helpful to you? I’d love to hear <em>your ideas</em> on how to improve Docs. Drop me a comment below  👇</p>
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature6.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature6.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[About Deploying on Fridays]]></title>
-    <link href="http://jivimberg.github.io/blog/2021/01/22/about-deploying-on-fridays/"/>
+    <link href="http://jivimberg.io/blog/2021/01/22/about-deploying-on-fridays/"/>
     <updated>2021-01-22T08:55:35-08:00</updated>
-    <id>http://jivimberg.github.io/blog/2021/01/22/about-deploying-on-fridays</id>
+    <id>http://jivimberg.io/blog/2021/01/22/about-deploying-on-fridays</id>
     <content type="html"><![CDATA[<p>Common knowledge says that you don’t deploy on Friday if you want to have a peaceful weekend. Yet, some people will tell you that if you’re not comfortable deploying every day of the week, you’re doing it wrong. They’ll say that deploying shouldn’t be scary and that you probably don’t have enough tests. So, which one is it?</p>
 
 <!--more-->
 
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-01-22/homer-deploying.png" width="350"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-01-22/homer-deploying.png" width="350"></p>
 
 <h2>The problem with Fridays</h2>
 
@@ -724,7 +678,7 @@ fun main() {
 
 <p>To understand how to combat the danger of Fridays, let’s consider the <em>software lifecycle</em>. That is, the things that happen between <em>“I have to implement feature X”</em> and  <em>“<em>people using it in production</em>”</em>.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-01-22/software-lifecycle1.jpeg" width="700"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-01-22/software-lifecycle1.jpeg" width="700"></p>
 
 <p>From the developer&rsquo;s point of view, when would you say that feature X is <em>Done</em>? Is it once the branch is merged? Is it after the code is deployed? The answer depends on what your team considers the developer’s responsibility. On teams doing <a href="https://netflixtechblog.com/full-cycle-developers-at-netflix-a08c31f83249">Full Cycle Development</a>, the same person writing the code is the one that will test, operate and deploy the service. Which means that <strong>the feature can only be marked as Done once it’s being used in production.</strong></p>
 
@@ -736,13 +690,13 @@ fun main() {
 
 <p>The software lifecycle diagram shown above is an over-simplification. In reality, the flow is never a straight line. Every step can send you back to a previous step: Started coding and found a flaw in the design, go back to design  🔙, a test started failing, go back to develop 🔙, etc.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-01-22/software-lifecycle2.jpeg" width="700"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-01-22/software-lifecycle2.jpeg" width="700"></p>
 
 <p><a href="https://martinfowler.com/articles/developer-effectiveness.html">The secret sauce to a highly efficient team is keeping these feedback loops as short as possible</a>. If your tests take thirty minutes to run, by the time you see the failure, you’re already deep in some other task (or worse, on your 9th YouTube video).</p>
 
 <p>Deploying is no different. If it takes months for your code to reach production, by the time your users start using your new feature (and uncovering bugs), you have already moved on to something else. You no longer have the context fresh on your mind, and you barely recall the details and the design decisions taken at the time (which is why <a href="https://jivimberg.io/blog/2020/12/26/documenting-decisions/">you should be documenting those decisions</a>).</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-01-22/software-lifecycle3.jpeg" width="700"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-01-22/software-lifecycle3.jpeg" width="700"></p>
 
 <h2>How to make deployments less scary</h2>
 
@@ -752,7 +706,7 @@ fun main() {
 
 <p>And the benefits don’t end there! Smaller changes also mean shorter code reviews. It’s easier for developers reviewing your code to spot bugs in a small PR than in a huge one that modifies hundreds of lines. This is another way in which smaller changes bring better code quality.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2021-01-22/huge-pr.jpeg" width="400"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-01-22/huge-pr.jpeg" width="400"></p>
 
 <p>Last but not least, smaller PRs produce short-lived branches, reducing the number of merge conflicts one has to deal with.</p>
 
@@ -794,7 +748,7 @@ fun main() {
 
 <p>Many of the ideas in this post are inspired by the podcasts <a href="https://www.heavybit.com/library/podcasts/o11ycast/">Oll1cast</a> and <a href="https://maintainable.fm/">Maintainable</a>, as well as the books <a href="https://www.amazon.com/Software-Engineering-Google-Lessons-Programming/dp/1492082791">Software Engineering at Google</a> and <a href="https://www.oreilly.com/library/view/distributed-tracing-in/9781492056621/">Distributed Tracing in Practice</a>. If you enjoy these topics, go check them out.</p>
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature7.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature7.png" width="200" title="‘My signature’" ></p>
 <div class="footnotes">
 <hr/>
 <ol>
@@ -808,9 +762,9 @@ fun main() {
   
   <entry>
     <title type="html"><![CDATA[Documenting Decisions]]></title>
-    <link href="http://jivimberg.github.io/blog/2020/12/26/documenting-decisions/"/>
+    <link href="http://jivimberg.io/blog/2020/12/26/documenting-decisions/"/>
     <updated>2020-12-26T13:51:06-08:00</updated>
-    <id>http://jivimberg.github.io/blog/2020/12/26/documenting-decisions</id>
+    <id>http://jivimberg.io/blog/2020/12/26/documenting-decisions</id>
     <content type="html"><![CDATA[<p>It’s Monday morning. You’re sitting at your desk with your steaming cup of Joe, ready to sink your teeth into that new feature you have to develop. The <code>git pull</code> downloads months worth of changes, and you dive into the code. Piece by piece, you start building a mental model of the system, trying to make sense of the different components. But something doesn’t feel right. Why was it built this way? It feels weird, it feels so obviously wrong, so poorly designed, so suboptimal.</p>
 
 <p>You realize you need help. Whoever wrote this mess should be able to provide some context. You run <code>git blame</code> and your own name hits you in the face like a brick. You start thinking that maybe it’s no so wrong. That you probably had your reasons. If you could only go back in time and ask your past self…</p>
@@ -830,7 +784,7 @@ fun main() {
 
 <p>An Architecture Decision Log can help us capture the context, motivations, and assumptions behind a decision. We are basically doing a brain dump of all the things that were considered before making a final call on something.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-12-26/architecture.gif" width="500"></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-12-26/architecture.gif" width="500"></p>
 
 <p>If one thing is constant about developing software is change. New features are requested, the app grows and it has to support an increasing number of requests, people leave the team and new developers join. By keeping an Architecture Decision Log, we capture the thought process that goes into a decision, <strong>so that future maintainers can understand why something is the way it is, and use this information to evaluate new changes.</strong>  Maybe an assumption made about how users would use the app turned out not to be true. Or perhaps a requirement about the size of stored data has changed, and the existing database can’t scale accordingly.</p>
 
@@ -877,15 +831,15 @@ fun main() {
 
 <hr />
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Show What's Important, Hide the Rest]]></title>
-    <link href="http://jivimberg.github.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest/"/>
+    <link href="http://jivimberg.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest/"/>
     <updated>2020-09-07T18:05:00-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest</id>
+    <id>http://jivimberg.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest</id>
     <content type="html"><![CDATA[<p>What we include in a test is as important as what we leave out. Having the right amount of information helps us understand what the test is doing at a glance.</p>
 
 <!--more-->
@@ -899,17 +853,17 @@ fun main() {
 </ol>
 
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-09-07/restaurantTestsBefore.png" width="700" title="‘Repetitive tests’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-09-07/restaurantTestsBefore.png" width="700" title="‘Repetitive tests’" ></p>
 
 <p>This works fine, but writing a new <code>Recipe</code> for every single test gets repetitive pretty fast. More importantly, most lines of the test are spent creating the <code>Recipe</code> object. By having to spell out every single property, we lose track of what’s important for each specific test.</p>
 
 <p>Luckily, we can use <a href="https://kotlinlang.org/docs/reference/functions.html#default-arguments">Kotlin default arguments</a> to make the tests better. We could introduce default values directly on the <code>Recipe</code> class, but that would mean we’d have to pick sensible defaults for Recipes in production. We probably don’t want to allow for this flexibility, as we want to force users to specify those properties for each recipe defined. Instead, we will write a <a href="https://phauer.com/2018/best-practices-unit-testing-kotlin/#use-helper-functions-with-default-arguments-to-ease-object-creation"><em>helper function</em></a> with default arguments to handle the <code>Recipe</code> creation. We’ll make it <code>private</code> so that it’s only accessible in the test class.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-09-07/helperFunction.png" width="700" title="‘Helper function’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-09-07/helperFunction.png" width="700" title="‘Helper function’" ></p>
 
 <p>Now we can re-write our tests to make use of the helper function:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-09-07/restaurantTestsAfter.png" width="700" title="‘Improved tests’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-09-07/restaurantTestsAfter.png" width="700" title="‘Improved tests’" ></p>
 
 <p>On each test, we only specify the property that the test cares about and leave out all the other ones. This way, somebody glancing at the test can immediately identify what we’re checking, and it’s not distracted by the details on how to create a <code>Recipe</code> object.</p>
 
@@ -917,7 +871,7 @@ fun main() {
 
 <p>We could have written the test for vegan recipes without specifying any property, and it would still pass.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-09-07/notExplicit.png" width="700" title="‘Not explicit enough tests’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-09-07/notExplicit.png" width="700" title="‘Not explicit enough tests’" ></p>
 
 <p>By default <code>isVegan</code> is true, so we&rsquo;re not required to define it. However, <strong>we opted for explicitly specifying it in the test</strong>, just so that somebody reading the test would know that the value of <code>isVegan</code>  is important for this test. As an extra benefit, the test will not break if, in the future, somebody decides to change the default value for <code>isVegan</code>.</p>
 
@@ -925,15 +879,15 @@ fun main() {
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Reducing Non-determinism to Avoid Flaky Tests]]></title>
-    <link href="http://jivimberg.github.io/blog/2020/07/27/effective-testing-reducing-non-determinism/"/>
+    <link href="http://jivimberg.io/blog/2020/07/27/effective-testing-reducing-non-determinism/"/>
     <updated>2020-07-27T22:00:54-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2020/07/27/effective-testing-reducing-non-determinism</id>
+    <id>http://jivimberg.io/blog/2020/07/27/effective-testing-reducing-non-determinism</id>
     <content type="html"><![CDATA[<p>Flaky tests are those that randomly fail for no apparent reason. If you have a flaky test, you might re-run it, over and over, until it succeeds. If you have a <em>couple</em> of them, the chances of all passing at the same time are slim, so maybe you ignore the failures. You know, just this one time… Soon enough, you’re not paying attention to failures on this test suite. Congratulations! Your tests are now worthless.</p>
 
 <!--more-->
@@ -945,7 +899,7 @@ fun main() {
 
 <p>You&rsquo;ve probably seen the <a href="https://martinfowler.com/bliki/TestPyramid.html">Test Pyramid</a> before. Tests are classified by scope, and the recommendation is to favor tests with reduced scopes (i.e. Unit Tests).</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-31/TestingPyramid.jpg" width="700" title="‘Using data classes for assertions’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-31/TestingPyramid.jpg" width="700" title="‘Using data classes for assertions’" ></p>
 
 <p>At Google they came up with a new dimension: <em>Test Size</em><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Tests are grouped in categories <strong>based on the resources a test needs to run</strong> (memory, processes, time, etc.).</p>
 
@@ -961,7 +915,7 @@ fun main() {
 
 <p>How does this tie back to our crusade against flaky tests? Simple, <strong>the smaller the test, the more deterministic it’ll be.</strong> As a bonus perk, they also tend to be faster.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-31/TestSizes.jpg" width="700" title="‘Test sizes’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-31/TestSizes.jpg" width="700" title="‘Test sizes’" ></p>
 
 <p>Google went the extra mile and built infrastructure to enforce these constraints. For example, a test marked as <em>Small</em> would fail if it tried to do I/O.</p>
 
@@ -989,7 +943,7 @@ fun main() {
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
 <div class="footnotes">
 <hr/>
 <ol>
@@ -1003,9 +957,9 @@ fun main() {
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Expressive Assertions]]></title>
-    <link href="http://jivimberg.github.io/blog/2020/07/18/effective-testing-expressive-assertions/"/>
+    <link href="http://jivimberg.io/blog/2020/07/18/effective-testing-expressive-assertions/"/>
     <updated>2020-07-18T11:58:34-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2020/07/18/effective-testing-expressive-assertions</id>
+    <id>http://jivimberg.io/blog/2020/07/18/effective-testing-expressive-assertions</id>
     <content type="html"><![CDATA[<p>Using expressive assertions can help us figure out why a test fails without having to go through the code.</p>
 
 <!--more-->
@@ -1013,21 +967,21 @@ fun main() {
 
 <p>Let&rsquo;s start with an example. Here&rsquo;s a test making sure our recipe has tomatoes 🍅</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/badAssertion.png" width="700" title="‘A test with a non-descriptive assertion’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/badAssertion.png" width="700" title="‘A test with a non-descriptive assertion’" ></p>
 
 <p>At first glance, everything looks ok. The test passes, it is easy to read, and it follows <a href="https://jivimberg.io/blog/2020/07/10/effective-testing-test-structure/">the <em>”Given - When - Then”</em>  structure</a>.</p>
 
 <p>Some months go by, and one day our test starts failing.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/badAssertionOutput.png" width="700" title="‘The output of a test with a non-descriptive assertion’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/badAssertionOutput.png" width="700" title="‘The output of a test with a non-descriptive assertion’" ></p>
 
 <p>At this point, we&rsquo;ve probably forgotten everything about the recipe, and we’re not sure what’s causing the failure. <a href="https://jivimberg.io/blog/2020/07/05/effective-testing-use-descriptive-test-names/">The test name is not helping us much either</a>.</p>
 
 <p>To avoid this situation, we can include a message that will be displayed whenever the assertion fails.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/withMessage.png" width="700" title="‘Assertion with explicit message’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/withMessage.png" width="700" title="‘Assertion with explicit message’" ></p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/withMessageOutput.png" width="700" title="‘Output of a test with an assertion with explicit message’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/withMessageOutput.png" width="700" title="‘Output of a test with an assertion with explicit message’" ></p>
 
 <p>Now the failure is obvious. There is no 🍅 on the recipe. <strong>We can immediately tell what’s wrong without even looking at the test code.</strong> But we can do better…</p>
 
@@ -1035,13 +989,13 @@ fun main() {
 
 <p>Let&rsquo;s face it, writing this kind of detailed message for every assertion would be a pain in the ass. Fortunately, we don’t have to. Instead, <strong>we can use an <a href="https://blog.frankel.ch/comparison-assertion-libraries/">expressive assertion library</a> to do the heavy lifting for us.</strong> This is how our code would look like using <a href="https://strikt.io/">Strikt</a>:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/strikt.png" width="700" title="‘Example using Strikt’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/strikt.png" width="700" title="‘Example using Strikt’" ></p>
 
 <p>We&rsquo;re using <a href="https://kotlinlang.org/docs/reference/functions.html#infix-notation">Kotlin infix notation</a> to make the code more readable. This a stylistic decision, you don’t have to use it if you don’t like it.</p>
 
 <p>You might notice we&rsquo;re calling the <code>contains</code> method on the assertion itself. This is possible because Strikt can tell that the type we’re asserting on, is a <em>String</em>, and thus, it can provide methods explicitly tailored to Strings. This is what the error message would look like in this case:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/outputStrikt.png" width="700" title="‘Output of the basic Strikt example’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/outputStrikt.png" width="700" title="‘Output of the basic Strikt example’" ></p>
 
 <p><strong>Almost the same information we got from writing our own message, but without the boilerplate.</strong></p>
 
@@ -1049,33 +1003,33 @@ fun main() {
 
 <p>Here are some more examples of type-specific assertions:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/collectionAssertion.png" width="700" title="‘Collection specific assertions’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/collectionAssertion.png" width="700" title="‘Collection specific assertions’" ></p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/assertingExceptions.png" width="700" title="‘Asserting exceptions’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/assertingExceptions.png" width="700" title="‘Asserting exceptions’" ></p>
 
 <h2>Asserting on objects</h2>
 
 <p>When validating properties on objects, you might be tempted to write something like this:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/badObjectAssertions.png" width="700" title="‘Manually asserting properties on object’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/badObjectAssertions.png" width="700" title="‘Manually asserting properties on object’" ></p>
 
 <p>You can probably tell why this is bad. By the time we see the failure, we no longer have context on what property we’re asserting.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/objectAssertionOutput.png" width="700" title="‘Using data classes for assertions’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/objectAssertionOutput.png" width="700" title="‘Using data classes for assertions’" ></p>
 
 <p>Was it checking the <code>title</code>, the <code>author</code>, or something else?</p>
 
 <p>Instead, you can take advantage of the fact that Data Classes automatically get <code>equals</code> and <code>toString</code> implementations. So we can use an <code>assertEquals</code> and get a nice looking message showing us both instances.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/dataClasses.png" width="700" title="‘Using data classes for assertions’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/dataClasses.png" width="700" title="‘Using data classes for assertions’" ></p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/dataClassesOutput.png" width="700" title="‘Using data classes test output’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/dataClassesOutput.png" width="700" title="‘Using data classes test output’" ></p>
 
 <p>If we don&rsquo;t care about comparing all properties we can use <a href="https://strikt.io/wiki/traversing-subjects/">Strikt to assert only specific fields</a>:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/traversingObjects.png" width="700" title="‘Using Strikt to traverse objects on assertions’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/traversingObjects.png" width="700" title="‘Using Strikt to traverse objects on assertions’" ></p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-19/traversingObjectsOutput.png" width="700" title="‘Strikt object traversal test output’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/traversingObjectsOutput.png" width="700" title="‘Strikt object traversal test output’" ></p>
 
 <p>The <a href="https://strikt.io/wiki/assertion-styles/">block assertion style</a> means that even though the <em>title</em> assertion failed Strikt will still check for <em>page count</em> and <strong>it’ll provide output for all the assertions in the block.</strong></p>
 
@@ -1083,15 +1037,15 @@ fun main() {
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Test Structure]]></title>
-    <link href="http://jivimberg.github.io/blog/2020/07/10/effective-testing-test-structure/"/>
+    <link href="http://jivimberg.io/blog/2020/07/10/effective-testing-test-structure/"/>
     <updated>2020-07-10T23:53:38-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2020/07/10/effective-testing-test-structure</id>
+    <id>http://jivimberg.io/blog/2020/07/10/effective-testing-test-structure</id>
     <content type="html"><![CDATA[<p>One way to make sure your tests are readable is to have them all adhere to the same structure.</p>
 
 <!--more-->
@@ -1108,31 +1062,31 @@ fun main() {
 
 <p>For example:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-10/exampleJunit.png" width="700" title="‘Example of the proposed structure using JUnit’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-10/exampleJunit.png" width="700" title="‘Example of the proposed structure using JUnit’" ></p>
 
 <p>The comments explaining each section are optional, and can be omitted on trivial scenarios like the one shown here.</p>
 
 <p>Note how we use whitespace to clearly separate each section. Anybody familiar with the structure will be able to easily identify each section at a glance.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-10/testSections.jpg" width="700" title="‘Colored sections on test’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-10/testSections.jpg" width="700" title="‘Colored sections on test’" ></p>
 
 <p>Some testing libraries like <a href="https://github.com/kotest/kotest/">Kotest</a> support a style that already includes the <em>Given</em>, <em>When</em> and <em>Then</em> keywords, making the structure explicit.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-10/exampleKotest.png" width="700" title="‘Example of the proposed structure using Kotest’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-10/exampleKotest.png" width="700" title="‘Example of the proposed structure using Kotest’" ></p>
 
 <hr />
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature13.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature13.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Use Descriptive Test Names]]></title>
-    <link href="http://jivimberg.github.io/blog/2020/07/05/effective-testing-use-descriptive-test-names/"/>
+    <link href="http://jivimberg.io/blog/2020/07/05/effective-testing-use-descriptive-test-names/"/>
     <updated>2020-07-05T23:21:07-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2020/07/05/effective-testing-use-descriptive-test-names</id>
+    <id>http://jivimberg.io/blog/2020/07/05/effective-testing-use-descriptive-test-names</id>
     <content type="html"><![CDATA[<p>Picking good test names can help us identify what&rsquo;s wrong with our code when something fails.</p>
 
 <!--more-->
@@ -1140,7 +1094,7 @@ fun main() {
 
 <p>It&rsquo;s Friday afternoon. You finally finished that long refactor you’ve been working on for the whole week. Everything is looking good. Except you run the tests and see one failure.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-05/BadNames.png" title="‘Test output with bad test names’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-05/BadNames.png" title="‘Test output with bad test names’" ></p>
 
 <p style='text-align: center; font-size: 42px;'>
 🤔
@@ -1151,7 +1105,7 @@ fun main() {
 
 <p>But what if the output looked more like this:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-05/GoodNames.png" title="‘Test output with good test names’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-05/GoodNames.png" title="‘Test output with good test names’" ></p>
 
 <p>Now the issue is obvious. <strong>You can immediately tell which part of the code is not working and what the output should be.</strong></p>
 
@@ -1163,13 +1117,13 @@ fun main() {
 
 <p>If you&rsquo;re using Kotlin, you can <a href="https://kotlinlang.org/docs/reference/coding-conventions.html#function-names">use backticks to have whitespaces in your function name</a>. If you’re working with <a href="https://junit.org/junit5/docs/current/user-guide/">JUnit</a> you can leverage the <a href="https://junit.org/junit5/docs/5.0.3/api/org/junit/jupiter/api/DisplayName.html"><code>@DisplayName</code></a> annotation for prettier names. You can even get emojis in there:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-05/WithEmojis.png" title="‘Test output with emojis’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-05/WithEmojis.png" title="‘Test output with emojis’" ></p>
 
 <p>You can also write a custom name generator using <code>@DisplayNameGeneration</code> <a href="https://www.baeldung.com/junit-custom-display-name-generator">as shown here</a>.</p>
 
 <p>Some testing libraries like <a href="https://github.com/kotest/kotest/">Kotest</a>, also <a href="https://github.com/kotest/kotest/blob/master/doc/styles.md#should-spec">support nesting tests</a>:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-07-05/NestedNames.png" title="‘Test output with emojis’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-05/NestedNames.png" title="‘Test output with emojis’" ></p>
 
 <hr />
 
@@ -1177,15 +1131,15 @@ fun main() {
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature14.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature14.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Working With Queues]]></title>
-    <link href="http://jivimberg.github.io/blog/2020/05/30/working-with-queues/"/>
+    <link href="http://jivimberg.io/blog/2020/05/30/working-with-queues/"/>
     <updated>2020-05-30T19:29:39-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2020/05/30/working-with-queues</id>
+    <id>http://jivimberg.io/blog/2020/05/30/working-with-queues</id>
     <content type="html"><![CDATA[<p>Queues are a powerful tool for building reliable systems. In this article, I’ll describe some of the tips and tricks I came across when working with queues.</p>
 
 <p>Some of the advice is specific to Amazon SQS queues because that’s what I’ve been using the most lately. And also because some of them come from <a href="https://aws.amazon.com/builders-library/avoiding-insurmountable-queue-backlogs/">this amazing article</a> from the <a href="https://aws.amazon.com/builders-library/">Amazon Builders’ Library</a>.</p>
@@ -1197,11 +1151,11 @@ fun main() {
 
 <p>Queues can be used to increase the system’s availability by accepting new messages even if our service is down. They help us decouple producers from consumers. When using systems like SQS, we also get a durability guarantee, because we know messages published won’t be lost if our system fails as they are persisted in the queue. Additionally, we get an increase in reliability since we can configure our system to retry the processing of a message in case of failure.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-06-07/Availability.png" title="‘Example of how queues can increase availability’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-06-07/Availability.png" title="‘Example of how queues can increase availability’" ></p>
 
 <p>These advantages come at a cost. <strong>We get better reliability, availability, and durability at the price of increased latency</strong>. Meaning, messages can take longer to be processed compared to a synchronous system. This is because our system might have to go through a backlog of old messages before getting to the one just published. Furthermore, if the pace at which messages are put on the queue is faster than the speed at which our system can process them, the system might never be able to catch up!</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-06-07/Overflow.gif" title="‘Animation on how a slow consuming queue can overflow’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-06-07/Overflow.gif" title="‘Animation on how a slow consuming queue can overflow’" ></p>
 
 <p>Let’s go over some of the things we can do to prevent or mitigate these risks.</p>
 
@@ -1217,7 +1171,7 @@ fun main() {
 </ol>
 
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-06-07/WrapQueues.png" title="‘System diagram for wrapping queues’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-06-07/WrapQueues.png" title="‘System diagram for wrapping queues’" ></p>
 
 <p>The downside of wrapping the queues is that we turn an asynchronous call into synchronous. Now our system has to be up to process new messages. We’re trading the availability improvements for more control.</p>
 
@@ -1227,7 +1181,7 @@ fun main() {
 
 <p>Another technique is to move the excess to a spillover queue to be processed later. The system will first work on the new messages on the main queue, and only tackle the ones on the spillover queue once resources are available. This way, we can approximate LIFO order, which might be more appropriate for systems dealing with real-time events.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-06-07/Spillover.png" title="‘Diagram of a system using spillover queue’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-06-07/Spillover.png" title="‘Diagram of a system using spillover queue’" ></p>
 
 <p>Finally, we can measure the size of the backlog and scale the number of consumers accordingly. Once the backlog is back to its normal size, we can scale down the consumer instances.</p>
 
@@ -1237,7 +1191,7 @@ fun main() {
 
 <p>One possible solution is to have different customers publish to different queues, and have the system consume in a round-robin fashion. This is a simple solution, but it does not scale well. If we had thousands of customers, we’d have to manage and poll thousands of queues. Instead, we can have a fixed number of queues and hash each customer to a small number of them. Whenever we receive a message, we retrieve the queues assigned to that customer and put the message on the queue with the shortest backlog. That way, if a client is producing lots of messages on their queues, other workflows are automatically routed to less utilized queues. One caveat worth considering, is that message order is not preserved in this model.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-06-07/Sharding.gif" title="‘Animation of multi-tenant system using sharing’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-06-07/Sharding.gif" title="‘Animation of multi-tenant system using sharing’" ></p>
 
 <p>Another solution is to set a rate for messages processed for each customer. Once the customer has gone over the specified rate, messages are put in a spillover queue to be deal with later. This pattern is similar to the one we applied for old messages in the previous section, only in this case we’re using it to prevent one client from exhausting all the processing power.</p>
 
@@ -1253,15 +1207,15 @@ fun main() {
 
 <p>We can also use the ability to programmatically modify the <em>visibilityTimeout</em> for a message to speed up retries. Say our queue is configured with a <em>visibilityTimeout</em> of 10 minutes, and while processing a message, we face a transient error, we can set <em>visibilityTimeout</em> to zero to make it retry faster.</p>
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature8.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature8.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[The Whiteboard Interview Is Broken]]></title>
-    <link href="http://jivimberg.github.io/blog/2020/05/09/the-whiteboard-interview-is-broken/"/>
+    <link href="http://jivimberg.io/blog/2020/05/09/the-whiteboard-interview-is-broken/"/>
     <updated>2020-05-09T17:48:02-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2020/05/09/the-whiteboard-interview-is-broken</id>
+    <id>http://jivimberg.io/blog/2020/05/09/the-whiteboard-interview-is-broken</id>
     <content type="html"><![CDATA[<p>We have deluded ourselves into thinking that being able to invert a binary tree on a whiteboard is the hallmark of great software engineering. It’s time we look for better ways of evaluating coding skills.</p>
 
 <!--more-->
@@ -1315,15 +1269,15 @@ fun main() {
 
 <p>Improving the coding interview takes time. But it’s hard to think of a better way investment than something that’ll help you hire great software engineers. Hopefully, with time we’ll see fewer and fewer whiteboard interviews.</p>
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature4.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature4.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[How to Craft Effective Presentations]]></title>
-    <link href="http://jivimberg.github.io/blog/2020/03/13/how-to-create-effective-presentations/"/>
+    <link href="http://jivimberg.io/blog/2020/03/13/how-to-create-effective-presentations/"/>
     <updated>2020-03-13T15:17:29-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2020/03/13/how-to-create-effective-presentations</id>
+    <id>http://jivimberg.io/blog/2020/03/13/how-to-create-effective-presentations</id>
     <content type="html"><![CDATA[<p>This is a compilation of all the things I learned for creating effective presentations.</p>
 
 <!--more-->
@@ -1335,7 +1289,7 @@ fun main() {
 
 <p>There&rsquo;s a simple reason for this: Humans brains are really dumb. They can’t process spoken and written words at the same time. <strong>People will either read the slides or listen to you, but not both.</strong> And since you’re presenting my guess is you want them paying attention to you. So drop all that extra text so people can focus on what you’re saying.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/badExample.png" width="600" title="‘Slide with a lot of text’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/badExample.png" width="600" title="‘Slide with a lot of text’" ></p>
 
 <p>The first step to a bullet-free slide is breaking your content into smaller chunks. <strong>Each slide should focus on a single idea that can be expressed in one or two sentences</strong> (no more than 20 words). Less is more. The rest of the content, the things that you’d normally put in the bullet points, can be spoken. There’s no limit to the number of slides you can use, just make sure you’re only adding the key points on text and speaking the rest.</p>
 
@@ -1343,11 +1297,11 @@ fun main() {
 
 <p>Now that you have your central ideas, let&rsquo;s talk about styling. The main goal is to keep it simple so viewers are not distracted. Choose a sans-serif typeface (the ones without the ornaments) and make your text HUGE.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/serif-vs-sans-serif.jpg" width="400" title="‘Example of serif and sans serif fonts’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/serif-vs-sans-serif.jpg" width="400" title="‘Example of serif and sans serif fonts’" ></p>
 
 <p>Big letters are important because everybody in the room should be able to read it, and it’ll help you stay under the 20 words limit. Pick contrasting colors for text and background. You can use <a href="https://colorhunt.co/">Color Hunt</a> to find a cool palette for your deck.  Finally, place the text in the upper left corner. You can add an image or graph if needed, but don’t put something just because you have the space. Make sure it’s meaningful. Keep it short, keep it simple.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/bigText.png" width="600" title="‘Big text is easier to read’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/bigText.png" width="600" title="‘Big text is easier to read’" ></p>
 
 <p style='text-align: center;'>
 (Yes, this is the whole slide)
@@ -1360,7 +1314,7 @@ fun main() {
 
 <p>All you have to do is move the text from the slides to the presenter notes.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/presenterNotes.png" width="600" title="‘Handout example’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/presenterNotes.png" width="600" title="‘Handout example’" ></p>
 
 <p>Then, to email your presentation just select <em>Print settings and preview</em> and choose <em>1 slide with notes</em>. Now you have a PDF handout to send after the presentation that includes all the context needed to understand each slide. As a bonus you also get notes you can use while presenting.</p>
 
@@ -1370,15 +1324,15 @@ fun main() {
 
 <p>First, avoid cluttered templates. They might look cute on page but they can distract the audience.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/clutteredTemplates.png" width="600" title="‘Example of a slide with a cluttered template’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/clutteredTemplates.png" width="600" title="‘Example of a slide with a cluttered template’" ></p>
 
 <p>Also, get rid of all the cheese transitions. The only animations you should need is <em>appear </em>and<em> disappear</em> to reveal content as you talk. You can also color and opacity on text or images to guide the audience attention. To achieve this you simply duplicate the slide and apply the appropriate changes.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/focus.gif" width="600" title="‘Example of using color and opacity to guide audience focus’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/focus.gif" width="600" title="‘Example of using color and opacity to guide audience focus’" ></p>
 
 <p>The only exception to the &ldquo;no animation rule&rdquo; is if your animation is needed to express the slide’s idea. For example, you might animate a pointer to represent the order of execution on a snippet of code, as I did here:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/animationExample2.gif" title="‘Example of a valid use of animation in a slide’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/animationExample2.gif" title="‘Example of a valid use of animation in a slide’" ></p>
 
 <p style='text-align: center;'>
 (I used Magic Move on  Keynote to create this)
@@ -1416,7 +1370,7 @@ fun main() {
 
 <p>Most of the time the title slide includes just the title of the talk. Instead, consider providing some context on what’s going to be covered in the presentation as a full sentence. If you’re opening with a hook you can have visuals on your title slide to get right into it.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/titleSlides.png" width="700" title="‘Example of title slides’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/titleSlides.png" width="700" title="‘Example of title slides’" ></p>
 
 <h3>The intro slide</h3>
 
@@ -1434,7 +1388,7 @@ fun main() {
 
 <p>When using images go big. Don&rsquo;t worry about breaking the template if you’re using one. Take an empty slide and set the image as background. Don’t put text on it unless you really need to. And if you do use contrasting colors, or place the text over a box with a transparent background to make it readable.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/imageSlides.png" width="700" title="‘Examples of image slides’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/imageSlides.png" width="700" title="‘Examples of image slides’" ></p>
 
 <h3>The code slide</h3>
 
@@ -1444,7 +1398,7 @@ fun main() {
 
 <p>If the code has multiple parts you&rsquo;ll be talking about, highlight only the section you’re focusing on and gray out all the rest.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-04-23/codeSlide.gif" width="600" title="‘Example of using color and opacity to guide audience focus’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/codeSlide.gif" width="600" title="‘Example of using color and opacity to guide audience focus’" ></p>
 
 <p>Consider using pseudo code so people don&rsquo;t need to be familiar with your language of choice to understand the slide.</p>
 
@@ -1466,15 +1420,15 @@ fun main() {
 
 <p>Some of these things I learned from <a href="https://zachholman.com/talks">Zach Holman writings</a> (check his website <a href="https://speaking.io/">speaking.io</a>). More recently I attended a course from <a href="http://christinehaasconsulting.com/services/">Christine Haas Consulting</a> which really helped me polish my presentation skills. The rest comes from years of watching great presenters and practicing. That’s the only way to improve, right?</p>
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Hexagonal Architecture on Spring Boot]]></title>
-    <link href="http://jivimberg.github.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot/"/>
+    <link href="http://jivimberg.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot/"/>
     <updated>2020-02-01T20:51:59-08:00</updated>
-    <id>http://jivimberg.github.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot</id>
+    <id>http://jivimberg.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot</id>
     <content type="html"><![CDATA[<p>In this article, I&rsquo;ll show how to implement a Spring Boot application using Hexagonal Architecture.</p>
 
 <!--more-->
@@ -1488,7 +1442,7 @@ fun main() {
 
 <p>The business core interacts with other components through ports and adapters. This way, we can change the underlying technologies without having to modify the application core.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-02-01/HexagonalArchitecture-generic.png" width="700" title="‘Generic Hexagonal Architecture diagram’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-02-01/HexagonalArchitecture-generic.png" width="700" title="‘Generic Hexagonal Architecture diagram’" ></p>
 
 <h2>Application Core</h2>
 
@@ -1800,7 +1754,7 @@ fun main() {
 
 <p>In this article, we&rsquo;ve seen how to implement an application using Hexagonal Architecture and Spring Boot. This is what the system ends up looking like:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2020-02-01/HexagonalArchitecture-impl.png" width="700" title="‘Generic Hexagonal Architecture Spring Boot example’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-02-01/HexagonalArchitecture-impl.png" width="700" title="‘Generic Hexagonal Architecture Spring Boot example’" ></p>
 
 <p>The code for this example is <a href="https://github.com/jivimberg/hexagonal-architecture">available on Github</a>.</p>
 
@@ -1808,15 +1762,15 @@ fun main() {
 
 <p>This article is based on the <em>highly recommendable</em> <a href="https://leanpub.com/get-your-hands-dirty-on-clean-architecture">&ldquo;Get Your Hands Dirty on Clean Architecture</a> by <a href="https://twitter.com/TomHombergs">Tom Hombergs</a>, and <a href="https://www.baeldung.com/hexagonal-architecture-ddd-spring">this Baeldung article</a> by <a href="https://www.baeldung.com/author/lukasz-rys/">Łukasz Ryś</a>.</p>
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature9.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature9.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Book Recommendations: Shape Up]]></title>
-    <link href="http://jivimberg.github.io/blog/2019/09/15/book-recommendations-shape-up/"/>
+    <link href="http://jivimberg.io/blog/2019/09/15/book-recommendations-shape-up/"/>
     <updated>2019-09-15T10:51:31-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2019/09/15/book-recommendations-shape-up</id>
+    <id>http://jivimberg.io/blog/2019/09/15/book-recommendations-shape-up</id>
     <content type="html"><![CDATA[<p>I love reading about how people do creative work. Be it <a href="https://en.wikipedia.org/wiki/On_Writing:_A_Memoir_of_the_Craft">writing books</a> or <a href="http://the-witness.net/news/">designing video games</a>, there’s something magical about peeking behind the curtain and learning how the pros do their thing.</p>
 
 <p>Today I’m reviewing <a href="https://basecamp.com/shapeup">Shape Up</a>, a book about the process of writing software at Basecamp.</p>
@@ -1824,7 +1778,7 @@ fun main() {
 <!--more-->
 
 
-<p><a href="https://basecamp.com/shapeup"><img class="center" src="http://jivimberg.github.io/images/posts/2019-09-29/shapeUpCover.png" width="700" title="‘Book cover’" ></a></p>
+<p><a href="https://basecamp.com/shapeup"><img class="center" src="http://jivimberg.io/images/posts/2019-09-29/shapeUpCover.png" width="700" title="‘Book cover’" ></a></p>
 
 <p>(<em>I promise those potato shapes ☝️ will make sense by the time you finish the book</em>)</p>
 
@@ -1855,13 +1809,13 @@ fun main() {
 
 <p>The key to Shaping is that it has to happen at <strong>the proper level of abstraction</strong>. Go too abstract, and the dev team might end up building the wrong thing. Go too concrete, and they have no wiggle room to work around a technical pitfall or revise a design choice.</p>
 
-<p><img class="right" src="http://jivimberg.github.io/images/posts/2019-09-29/knob.png" width="400" title="‘Abstraction knob’" ></p>
+<p><img class="right" src="http://jivimberg.io/images/posts/2019-09-29/knob.png" width="400" title="‘Abstraction knob’" ></p>
 
 <p>For example, they’d use fat marker drawings instead of wireframes, to avoid delving too deep into the UI design details.</p>
 
 <p>You want to end up with a good definition of the problem and a rough sketch of the solution. A clear sense of what’s part of the solution and what’s out of scope. A set of elements and how they connect to each other, but no comprehensive list of tasks or high-res mockups. Those things will come later when the dev team takes over and starts exploring the solution.</p>
 
-<p><img class="left" src="http://jivimberg.github.io/images/posts/2019-09-29/fatMarker.png" width="150" title="‘Fat marker sketch’" ></p>
+<p><img class="left" src="http://jivimberg.io/images/posts/2019-09-29/fatMarker.png" width="150" title="‘Fat marker sketch’" ></p>
 
 <p>Only once shaping is complete, they’d take it to the <a href="https://basecamp.com/shapeup/2.2-chapter-08#the-betting-table"><em>“betting table“</em></a> where they decide if this is something they want to bet the next six weeks on. If the pitch is , it goes into the next cycle. If it’s not, then nothing happens. There’s no centralized backlog or list of rejected ideas. If somebody considers it important or thinks that a better solution can be found, they’ll lobby for it again six weeks later.</p>
 
@@ -1869,7 +1823,7 @@ fun main() {
 
 <p>Every single new idea and feature request gets the same answer:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-09-29/interesting.png" width="400" title="‘Interesting! Maybe some time’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-09-29/interesting.png" width="400" title="‘Interesting! Maybe some time’" ></p>
 
 <p>Basecamp believes an idea needs to go through the shaping process detailed above before they’re ready to bet on it.  When a new request comes in, they’d first try to identify what’s the user need (which sometimes might be quite different from what the user is asking for). Then, they see how they can solve the requirement with a minimal amount of effort. They acknowledge there’s always a better, more complete solution if you have infinite time at your disposal. The trick here is to find a good solution that works under the given constraints (in their case, that it can be built by a small team of engineers and designers in no more than six weeks)</p>
 
@@ -1879,7 +1833,7 @@ fun main() {
 
 <p>This is how we track progress in our industry:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-09-29/scrum.jpg" width="700" title="‘Wall full of post-it notes’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-09-29/scrum.jpg" width="700" title="‘Wall full of post-it notes’" ></p>
 
 <p>The problem with this approach is that it only works if all required tasks are known up-front. And let’s face, 99% of the time, that’s not the case. Most of the time, you’d start coding the first task only to discover that a new component needs to be added, and you’ll have to fix a few connections this change will introduce.</p>
 
@@ -1893,11 +1847,11 @@ fun main() {
 
 <p>The tool they came up with to communicate progress are <a href="https://basecamp.com/features/hill-charts">Hill Charts</a>, and they look like this:</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-09-29/hillChart1.png" width="600" title="‘Hill Chart’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-09-29/hillChart1.png" width="600" title="‘Hill Chart’" ></p>
 
 <p>As you can tell, it’s not (only) a function of pending tasks, but also of confidence in that all remaining tasks have been discovered.</p>
 
-<p><img class="center" src="http://jivimberg.github.io/images/posts/2019-09-29/hillChart2.png" width="600" title="‘Hill Chart 2’" ></p>
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-09-29/hillChart2.png" width="600" title="‘Hill Chart 2’" ></p>
 
 <p>A good way of gaining confidence at the start of a project is to begin with the pieces that present the most uncertainty, and move them to the top of the hill first. Doing this before finishing the downhill stuff reduces the chances the project will be late.</p>
 
@@ -1907,12 +1861,103 @@ fun main() {
 
 <p>If you enjoyed the review, you’ll love the book. <a href="https://basecamp.com/shapeup">Go check it out!!</a></p>
 
-<p> <img class="right-fill" src="http://jivimberg.github.io/images/signatures/signature5.png" width="200" title="‘My signature’" ></p>
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature5.png" width="200" title="‘My signature’" ></p>
 <div class="footnotes">
 <hr/>
 <ol>
 <li id="fn:1">
 <p>Not sure why they’re not referred to as PMs in the book<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Book Recommendations: The Advantage]]></title>
+    <link href="http://jivimberg.io/blog/2019/08/11/book-recommendations-the-advantage/"/>
+    <updated>2019-08-11T20:09:32-07:00</updated>
+    <id>http://jivimberg.io/blog/2019/08/11/book-recommendations-the-advantage</id>
+    <content type="html"><![CDATA[<p>Today I’m reviewing <a href="https://read.amazon.com/kp/embed?asin=B006ORWT3Y&amp;preview=newtab&amp;linkCode=kpe&amp;ref_=cm_sw_r_kb_dp_CFpuDbJQRH32R">The Advantage</a> by <a href="https://twitter.com/patricklencioni">Patrick Lencioni</a>. A book written for leaders looking to build a healthy organization.</p>
+
+<!--more-->
+
+
+
+
+<iframe type="text/html" width="336" height="550" frameborder="0" allowfullscreen style="margin: auto; display: block; max-width:100%"  src="https://read.amazon.com/kp/card?asin=B006ORWT3Y&preview=inline&linkCode=kpe&ref_=cm_sw_r_kb_dp_CFpuDbJQRH32R" ></iframe>
+
+
+<h1>Intro</h1>
+
+<p>The book opens explaining why organizational health is so important. This is <em>The Advantage</em> referenced by the title. If you&rsquo;re not sold on the idea that culture is a big business advantage by the end of the chapter, you&rsquo;re probably better off reading something else…</p>
+
+<h1>The 6 questions</h1>
+
+<p>Next, the author goes on to describe <em>The Four Disciplines Model</em> ™. In a nutshell:</p>
+
+<h2>1. Build a Cohesive Leadership Team</h2>
+
+<p>Keep the team small. Make sure every leader understands that playing for the leadership team is more important than favoring their specific departments. Foster conflict, but achieve commitment (<a href="https://en.wikipedia.org/wiki/Disagree_and_commit">&ldquo;Disagree and commit&rdquo;</a>). Once you reach commitment, keep people accountable. Finally, <strong>embrace feedback</strong>, you have to be willing to be vulnerable with your team-mates. It is ok to admit when you fuck up<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
+
+<h2>2. Create Clarity</h2>
+
+<p>Once you have a good leadership team, make sure you&rsquo;re aligned on the important topics. To achieve this, the leadership team should answer 6 questions:</p>
+
+<ol>
+<li>Why do we exist?</li>
+<li>How do we behave?</li>
+<li>What do we do?</li>
+<li>How will we succeed?</li>
+<li>What is most important, right now?</li>
+<li>Who must do what?</li>
+</ol>
+
+
+<p>The answers to these questions will become the kernel of every decision taken. So, don&rsquo;t fall for generic marketing 💩. Be really specific on what your key differentiator is, and drop everything else. If you&rsquo;re not willing to center all your business in, say, <em>customer satisfaction</em> just don&rsquo;t mention it.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-08-11/dunder-mifflin.jpg" title="‘Dunder Mifflin mission statement’" ></p>
+
+<p>Bottomline, if your answers sound like <a href="https://dundermifflinpaper.com/">Dunder Mifflin</a>&rsquo;s mission statement you&rsquo;re doing it wrong.</p>
+
+<p>As soon as there&rsquo;s agreement and commitment on these answers the leadership team needs to communicate them to the rest of the organization.</p>
+
+<h2>3. Over-communicate Clarity</h2>
+
+<p>The book advocates for 2 communication strategies:</p>
+
+<ul>
+<li>Cascading communication: <strong>the same message</strong> should be relayed down the ranks, organically. That is, don&rsquo;t just learn a script and repeat it like a robot, understand the message and pass it through face to face. Give people the chance to ask questions to clarify meaning.</li>
+<li>Over-communication: <strong>Repeat</strong> the message until it sticks. Say it again, and again, and again&hellip; Only after hearing the same thing from multiple source people will believe it.</li>
+</ul>
+
+
+<h2>4. Reinforce clarity</h2>
+
+<p>Finally, make sure <strong>all</strong> actions are aligned with the answers agreed upon by the leadership team. Actions speak louder than words. Lead by example.</p>
+
+<p>All company processes should reinforce these values. When hiring don&rsquo;t just look for technical ability, check for cultural fit first. The first few days of a new hire in the company are key to instruct new employees on the company values. Don&rsquo;t waste them with trivial stuff like setting up the email account, they&rsquo;ll have time for that. Similarly, every benefit, promotion and reward should be designed to remind employees what&rsquo;s important.</p>
+
+<h1>Meetings</h1>
+
+<p>The last part of the book focuses on how to have meaningful meetings. It proposes a framework of 4 different type of meetings:</p>
+
+<ul>
+<li><strong>Daily checkins:</strong> aka <a href="https://en.wikipedia.org/wiki/Stand-up_meeting">Standup Meetings</a>.</li>
+<li><strong>Weekly staff meetings:</strong> in which the author proposes setting no agenda beforehand and instead using the first 15 minutes to align on what topics should be discussed.</li>
+<li><strong>Adhoc topical meetings:</strong>  2 to 4 hours meetings focused on a single topic.</li>
+<li><strong>Quarterly off-site</strong> 1 or 2 days offsite to revisit and reiterate on the 6 questions.</li>
+</ul>
+
+
+<p>To be honest I didn&rsquo;t find much <em>new</em> knowledge on the meetings topic. But maybe that&rsquo;s only because I was familiar with the author&rsquo;s book on the subject: <a href="https://www.amazon.com/Death-Meeting-Leadership-Solving-Business/dp/0787968056">Death by meetings</a>.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature11.png" width="200" title="‘My signature’" ></p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>More on this in <a href="https://jivimberg.io/blog/2018/09/30/book-recommendations-radical-candor/">Radical Candor</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
 </ol>
 </div>
 

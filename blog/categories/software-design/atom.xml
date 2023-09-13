@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Software Design | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/software-design/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2023-09-12T20:50:49-07:00</updated>
-  <id>http://jivimberg.github.io/</id>
+  <link href="http://jivimberg.io/blog/categories/software-design/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-13T05:40:48+00:00</updated>
+  <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Notes on API Design]]></title>
-    <link href="http://jivimberg.github.io/blog/2014/10/12/notes-on-api-design/"/>
+    <link href="http://jivimberg.io/blog/2014/10/12/notes-on-api-design/"/>
     <updated>2014-10-12T15:34:29-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2014/10/12/notes-on-api-design</id>
+    <id>http://jivimberg.io/blog/2014/10/12/notes-on-api-design</id>
     <content type="html"><![CDATA[<p>This is from a presentation I gave at work about how to design APIs that don&rsquo;t suck. You can download the whole presentation from <a href="/downloads/ApiDesignKeynote.zip">here</a></p>
 
 <!-- more -->

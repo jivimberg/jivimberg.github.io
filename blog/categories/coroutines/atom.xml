@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Coroutines | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/coroutines/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2023-09-12T20:50:49-07:00</updated>
-  <id>http://jivimberg.github.io/</id>
+  <link href="http://jivimberg.io/blog/categories/coroutines/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-13T05:40:48+00:00</updated>
+  <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Different Kinds of Channels in Kotlin]]></title>
-    <link href="http://jivimberg.github.io/blog/2019/04/18/different-kinds-of-channels-in-kotlin/"/>
+    <link href="http://jivimberg.io/blog/2019/04/18/different-kinds-of-channels-in-kotlin/"/>
     <updated>2019-04-18T07:59:14-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2019/04/18/different-kinds-of-channels-in-kotlin</id>
+    <id>http://jivimberg.io/blog/2019/04/18/different-kinds-of-channels-in-kotlin</id>
     <content type="html"><![CDATA[<p>Overview of the different kinds of Kotlin channels and their behaviors.</p>
 
 <!--more-->
@@ -53,9 +53,9 @@
   
   <entry>
     <title type="html"><![CDATA[SQS Consumer Using Kotlin Coroutines]]></title>
-    <link href="http://jivimberg.github.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines/"/>
+    <link href="http://jivimberg.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines/"/>
     <updated>2019-02-23T16:52:48-03:00</updated>
-    <id>http://jivimberg.github.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines</id>
+    <id>http://jivimberg.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines</id>
     <content type="html"><![CDATA[<p>Today we’ll see how to write a SQS consumer that processes messages in a parallel, non-blocking way, using Kotlin coroutines.</p>
 
 <!--more-->
@@ -389,9 +389,9 @@ private suspend fun processMsg(message: Message) = withContext(Dispatchers.Defau
   
   <entry>
     <title type="html"><![CDATA[Parallel Map in Kotlin]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/05/04/parallel-map-in-kotlin/"/>
+    <link href="http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin/"/>
     <updated>2018-05-04T16:32:00-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/05/04/parallel-map-in-kotlin</id>
+    <id>http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin</id>
     <content type="html"><![CDATA[<p>Ever wonder how to run <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html"><code>map</code></a>  in parallel using coroutines? This is how you do it.</p>
 
 <!--more-->
@@ -537,9 +537,9 @@ fun main() = runBlocking<Unit> {
   
   <entry>
     <title type="html"><![CDATA[Go Channels in Kotlin - an Example]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/04/23/go-channels-in-kotlin-an-example/"/>
+    <link href="http://jivimberg.io/blog/2018/04/23/go-channels-in-kotlin-an-example/"/>
     <updated>2018-04-23T08:37:13-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/04/23/go-channels-in-kotlin-an-example</id>
+    <id>http://jivimberg.io/blog/2018/04/23/go-channels-in-kotlin-an-example</id>
     <content type="html"><![CDATA[<p>This is the story of a real use case that was solved by using <a href="https://github.com/Kotlin/kotlinx.coroutines/blob/master/coroutines-guide.md#channels">Go style channels in Kotlin</a>.</p>
 
 <!--more-->

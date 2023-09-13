@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Generated | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/generated/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2023-09-12T20:50:49-07:00</updated>
-  <id>http://jivimberg.github.io/</id>
+  <link href="http://jivimberg.io/blog/categories/generated/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-13T05:40:48+00:00</updated>
+  <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[JaCoCo &amp; Kotlin: Coverage on Generated Code]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code/"/>
+    <link href="http://jivimberg.io/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code/"/>
     <updated>2018-08-12T21:26:43-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code</id>
+    <id>http://jivimberg.io/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code</id>
     <content type="html"><![CDATA[<p>JaCoCo works <em>flawlessly</em> with Kotlin. Except when it reports lines not covered on generated code 😡. Fortunately there’s a fix already in place.</p>
 
 <!--more-->

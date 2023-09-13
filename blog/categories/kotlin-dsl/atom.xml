@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Kotlin-dsl | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/kotlin-dsl/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2023-09-12T20:50:49-07:00</updated>
-  <id>http://jivimberg.github.io/</id>
+  <link href="http://jivimberg.io/blog/categories/kotlin-dsl/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-13T05:40:48+00:00</updated>
+  <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Random Thoughts on Using Gradle With Kotlin DSL]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl/"/>
+    <link href="http://jivimberg.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl/"/>
     <updated>2018-08-28T08:36:57-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl</id>
+    <id>http://jivimberg.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl</id>
     <content type="html"><![CDATA[<p>Since Gradle 3.0 you can <a href="https://blog.gradle.org/kotlin-meets-gradle"><strong>write your build scripts using Kotlin instead of Groovy</strong></a>. I was curious, so I decided to give it a try. Here are my thoughts on the process.</p>
 
 <!--more-->

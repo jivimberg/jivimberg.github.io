@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Culture | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/culture/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2023-09-12T20:50:49-07:00</updated>
-  <id>http://jivimberg.github.io/</id>
+  <link href="http://jivimberg.io/blog/categories/culture/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-13T05:40:48+00:00</updated>
+  <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Documenting Decisions]]></title>
-    <link href="http://jivimberg.github.io/blog/2020/12/26/documenting-decisions/"/>
+    <link href="http://jivimberg.io/blog/2020/12/26/documenting-decisions/"/>
     <updated>2020-12-26T13:51:06-08:00</updated>
-    <id>http://jivimberg.github.io/blog/2020/12/26/documenting-decisions</id>
+    <id>http://jivimberg.io/blog/2020/12/26/documenting-decisions</id>
     <content type="html"><![CDATA[<p>It’s Monday morning. You’re sitting at your desk with your steaming cup of Joe, ready to sink your teeth into that new feature you have to develop. The <code>git pull</code> downloads months worth of changes, and you dive into the code. Piece by piece, you start building a mental model of the system, trying to make sense of the different components. But something doesn’t feel right. Why was it built this way? It feels weird, it feels so obviously wrong, so poorly designed, so suboptimal.</p>
 
 <p>You realize you need help. Whoever wrote this mess should be able to provide some context. You run <code>git blame</code> and your own name hits you in the face like a brick. You start thinking that maybe it’s no so wrong. That you probably had your reasons. If you could only go back in time and ask your past self…</p>
@@ -90,9 +90,9 @@
   
   <entry>
     <title type="html"><![CDATA[Book Recommendations: The Advantage]]></title>
-    <link href="http://jivimberg.github.io/blog/2019/08/11/book-recommendations-the-advantage/"/>
+    <link href="http://jivimberg.io/blog/2019/08/11/book-recommendations-the-advantage/"/>
     <updated>2019-08-11T20:09:32-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2019/08/11/book-recommendations-the-advantage</id>
+    <id>http://jivimberg.io/blog/2019/08/11/book-recommendations-the-advantage</id>
     <content type="html"><![CDATA[<p>Today I’m reviewing <a href="https://read.amazon.com/kp/embed?asin=B006ORWT3Y&amp;preview=newtab&amp;linkCode=kpe&amp;ref_=cm_sw_r_kb_dp_CFpuDbJQRH32R">The Advantage</a> by <a href="https://twitter.com/patricklencioni">Patrick Lencioni</a>. A book written for leaders looking to build a healthy organization.</p>
 
 <!--more-->
