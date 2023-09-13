@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Flaky | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/flaky/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -29,7 +29,7 @@
 
 <p>You&rsquo;ve probably seen the <a href="https://martinfowler.com/bliki/TestPyramid.html">Test Pyramid</a> before. Tests are classified by scope, and the recommendation is to favor tests with reduced scopes (i.e. Unit Tests).</p>
 
-<p>{% img center /images/posts/2020-07-31/TestingPyramid.jpg 700 ‘Using data classes for assertions’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-31/TestingPyramid.jpg" width="700" title="‘Using data classes for assertions’" ></p>
 
 <p>At Google they came up with a new dimension: <em>Test Size</em><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Tests are grouped in categories <strong>based on the resources a test needs to run</strong> (memory, processes, time, etc.).</p>
 
@@ -45,7 +45,7 @@
 
 <p>How does this tie back to our crusade against flaky tests? Simple, <strong>the smaller the test, the more deterministic it’ll be.</strong> As a bonus perk, they also tend to be faster.</p>
 
-<p>{% img center /images/posts/2020-07-31/TestSizes.jpg 700 ‘Test sizes’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-31/TestSizes.jpg" width="700" title="‘Test sizes’" ></p>
 
 <p>Google went the extra mile and built infrastructure to enforce these constraints. For example, a test marked as <em>Small</em> would fail if it tried to do I/O.</p>
 
@@ -73,7 +73,7 @@
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
-<p> {% img right-fill /images/signatures/signature2.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
 <div class="footnotes">
 <hr/>
 <ol>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Architecture | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/architecture/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -23,7 +23,7 @@
 <!--more-->
 
 
-<p>{% img center /images/posts/2023-08-15/door.jpg 450 %}</p>
+<p><img class="center" src="/images/posts/2023-08-15/door.jpg" width="450"></p>
 
 <p>You can safely ignore the puppy; it’s only there for SEO purposes. Focus instead on that thing on the wall, marked by the orange arrow. That is a motion-sensor light switch, the kind that turns the light on when you walk by. Only this one doesn’t because it works like shit. You must wave your hand in front of it, almost touching it, for the lights to come on.</p>
 
@@ -35,11 +35,11 @@
 
 <p>Let’s illustrate this with an example. Not too long ago, Google launched their <a href="https://support.google.com/mail/answer/9116836?hl=en&amp;co=GENIE.Platform%3DDesktop">Smart Compose</a> feature for Gmail. The way it works is you start writing your email and suddenly a grayed-out text appears, trying to guess your next few words. If you like the suggestion, you press <code>tab</code>, and the caret jumps to the end of the line saving you a few keystrokes and leaving you wondering what sort of witchcraft Google is using to read your mind.</p>
 
-<p>{% img center /images/posts/2023-08-15/gmail-smart-compose.gif %}</p>
+<p><img class="center" src="/images/posts/2023-08-15/gmail-smart-compose.gif"></p>
 
 <p>Now, Google could have designed this feature in many different ways. It could, for example, open a popup menu with multiple options letting the user select the best one from the list the way <a href="https://presage.sourceforge.io/">this tool</a> does:</p>
 
-<p>{% img center /images/posts/2023-08-15/gprompter.jpg %}</p>
+<p><img class="center" src="/images/posts/2023-08-15/gprompter.jpg"></p>
 
 <p>This approach might seem more powerful at first glance because it gives the user multiple options instead of just one. But it has a huge disadvantage: it disrupts the user workflow. Picture this: You’re redacting an essay. You think of a sentence and start writing. Midway through a menu pops up designed to look like it’s on top of what you’re doing. Your hands stop typing. Your eyes dart through the popup content, read the first one, jump to the next line, read the second one, etc. You consider all the options and decide to go with the 4th one. Your hands jump to the arrow keys, and you click click click until the one you want is highlighted, then click once more to select it. All of this happens in a matter of milliseconds. And yet it is enough to break your flow. By contrast, Google’s design, users are offered a single option presented inline, as if the text were already written. With the grayed-out text shown in our visual pathway, the eyes naturally flow to the end of the sentence. We can accept the suggestion with just a single keystroke; if we do, our eyes are already in the right place to continue writing.</p>
 
@@ -49,12 +49,12 @@
 
 <p>Instead, we should have emulated the guy that installed that motion sensor in my in-laws' apartment. Rather than introducing a whole new tool, present whatever insight we can gather as part of the existing user workflow. For example, if a developer receives an alert from a failing metric on Service A, we could include any other metrics we think might be related in that same alert. Enriching the alert with additional context giving users a hint on where to look next. Or if they’re looking at a dashboard and notice an anomalous metric, we could then surface a message saying: “Hey, by the way, Service B is also failing in a similar way; you may want to check it”.</p>
 
-<p>{% img center /images/posts/2023-08-15/grafana_clippy.png 700 %}
+<p><img class="center" src="/images/posts/2023-08-15/grafana_clippy.png" width="700">
 <em class="img-caption"> What if Clippy was the peak of UX design? </em></p>
 
 <p>Instead of adopting an <em>“If you build it, they will come”</em> approach we should have <a href="https://medium.com/mule-design/meeting-users-where-they-are-624bc0caa83a">met users where they were at</a>. Presenting key insights in the context of their troubleshooting session and letting them jump to the new tool if they want to dig deeper. <strong>A system built this way would degrade gracefully</strong>: If the correlation service is down or the suggestion is not good, users can still keep troubleshooting the same way they do today.</p>
 
-<p>{% img right-fill /images/signatures/signature10.png 200 ‘My signature’ %}</p>
+<p><img class="right-fill" src="/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
@@ -82,7 +82,7 @@
 
 <p>An Architecture Decision Log can help us capture the context, motivations, and assumptions behind a decision. We are basically doing a brain dump of all the things that were considered before making a final call on something.</p>
 
-<p>{% img center /images/posts/2020-12-26/architecture.gif 500 %}</p>
+<p><img class="center" src="/images/posts/2020-12-26/architecture.gif" width="500"></p>
 
 <p>If one thing is constant about developing software is change. New features are requested, the app grows and it has to support an increasing number of requests, people leave the team and new developers join. By keeping an Architecture Decision Log, we capture the thought process that goes into a decision, <strong>so that future maintainers can understand why something is the way it is, and use this information to evaluate new changes.</strong>  Maybe an assumption made about how users would use the app turned out not to be true. Or perhaps a requirement about the size of stored data has changed, and the existing database can’t scale accordingly.</p>
 
@@ -129,7 +129,7 @@
 
 <hr />
 
-<p> {% img right-fill /images/signatures/signature2.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
@@ -149,11 +149,11 @@
 
 <p>Queues can be used to increase the system’s availability by accepting new messages even if our service is down. They help us decouple producers from consumers. When using systems like SQS, we also get a durability guarantee, because we know messages published won’t be lost if our system fails as they are persisted in the queue. Additionally, we get an increase in reliability since we can configure our system to retry the processing of a message in case of failure.</p>
 
-<p>{% img center /images/posts/2020-06-07/Availability.png ‘Example of how queues can increase availability’ %}</p>
+<p><img class="center" src="/images/posts/2020-06-07/Availability.png" title="‘Example of how queues can increase availability’" ></p>
 
 <p>These advantages come at a cost. <strong>We get better reliability, availability, and durability at the price of increased latency</strong>. Meaning, messages can take longer to be processed compared to a synchronous system. This is because our system might have to go through a backlog of old messages before getting to the one just published. Furthermore, if the pace at which messages are put on the queue is faster than the speed at which our system can process them, the system might never be able to catch up!</p>
 
-<p>{% img center /images/posts/2020-06-07/Overflow.gif ‘Animation on how a slow consuming queue can overflow’ %}</p>
+<p><img class="center" src="/images/posts/2020-06-07/Overflow.gif" title="‘Animation on how a slow consuming queue can overflow’" ></p>
 
 <p>Let’s go over some of the things we can do to prevent or mitigate these risks.</p>
 
@@ -169,7 +169,7 @@
 </ol>
 
 
-<p>{% img center /images/posts/2020-06-07/WrapQueues.png ‘System diagram for wrapping queues’ %}</p>
+<p><img class="center" src="/images/posts/2020-06-07/WrapQueues.png" title="‘System diagram for wrapping queues’" ></p>
 
 <p>The downside of wrapping the queues is that we turn an asynchronous call into synchronous. Now our system has to be up to process new messages. We’re trading the availability improvements for more control.</p>
 
@@ -179,7 +179,7 @@
 
 <p>Another technique is to move the excess to a spillover queue to be processed later. The system will first work on the new messages on the main queue, and only tackle the ones on the spillover queue once resources are available. This way, we can approximate LIFO order, which might be more appropriate for systems dealing with real-time events.</p>
 
-<p>{% img center /images/posts/2020-06-07/Spillover.png ‘Diagram of a system using spillover queue’ %}</p>
+<p><img class="center" src="/images/posts/2020-06-07/Spillover.png" title="‘Diagram of a system using spillover queue’" ></p>
 
 <p>Finally, we can measure the size of the backlog and scale the number of consumers accordingly. Once the backlog is back to its normal size, we can scale down the consumer instances.</p>
 
@@ -189,7 +189,7 @@
 
 <p>One possible solution is to have different customers publish to different queues, and have the system consume in a round-robin fashion. This is a simple solution, but it does not scale well. If we had thousands of customers, we’d have to manage and poll thousands of queues. Instead, we can have a fixed number of queues and hash each customer to a small number of them. Whenever we receive a message, we retrieve the queues assigned to that customer and put the message on the queue with the shortest backlog. That way, if a client is producing lots of messages on their queues, other workflows are automatically routed to less utilized queues. One caveat worth considering, is that message order is not preserved in this model.</p>
 
-<p>{% img center /images/posts/2020-06-07/Sharding.gif ‘Animation of multi-tenant system using sharing’ %}</p>
+<p><img class="center" src="/images/posts/2020-06-07/Sharding.gif" title="‘Animation of multi-tenant system using sharing’" ></p>
 
 <p>Another solution is to set a rate for messages processed for each customer. Once the customer has gone over the specified rate, messages are put in a spillover queue to be deal with later. This pattern is similar to the one we applied for old messages in the previous section, only in this case we’re using it to prevent one client from exhausting all the processing power.</p>
 
@@ -205,7 +205,7 @@
 
 <p>We can also use the ability to programmatically modify the <em>visibilityTimeout</em> for a message to speed up retries. Say our queue is configured with a <em>visibilityTimeout</em> of 10 minutes, and while processing a message, we face a transient error, we can set <em>visibilityTimeout</em> to zero to make it retry faster.</p>
 
-<p> {% img right-fill /images/signatures/signature8.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature8.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
@@ -227,7 +227,7 @@
 
 <p>The business core interacts with other components through ports and adapters. This way, we can change the underlying technologies without having to modify the application core.</p>
 
-<p>{% img center /images/posts/2020-02-01/HexagonalArchitecture-generic.png 700 ‘Generic Hexagonal Architecture diagram’ %}</p>
+<p><img class="center" src="/images/posts/2020-02-01/HexagonalArchitecture-generic.png" width="700" title="‘Generic Hexagonal Architecture diagram’" ></p>
 
 <h2>Application Core</h2>
 
@@ -235,30 +235,52 @@
 
 <p>Let&rsquo;s start with the domain model. Its main responsibility is to model the business rules. It also verifies that the objects are always in a valid state:</p>
 
-<p>{% codeblock lang:java BankAccount.java %}
-public class BankAccount {</p>
-
-<pre><code>    private Long id;
-    private BigDecimal balance;
-
-    // Constructor
-
-    public boolean withdraw(BigDecimal amount) {
-        if(balance.compareTo(amount) &lt; 0) {
-            return false;
-        }
-
-        balance = balance.subtract(amount);
-        return true;
-    }
-
-    public void deposit(BigDecimal amount) {
-        balance = balance.add(amount);
-    }
-</code></pre>
-
-<p>}
-{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>BankAccount.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccount</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="kd">private</span> <span class="n">Long</span> <span class="n">id</span><span class="o">;</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">BigDecimal</span> <span class="n">balance</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">if</span><span class="o">(</span><span class="n">balance</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">amount</span><span class="o">)</span> <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">balance</span> <span class="o">=</span> <span class="n">balance</span><span class="o">.</span><span class="na">subtract</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">balance</span> <span class="o">=</span> <span class="n">balance</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>The domain model should have no dependency on any specific technology. That&rsquo;s the reason why you&rsquo;ll find no Spring annotations here.</p>
 
@@ -268,74 +290,118 @@ public class BankAccount {</p>
 
 <p>First, let&rsquo;s define 2 incoming ports. <strong>These are used by external components to call our application</strong>. In this case, we&rsquo;ll have one per use case. One for <em>Deposit</em>:</p>
 
-<p>{% codeblock lang:java DepositUseCase.java %}
-public interface DepositUseCase {
-        void deposit(Long id, BigDecimal amount);
-}
-{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>DepositUseCase.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">DepositUseCase</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>And one for <em>Withdraw</em>:</p>
 
-<p>{% codeblock lang:java WithdrawUseCase.java %}
-public interface WithdrawUseCase {
-        boolean withdraw(Long id, BigDecimal amount);
-}
-{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>WithdrawUseCase.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">WithdrawUseCase</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Similarly, we&rsquo;ll also have 2 outgoing ports. <strong>These are for our application to interact with the database</strong>. Once again, we&rsquo;ll have one per use case. One for <em>Loading</em> the Account:</p>
 
-<p>{% codeblock lang:java LoadAccountPort.java %}
-public interface LoadAccountPort {
-        Optional<BankAccount> load(Long id);
-}
-{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>LoadAccountPort.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">LoadAccountPort</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Optional</span><span class="o">&lt;</span><span class="n">BankAccount</span><span class="o">&gt;</span> <span class="nf">load</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>And one for <em>Saving</em> it:</p>
 
-<p>{% codeblock lang:java SaveAccountPort.java %}
-public interface SaveAccountPort {
-        void save(BankAccount bankAccount);
-}
-{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>SaveAccountPort.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SaveAccountPort</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kt">void</span> <span class="nf">save</span><span class="o">(</span><span class="n">BankAccount</span> <span class="n">bankAccount</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h3>Service</h3>
 
 <p>Next, we&rsquo;ll create a service to tie all the pieces together and drive the execution:</p>
 
-<p>{% codeblock lang:java BankAccountService.java %}
-public class BankAccountService implements DepositUseCase, WithdrawUseCase {</p>
-
-<pre><code>    private LoadAccountPort loadAccountPort;
-    private SaveAccountPort saveAccountPort;
-
-    // Constructor
-
-    @Override
-    public void deposit(Long id, BigDecimal amount) {
-        BankAccount account = loadAccountPort.load(id)
-                .orElseThrow(NoSuchElementException::new);
-
-        account.deposit(amount);
-
-        saveAccountPort.save(account);
-    }
-
-    @Override
-    public boolean withdraw(Long id, BigDecimal amount) {
-        BankAccount account = loadAccountPort.load(id)
-                .orElseThrow(NoSuchElementException::new);
-
-        boolean hasWithdrawn = account.withdraw(amount);
-
-        if(hasWithdrawn) {
-            saveAccountPort.save(account);
-        }
-        return hasWithdrawn;
-    }
-</code></pre>
-
-<p>}
-{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>BankAccountService.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountService</span> <span class="kd">implements</span> <span class="n">DepositUseCase</span><span class="o">,</span> <span class="n">WithdrawUseCase</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="kd">private</span> <span class="n">LoadAccountPort</span> <span class="n">loadAccountPort</span><span class="o">;</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">SaveAccountPort</span> <span class="n">saveAccountPort</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">BankAccount</span> <span class="n">account</span> <span class="o">=</span> <span class="n">loadAccountPort</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">orElseThrow</span><span class="o">(</span><span class="nl">NoSuchElementException:</span><span class="o">:</span><span class="k">new</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">account</span><span class="o">.</span><span class="na">deposit</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">saveAccountPort</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">account</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">BankAccount</span> <span class="n">account</span> <span class="o">=</span> <span class="n">loadAccountPort</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">orElseThrow</span><span class="o">(</span><span class="nl">NoSuchElementException:</span><span class="o">:</span><span class="k">new</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="kt">boolean</span> <span class="n">hasWithdrawn</span> <span class="o">=</span> <span class="n">account</span><span class="o">.</span><span class="na">withdraw</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span><span class="o">(</span><span class="n">hasWithdrawn</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">saveAccountPort</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">account</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">hasWithdrawn</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Note how the service implements the incoming ports. On each method, it uses the <em>Load</em> port to fetch the account from the database. Then, it performs the changes on the domain model. And finally, it saves those changes through the <em>Save</em> port.</p>
 
@@ -347,29 +413,52 @@ public class BankAccountService implements DepositUseCase, WithdrawUseCase {</p>
 
 <p>For the incoming interactions, we&rsquo;ll create a REST controller:</p>
 
-<p>{% codeblock lang:java BankAccountController.java %}
-@RestController
-@RequestMapping(&ldquo;/account&rdquo;)
-public class BankAccountController {</p>
-
-<pre><code>    private final DepositUseCase depositUseCase;
-    private final WithdrawUseCase withdrawUseCase;
-
-    // Constructor
-
-    @PostMapping(value = "/{id}/deposit/{amount}")
-    void deposit(@PathVariable final Long id, @PathVariable final BigDecimal amount) {
-        depositUseCase.deposit(id, amount);
-    }
-
-    @PostMapping(value = "/{id}/withdraw/{amount}")
-    void withdraw(@PathVariable final Long id, @PathVariable final BigDecimal amount) {
-        withdrawUseCase.withdraw(id, amount);
-    }
-}
-</code></pre>
-
-<p>{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>BankAccountController.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@RestController</span>
+</span><span class='line'><span class="nd">@RequestMapping</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;/</span><span class="n">account</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountController</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">DepositUseCase</span> <span class="n">depositUseCase</span><span class="o">;</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">final</span> <span class="n">WithdrawUseCase</span> <span class="n">withdrawUseCase</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/{id}/deposit/{amount}&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">depositUseCase</span><span class="o">.</span><span class="na">deposit</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/{id}/withdraw/{amount}&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">withdraw</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">withdrawUseCase</span><span class="o">.</span><span class="na">withdraw</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>The controller uses the defined ports to make calls to the application core.</p>
 
@@ -377,52 +466,86 @@ public class BankAccountController {</p>
 
 <p>For the persistence layer, we&rsquo;ll use Mongo DB through Spring Data:</p>
 
-<p>{% codeblock lang:java SpringDataBankAccountRepository.java %}
-public interface SpringDataBankAccountRepository extends MongoRepository&lt;BankAccount, Long> { }
-{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>SpringDataBankAccountRepository.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SpringDataBankAccountRepository</span> <span class="kd">extends</span> <span class="n">MongoRepository</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">BankAccount</span><span class="o">,</span> <span class="n">Long</span><span class="o">&gt;</span> <span class="o">{</span> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Also, we&rsquo;ll create a <em>BankAccountRepository</em> class that connects the outgoing ports with the <em>SpringDataBankAccountRepository</em>:</p>
 
-<p>{% codeblock lang:java BankAccountRepository.java %}
-@Component
-public class BankAccountRepository implements LoadAccountPort, SaveAccountPort {</p>
-
-<pre><code>    private SpringDataBankAccountRepository repository;
-
-    // Constructor
-
-    @Override
-    public Optional&lt;BankAccount&gt; load(Long id) {
-        return repository.findById(id);
-    }
-
-    @Override
-    public void save(BankAccount bankAccount) {
-        repository.save(bankAccount);
-    }
-</code></pre>
-
-<p>}</p>
-
-<p>{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>BankAccountRepository.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Component</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountRepository</span> <span class="kd">implements</span> <span class="n">LoadAccountPort</span><span class="o">,</span> <span class="n">SaveAccountPort</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="kd">private</span> <span class="n">SpringDataBankAccountRepository</span> <span class="n">repository</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">Optional</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">BankAccount</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">load</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">save</span><span class="o">(</span><span class="n">BankAccount</span> <span class="n">bankAccount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">repository</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">bankAccount</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <h3>Infrastructure</h3>
 
 <p>Finally, we need to tell Spring to expose the <em>BankAccountService</em> as a bean, so it can be injected in the controller:</p>
 
-<p>{% codeblock lang:java BeanConfiguration.java %}
-@Configuration
-@ComponentScan(basePackageClasses = HexagonalApplication.class)
-public class BeanConfiguration {</p>
-
-<pre><code>    @Bean
-    BankAccountService bankAccountService(BankAccountRepository repository) {
-        return new BankAccountService(repository, repository);
-    }
-</code></pre>
-
-<p>}
-{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>BeanConfiguration.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
+</span><span class='line'><span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">basePackageClasses</span> <span class="o">=</span> <span class="n">HexagonalApplication</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BeanConfiguration</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="nd">@Bean</span>
+</span><span class='line'>    <span class="n">BankAccountService</span> <span class="nf">bankAccountService</span><span class="o">(</span><span class="n">BankAccountRepository</span> <span class="n">repository</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="k">new</span> <span class="nf">BankAccountService</span><span class="o">(</span><span class="n">repository</span><span class="o">,</span> <span class="n">repository</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Defining the beans in the Adapters layer helps us maintain the infrastructure code decoupled from the business logic.</p>
 
@@ -430,7 +553,7 @@ public class BeanConfiguration {</p>
 
 <p>In this article, we&rsquo;ve seen how to implement an application using Hexagonal Architecture and Spring Boot. This is what the system ends up looking like:</p>
 
-<p>{% img center /images/posts/2020-02-01/HexagonalArchitecture-impl.png 700 ‘Generic Hexagonal Architecture Spring Boot example’ %}</p>
+<p><img class="center" src="/images/posts/2020-02-01/HexagonalArchitecture-impl.png" width="700" title="‘Generic Hexagonal Architecture Spring Boot example’" ></p>
 
 <p>The code for this example is <a href="https://github.com/jivimberg/hexagonal-architecture">available on Github</a>.</p>
 
@@ -438,7 +561,7 @@ public class BeanConfiguration {</p>
 
 <p>This article is based on the <em>highly recommendable</em> <a href="https://leanpub.com/get-your-hands-dirty-on-clean-architecture">&ldquo;Get Your Hands Dirty on Clean Architecture</a> by <a href="https://twitter.com/TomHombergs">Tom Hombergs</a>, and <a href="https://www.baeldung.com/hexagonal-architecture-ddd-spring">this Baeldung article</a> by <a href="https://www.baeldung.com/author/lukasz-rys/">Łukasz Ryś</a>.</p>
 
-<p> {% img right-fill /images/signatures/signature9.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature9.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   

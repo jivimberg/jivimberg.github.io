@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Productivity | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/productivity/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -29,25 +29,25 @@
 
 <p>Maybe you noticed that some of the drawings that I use on this website look like they where done by a 5 year old. Like this one:</p>
 
-<p><a href="https://jivimberg.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines/">{% img center /images/posts/2019-06-18/consumerDiagram.png  800 ‘A hand drawing’ %}</a></p>
+<p><a href="https://jivimberg.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines/"><img class="center" src="/images/posts/2019-06-18/consumerDiagram.png" width="800" title="‘A hand drawing’" ></a></p>
 
 <p>I create these using <a href="https://products.office.com/en-us/onenote/digital-note-taking-app">Microsoft’s OneNote</a> on my wife’s <a href="https://www.microsoft.com/en-us/p/surface-pro-5th-gen/8nkt9wttrbjk?activetab=pivot:overviewtab">Surface Pro</a>. The app it’s somewhat basic, but it does one key thing: it lets you select your traces, move them around and scale them with simple gestures. And that’s really alI you need.</p>
 
-<p>{% img center /images/posts/2019-06-18/surfacePro.jpg  600 ‘Drawing on a SurfacePro’ %}</p>
+<p><img class="center" src="/images/posts/2019-06-18/surfacePro.jpg" width="600" title="‘Drawing on a SurfacePro’" ></p>
 
 <p>Also you can drop any kind of file to OneDrop and draw on top of it.</p>
 
-<p>{% img center /images/posts/2019-06-18/meFramed.png  200 ‘A doodle on my face’ %}</p>
+<p><img class="center" src="/images/posts/2019-06-18/meFramed.png" width="200" title="‘A doodle on my face’" ></p>
 
 <p>But, as I said, the Surface Pro is not mine, so I don’t get to take it to work. At the office I use a low-tech alternative: a <strong><a href="https://getrocketbook.com/">Rocketbook</a></strong>. It’s a notebook you can erase with water.</p>
 
-<p>{% img center /images/posts/2019-06-18/rocketbook.gif ‘Rocketbook animation’ %}</p>
+<p><img class="center" src="/images/posts/2019-06-18/rocketbook.gif" title="‘Rocketbook animation’" ></p>
 
 <p>The pages are from a plasticky material, but it feels pretty close to drawing on actual paper. And you get karma points for not needing dead trees to do your half-ass doodles.</p>
 
 <p>The best thing is that it comes with an app that allows you to scan your drawings and configure an action based on an icon you mark on the page. This helps me digitalize all my notes in a breeze. I can sketch something quickly, take out my phone and share it in Slack in 2 seconds, and without having to shell out $1k for an iPad.</p>
 
-<p>{% img center /images/posts/2019-06-18/slack.png ‘Slack conversation with drawing’ %}</p>
+<p><img class="center" src="/images/posts/2019-06-18/slack.png" title="‘Slack conversation with drawing’" ></p>
 
 <p>My only complain is that you have to wait a couple of minutes for the pages to dry when you’re cleaning it. So cleaning the whole book might take you 15 or 20 minutes. But I only do this once a month so it’s not that big of a deal for me.</p>
 
@@ -55,11 +55,11 @@
 
 <p>Let’s face it, most of your diagrams will still be boxes, cylinders and stick-figures. You don’t want your wiki page or slides including an image like this:</p>
 
-<p>{% img center /images/posts/2019-06-18/ugly-whiteboard.png  400 ‘Whiteboard image that looks ugly’ %}</p>
+<p><img class="center" src="/images/posts/2019-06-18/ugly-whiteboard.png" width="400" title="‘Whiteboard image that looks ugly’" ></p>
 
 <p>Why not do it with style? Meet <strong><a href="https://whimsical.com">Whimsical</a></strong>. With this tool you’ll be able to spit beautiful diagrams in seconds. It’s deceptively simple. It has smart snap to grip and auto-grouping that at times feels like it’s reading your mind.</p>
 
-<p>{% img center /images/posts/2019-06-18/whimsical.gif 800 ‘Whimsical demo’ %}</p>
+<p><img class="center" src="/images/posts/2019-06-18/whimsical.gif" width="800" title="‘Whimsical demo’" ></p>
 
 <p>It can do flowcharts, mind maps, wireframes and sticky notes. The catch is you only get 4 <em>“boards”</em> for free. After that it’s $10 a month💰</p>
 
@@ -67,23 +67,42 @@
 
 <p>Use the comic style to get your diagrams to look like this:</p>
 
-<p><a href="https://jivimberg.io/blog/2018/07/03/writing-githooks-in-kotlin/">{% img center /images/posts/2019-06-18/drawio.png  ‘Draw.io example’ %} </a></p>
+<p><a href="https://jivimberg.io/blog/2018/07/03/writing-githooks-in-kotlin/"><img class="center" src="/images/posts/2019-06-18/drawio.png" title="‘Draw.io example’" > </a></p>
 
 <p><em>(This diagram is from my <a href="https://jivimberg.io/blog/2018/07/03/writing-githooks-in-kotlin/">“Writing Githooks in Kotlin”</a> post)</em></p>
 
 <p>If all you’re trying to create is a UML of your existing code then you should check <a href="https://www.jetbrains.com/help/idea/class-diagram.html">this Intellij feature</a> that gives you just that in a couple clicks.</p>
 
-<p>{% img center /images/posts/2019-06-18/intellijUML.png 600 ‘UML diagram from Intellij’ %}</p>
+<p><img class="center" src="/images/posts/2019-06-18/intellijUML.png" width="600" title="‘UML diagram from Intellij’" ></p>
 
 <p>Similarly if you’re using Spring you can <a href="https://www.jetbrains.com/help/idea/spring-support.html">get a beans dependencies diagram</a> just as easily.</p>
 
-<p>{% img center /images/posts/2019-06-18/beans-dependencies.png 600 ‘Beans dependencies diagram on Intellij’ %}</p>
+<p><img class="center" src="/images/posts/2019-06-18/beans-dependencies.png" width="600" title="‘Beans dependencies diagram on Intellij’" ></p>
 
 <h2>Sharing snippets of code</h2>
 
 <p>If you need to share a snippet of code you can create a Gist like this one: <a href="https://gist.github.com/jivimberg/8cae46cdb5b98c0d19176efcde2eadd9">sendForm.gs</a>. And you can easily embed them in a page:</p>
 
-<p>{% gist 8cae46cdb5b98c0d19176efcde2eadd9 %}</p>
+<p><div><script src='https://gist.github.com/8cae46cdb5b98c0d19176efcde2eadd9.js'></script>
+<noscript><pre><code>function sendFormEmail() {
+    var toEmailAddress = &quot;someone@gmail.com&quot;;
+    var htmlMessage = HtmlService.createHtmlOutputFromFile(&quot;Name-of-your-HTML-file.html&quot;).getContent();
+    var subject = &quot;Subject&quot;;
+    var message = &quot;Some message&quot;;
+    MailApp.sendEmail(toEmailAddress, subject, message, {
+      htmlBody: htmlMessage
+    });
+}
+
+function createTimeDrivenTriggers() {
+    // Trigger every day at 6 pm.
+    ScriptApp.newTrigger(&#39;sendFormEmail&#39;)
+    .timeBased()
+    .atHour(18)
+    .everyDays(1) // Frequency is required if you are using atHour() or nearMinute()
+    .create();
+}</code></pre></noscript></div>
+</p>
 
 <p>Gist are great because they have version history, can be commented, forked and starred and you can group multiple files in a single Gist.</p>
 
@@ -163,7 +182,7 @@ fun <T, R> Flow<T>.parallelMap(
 
 <p>Finally, if all you want is to show some highlighted code you can use <a href="https://carbon.now.sh">carbon.sh</a> to get a beautiful image of your source code, like this one:</p>
 
-<p>{% img center /images/posts/2019-06-18/carbon.png  ‘Carbon.sh demo’ %}</p>
+<p><img class="center" src="/images/posts/2019-06-18/carbon.png" title="‘Carbon.sh demo’" ></p>
 
 <h2>Presentations</h2>
 
@@ -176,7 +195,7 @@ fun <T, R> Flow<T>.parallelMap(
 
 <p>This days, though, if I need to throw a deck together quickly, I hit <a href="https://www.slidescarnival.com/"><strong>Slides Carnivals</strong></a>. I pick a template that matches the topic I’m covering, import it in Google Slides and start working on it. Only if I need some fancy animations I’d use Keynote (see next topic).</p>
 
-<p>{% img center /images/posts/2019-06-18/slidesCarnival.png 800  ‘Slides carnival’ %}</p>
+<p><img class="center" src="/images/posts/2019-06-18/slidesCarnival.png" width="800" title="‘Slides carnival’" ></p>
 
 <p>Finally,  it doesn’t really matter which tools you use if you’re just going to cramp 3 paragraphs of text in a slide. And no, having bullet points doesn’t make it any better.  You need to <a href="https://zachholman.com/posts/slide-design-for-developers/">give your deck some ❤️</a>. But  that’s a topic for another day.</p>
 
@@ -186,7 +205,7 @@ fun <T, R> Flow<T>.parallelMap(
 
 <p>Don’t believe me? Try explaining how the <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/index.html">different kinds of Kotlin channels</a> behave using just words. Then check this animation:</p>
 
-<p>{% img center /images/posts/2019-04-18/Channels.gif  600 ‘Channels animation’ %}</p>
+<p><img class="center" src="/images/posts/2019-04-18/Channels.gif" width="600" title="‘Channels animation’" ></p>
 
 <p>You can create simple animations like this one 👆 on <strong><a href="https://www.apple.com/keynote/">Keynote</a></strong>. Using <em>Magic move</em> and playing around with the order you can create all kind of choreographed animations. When you’re satisfied with the result, <a href="https://support.apple.com/kb/PH28038?locale=en_US&amp;viewlocale=en_US">you can export your creation as a gif</a> and share it with the world.</p>
 
@@ -194,11 +213,11 @@ fun <T, R> Flow<T>.parallelMap(
 
 <p>If you ever worked with non-tech people you know the importance of showing something. Just telling them about what a system will do or how it would look it’s not enough. They have to see it 👀. That’s why low-res mockups are so powerful. You can use a tool like <a href="https://balsamiq.com/">Balsamiq</a> to create something like this in minutes. And you can even make them interactive to show how different screens would connect to each other.</p>
 
-<p>{% img center /images/posts/2019-06-18/balsamiq.png 600 ‘balsamic example’ %}</p>
+<p><img class="center" src="/images/posts/2019-06-18/balsamiq.png" width="600" title="‘balsamic example’" ></p>
 
 <p>Whimsical also has wire-framing capabilities:</p>
 
-<p>{% img center /images/posts/2019-06-18/whimsical-wireframe.png ‘Whimsical wireframe’ %}</p>
+<p><img class="center" src="/images/posts/2019-06-18/whimsical-wireframe.png" title="‘Whimsical wireframe’" ></p>
 
 <p>If you’re looking for something more high-res checkout <a href="https://www.invisionapp.com">InVision</a>, that’s what all the cool kids are using this days.</p>
 
@@ -206,23 +225,23 @@ fun <T, R> Flow<T>.parallelMap(
 
 <p><strong><a href="https://www.canva.com">Canva</a></strong> is probably the <strong>best design tools for non-designers</strong> you’ll find online, hands down.  I’ve used it for all kind of things. I’ve used it to create logos:</p>
 
-<p>{% img center /images/posts/2019-06-18/Kassette.png 250 ‘Logo created in Canva’ %}</p>
+<p><img class="center" src="/images/posts/2019-06-18/Kassette.png" width="250" title="‘Logo created in Canva’" ></p>
 
 <p>Presentations:</p>
 
-<p><a href="https://jivimberg.io/blog/2014/10/12/notes-on-api-design/">{% img left /images/posts/2019-06-18/Stability.jpg 225 &lsquo;Stability&rsquo; %} </a></p>
+<p><a href="https://jivimberg.io/blog/2014/10/12/notes-on-api-design/"><img class="left" src="/images/posts/2019-06-18/Stability.jpg" width="225" title="&lsquo;Stability&rsquo;" > </a></p>
 
-<p><a href="https://jivimberg.io/blog/2014/10/12/notes-on-api-design/">{% img left /images/posts/2019-06-18/MinimizeAccessibility.jpg 225 &lsquo;Minimize Accessibility&rsquo; %}  </a></p>
+<p><a href="https://jivimberg.io/blog/2014/10/12/notes-on-api-design/"><img class="left" src="/images/posts/2019-06-18/MinimizeAccessibility.jpg" width="225" title="&lsquo;Minimize Accessibility&rsquo;" >  </a></p>
 
-<p><a href="https://jivimberg.io/blog/2014/10/12/notes-on-api-design/">{% img /images/posts/2019-06-18/ImplVsInterface.jpg 225 &lsquo;Implementation Vs Interface&rsquo; %} </a></p>
+<p><a href="https://jivimberg.io/blog/2014/10/12/notes-on-api-design/"><img src="/images/posts/2019-06-18/ImplVsInterface.jpg" width="225" title="&lsquo;Implementation Vs Interface&rsquo;" > </a></p>
 
 <p>My resume:</p>
 
-<p><a href="https://drive.google.com/file/d/12FKryxTfewr_QtvQtTDMJf-NwmuySY2k/view">{% img center /images/posts/2019-06-18/resume-1.png  500 ‘My Resume’ %}</a></p>
+<p><a href="https://drive.google.com/file/d/12FKryxTfewr_QtvQtTDMJf-NwmuySY2k/view"><img class="center" src="/images/posts/2019-06-18/resume-1.png" width="500" title="‘My Resume’" ></a></p>
 
 <p>Banners for <a href="https://play.google.com/store/apps/details?id=com.eightblocksaway.android.practicepronunciation&amp;hl=en_US">an Android app I wrote</a>:</p>
 
-<p><a href="https://play.google.com/store/apps/details?id=com.eightblocksaway.android.practicepronunciation&amp;hl=en_US">{% img center /images/posts/2019-06-18/PracticePronunciation.png 400 ‘Practice pronunciation banner’ %}</a></p>
+<p><a href="https://play.google.com/store/apps/details?id=com.eightblocksaway.android.practicepronunciation&amp;hl=en_US"><img class="center" src="/images/posts/2019-06-18/PracticePronunciation.png" width="400" title="‘Practice pronunciation banner’" ></a></p>
 
 <p>And much, much more… Seriously, if you’ve never used it just go and check it out because it’s amazing, and super simple to use.</p>
 
@@ -238,7 +257,7 @@ fun <T, R> Flow<T>.parallelMap(
 
 <p><strong>Tip 3:</strong> Befriend graphic designers. Ask them what tools they use. Watch them work. Take note on how they dress.</p>
 
-<p> {% img right-fill /images/signatures/signature2.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 
@@ -261,15 +280,15 @@ fun <T, R> Flow<T>.parallelMap(
 
 <p>The <strong>first</strong> thing I do every time I have to configure a new installation of IntelliJ is setting the theme to <em>Darcula</em>.</p>
 
-<p>{% img center /images/posts/2018-06-10/Darcula.png 720 ’Darcula theme’ %}</p>
+<p><img class="center" src="/images/posts/2018-06-10/Darcula.png" width="720" title="’Darcula theme’" ></p>
 
 <p>The <strong>second</strong> thing I do is <strong>changing the font</strong> to <a href="https://github.com/tonsky/FiraCode">Fira Code</a>, and <strong>enabling font ligatures.</strong> Here’s how it looks like:</p>
 
-<p>{% img center /images/posts/2018-06-10/FiraCodeExample.png 720 ’Fira code example’ %}</p>
+<p><img class="center" src="/images/posts/2018-06-10/FiraCodeExample.png" width="720" title="’Fira code example’" ></p>
 
 <p>You can enable this from <code>Settings</code> > <code>Editor</code> > <code>Font</code>. Make sure to check <code>Enable font ligatures</code> if you like that <code>≠</code> symbol.</p>
 
-<p>{% img center /images/posts/2018-06-10/FiraCode.png 720 ’Fira code setting’ %}</p>
+<p><img class="center" src="/images/posts/2018-06-10/FiraCode.png" width="720" title="’Fira code setting’" ></p>
 
 <h2>2. Auto-reformat</h2>
 
@@ -284,7 +303,7 @@ fun <T, R> Flow<T>.parallelMap(
 </ul>
 
 
-<p>{% img center /images/posts/2018-06-10/saveActions.png 720 ’Save actions settings’ %}</p>
+<p><img class="center" src="/images/posts/2018-06-10/saveActions.png" width="720" title="’Save actions settings’" ></p>
 
 <p>Now your can just spit your <em>ugly</em> code and <strong>it’ll get perfectly formatted on each save</strong>. <em>Nice uh?</em></p>
 
@@ -298,7 +317,7 @@ fun <T, R> Flow<T>.parallelMap(
 
 <p>Here you can see it in action:</p>
 
-<p>{% img center /images/posts/2018-06-10/expandSelection.gif ’Expand and shrink selection animation’ %}</p>
+<p><img class="center" src="/images/posts/2018-06-10/expandSelection.gif" title="’Expand and shrink selection animation’" ></p>
 
 <p>Just mentioning this one because it was new to me at the time and nowadays I find myself using it <strong>all the time!</strong></p>
 
@@ -328,11 +347,11 @@ fun <T, R> Flow<T>.parallelMap(
 
 <p>2 - Send this form to your email address using the <strong>Send Form</strong> button. Send it using the <strong>&ldquo;send form via email&rdquo;</strong> option, as shown in the picture:</p>
 
-<p>{% img center /images/posts/2014-08-21/SendForm.png 400 &lsquo;Send Form&rsquo; %}</p>
+<p><img class="center" src="/images/posts/2014-08-21/SendForm.png" width="400" title="&lsquo;Send Form&rsquo;" ></p>
 
 <p>3 - Now we need to get that form in HTML. To achieve this we will need the raw email. In GMail you can see it using the <strong>Show original</strong> option in the menu, from there you should copy everything that&rsquo;s enclosed in the <code>&lt;html&gt;...&lt;/html&gt;</code> tags (including the tags).</p>
 
-<p>{% img center /images/posts/2014-08-21/ShowOriginal.png 250 &lsquo;Show Original&rsquo; %}</p>
+<p><img class="center" src="/images/posts/2014-08-21/ShowOriginal.png" width="250" title="&lsquo;Show Original&rsquo;" ></p>
 
 <p>4 - So we have the HTML but, at least if you obtain it like me, you&rsquo;ll notice that it is encoding as <strong>quoted-printable</strong>. I use <a href="http://www.webatic.com/run/convert/qp.php">this site</a> to decode it. Make sure you paste your code in the <strong>Encoded</strong> text field and press the <strong>decode</strong> button. Copy this code to your clipboard, we will need it later.</p>
 
@@ -359,7 +378,7 @@ fun <T, R> Flow<T>.parallelMap(
 
 <p>9 - Finally go to <em>Edit > Current project triggers</em>  and create a time driven trigger to run it daily (or weekly, or whatever suits your needs)<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup></p>
 
-<p>{% img center /images/posts/2014-08-21/Triggers.png 700 &lsquo;Triggers&rsquo; %}</p>
+<p><img class="center" src="/images/posts/2014-08-21/Triggers.png" width="700" title="&lsquo;Triggers&rsquo;" ></p>
 
 <p>9 (option B) - As <strong>an alternative</strong> you can define the triggers in the script itself using code as suggested by <a href="https://disqus.com/by/johannesschwaninger/">Johannes Schwaninger</a> in the comments. You can do so like this:</p>
 

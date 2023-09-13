@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Book Recommendations: Migrating to Cloud-Native Application Architectures - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Book Recommendations: Migrating to Cloud-Native Application Architectures written July 24, 2018 in book, cloud-native, microservices Complementing &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.io/blog/2018/07/24/book-recommendations-migrating-to-cloud-native-application-architectures">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<!-- Twitter card configuration from: https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image -->
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@jivimberg">
+  <meta name="twitter:creator" content="@jivimberg">
+  <meta name="twitter:title" content="Book recommendations: Migrating to Cloud-Native Application Architectures">
+  <meta name="twitter:description" content="Book Recommendations: Migrating to Cloud-Native Application Architectures written July 24, 2018 in book, cloud-native, microservices Complementing my last book recommendation on  Migrating to &hellip;">
+  <meta name="twitter:image" content="https://jivimberg.io/images/background.jpg">
+
+
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W97HTLLN1Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W97HTLLN1Y');
+</script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Book Recommendations: Migrating to Cloud-Native Application Architectures</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2018-07-24T16:18:45-07:00" pubdate data-updated="true">July 24, 2018</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/book/'>book</a>, <a class='category' href='/blog/categories/cloud-native/'>cloud-native</a>, <a class='category' href='/blog/categories/microservices/'>microservices</a>
+  
+</span>
+
+
+        </div>
+        <p>Complementing <a href="https://jivimberg.io/blog/2018/05/25/book-recomendations-migrating-to-microservices-databases/">my last book recommendation</a> on <em> Migrating to microservices databases</em> by <a href="https://twitter.com/yanaga">Edson Yanaga</a> now I present <a href="https://content.pivotal.io/ebooks/migrating-to-cloud-native-application-architectures"><em>Migrating to Cloud-Native Application Architectures</em></a> by <a href="@mstine">Matt Stine</a>.</p>
+
+<!--more-->
+
+
+<p><a href="https://content.pivotal.io/ebooks/migrating-to-cloud-native-application-architectures"><img class="center" src="/images/posts/2018-07-28/cover.jpg" title="’Migrating to Cloud-Native Application book cover’" ></a></p>
+
+<p>I’m really digging this O’Reilly booklet style! They <strong>condense a good overview of a specific topic in one-sitting books</strong>. While at the same time provide enough links and resources to keep you digging for a few afternoons if interested.</p>
+
+<p>Matt’s book is divided in 3 parts. The first bit <strong>”The rise of cloud service”</strong> serves as an introduction to the topic. It defines <em>cloud native architectures </em> key characteristics and <strong>why you might consider using one</strong>.  If you are already familiar with the subject you may want to skim through this first section.</p>
+
+<p>The second part is the one I enjoyed the most. It talks about <strong>the changes needed to go cloud native</strong>. It covers areas that are sometimes forgotten or considered as an afterthought such as <em>team collaboration</em>, <em>organizational changes</em> (the <a href="https://www.thoughtworks.com/radar/techniques/inverse-conway-maneuver">Inverse Conway Maneuver</a>) and the <em>decentralization of decision making</em>. The rest of the chapter touches on the <strong>technical challenges</strong> required. It was really nice to see a bit on how to <strong>use <a href="https://en.wikipedia.org/wiki/Domain-driven_design">DDD</a> to identify service boundaries</strong> when decomposing data models.</p>
+
+<p>On the last chapter, called <strong>Migration Cookbook</strong>, Matt explores different strategies for decomposing the monolith (such as <em>”strangling the monolith”</em>, <em>”new features as Micro-services”</em>, <em>”anti-corruption layer”</em>, etc.) and provides links to articles by companies that applied this strategies on their own systems. The book finishes with a section called <strong>Distributed system recipes</strong>  where some of the more common <em>“challenges”</em> of a cloud-native architecture are explored and particular solutions are presented using <a href="http://projects.spring.io/spring-cloud/">Spring Cloud</a> and <a href="https://netflix.github.io/">Netflix OSS</a>. Here you’ll find things like <em>service discovery</em>, <em>versioned configuration</em>, <em>load balancing</em>, etc. Each topic is presented with a brief description of the problem, a mention of the Netflix OSS solution (and it’s features) and a code snippet showing how to integrate it with Spring.</p>
+
+<h2>Bottom line</h2>
+
+<p><strong>GO READ IT!</strong> It won’t take you more than an afternoon and chances are you’ll learn something new. You’ll walk away with <strong>a better understanding of the cloud-native landscape.</strong></p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.io/blog/2018/07/24/book-recommendations-migrating-to-cloud-native-application-architectures/';
+        var disqus_url = 'http://jivimberg.io/blog/2018/07/24/book-recommendations-migrating-to-cloud-native-application-architectures/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2018/07/20/map-dot-merge/" title="Previous Post: Map.merge">&laquo; Previous: Map.merge</a>
+        
+
+        
+          <a class="pull-right" href="/blog/2018/08/04/recursive-queries-on-rdbms-with-jpa/" title="Next Post: Hierarchical queries on RDBMS with JPA">Next: Hierarchical queries on RDBMS with JPA &raquo;</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

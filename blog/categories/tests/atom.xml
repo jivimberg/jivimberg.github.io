@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tests | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/tests/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -31,17 +31,17 @@
 </ol>
 
 
-<p>{% img center /images/posts/2020-09-07/restaurantTestsBefore.png 700 ‘Repetitive tests’ %}</p>
+<p><img class="center" src="/images/posts/2020-09-07/restaurantTestsBefore.png" width="700" title="‘Repetitive tests’" ></p>
 
 <p>This works fine, but writing a new <code>Recipe</code> for every single test gets repetitive pretty fast. More importantly, most lines of the test are spent creating the <code>Recipe</code> object. By having to spell out every single property, we lose track of what’s important for each specific test.</p>
 
 <p>Luckily, we can use <a href="https://kotlinlang.org/docs/reference/functions.html#default-arguments">Kotlin default arguments</a> to make the tests better. We could introduce default values directly on the <code>Recipe</code> class, but that would mean we’d have to pick sensible defaults for Recipes in production. We probably don’t want to allow for this flexibility, as we want to force users to specify those properties for each recipe defined. Instead, we will write a <a href="https://phauer.com/2018/best-practices-unit-testing-kotlin/#use-helper-functions-with-default-arguments-to-ease-object-creation"><em>helper function</em></a> with default arguments to handle the <code>Recipe</code> creation. We’ll make it <code>private</code> so that it’s only accessible in the test class.</p>
 
-<p>{% img center /images/posts/2020-09-07/helperFunction.png 700 ‘Helper function’ %}</p>
+<p><img class="center" src="/images/posts/2020-09-07/helperFunction.png" width="700" title="‘Helper function’" ></p>
 
 <p>Now we can re-write our tests to make use of the helper function:</p>
 
-<p>{% img center /images/posts/2020-09-07/restaurantTestsAfter.png 700 ‘Improved tests’ %}</p>
+<p><img class="center" src="/images/posts/2020-09-07/restaurantTestsAfter.png" width="700" title="‘Improved tests’" ></p>
 
 <p>On each test, we only specify the property that the test cares about and leave out all the other ones. This way, somebody glancing at the test can immediately identify what we’re checking, and it’s not distracted by the details on how to create a <code>Recipe</code> object.</p>
 
@@ -49,7 +49,7 @@
 
 <p>We could have written the test for vegan recipes without specifying any property, and it would still pass.</p>
 
-<p>{% img center /images/posts/2020-09-07/notExplicit.png 700 ‘Not explicit enough tests’ %}</p>
+<p><img class="center" src="/images/posts/2020-09-07/notExplicit.png" width="700" title="‘Not explicit enough tests’" ></p>
 
 <p>By default <code>isVegan</code> is true, so we&rsquo;re not required to define it. However, <strong>we opted for explicitly specifying it in the test</strong>, just so that somebody reading the test would know that the value of <code>isVegan</code>  is important for this test. As an extra benefit, the test will not break if, in the future, somebody decides to change the default value for <code>isVegan</code>.</p>
 
@@ -57,7 +57,7 @@
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
-<p> {% img right-fill /images/signatures/signature10.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
@@ -77,7 +77,7 @@
 
 <p>You&rsquo;ve probably seen the <a href="https://martinfowler.com/bliki/TestPyramid.html">Test Pyramid</a> before. Tests are classified by scope, and the recommendation is to favor tests with reduced scopes (i.e. Unit Tests).</p>
 
-<p>{% img center /images/posts/2020-07-31/TestingPyramid.jpg 700 ‘Using data classes for assertions’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-31/TestingPyramid.jpg" width="700" title="‘Using data classes for assertions’" ></p>
 
 <p>At Google they came up with a new dimension: <em>Test Size</em><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Tests are grouped in categories <strong>based on the resources a test needs to run</strong> (memory, processes, time, etc.).</p>
 
@@ -93,7 +93,7 @@
 
 <p>How does this tie back to our crusade against flaky tests? Simple, <strong>the smaller the test, the more deterministic it’ll be.</strong> As a bonus perk, they also tend to be faster.</p>
 
-<p>{% img center /images/posts/2020-07-31/TestSizes.jpg 700 ‘Test sizes’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-31/TestSizes.jpg" width="700" title="‘Test sizes’" ></p>
 
 <p>Google went the extra mile and built infrastructure to enforce these constraints. For example, a test marked as <em>Small</em> would fail if it tried to do I/O.</p>
 
@@ -121,7 +121,7 @@
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
-<p> {% img right-fill /images/signatures/signature2.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
 <div class="footnotes">
 <hr/>
 <ol>
@@ -145,21 +145,21 @@
 
 <p>Let&rsquo;s start with an example. Here&rsquo;s a test making sure our recipe has tomatoes 🍅</p>
 
-<p>{% img center /images/posts/2020-07-19/badAssertion.png 700 ‘A test with a non-descriptive assertion’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/badAssertion.png" width="700" title="‘A test with a non-descriptive assertion’" ></p>
 
 <p>At first glance, everything looks ok. The test passes, it is easy to read, and it follows <a href="https://jivimberg.io/blog/2020/07/10/effective-testing-test-structure/">the <em>”Given - When - Then”</em>  structure</a>.</p>
 
 <p>Some months go by, and one day our test starts failing.</p>
 
-<p>{% img center /images/posts/2020-07-19/badAssertionOutput.png 700 ‘The output of a test with a non-descriptive assertion’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/badAssertionOutput.png" width="700" title="‘The output of a test with a non-descriptive assertion’" ></p>
 
 <p>At this point, we&rsquo;ve probably forgotten everything about the recipe, and we’re not sure what’s causing the failure. <a href="https://jivimberg.io/blog/2020/07/05/effective-testing-use-descriptive-test-names/">The test name is not helping us much either</a>.</p>
 
 <p>To avoid this situation, we can include a message that will be displayed whenever the assertion fails.</p>
 
-<p>{% img center /images/posts/2020-07-19/withMessage.png 700 ‘Assertion with explicit message’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/withMessage.png" width="700" title="‘Assertion with explicit message’" ></p>
 
-<p>{% img center /images/posts/2020-07-19/withMessageOutput.png 700 ‘Output of a test with an assertion with explicit message’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/withMessageOutput.png" width="700" title="‘Output of a test with an assertion with explicit message’" ></p>
 
 <p>Now the failure is obvious. There is no 🍅 on the recipe. <strong>We can immediately tell what’s wrong without even looking at the test code.</strong> But we can do better…</p>
 
@@ -167,13 +167,13 @@
 
 <p>Let&rsquo;s face it, writing this kind of detailed message for every assertion would be a pain in the ass. Fortunately, we don’t have to. Instead, <strong>we can use an <a href="https://blog.frankel.ch/comparison-assertion-libraries/">expressive assertion library</a> to do the heavy lifting for us.</strong> This is how our code would look like using <a href="https://strikt.io/">Strikt</a>:</p>
 
-<p>{% img center /images/posts/2020-07-19/strikt.png 700 ‘Example using Strikt’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/strikt.png" width="700" title="‘Example using Strikt’" ></p>
 
 <p>We&rsquo;re using <a href="https://kotlinlang.org/docs/reference/functions.html#infix-notation">Kotlin infix notation</a> to make the code more readable. This a stylistic decision, you don’t have to use it if you don’t like it.</p>
 
 <p>You might notice we&rsquo;re calling the <code>contains</code> method on the assertion itself. This is possible because Strikt can tell that the type we’re asserting on, is a <em>String</em>, and thus, it can provide methods explicitly tailored to Strings. This is what the error message would look like in this case:</p>
 
-<p>{% img center /images/posts/2020-07-19/outputStrikt.png 700 ‘Output of the basic Strikt example’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/outputStrikt.png" width="700" title="‘Output of the basic Strikt example’" ></p>
 
 <p><strong>Almost the same information we got from writing our own message, but without the boilerplate.</strong></p>
 
@@ -181,33 +181,33 @@
 
 <p>Here are some more examples of type-specific assertions:</p>
 
-<p>{% img center /images/posts/2020-07-19/collectionAssertion.png 700 ‘Collection specific assertions’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/collectionAssertion.png" width="700" title="‘Collection specific assertions’" ></p>
 
-<p>{% img center /images/posts/2020-07-19/assertingExceptions.png 700 ‘Asserting exceptions’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/assertingExceptions.png" width="700" title="‘Asserting exceptions’" ></p>
 
 <h2>Asserting on objects</h2>
 
 <p>When validating properties on objects, you might be tempted to write something like this:</p>
 
-<p>{% img center /images/posts/2020-07-19/badObjectAssertions.png 700 ‘Manually asserting properties on object’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/badObjectAssertions.png" width="700" title="‘Manually asserting properties on object’" ></p>
 
 <p>You can probably tell why this is bad. By the time we see the failure, we no longer have context on what property we’re asserting.</p>
 
-<p>{% img center /images/posts/2020-07-19/objectAssertionOutput.png 700 ‘Using data classes for assertions’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/objectAssertionOutput.png" width="700" title="‘Using data classes for assertions’" ></p>
 
 <p>Was it checking the <code>title</code>, the <code>author</code>, or something else?</p>
 
 <p>Instead, you can take advantage of the fact that Data Classes automatically get <code>equals</code> and <code>toString</code> implementations. So we can use an <code>assertEquals</code> and get a nice looking message showing us both instances.</p>
 
-<p>{% img center /images/posts/2020-07-19/dataClasses.png 700 ‘Using data classes for assertions’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/dataClasses.png" width="700" title="‘Using data classes for assertions’" ></p>
 
-<p>{% img center /images/posts/2020-07-19/dataClassesOutput.png 700 ‘Using data classes test output’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/dataClassesOutput.png" width="700" title="‘Using data classes test output’" ></p>
 
 <p>If we don&rsquo;t care about comparing all properties we can use <a href="https://strikt.io/wiki/traversing-subjects/">Strikt to assert only specific fields</a>:</p>
 
-<p>{% img center /images/posts/2020-07-19/traversingObjects.png 700 ‘Using Strikt to traverse objects on assertions’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/traversingObjects.png" width="700" title="‘Using Strikt to traverse objects on assertions’" ></p>
 
-<p>{% img center /images/posts/2020-07-19/traversingObjectsOutput.png 700 ‘Strikt object traversal test output’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/traversingObjectsOutput.png" width="700" title="‘Strikt object traversal test output’" ></p>
 
 <p>The <a href="https://strikt.io/wiki/assertion-styles/">block assertion style</a> means that even though the <em>title</em> assertion failed Strikt will still check for <em>page count</em> and <strong>it’ll provide output for all the assertions in the block.</strong></p>
 
@@ -215,7 +215,7 @@
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
-<p> {% img right-fill /images/signatures/signature2.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
@@ -240,23 +240,23 @@
 
 <p>For example:</p>
 
-<p>{% img center /images/posts/2020-07-10/exampleJunit.png 700 ‘Example of the proposed structure using JUnit’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-10/exampleJunit.png" width="700" title="‘Example of the proposed structure using JUnit’" ></p>
 
 <p>The comments explaining each section are optional, and can be omitted on trivial scenarios like the one shown here.</p>
 
 <p>Note how we use whitespace to clearly separate each section. Anybody familiar with the structure will be able to easily identify each section at a glance.</p>
 
-<p>{% img center /images/posts/2020-07-10/testSections.jpg 700 ‘Colored sections on test’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-10/testSections.jpg" width="700" title="‘Colored sections on test’" ></p>
 
 <p>Some testing libraries like <a href="https://github.com/kotest/kotest/">Kotest</a> support a style that already includes the <em>Given</em>, <em>When</em> and <em>Then</em> keywords, making the structure explicit.</p>
 
-<p>{% img center /images/posts/2020-07-10/exampleKotest.png 700 ‘Example of the proposed structure using Kotest’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-10/exampleKotest.png" width="700" title="‘Example of the proposed structure using Kotest’" ></p>
 
 <hr />
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
-<p> {% img right-fill /images/signatures/signature13.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature13.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
@@ -272,7 +272,7 @@
 
 <p>It&rsquo;s Friday afternoon. You finally finished that long refactor you’ve been working on for the whole week. Everything is looking good. Except you run the tests and see one failure.</p>
 
-<p>{% img center /images/posts/2020-07-05/BadNames.png ‘Test output with bad test names’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-05/BadNames.png" title="‘Test output with bad test names’" ></p>
 
 <p style='text-align: center; font-size: 42px;'>
 🤔
@@ -283,7 +283,7 @@
 
 <p>But what if the output looked more like this:</p>
 
-<p>{% img center /images/posts/2020-07-05/GoodNames.png ‘Test output with good test names’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-05/GoodNames.png" title="‘Test output with good test names’" ></p>
 
 <p>Now the issue is obvious. <strong>You can immediately tell which part of the code is not working and what the output should be.</strong></p>
 
@@ -295,13 +295,13 @@
 
 <p>If you&rsquo;re using Kotlin, you can <a href="https://kotlinlang.org/docs/reference/coding-conventions.html#function-names">use backticks to have whitespaces in your function name</a>. If you’re working with <a href="https://junit.org/junit5/docs/current/user-guide/">JUnit</a> you can leverage the <a href="https://junit.org/junit5/docs/5.0.3/api/org/junit/jupiter/api/DisplayName.html"><code>@DisplayName</code></a> annotation for prettier names. You can even get emojis in there:</p>
 
-<p>{% img center /images/posts/2020-07-05/WithEmojis.png ‘Test output with emojis’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-05/WithEmojis.png" title="‘Test output with emojis’" ></p>
 
 <p>You can also write a custom name generator using <code>@DisplayNameGeneration</code> <a href="https://www.baeldung.com/junit-custom-display-name-generator">as shown here</a>.</p>
 
 <p>Some testing libraries like <a href="https://github.com/kotest/kotest/">Kotest</a>, also <a href="https://github.com/kotest/kotest/blob/master/doc/styles.md#should-spec">support nesting tests</a>:</p>
 
-<p>{% img center /images/posts/2020-07-05/NestedNames.png ‘Test output with emojis’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-05/NestedNames.png" title="‘Test output with emojis’" ></p>
 
 <hr />
 
@@ -309,7 +309,7 @@
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
-<p> {% img right-fill /images/signatures/signature14.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature14.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Papers | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/papers/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -33,7 +33,7 @@
 
 <p>Say we have an instrumented system we want to troubleshoot:</p>
 
-<p>{% img center /images/posts/2022-02-14/pt1.jpg 700 %}</p>
+<p><img class="center" src="/images/posts/2022-02-14/pt1.jpg" width="700"></p>
 
 <p>The first step is to define <strong>Tracepoints</strong> ⓵. Tracepoints are pointers to the source code where the code will be instrumented to collect metrics. They are instructions on <em>where</em> and <em>how</em> to modify the system to extract the required information. You can think of them as <a href="https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/aop.html"><em>pointcuts</em> from aspect-oriented programming</a>. They can refer to any arbitrary interface or method signature or be inserted at specific line numbers.</p>
 
@@ -43,7 +43,7 @@
 
 <p>Tracepoints are created by someone with good system knowledge (such as developers or operators). They <strong>define the vocabulary users will use to write the queries</strong>.</p>
 
-<p>{% img center /images/posts/2022-02-14/pt2.jpg 700 %}</p>
+<p><img class="center" src="/images/posts/2022-02-14/pt2.jpg" width="700"></p>
 
 <p>The next step is to write a query using the terms introduced by the tracepoints ⓶. A query might look something like this:</p>
 
@@ -68,25 +68,25 @@ Select cl.procName, SUM(incr.delta)
 
 <p>The Frontend creates these Advice and notifies the PT Agents to install them in the corresponding Tracepoints ⓸.</p>
 
-<p>{% img center /images/posts/2022-02-14/pt3.jpg 700 %}</p>
+<p><img class="center" src="/images/posts/2022-02-14/pt3.jpg" width="700"></p>
 
 <p>This is done by <em>weaving</em> generated code that gets executed every time a request passes through the Tracepoint.</p>
 
-<p>{% img center /images/posts/2022-02-14/weaving.png 700 %}</p>
+<p><img class="center" src="/images/posts/2022-02-14/weaving.png" width="700"></p>
 
 <p>For the query shown above, Advice A1 and A2 would be generated:</p>
 
-<p>{% img center /images/posts/2022-02-14/generatedAdvices.png 700 %}</p>
+<p><img class="center" src="/images/posts/2022-02-14/generatedAdvices.png" width="700"></p>
 
 <p>To do the happens-before join required by the query shown above Pivot Tracing needs to propagate the variables captured at <code>ClientProtocols Tracepoint</code> to the  <code>DataNodeMetrics Tracepoint</code>. This is done through something called <em>baggage</em> (if you’re familiar with <a href="https://opentelemetry.io/docs/concepts/signals/baggage/">OTel’s baggage</a> it’s basically the same thing).  When the request gets to the <code>ClientProtocols Tracepoint</code>, the Advice A1 <em>Observes</em> the variables and <em>Packs</em> them as part of the request baggage ⓹. Later, when the code gets to the <code>DataNodeMetrics Tracepoint</code>, the Advice A2 <em>Unpacks</em> the variables, <em>Observes</em> the value of <code>delta</code>, and <em>Emits</em> a joined tuple ⓺.</p>
 
-<p>{% img center /images/posts/2022-02-14/pt4.jpg 700 %}</p>
+<p><img class="center" src="/images/posts/2022-02-14/pt4.jpg" width="700"></p>
 
 <p>The tuples emitted by <code>DataNodeMetrics Tracepoint</code> ⓺ are aggregated locally and then streamed to the client over the message bus ⓻.</p>
 
 <p>Finally, Pivot Tracing Frontend uses these tuples to answer the user’s query ⓼. And that’s how the whole thing works.</p>
 
-<p>{% img center /images/posts/2022-02-14/pt5.jpg 700 %}</p>
+<p><img class="center" src="/images/posts/2022-02-14/pt5.jpg" width="700"></p>
 
 <h2>The power of Happens-Before</h2>
 
@@ -96,7 +96,7 @@ Select cl.procName, SUM(incr.delta)
 
 <p>Pivot Tracing not only supports this, but it also does it in a cost-efficient manner by only propagating just enough context to answer a given user query. This is only possible thanks to their use of Dynamic Instrumentation.</p>
 
-<p>{% img center /images/posts/2022-02-14/happens-before.jpeg 500 %}</p>
+<p><img class="center" src="/images/posts/2022-02-14/happens-before.jpeg" width="500"></p>
 
 <p>So far, we’ve used a straightforward request path for our examples: Service A -> Service B. It’s worth noting that the requests call graphs tend to be much more complex in real life. The tracepoints the user might be interested in querying could be N levels removed. The image above shows which tuples are captured by each query based on the execution graph.</p>
 
@@ -126,7 +126,7 @@ Select cl.procName, SUM(incr.delta)
 
 <p>This is a typical example of a happens-before query. The clause <code>cl -&gt; incr</code> means we only care about <code>incr</code> events if the request first passes through <code>cl</code>. A user without knowledge of how Pivot Tracing works might think that the cost of this query is proportional to the number of requests it matches, but this would be completely wrong. To answer this query, Pivot Tracing must pack <em>Advice</em> in all requests that go through <code>cl</code>. This baggage is then transmitted across <em>all</em> services downstream from <code>cl</code>. This needs to be done because the system doesn’t know a priori which of those requests will then go through <code>incr</code>.</p>
 
-<p>{% img center /images/posts/2022-02-14/instrumentation-comp.jpeg 700 %}</p>
+<p><img class="center" src="/images/posts/2022-02-14/instrumentation-comp.jpeg" width="700"></p>
 
 <p>Any given query might affect the baggage content passed across <em>N</em> number of services, and there’s no way of knowing which services will be affected at query time.</p>
 
@@ -138,7 +138,7 @@ Select cl.procName, SUM(incr.delta)
 
 <p>Despite all these pitfalls, I still believe Dynamic Instrumentation is a valuable tool and, I’d love to see it adopted in mainstream distributed tracing frameworks. The ability to write queries about any part of the code without having to manually instrument it’s just too good to pass on. We shouldn’t treat it as the primary instrumentation strategy but as a secondary method of answering complex, more specific queries crafted to troubleshoot particular incidents. Engineers designing these tools need to take extra care and put the proper safeguards in place to avoid users shooting themselves in the foot.</p>
 
-<p>{% img right-fill /images/signatures/signature3.png 200 ‘My signature’ %}</p>
+<p><img class="right-fill" src="/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
@@ -156,17 +156,17 @@ Select cl.procName, SUM(incr.delta)
 
 <p>Sifter uses the incoming stream of traces to <strong>builds a model that approximates the system’s common-case behavior</strong>. To make a sampling decision, it checks how well the model matches the incoming trace. Sampling is biased toward traces that are <em>not</em> well approximated (outliers and anomalous traces).</p>
 
-<p>{% img center /images/posts/2021-07-28/full-pipeline.png %}</p>
+<p><img class="center" src="/images/posts/2021-07-28/full-pipeline.png"></p>
 
 <h3>The model</h3>
 
 <p>Sifter uses a 2-layer neural network that models the probability of an event occurring given its immediate predecessors and successors. To create this model, they first extract all <em>N</em>-length paths for each trace.</p>
 
-<p>{% img center /images/posts/2021-07-28/paths.png %}</p>
+<p><img class="center" src="/images/posts/2021-07-28/paths.png"></p>
 
 <p>For a given path (p_0<em>, …, p_N</em>), the neural network predicts the probability of p_N/2_ given its surrounding events p_0<em>, … , p_N</em> (excluding  p_N/2_). The model gives better predictions for paths that are seeing more frequently in the input dataset.</p>
 
-<p>{% img center /images/posts/2021-07-28/neural-network.png %}</p>
+<p><img class="center" src="/images/posts/2021-07-28/neural-network.png"></p>
 
 <h3>Sampling</h3>
 
@@ -174,11 +174,11 @@ Select cl.procName, SUM(incr.delta)
 
 <p>The <em>loss</em> is then weighted against the loss of the <em>k</em> most recent traces.</p>
 
-<p>{% img center /images/posts/2021-07-28/formula-loss.png %}</p>
+<p><img class="center" src="/images/posts/2021-07-28/formula-loss.png"></p>
 
 <p>If all traces have the same <em>loss</em>, then the trace is sampled uniformly at random with probability <em>α</em>. Otherwise, the probability is calculated using this formula:</p>
 
-<p>{% img center /images/posts/2021-07-28/formula-sampling.png %}</p>
+<p><img class="center" src="/images/posts/2021-07-28/formula-sampling.png"></p>
 
 <p>Traces with the lowest <em>loss</em> will have a sampling probability of zero. Traces with the highest loss will have the highest sampling probability.</p>
 
@@ -200,7 +200,7 @@ Select cl.procName, SUM(incr.delta)
 </ul>
 
 
-<p> {% img right-fill /images/signatures/signature3.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   

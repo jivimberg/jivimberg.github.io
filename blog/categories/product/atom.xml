@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Product | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/product/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -23,7 +23,7 @@
 <!--more-->
 
 
-<p>{% img center /images/posts/2023-08-15/door.jpg 450 %}</p>
+<p><img class="center" src="/images/posts/2023-08-15/door.jpg" width="450"></p>
 
 <p>You can safely ignore the puppy; it’s only there for SEO purposes. Focus instead on that thing on the wall, marked by the orange arrow. That is a motion-sensor light switch, the kind that turns the light on when you walk by. Only this one doesn’t because it works like shit. You must wave your hand in front of it, almost touching it, for the lights to come on.</p>
 
@@ -35,11 +35,11 @@
 
 <p>Let’s illustrate this with an example. Not too long ago, Google launched their <a href="https://support.google.com/mail/answer/9116836?hl=en&amp;co=GENIE.Platform%3DDesktop">Smart Compose</a> feature for Gmail. The way it works is you start writing your email and suddenly a grayed-out text appears, trying to guess your next few words. If you like the suggestion, you press <code>tab</code>, and the caret jumps to the end of the line saving you a few keystrokes and leaving you wondering what sort of witchcraft Google is using to read your mind.</p>
 
-<p>{% img center /images/posts/2023-08-15/gmail-smart-compose.gif %}</p>
+<p><img class="center" src="/images/posts/2023-08-15/gmail-smart-compose.gif"></p>
 
 <p>Now, Google could have designed this feature in many different ways. It could, for example, open a popup menu with multiple options letting the user select the best one from the list the way <a href="https://presage.sourceforge.io/">this tool</a> does:</p>
 
-<p>{% img center /images/posts/2023-08-15/gprompter.jpg %}</p>
+<p><img class="center" src="/images/posts/2023-08-15/gprompter.jpg"></p>
 
 <p>This approach might seem more powerful at first glance because it gives the user multiple options instead of just one. But it has a huge disadvantage: it disrupts the user workflow. Picture this: You’re redacting an essay. You think of a sentence and start writing. Midway through a menu pops up designed to look like it’s on top of what you’re doing. Your hands stop typing. Your eyes dart through the popup content, read the first one, jump to the next line, read the second one, etc. You consider all the options and decide to go with the 4th one. Your hands jump to the arrow keys, and you click click click until the one you want is highlighted, then click once more to select it. All of this happens in a matter of milliseconds. And yet it is enough to break your flow. By contrast, Google’s design, users are offered a single option presented inline, as if the text were already written. With the grayed-out text shown in our visual pathway, the eyes naturally flow to the end of the sentence. We can accept the suggestion with just a single keystroke; if we do, our eyes are already in the right place to continue writing.</p>
 
@@ -49,12 +49,12 @@
 
 <p>Instead, we should have emulated the guy that installed that motion sensor in my in-laws' apartment. Rather than introducing a whole new tool, present whatever insight we can gather as part of the existing user workflow. For example, if a developer receives an alert from a failing metric on Service A, we could include any other metrics we think might be related in that same alert. Enriching the alert with additional context giving users a hint on where to look next. Or if they’re looking at a dashboard and notice an anomalous metric, we could then surface a message saying: “Hey, by the way, Service B is also failing in a similar way; you may want to check it”.</p>
 
-<p>{% img center /images/posts/2023-08-15/grafana_clippy.png 700 %}
+<p><img class="center" src="/images/posts/2023-08-15/grafana_clippy.png" width="700">
 <em class="img-caption"> What if Clippy was the peak of UX design? </em></p>
 
 <p>Instead of adopting an <em>“If you build it, they will come”</em> approach we should have <a href="https://medium.com/mule-design/meeting-users-where-they-are-624bc0caa83a">met users where they were at</a>. Presenting key insights in the context of their troubleshooting session and letting them jump to the new tool if they want to dig deeper. <strong>A system built this way would degrade gracefully</strong>: If the correlation service is down or the suggestion is not good, users can still keep troubleshooting the same way they do today.</p>
 
-<p>{% img right-fill /images/signatures/signature10.png 200 ‘My signature’ %}</p>
+<p><img class="right-fill" src="/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   

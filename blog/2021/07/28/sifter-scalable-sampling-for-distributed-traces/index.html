@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Sifter: Scalable Sampling for Distributed Tracing - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Review of Sifter, a scalable approach to sampling that is biased towards anomalous traces.">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<!-- Twitter card configuration from: https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image -->
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@jivimberg">
+  <meta name="twitter:creator" content="@jivimberg">
+  <meta name="twitter:title" content="Sifter: Scalable Sampling for Distributed Tracing">
+  <meta name="twitter:description" content="Review of Sifter, a scalable approach to sampling that is biased towards anomalous traces.">
+  <meta name="twitter:image" content="https://jivimberg.io/images/posts/2021-07-28/paths.png">
+
+
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W97HTLLN1Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W97HTLLN1Y');
+</script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Sifter: Scalable Sampling for Distributed Tracing</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2021-07-28T08:39:37-07:00" pubdate data-updated="true">July 28, 2021</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/distributed-tracing/'>distributed-tracing</a>, <a class='category' href='/blog/categories/observability/'>observability</a>, <a class='category' href='/blog/categories/papers/'>papers</a>, <a class='category' href='/blog/categories/sampling/'>sampling</a>
+  
+</span>
+
+
+        </div>
+        <p>Distributed tracing can be ridiculously expensive if you try to trace a hundred percent of requests. A common technique to reduce costs is to sample only a small portion of the traffic. But naive sampling techniques like <em>uniform sampling</em> will inevitably capture more common-case executions and might miss the more interesting edge cases. Instead, <strong><a href="https://dl.acm.org/doi/10.1145/3357223.3362736">Sifter’s approach</a> is to bias sampling decisions towards outliers and anomalous traces.</strong> This way, anomalous traces have a higher chance of being sampled, and the more uninteresting traces are discarded.</p>
+
+<!--more-->
+
+
+<h2>How it works</h2>
+
+<p>Sifter uses the incoming stream of traces to <strong>builds a model that approximates the system’s common-case behavior</strong>. To make a sampling decision, it checks how well the model matches the incoming trace. Sampling is biased toward traces that are <em>not</em> well approximated (outliers and anomalous traces).</p>
+
+<p><img class="center" src="/images/posts/2021-07-28/full-pipeline.png"></p>
+
+<h3>The model</h3>
+
+<p>Sifter uses a 2-layer neural network that models the probability of an event occurring given its immediate predecessors and successors. To create this model, they first extract all <em>N</em>-length paths for each trace.</p>
+
+<p><img class="center" src="/images/posts/2021-07-28/paths.png"></p>
+
+<p>For a given path (p_0<em>, …, p_N</em>), the neural network predicts the probability of p_N/2_ given its surrounding events p_0<em>, … , p_N</em> (excluding  p_N/2_). The model gives better predictions for paths that are seeing more frequently in the input dataset.</p>
+
+<p><img class="center" src="/images/posts/2021-07-28/neural-network.png"></p>
+
+<h3>Sampling</h3>
+
+<p>To make a sampling decision, Sifter first extracts all <em>N</em>-length paths from traces and feeds that into the model. It then uses the output to calculate the prediction&rsquo;s <em>loss</em>, that is the difference between the predicted and actual events. <strong>The higher the loss, the more “interesting” the trace is.</strong></p>
+
+<p>The <em>loss</em> is then weighted against the loss of the <em>k</em> most recent traces.</p>
+
+<p><img class="center" src="/images/posts/2021-07-28/formula-loss.png"></p>
+
+<p>If all traces have the same <em>loss</em>, then the trace is sampled uniformly at random with probability <em>α</em>. Otherwise, the probability is calculated using this formula:</p>
+
+<p><img class="center" src="/images/posts/2021-07-28/formula-sampling.png"></p>
+
+<p>Traces with the lowest <em>loss</em> will have a sampling probability of zero. Traces with the highest loss will have the highest sampling probability.</p>
+
+<h3>Updating the model</h3>
+
+<p>Sifter does a gradient descent back-propagation pass on the model for every trace seen to keep the model up-to-date. It also adds the trace’s loss into the window of <em>k</em> most recent traces and pops the oldest value. Note that <strong>this happens on every trace regardless of whether it is sampled or not.</strong></p>
+
+<h2>Sifter’s Properties</h2>
+
+<p>The following list is a summary of Sifter’s design choices and their consequences:</p>
+
+<ul>
+<li><strong>Sifter’s operates online over a continuous stream of traces.</strong>  The overhead added by sampling is in the order of milliseconds. This latency is affected only by the trace size and the number of unique events in a trace. It is independent of the workload volume and the number of previously sampled traces.</li>
+<li><strong>Sifter is not feature-based.</strong> The model used to identify interesting traces does not require any feature engineering from developers. As a consequence, Sifter’s approach is not limited to what developers consider interesting a priori. Instead, interesting features on the sampled traces can be discovered rather than engineered.</li>
+<li>As a corollary to the previous point, <strong>Sifter can automatically adapt to changes in traffic over time.</strong> The model is updated with every incoming trace, and the sampling probability is adjusted as the workload distribution changes.</li>
+<li>The amount of memory needed to keep Sifter’s model is a function of <em>N</em> the path size, <em>E</em> the label vocabulary, and <em>k</em> the number of most recently seen traces we consider. The total size is constant with respect to the workload volume and the number of sampling traces.</li>
+<li><strong>Sifter does not require any pre-training or manual configuration before operation.</strong> On bootstrap, it’ll start making random sampling decisions while learning the model’s system behavior with every new trace.</li>
+<li>Sifter’s model converts traces into a <em>directed acyclic graph</em> of labels based on event origin, i.e. source file and line number. It does not consider other span features like timing, tags, annotations, etc.</li>
+</ul>
+
+
+<p> <img class="right-fill" src="/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces/';
+        var disqus_url = 'http://jivimberg.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2021/03/07/google-docs-could-be-so-much-better/" title="Previous Post: Google Docs could be so much better!">&laquo; Previous: Google Docs could be so much better!</a>
+        
+
+        
+          <a class="pull-right" href="/blog/2021/08/21/adding-context-to-extension-functions/" title="Next Post: Adding Context to Extension Functions">Next: Adding Context to Extension Functions &raquo;</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Gradle | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/gradle/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -37,7 +37,7 @@
 
 <p>The second reason for making the transition was IDE support. Groovy is a dynamically typed language, which makes it harder for the IDE to provide accurate code completion and script validity through type checks. Kotlin being statically typed doesn’t suffer from the same problems</p>
 
-<p>{% img center /images/posts/2018-09-11/kotlin-code-completion.png ‘Kotlin code completion’ %}</p>
+<p><img class="center" src="/images/posts/2018-09-11/kotlin-code-completion.png" title="‘Kotlin code completion’" ></p>
 
 <h2>3. Interoperability</h2>
 
@@ -45,7 +45,7 @@
 
 <p>This interoperability let us <strong><a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy_2">call Groovy code from Kotlin</a> and <a href="https://guides.gradle.org/migrating-build-logic-from-groovy-to-kotlin/#calling_kotlin_from_groovy">viceversa</a></strong>. Which effectively means that you can have <strong>a mix of both Groovy and Kotlin scripts working together in the same project</strong>. So no need to migrate all your build scripts at once, or to push stubborn <em>“Wally”</em> to learn Kotlin DSL.</p>
 
-<p>{% img center /images/posts/2018-09-11/wally2.png ‘Wally’ %}</p>
+<p><img class="center" src="/images/posts/2018-09-11/wally2.png" title="‘Wally’" ></p>
 
 <h1>The exodus</h1>
 
@@ -53,7 +53,7 @@
 
 <p>You’ll just have to <strong>push through that first moment</strong> when nothing seems to be working, your project doesn’t compile at all, and you know you’re a <code>⌘ + Z</code> away from a pristine working copy. <em>But you can&rsquo;t make an omelet without breaking a few eggs, can you?</em></p>
 
-<p>{% img center /images/posts/2018-09-11/panic.png ‘Panic!’ %}</p>
+<p><img class="center" src="/images/posts/2018-09-11/panic.png" title="‘Panic!’" ></p>
 
 <p><strong>I just wish there was some kind of automatic migration action in IntelliJ.</strong> Even if it’s a best effort that leaves you half way there, I’d greatly appreciate it. Ideally it should work just like when you paste some Java code into a Kotlin file: <code>⌘ + V</code> + ✨<em>fairy dust</em>✨ and you have your <code>build.gradle.kts</code> ready to go.</p>
 
@@ -74,7 +74,7 @@
 
 <h2>1. <em>“I can’t just copy-past things from Stack Overflow”</em></h2>
 
-<p>{% img center /images/posts/2018-09-11/copy-paste.jpg 250 ‘Copy paste from Stack Overflow’ %}</p>
+<p><img class="center" src="/images/posts/2018-09-11/copy-paste.jpg" width="250" title="‘Copy paste from Stack Overflow’" ></p>
 
 <p>This is <strong>by far the biggest drawback</strong>. In my experience most teams have one or two <em>”build tool experts”</em>. The rest of the team just use a few tasks and maybe add a dependency every now and then. This casual user might have a harder time using Kotlin DSL because <strong>copy-pasting pieces of code from the web will not work out of the box</strong>. Converting this snippets to Kotlin DSL is not rocket-science, but in some cases it might require some basic level of understanding of how Kotlin DSL works.</p>
 
@@ -104,7 +104,7 @@
 
 <p><strong>Well, turns out you can!</strong> Here’s how you do it…</p>
 
-<p>{% img center /images/posts/2018-07-04/captain-hook.png ’Captain githook’ %}</p>
+<p><img class="center" src="/images/posts/2018-07-04/captain-hook.png" title="’Captain githook’" ></p>
 
 <h2>What do I need?</h2>
 
@@ -311,7 +311,7 @@ tasks {
 
 <p>So what I ended up doing was moving all the <em>Pre-Push</em> logic to a regular <code>*.kt</code> file. And then simply creating a <code>*kts</code> Kotlin script that calls my class using the <a href="https://github.com/holgerbrandl/kscript#ease-prototyping-with-include"><code>//INCLUDE</code> KScript directive</a>.</p>
 
-<p>{% img center /images/posts/2018-07-04/testing-githook-kotlin.png ’Testing githook’ %}</p>
+<p><img class="center" src="/images/posts/2018-07-04/testing-githook-kotlin.png" title="’Testing githook’" ></p>
 
 <p>The downside is that I know have 2 files for my githook (a <code>*.kt</code> and a <code>*.kts</code>) but that seems <strong>a small price to pay for being able to easily test my code</strong>.</p>
 
@@ -335,36 +335,6 @@ tasks {
 </ol>
 </div>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Jacoco & Gradle - How to Verify Coverage With Exclusions]]></title>
-    <link href="http://jivimberg.io/blog/2018/04/26/gradle-verify-coverage-with-exclusions/"/>
-    <updated>2018-04-26T08:49:52-07:00</updated>
-    <id>http://jivimberg.io/blog/2018/04/26/gradle-verify-coverage-with-exclusions</id>
-    <content type="html"><![CDATA[<p>A post about how to add exclusions to your Jacoco test coverage verification in Gradle.</p>
-
-<!--more-->
-
-
-<p>This is how you setup Jacoco to fail when the code doesn’t meet the expected coverage threshold:</p>
-
-<p>{% gist ea79614ce9b80c29b03be8326586f238 %}</p>
-
-<p>See that <code>rule</code>?  I’m not setting any particular <code>element</code> so <a href="https://docs.gradle.org/current/javadoc/org/gradle/testing/jacoco/tasks/rules/JacocoViolationRule.html#getElement--">by default it’ll set <em>BUNDLE</em></a>. <strong>This is just what I want as I’d like to set a threshold for the coverage of the entire module.</strong></p>
-
-<p>So if I need to exclude certain <strong>packages</strong> or <strong>files</strong> from the count this is what I do:</p>
-
-<p>{% gist 3ee0beaa9ab8b20b48e4273378dcd30e %}</p>
-
-<h3>Why <em>exclude</em> doesn’t work</h3>
-
-<p>My first approach was setting the <code>excludes</code> property on the rule like this:</p>
-
-<p>{% gist 0962942885d4db41a9dad890aba5d225 %}</p>
-
-<p>The reason this doesn’t work is that <code>excludes</code> works on objects of the type defined with the <code>element</code> property. In this case the type is <em>BUNDLE</em> whereas the thing we want to exclude are <strong>packages</strong> and <strong>files</strong>.</p>
 ]]></content>
   </entry>
   

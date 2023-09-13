@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>JaCoCo &amp; Kotlin: Coverage on Generated Code - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="JaCoCo &amp; Kotlin: Coverage on Generated Code written August 12, 2018 in coverage, generated, jacoco, kotlin JaCoCo works flawlessly with Kotlin. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.io/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<!-- Twitter card configuration from: https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image -->
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@jivimberg">
+  <meta name="twitter:creator" content="@jivimberg">
+  <meta name="twitter:title" content="JaCoCo &amp; Kotlin: coverage on generated code">
+  <meta name="twitter:description" content="JaCoCo &amp; Kotlin: Coverage on Generated Code written August 12, 2018 in coverage, generated, jacoco, kotlin JaCoCo works flawlessly with Kotlin. Except when it reports lines not covered on &hellip;">
+  <meta name="twitter:image" content="https://jivimberg.io/images/background.jpg">
+
+
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W97HTLLN1Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W97HTLLN1Y');
+</script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>JaCoCo &amp; Kotlin: Coverage on Generated Code</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2018-08-12T21:26:43-07:00" pubdate data-updated="true">August 12, 2018</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/coverage/'>coverage</a>, <a class='category' href='/blog/categories/generated/'>generated</a>, <a class='category' href='/blog/categories/jacoco/'>jacoco</a>, <a class='category' href='/blog/categories/kotlin/'>kotlin</a>
+  
+</span>
+
+
+        </div>
+        <p>JaCoCo works <em>flawlessly</em> with Kotlin. Except when it reports lines not covered on generated code 😡. Fortunately there’s a fix already in place.</p>
+
+<!--more-->
+
+
+<hr />
+
+<h3><em>Update 08/26:</em> <strong>JaCoCo 0.8.2 has now officially been released</strong> 👏 No need to use the <em>0.8.2-SNAPSHOT</em> anymore.</h3>
+
+<hr />
+
+<p><img class="center" src="/images/posts/2018-08-12/JaCoCo-before.png" width="720" title="’JaCoCo before’" ></p>
+
+<blockquote><p>What!? I didn’t even write those functions! There’s no way I’m writing tests for them. I’m pretty sure the compiler knows what it’s doing…</p><footer><strong>Me</strong> <cite>Every Time I Saw the Coverage Report</cite></footer></blockquote>
+
+
+<p>Good news is that this <a href="https://github.com/goodwinnk">has been fixed</a> in the latest JaCoCo release (thanks to <a href="https://github.com/goodwinnk">goodwink</a>). Bad news is that <strong>0.8.2 is not out yet</strong> 😞</p>
+
+<p>If you are like me, and can’t wait to get this working, you can <strong>use the SNAPSHOT version of JaCoCo</strong> making this changes on your <code>build.gradle</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='kotlin'><span class='line'><span class="n">repositories</span> <span class="p">{</span>
+</span><span class='line'>  <span class="err">…</span>
+</span><span class='line'>  <span class="n">maven</span><span class="p">(</span><span class="s">&quot;https://oss.sonatype.org/content/repositories/snapshots&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">jacoco</span> <span class="p">{</span>
+</span><span class='line'>  <span class="n">toolVersion</span> <span class="p">=</span> <span class="s">&quot;0.8.2-SNAPSHOT&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>(I’m using <a href="https://github.com/gradle/kotlin-dsl">Gradle with Kotlin DSL</a> in this example)</em></p>
+
+<p>Now you can finally take your Kotlin coverage to 100% without having to write tests for <code>component1()</code> and <code>component2()</code>.</p>
+
+<p><img class="center" src="/images/posts/2018-08-12/JaCoCo-after.png" width="720" title="’JaCoCo after’" ></p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.io/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code/';
+        var disqus_url = 'http://jivimberg.io/blog/2018/08/12/jacoco-and-kotlin-coverage-on-generated-code/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2018/08/04/recursive-queries-on-rdbms-with-jpa/" title="Previous Post: Hierarchical queries on RDBMS with JPA">&laquo; Previous: Hierarchical queries on RDBMS with JPA</a>
+        
+
+        
+          <a class="pull-right" href="/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl/" title="Next Post: Random thoughts on using Gradle with Kotlin DSL">Next: Random thoughts on using Gradle with Kotlin DSL &raquo;</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

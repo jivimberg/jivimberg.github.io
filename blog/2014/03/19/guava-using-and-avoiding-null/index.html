@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Guava - Using and Avoiding Null - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Guava - Using and Avoiding Null written March 19, 2014 in guava, java, libs I&rsquo;m starting a series of posts on Guava (Google&rsquo;s core &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.io/blog/2014/03/19/guava-using-and-avoiding-null">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<!-- Twitter card configuration from: https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image -->
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@jivimberg">
+  <meta name="twitter:creator" content="@jivimberg">
+  <meta name="twitter:title" content="Guava - Using and avoiding null">
+  <meta name="twitter:description" content="Guava - Using and Avoiding Null written March 19, 2014 in guava, java, libs I&rsquo;m starting a series of posts on Guava (Google&rsquo;s core libraries). Today I am going to start with null, how to &hellip;">
+  <meta name="twitter:image" content="https://jivimberg.io/images/background.jpg">
+
+
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W97HTLLN1Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W97HTLLN1Y');
+</script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Guava - Using and Avoiding Null</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2014-03-19T00:34:41-07:00" pubdate data-updated="true">March 19, 2014</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/guava/'>guava</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/libs/'>libs</a>
+  
+</span>
+
+
+        </div>
+        <p>I&rsquo;m starting a series of posts on <a href="https://code.google.com/p/guava-libraries/">Guava</a> (Google&rsquo;s core libraries). Today I am going to start with <strong>null</strong>, how to use it, and how to avoid it when necessary.</p>
+
+<!--more-->
+
+
+<blockquote><p><strong>&ldquo;I call it my billion-dollar mistake.&rdquo;</strong><br/>
+Sir C. A. R. Hoare, on his invention of the null reference</p></blockquote>
+
+<h3>Null in Guava Collections</h3>
+
+<p>How many times have you expected null values on your collections? And how many times have you <em>actually</em> check to prevent null values on them?</p>
+
+<p>That&rsquo;s why most of Guava &ldquo;New Collections&rdquo; and utilities will fail fast with a NPE when you try to add null to them. And they provide the <strong>Optional</strong> utilty for those cases where we need to indicate absence of some kind, without using null.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">//This will fail with java.lang.NullPointerException: at index 2</span>
+</span><span class='line'><span class="n">ImmutableList</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">&quot;one&quot;</span><span class="o">,</span> <span class="s">&quot;two&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Optional</h3>
+
+<p>Optional is a way of representing a reference which may be present or not. The whole point of using Optional instead of null, is that there is no way the client can miss the case where the reference is absent. It forces him to actively unwrap the value or else the program won&rsquo;t compile.</p>
+
+<p>Here is how you create an optional:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">creatingAnOptional</span><span class="o">(){</span>
+</span><span class='line'>        <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">result</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">findString</span><span class="o">();</span> <span class="c1">//may return null</span>
+</span><span class='line'>        <span class="n">result</span> <span class="o">=</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">// which is the same as doing:</span>
+</span><span class='line'>        <span class="k">if</span><span class="o">(</span><span class="n">value</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+</span><span class='line'>            <span class="n">result</span> <span class="o">=</span> <span class="n">Optional</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">value</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">result</span> <span class="o">=</span> <span class="n">Optional</span><span class="o">.</span><span class="na">absent</span><span class="o">();</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>And here is how you query for the value:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kt">void</span> <span class="nf">queryingOptionals</span><span class="o">(){</span>
+</span><span class='line'>        <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">optional</span> <span class="o">=</span> <span class="n">creatingAnOptional</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span><span class="o">(</span><span class="n">optional</span><span class="o">.</span><span class="na">isPresent</span><span class="o">()){</span>
+</span><span class='line'>            <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">optional</span><span class="o">.</span><span class="na">get</span><span class="o">();</span> <span class="c1">//We are sure is the value is there</span>
+</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;The string is: &quot;</span> <span class="o">+</span> <span class="n">value</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1">//or</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Value or default: &quot;</span> <span class="o">+</span> <span class="n">optional</span><span class="o">.</span><span class="na">or</span><span class="o">(</span><span class="s">&quot;Default value&quot;</span><span class="o">));</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The next time you are writing a method that return a values which may or may not be present, remember to use Optional. It will make your API much clearer and force the caller to consider the absent value case.</p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.io/blog/2014/03/19/guava-using-and-avoiding-null/';
+        var disqus_url = 'http://jivimberg.io/blog/2014/03/19/guava-using-and-avoiding-null/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2014/03/17/why-was-this-blog-created/" title="Previous Post: Why was this blog created">&laquo; Previous: Why was this blog created</a>
+        
+
+        
+          <a class="pull-right" href="/blog/2014/03/28/guava-fun-with-comparisons/" title="Next Post: Guava - Fun with Comparisons">Next: Guava - Fun with Comparisons &raquo;</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

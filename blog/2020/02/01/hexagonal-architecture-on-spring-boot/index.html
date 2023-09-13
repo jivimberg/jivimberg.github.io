@@ -1,0 +1,503 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Hexagonal Architecture on Spring Boot - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Hexagonal Architecture on Spring Boot written February 1, 2020 in architecture, hexagonal, java, spring, spring-boot In this article, I&rsquo;ll &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<!-- Twitter card configuration from: https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image -->
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@jivimberg">
+  <meta name="twitter:creator" content="@jivimberg">
+  <meta name="twitter:title" content="Hexagonal Architecture on Spring Boot">
+  <meta name="twitter:description" content="Hexagonal Architecture on Spring Boot written February 1, 2020 in architecture, hexagonal, java, spring, spring-boot In this article, I&rsquo;ll show how to implement a Spring Boot application using &hellip;">
+  <meta name="twitter:image" content="https://jivimberg.io/images/background.jpg">
+
+
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W97HTLLN1Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W97HTLLN1Y');
+</script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Hexagonal Architecture on Spring Boot</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2020-02-01T20:51:59-08:00" pubdate data-updated="true">February 1, 2020</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/architecture/'>architecture</a>, <a class='category' href='/blog/categories/hexagonal/'>hexagonal</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/spring/'>spring</a>, <a class='category' href='/blog/categories/spring-boot/'>spring-boot</a>
+  
+</span>
+
+
+        </div>
+        <p>In this article, I&rsquo;ll show how to implement a Spring Boot application using Hexagonal Architecture.</p>
+
+<!--more-->
+
+
+<p>We&rsquo;ll build a Bank Account simulation with <em>deposit</em> and <em>withdraw</em> operations exposed through REST endpoints.</p>
+
+<h2>Hexagonal Architecture</h2>
+
+<p>Hexagonal architecture is an architectural style that <strong>focuses on keeping the business logic decoupled from external concerns</strong>.</p>
+
+<p>The business core interacts with other components through ports and adapters. This way, we can change the underlying technologies without having to modify the application core.</p>
+
+<p><img class="center" src="/images/posts/2020-02-01/HexagonalArchitecture-generic.png" width="700" title="‘Generic Hexagonal Architecture diagram’" ></p>
+
+<h2>Application Core</h2>
+
+<h3>Domain Model</h3>
+
+<p>Let&rsquo;s start with the domain model. Its main responsibility is to model the business rules. It also verifies that the objects are always in a valid state:</p>
+
+<figure class='code'><figcaption><span>BankAccount.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccount</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">Long</span> <span class="n">id</span><span class="o">;</span>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">BigDecimal</span> <span class="n">balance</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">if</span><span class="o">(</span><span class="n">balance</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">amount</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>              <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>          <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="n">balance</span> <span class="o">=</span> <span class="n">balance</span><span class="o">.</span><span class="na">subtract</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>          <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">balance</span> <span class="o">=</span> <span class="n">balance</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The domain model should have no dependency on any specific technology. That&rsquo;s the reason why you&rsquo;ll find no Spring annotations here.</p>
+
+<h3>Ports</h3>
+
+<p>Now it&rsquo;s time to have our business logic interact with the outside world. To achieve this, we&rsquo;ll introduce some ports.</p>
+
+<p>First, let&rsquo;s define 2 incoming ports. <strong>These are used by external components to call our application</strong>. In this case, we&rsquo;ll have one per use case. One for <em>Deposit</em>:</p>
+
+<figure class='code'><figcaption><span>DepositUseCase.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">DepositUseCase</span> <span class="o">{</span>
+</span><span class='line'>      <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And one for <em>Withdraw</em>:</p>
+
+<figure class='code'><figcaption><span>WithdrawUseCase.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">WithdrawUseCase</span> <span class="o">{</span>
+</span><span class='line'>      <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Similarly, we&rsquo;ll also have 2 outgoing ports. <strong>These are for our application to interact with the database</strong>. Once again, we&rsquo;ll have one per use case. One for <em>Loading</em> the Account:</p>
+
+<figure class='code'><figcaption><span>LoadAccountPort.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">LoadAccountPort</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">Optional</span><span class="o">&lt;</span><span class="n">BankAccount</span><span class="o">&gt;</span> <span class="nf">load</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And one for <em>Saving</em> it:</p>
+
+<figure class='code'><figcaption><span>SaveAccountPort.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SaveAccountPort</span> <span class="o">{</span>
+</span><span class='line'>      <span class="kt">void</span> <span class="nf">save</span><span class="o">(</span><span class="n">BankAccount</span> <span class="n">bankAccount</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Service</h3>
+
+<p>Next, we&rsquo;ll create a service to tie all the pieces together and drive the execution:</p>
+
+<figure class='code'><figcaption><span>BankAccountService.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountService</span> <span class="kd">implements</span> <span class="n">DepositUseCase</span><span class="o">,</span> <span class="n">WithdrawUseCase</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">LoadAccountPort</span> <span class="n">loadAccountPort</span><span class="o">;</span>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">SaveAccountPort</span> <span class="n">saveAccountPort</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">BankAccount</span> <span class="n">account</span> <span class="o">=</span> <span class="n">loadAccountPort</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+</span><span class='line'>                  <span class="o">.</span><span class="na">orElseThrow</span><span class="o">(</span><span class="nl">NoSuchElementException:</span><span class="o">:</span><span class="k">new</span><span class="o">);</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="n">account</span><span class="o">.</span><span class="na">deposit</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="n">saveAccountPort</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">account</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">BankAccount</span> <span class="n">account</span> <span class="o">=</span> <span class="n">loadAccountPort</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+</span><span class='line'>                  <span class="o">.</span><span class="na">orElseThrow</span><span class="o">(</span><span class="nl">NoSuchElementException:</span><span class="o">:</span><span class="k">new</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="kt">boolean</span> <span class="n">hasWithdrawn</span> <span class="o">=</span> <span class="n">account</span><span class="o">.</span><span class="na">withdraw</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="k">if</span><span class="o">(</span><span class="n">hasWithdrawn</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>              <span class="n">saveAccountPort</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">account</span><span class="o">);</span>
+</span><span class='line'>          <span class="o">}</span>
+</span><span class='line'>          <span class="k">return</span> <span class="n">hasWithdrawn</span><span class="o">;</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note how the service implements the incoming ports. On each method, it uses the <em>Load</em> port to fetch the account from the database. Then, it performs the changes on the domain model. And finally, it saves those changes through the <em>Save</em> port.</p>
+
+<h2>Adapters</h2>
+
+<h3>Web</h3>
+
+<p>To complete our application, we need to provide implementations for the defined ports. We call these adapters.</p>
+
+<p>For the incoming interactions, we&rsquo;ll create a REST controller:</p>
+
+<figure class='code'><figcaption><span>BankAccountController.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@RestController</span>
+</span><span class='line'><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/account&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountController</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">private</span> <span class="kd">final</span> <span class="n">DepositUseCase</span> <span class="n">depositUseCase</span><span class="o">;</span>
+</span><span class='line'>      <span class="kd">private</span> <span class="kd">final</span> <span class="n">WithdrawUseCase</span> <span class="n">withdrawUseCase</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/{id}/deposit/{amount}&quot;</span><span class="o">)</span>
+</span><span class='line'>      <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">depositUseCase</span><span class="o">.</span><span class="na">deposit</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/{id}/withdraw/{amount}&quot;</span><span class="o">)</span>
+</span><span class='line'>      <span class="kt">void</span> <span class="nf">withdraw</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">withdrawUseCase</span><span class="o">.</span><span class="na">withdraw</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The controller uses the defined ports to make calls to the application core.</p>
+
+<h3>Persistence</h3>
+
+<p>For the persistence layer, we&rsquo;ll use Mongo DB through Spring Data:</p>
+
+<figure class='code'><figcaption><span>SpringDataBankAccountRepository.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SpringDataBankAccountRepository</span> <span class="kd">extends</span> <span class="n">MongoRepository</span><span class="o">&lt;</span><span class="n">BankAccount</span><span class="o">,</span> <span class="n">Long</span><span class="o">&gt;</span> <span class="o">{</span> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also, we&rsquo;ll create a <em>BankAccountRepository</em> class that connects the outgoing ports with the <em>SpringDataBankAccountRepository</em>:</p>
+
+<figure class='code'><figcaption><span>BankAccountRepository.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Component</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountRepository</span> <span class="kd">implements</span> <span class="n">LoadAccountPort</span><span class="o">,</span> <span class="n">SaveAccountPort</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">SpringDataBankAccountRepository</span> <span class="n">repository</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">BankAccount</span><span class="o">&gt;</span> <span class="nf">load</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">save</span><span class="o">(</span><span class="n">BankAccount</span> <span class="n">bankAccount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">repository</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">bankAccount</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Infrastructure</h3>
+
+<p>Finally, we need to tell Spring to expose the <em>BankAccountService</em> as a bean, so it can be injected in the controller:</p>
+
+<figure class='code'><figcaption><span>BeanConfiguration.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
+</span><span class='line'><span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">basePackageClasses</span> <span class="o">=</span> <span class="n">HexagonalApplication</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BeanConfiguration</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Bean</span>
+</span><span class='line'>      <span class="n">BankAccountService</span> <span class="nf">bankAccountService</span><span class="o">(</span><span class="n">BankAccountRepository</span> <span class="n">repository</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="k">new</span> <span class="nf">BankAccountService</span><span class="o">(</span><span class="n">repository</span><span class="o">,</span> <span class="n">repository</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Defining the beans in the Adapters layer helps us maintain the infrastructure code decoupled from the business logic.</p>
+
+<h2>Conclusion</h2>
+
+<p>In this article, we&rsquo;ve seen how to implement an application using Hexagonal Architecture and Spring Boot. This is what the system ends up looking like:</p>
+
+<p><img class="center" src="/images/posts/2020-02-01/HexagonalArchitecture-impl.png" width="700" title="‘Generic Hexagonal Architecture Spring Boot example’" ></p>
+
+<p>The code for this example is <a href="https://github.com/jivimberg/hexagonal-architecture">available on Github</a>.</p>
+
+<hr />
+
+<p>This article is based on the <em>highly recommendable</em> <a href="https://leanpub.com/get-your-hands-dirty-on-clean-architecture">&ldquo;Get Your Hands Dirty on Clean Architecture</a> by <a href="https://twitter.com/TomHombergs">Tom Hombergs</a>, and <a href="https://www.baeldung.com/hexagonal-architecture-ddd-spring">this Baeldung article</a> by <a href="https://www.baeldung.com/author/lukasz-rys/">Łukasz Ryś</a>.</p>
+
+<p> <img class="right-fill" src="/images/signatures/signature9.png" width="200" title="‘My signature’" ></p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot/';
+        var disqus_url = 'http://jivimberg.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2019/09/15/book-recommendations-shape-up/" title="Previous Post: Book recommendations: Shape Up">&laquo; Previous: Book recommendations: Shape Up</a>
+        
+
+        
+          <a class="pull-right" href="/blog/2020/03/13/how-to-create-effective-presentations/" title="Next Post: How to craft effective presentations">Next: How to craft effective presentations &raquo;</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

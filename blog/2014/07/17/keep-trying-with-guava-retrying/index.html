@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Keep Trying With Guava Retrying - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Keep Trying With Guava Retrying written July 17, 2014 in guava, java, libs We were having a race condition on a server which was &ldquo;fixed&rdquo &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.io/blog/2014/07/17/keep-trying-with-guava-retrying">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<!-- Twitter card configuration from: https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image -->
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@jivimberg">
+  <meta name="twitter:creator" content="@jivimberg">
+  <meta name="twitter:title" content="Keep trying with Guava Retrying">
+  <meta name="twitter:description" content="Keep Trying With Guava Retrying written July 17, 2014 in guava, java, libs We were having a race condition on a server which was &ldquo;fixed&rdquo; by adding an sleep to the thread to check again &hellip;">
+  <meta name="twitter:image" content="https://jivimberg.io/images/background.jpg">
+
+
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W97HTLLN1Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W97HTLLN1Y');
+</script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Keep Trying With Guava Retrying</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2014-07-17T14:22:07-07:00" pubdate data-updated="true">July 17, 2014</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/guava/'>guava</a>, <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/libs/'>libs</a>
+  
+</span>
+
+
+        </div>
+        <p>We were having a <a href="http://en.wikipedia.org/wiki/Race_condition#Software">race condition</a> on a server which was &ldquo;fixed&rdquo; by adding an sleep to the thread to check again later. Yes, it sucked, so I decided to make something more sophisticated and went looking for a library to handle retries with multiple strategies. That&rsquo;s when I first read about <a href="https://github.com/rholder/guava-retrying">Guava Retrying</a>.</p>
+
+<!--more-->
+
+
+<p>In the words of it&rsquo;s creator (<a href="https://github.com/rholder">rholder</a>):</p>
+
+<blockquote><p>Guava-Retrying is a small extension to Google&rsquo;s Guava library to allow for the creation of configurable retrying strategies for an arbitrary function call, such as something that talks to a remote service with flaky uptime.</p></blockquote>
+
+<h3>Quick example</h3>
+
+<p>Let&rsquo;s say we want to execute a task that will:</p>
+
+<ul>
+<li>Retry if the result is <code>null</code></li>
+<li>Retry if an exception of type IOException is thrown</li>
+<li>Wait 300 milliseconds to try again.</li>
+<li>Stop after 5 attempts</li>
+</ul>
+
+
+<p>Then we would do something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Callable</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span> <span class="n">yourTask</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">Boolean</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span> <span class="c1">// do something interesting here</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Retryer</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span> <span class="n">retryer</span> <span class="o">=</span> <span class="n">RetryerBuilder</span><span class="o">.&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="n">newBuilder</span><span class="o">()</span>
+</span><span class='line'>        <span class="o">.</span><span class="na">retryIfResult</span><span class="o">(</span><span class="n">Predicates</span><span class="o">.&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="n">isNull</span><span class="o">())</span>
+</span><span class='line'>        <span class="o">.</span><span class="na">retryIfExceptionOfType</span><span class="o">(</span><span class="n">IOException</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class='line'>        <span class="o">.</span><span class="na">withWaitStrategy</span><span class="o">(</span><span class="n">WaitStrategies</span><span class="o">.</span><span class="na">fixedWait</span><span class="o">(</span><span class="mi">300</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">MILLISECONDS</span><span class="o">))</span>
+</span><span class='line'>        <span class="o">.</span><span class="na">withStopStrategy</span><span class="o">(</span><span class="n">StopStrategies</span><span class="o">.</span><span class="na">stopAfterAttempt</span><span class="o">(</span><span class="mi">5</span><span class="o">))</span>
+</span><span class='line'>        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">retryer</span><span class="o">.</span><span class="na">call</span><span class="o">(</span><span class="n">yourTask</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">RetryException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ExecutionException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After attempting 5 times it will throw a <code>RetryException</code> with information about the last attempt. Any other exception thrown by your task will be wrapped and re-thrown in a <code>ExecutionException</code>.</p>
+
+<p>Other <strong>wait strategies</strong> supported are: <a href="http://rholder.github.io/guava-retrying/javadoc/2.0.0/com/github/rholder/retry/WaitStrategies.html#randomWait(long,%20java.util.concurrent.TimeUnit)">Random</a>, <a href="http://rholder.github.io/guava-retrying/javadoc/2.0.0/com/github/rholder/retry/WaitStrategies.html#incrementingWait(long,%20java.util.concurrent.TimeUnit,%20long,%20java.util.concurrent.TimeUnit)">Incremental</a>, <a href="http://rholder.github.io/guava-retrying/javadoc/2.0.0/com/github/rholder/retry/WaitStrategies.html#exponentialWait()">Exponential</a>, <a href="fibonacciWait">Fibonacci</a>.</p>
+
+<p>Other <strong>stop strategies</strong> supported are: <a href="http://rholder.github.io/guava-retrying/javadoc/2.0.0/com/github/rholder/retry/StopStrategies.html#neverStop()">never stop</a>, <a href="http://rholder.github.io/guava-retrying/javadoc/2.0.0/com/github/rholder/retry/StopStrategies.html#stopAfterDelay(long,%20java.util.concurrent.TimeUnit)">stop after delay</a>.</p>
+
+<p> <img class="right-fill" src="/images/signatures/signature4.png" width="200" title="‘My signature’" ></p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.io/blog/2014/07/17/keep-trying-with-guava-retrying/';
+        var disqus_url = 'http://jivimberg.io/blog/2014/07/17/keep-trying-with-guava-retrying/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2014/04/20/autovalue-for-android/" title="Previous Post: AutoValue for Android">&laquo; Previous: AutoValue for Android</a>
+        
+
+        
+          <a class="pull-right" href="/blog/2014/08/10/android-animations-are-just-a-trick/" title="Next Post: Android animations are just a trick">Next: Android animations are just a trick &raquo;</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

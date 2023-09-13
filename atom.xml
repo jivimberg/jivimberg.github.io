@@ -1,0 +1,2205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Coding Forest]]></title>
+  <link href="http://jivimberg.io/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-13T06:52:42+00:00</updated>
+  <id>http://jivimberg.io/</id>
+  <author>
+    <name><![CDATA[Juan Ignacio Vimberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[On Graceful Degradation of Service]]></title>
+    <link href="http://jivimberg.io/blog/2023/08/14/on-graceful-degradation-of-service/"/>
+    <updated>2023-08-14T20:29:04-03:00</updated>
+    <id>http://jivimberg.io/blog/2023/08/14/on-graceful-degradation-of-service</id>
+    <content type="html"><![CDATA[<p>This is the door to my in-laws’ apartment.</p>
+
+<!--more-->
+
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2023-08-15/door.jpg" width="450"></p>
+
+<p>You can safely ignore the puppy; it’s only there for SEO purposes. Focus instead on that thing on the wall, marked by the orange arrow. That is a motion-sensor light switch, the kind that turns the light on when you walk by. Only this one doesn’t because it works like shit. You must wave your hand in front of it, almost touching it, for the lights to come on.</p>
+
+<p>As you can see in the picture, this sensor is roughly placed at the same level a light switch would be. Because of this, when people reach out in the dark, they end up activating the malfunctioning sensor. This is what we call graceful degradation of service. The sensor is essentially being used as a touch button. <strong>The motion-sensing functionality doesn’t work, but the system as a whole still works: people are able to turn on the lights when they need them.</strong> If the sensor had been placed somewhere else, such as at knee level or on the ceiling, the system would not have degraded gracefully. Things would work as long as the sensor is functioning correctly, but as soon as it’s busted, there’d be no way of turning on the lights. People would reach out in the dark and find nothing. Placing the sensor on the ceiling would also make the whole system harder to maintain, as you’d need a ladder every time you need to service it.</p>
+
+<p>I don’t think anybody thought about graceful degradation when installing the switch. The motion sensor was most likely retrofitted after the fact, repurposing the hole previously used for a regular light switch. We could say that, in this case, the property of graceful degradation comes from leveraging a pre-existing user behavior. We could distill this learning into a product design rule that reads:</p>
+
+<blockquote><p>When introducing a new feature, leverage existing user workflows instead of disrupting them.</p></blockquote>
+
+<p>Let’s illustrate this with an example. Not too long ago, Google launched their <a href="https://support.google.com/mail/answer/9116836?hl=en&amp;co=GENIE.Platform%3DDesktop">Smart Compose</a> feature for Gmail. The way it works is you start writing your email and suddenly a grayed-out text appears, trying to guess your next few words. If you like the suggestion, you press <code>tab</code>, and the caret jumps to the end of the line saving you a few keystrokes and leaving you wondering what sort of witchcraft Google is using to read your mind.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2023-08-15/gmail-smart-compose.gif"></p>
+
+<p>Now, Google could have designed this feature in many different ways. It could, for example, open a popup menu with multiple options letting the user select the best one from the list the way <a href="https://presage.sourceforge.io/">this tool</a> does:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2023-08-15/gprompter.jpg"></p>
+
+<p>This approach might seem more powerful at first glance because it gives the user multiple options instead of just one. But it has a huge disadvantage: it disrupts the user workflow. Picture this: You’re redacting an essay. You think of a sentence and start writing. Midway through a menu pops up designed to look like it’s on top of what you’re doing. Your hands stop typing. Your eyes dart through the popup content, read the first one, jump to the next line, read the second one, etc. You consider all the options and decide to go with the 4th one. Your hands jump to the arrow keys, and you click click click until the one you want is highlighted, then click once more to select it. All of this happens in a matter of milliseconds. And yet it is enough to break your flow. By contrast, Google’s design, users are offered a single option presented inline, as if the text were already written. With the grayed-out text shown in our visual pathway, the eyes naturally flow to the end of the sentence. We can accept the suggestion with just a single keystroke; if we do, our eyes are already in the right place to continue writing.</p>
+
+<p>You might think Google’s design choice is obviously better and that I’m just cherry-picking a needlessly convoluted example as a straw man. And maybe you’re right. <strong>But keep in mind that design, when done right, is invisible.</strong> And what might seem like an obvious solution once you’ve seen it can be hard to come up with when you’re thinking a feature from scratch.</p>
+
+<p>Figuring out the right way to introduce new functionality without disrupting user workflows takes dedication and practice. Often we developers get worked up about the new capability we’re introducing and forget to consider how it fits into the existing user journey. This happened to me not so long ago at Netflix. We were working on a new tool that’d let users discover and analyze correlated system failures that could be causally related. That is, if service A is going <em>Boop!</em> and service B is also going <em>Boop!</em> and we know service A calls service B then there’s a good chance those two events might be related. In some cases, we can even venture that one symptom might be caused by the other, establishing a causal relationship between the signals based on the requests’ call paths. We were super excited to put this new functionality in users’ hands. We were so bullish about it that we envisioned it being the first step in the troubleshooting journey. Users would start by analyzing their service anomalous metric in the context of the overall system health. We created a new tool to surface this kind of relationship between services and took a few iterations to design how we would overlay service health data on this new visualization. What we failed to realize is that we were introducing a whole new way of troubleshooting an incident. <strong>Asking users to learn a new way of doing things is always a tough sell.</strong> Especially when there’s an outage and things are on fire, users would systematically trust their muscle memory and revert to their battle-tested tools and dashboards.</p>
+
+<p>Instead, we should have emulated the guy that installed that motion sensor in my in-laws' apartment. Rather than introducing a whole new tool, present whatever insight we can gather as part of the existing user workflow. For example, if a developer receives an alert from a failing metric on Service A, we could include any other metrics we think might be related in that same alert. Enriching the alert with additional context giving users a hint on where to look next. Or if they’re looking at a dashboard and notice an anomalous metric, we could then surface a message saying: “Hey, by the way, Service B is also failing in a similar way; you may want to check it”.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2023-08-15/grafana_clippy.png" width="700">
+<em class="img-caption"> What if Clippy was the peak of UX design? </em></p>
+
+<p>Instead of adopting an <em>“If you build it, they will come”</em> approach we should have <a href="https://medium.com/mule-design/meeting-users-where-they-are-624bc0caa83a">met users where they were at</a>. Presenting key insights in the context of their troubleshooting session and letting them jump to the new tool if they want to dig deeper. <strong>A system built this way would degrade gracefully</strong>: If the correlation service is down or the suggestion is not good, users can still keep troubleshooting the same way they do today.</p>
+
+<p><img class="right-fill" src="http://jivimberg.io/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How Platform Teams Get Shit Done]]></title>
+    <link href="http://jivimberg.io/blog/2023/07/28/how-platform-teams-get-shit-done/"/>
+    <updated>2023-07-28T00:43:59-03:00</updated>
+    <id>http://jivimberg.io/blog/2023/07/28/how-platform-teams-get-shit-done</id>
+    <content type="html"><![CDATA[<p><a href="https://thepete.net/">Pete Hodgson</a> explored the different ways in which a Platform team works with other teams to get shit done in <a href="https://martinfowler.com/articles/platform-teams-stuff-done.html">this article</a>. I thought it was interesting to see how collaboration changes based on the type of work, so I put together this visual summary to compare and contrast each type of interaction.</p>
+
+<!--more-->
+
+
+<p><a href="http://jivimberg.io/images/posts/2023-07-28/how-platform-teams.png"><img class="center" src="http://jivimberg.io/images/posts/2023-07-28/how-platform-teams.png" width="600"></a>
+<em class="img-caption">Click image to enlarge</em></p>
+
+<p>I added a few things here and there, but most of the stuff is taken from the <a href="https://martinfowler.com/articles/platform-teams-stuff-done.html">original article</a>, so if you care about this topic I recommend you check it out!</p>
+
+<p>I found particularly interesting the realization that migrations are hard because <strong>the team that owns the code that needs changing is not the one driving the migration.</strong> This creates a situation of misaligned incentives and makes it a socio-technical problem. The article describes the different ways the teams can collaborate to get it done, but it’s also important to understand the tools a platform team has to remove this friction in the first place, things like <a href="https://medium.com/nerd-for-tech/microservice-design-pattern-sidecar-sidekick-pattern-dbcea9bed783">sidecars</a>, <a href="https://konghq.com/learning-center/service-mesh/what-is-a-service-mesh#:~:text=Service%20mesh%20is%20a%20technology,it%20can%20be%20managed%20independently.">meshes</a> and <a href="https://blog.thepete.net/blog/2020/09/25/service-templates-service-chassis/">service chasis</a>.</p>
+
+<p>I also included a section on how Google does Large-Scale Changes (LSC). They created a tool that allows anybody to submit Large-Scale Changes that are applied across the whole codebase. They advocate for the approach of centralizing the migration, to the point where most changes are reviewed by a single expert, and local teams hold no veto power over the LSC. They rely on code analysis and transformation tools to write the LSC and have a test infrastructure to automatically run all tests that a given change might affect in an efficient manner. To read more about their approach refer to <a href="https://www.amazon.com/Software-Engineering-Google-Lessons-Programming/dp/1492082791">Software Engineering at Google</a> Chapter 14.</p>
+
+<p><img class="right-fill" src="http://jivimberg.io/images/signatures/signature7.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Pivot Tracing]]></title>
+    <link href="http://jivimberg.io/blog/2022/02/14/pivot-tracing/"/>
+    <updated>2022-02-14T23:02:52-08:00</updated>
+    <id>http://jivimberg.io/blog/2022/02/14/pivot-tracing</id>
+    <content type="html"><![CDATA[<p>Pivot Tracing lets users define arbitrary metrics over trace data at runtime. It does so by combining two powerful techniques:</p>
+
+<ol>
+<li>A <strong>Happen-Before operator</strong> that allows users to perform queries based on the causal relationship of the events.</li>
+<li>The ability to <strong>instrument code dinamically</strong> without having to redeploy.</li>
+</ol>
+
+
+<!--more-->
+
+
+<h2>How it works</h2>
+
+<p>Say we have an instrumented system we want to troubleshoot:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/pt1.jpg" width="700"></p>
+
+<p>The first step is to define <strong>Tracepoints</strong> ⓵. Tracepoints are pointers to the source code where the code will be instrumented to collect metrics. They are instructions on <em>where</em> and <em>how</em> to modify the system to extract the required information. You can think of them as <a href="https://docs.spring.io/spring-framework/docs/3.0.x/spring-framework-reference/html/aop.html"><em>pointcuts</em> from aspect-oriented programming</a>. They can refer to any arbitrary interface or method signature or be inserted at specific line numbers.</p>
+
+<p>Tracepoints export variables that can be used to write the queries, such as method arguments or local variables. Some default variables are provided out-of-the-box, such as: <em>host</em>, <em>timestamp</em>, <em>process id</em>, <em>process name</em>, etc.</p>
+
+<p>The cool thing about Tracepoints is that <strong>they don’t need to be defined a priori</strong>. And since defining a Tracepoint involves no code modification, <strong>new ones can be created at no cost</strong>.</p>
+
+<p>Tracepoints are created by someone with good system knowledge (such as developers or operators). They <strong>define the vocabulary users will use to write the queries</strong>.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/pt2.jpg" width="700"></p>
+
+<p>The next step is to write a query using the terms introduced by the tracepoints ⓶. A query might look something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">From</span> <span class="n">incr</span> <span class="k">In</span> <span class="n">DataNodeMetrics</span><span class="p">.</span><span class="n">incrBytesRead</span>
+</span><span class='line'><span class="k">Join</span> <span class="n">cl</span> <span class="k">In</span> <span class="k">First</span><span class="p">(</span><span class="n">ClientProtocols</span><span class="p">)</span> <span class="k">On</span> <span class="n">cl</span> <span class="o">-&gt;</span> <span class="n">incr</span>
+</span><span class='line'><span class="n">GroupBy</span> <span class="n">cl</span><span class="p">.</span><span class="n">procName</span>
+</span><span class='line'><span class="k">Select</span> <span class="n">cl</span><span class="p">.</span><span class="n">procName</span><span class="p">,</span> <span class="k">SUM</span><span class="p">(</span><span class="n">incr</span><span class="p">.</span><span class="n">delta</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this example, a Tracepoint exists for the method <code>DataNodeMetrics. incrBytesRead(int delta)</code>  and another for the class <code>ClientProtocols</code>. The shown query sums the values of <code>incr.delta</code> grouped by ClientProtocol’s <code>procName</code>. The clause <code>On cl -&gt; incr</code> establishes that we’re interested in only capturing <code>cl</code> events that happened before an <code>incr</code> event. <strong>The cool thing is that these two tracepoints belong to two different services! Pivot tracing will know how to propagate the required context needed to do the join and evaluate the happens-before clause.</strong></p>
+
+<p>Once the user submits the query, Pivot Tracing frontend compiles it to something called <strong>Advice</strong> ⓷. An Advice contains the instructions that need to be executed when a request passes through a Tracepoint to answer the query. These are the operations that can be executed as part of an Advice:</p>
+
+<ul>
+<li><strong>Observe:</strong> Creates a tuple from variables defined by a tracepoint.</li>
+<li><strong>Filter:</strong> Evaluates a predicate on all tuples.</li>
+<li><strong>Pack:</strong> Makes tuples available for use by later Advice</li>
+<li><strong>Unpack:</strong> Retrieves one or more tuples from prior Advice</li>
+<li><strong>Emit:</strong>Outputs a tuple for global aggregation.</li>
+</ul>
+
+
+<p>The Frontend creates these Advice and notifies the PT Agents to install them in the corresponding Tracepoints ⓸.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/pt3.jpg" width="700"></p>
+
+<p>This is done by <em>weaving</em> generated code that gets executed every time a request passes through the Tracepoint.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/weaving.png" width="700"></p>
+
+<p>For the query shown above, Advice A1 and A2 would be generated:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/generatedAdvices.png" width="700"></p>
+
+<p>To do the happens-before join required by the query shown above Pivot Tracing needs to propagate the variables captured at <code>ClientProtocols Tracepoint</code> to the  <code>DataNodeMetrics Tracepoint</code>. This is done through something called <em>baggage</em> (if you’re familiar with <a href="https://opentelemetry.io/docs/concepts/signals/baggage/">OTel’s baggage</a> it’s basically the same thing).  When the request gets to the <code>ClientProtocols Tracepoint</code>, the Advice A1 <em>Observes</em> the variables and <em>Packs</em> them as part of the request baggage ⓹. Later, when the code gets to the <code>DataNodeMetrics Tracepoint</code>, the Advice A2 <em>Unpacks</em> the variables, <em>Observes</em> the value of <code>delta</code>, and <em>Emits</em> a joined tuple ⓺.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/pt4.jpg" width="700"></p>
+
+<p>The tuples emitted by <code>DataNodeMetrics Tracepoint</code> ⓺ are aggregated locally and then streamed to the client over the message bus ⓻.</p>
+
+<p>Finally, Pivot Tracing Frontend uses these tuples to answer the user’s query ⓼. And that’s how the whole thing works.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/pt5.jpg" width="700"></p>
+
+<h2>The power of Happens-Before</h2>
+
+<p>One of the most remarkable features of Pivot Tracing is the Happens-Before operator: <code>-&gt;</code>. With a Happens-Before join, users can tell the system to capture events on  <em>Tracepoint B</em> only if the request first passed through <em>Tracepoint A</em>.</p>
+
+<p>Queries that require information from multiple services participating in a request (such as the one shown above) can’t be answered through Logs or Metrics captured on single service. By the time a metric is recorded on Service A, we no longer have the context to know where that request has come from. Distributed Tracing was created to fulfill this gap, to answer the questions Logs and Metrics couldn’t answer. <strong>Yet many of today’s most popular frameworks still lack the ability to write causal queries</strong>.</p>
+
+<p>Pivot Tracing not only supports this, but it also does it in a cost-efficient manner by only propagating just enough context to answer a given user query. This is only possible thanks to their use of Dynamic Instrumentation.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/happens-before.jpeg" width="500"></p>
+
+<p>So far, we’ve used a straightforward request path for our examples: Service A -> Service B. It’s worth noting that the requests call graphs tend to be much more complex in real life. The tracepoints the user might be interested in querying could be N levels removed. The image above shows which tuples are captured by each query based on the execution graph.</p>
+
+<h2>Pros and cons of Dynamic Instrumentation</h2>
+
+<p>We talked about how Pivot Tracing uses AOP to dynamically instrument the code. The promise made by Dynamic Instrumentation is that developers don’t need to worry about deciding what parts of the code to instrument and which tags to record. Instead, Pivot Tracing takes care of making the required code changes to be able to answer any given query.</p>
+
+<p>On paper, this sounds amazing. <strong>It means developers don’t need to think about observability storage costs when writing code.</strong> They don’t need to consider how traffic spikes and tag cardinality might conspire to make observability prohibitively expensive. It also removes the need to decide what parts of the code are worth measuring at design time, which is great because, by the time you’re troubleshooting an issue, you have a better idea about what kind of questions you might want to ask.</p>
+
+<p>The cost structure makes sense too. Think about all those log lines an application spits per second and how most of the time, only one in a gazillion lines is interesting. Furthermore, Dynamic Instrumentation means the code is only instrumented as a result of a query written by the user, so any cost incurred is well justified because you can guarantee somebody is looking at the emitted data. <strong>So basically, you only pay for what you use.</strong></p>
+
+<p>So where’s the catch?</p>
+
+<p>We said that the Pivot Tracing only starts collecting information after the user has submitted a query. <strong>This means you only start observing the system after the issue has already occurred</strong>. If you’re lucky, it’ll happen again soon, and you’ll be able to gain some insight from the provided query. Now, <em>this is a huge if</em>. Some of the most complex bugs are those that show up every now and then and are only reproducible under rare conditions. For these bugs dynamic instrumentation might not help much. A long running query will have to be installed in place so that information can be collected the next time it happens.</p>
+
+<p><strong>Another downside is that there’s no historical data to use as a baseline.</strong> Say users are reporting some page is slow. You can run a query and get a latency breakdown across services, but how do you know if what you’re seeing is an anomaly? Was the system this slow a week ago? Does service X always take more than 3 seconds to answer? Has the request time been affected by the deployment to service Y we made two days ago? These questions can’t be answered without stored observability data to refer to.</p>
+
+<p>The good news is that the choice between static and dynamic instrumentation doesn’t have to be binary. In reality, you’ll want to have a mix of statically instrumented known queries (this is where your dashboard and alerts data will come from), <em>AND</em> some headroom for dynamically instrumented queries for troubleshooting. The final cost ends up being the sum of both types of instrumentation. The cost for static instrumentation is driven by storage cost, whereas the dynamic instrumentation cost is a function of emission cost which depends on the query being executed. Of course, both are directly affected by traffic volume.</p>
+
+<p>Speaking of costs, one of the dangerous aspects of dynamic instrumentation is that the cost is directly influenced by the query provided. <strong>The paper describes no way of understanding and evaluating these costs, so they remain virtually hidden from the user writing the query</strong>. A given query could result in many kilobytes of Advice being transmitted as baggage across N services. Consider, once more, the query:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">From</span> <span class="n">incr</span> <span class="k">In</span> <span class="n">DataNodeMetrics</span><span class="p">.</span><span class="n">incrBytesRead</span>
+</span><span class='line'><span class="k">Join</span> <span class="n">cl</span> <span class="k">In</span> <span class="k">First</span><span class="p">(</span><span class="n">ClientProtocols</span><span class="p">)</span> <span class="k">On</span> <span class="n">cl</span> <span class="o">-&gt;</span> <span class="n">incr</span>
+</span><span class='line'><span class="n">GroupBy</span> <span class="n">cl</span><span class="p">.</span><span class="n">procName</span>
+</span><span class='line'><span class="k">Select</span> <span class="n">cl</span><span class="p">.</span><span class="n">procName</span><span class="p">,</span> <span class="k">SUM</span><span class="p">(</span><span class="n">incr</span><span class="p">.</span><span class="n">delta</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is a typical example of a happens-before query. The clause <code>cl -&gt; incr</code> means we only care about <code>incr</code> events if the request first passes through <code>cl</code>. A user without knowledge of how Pivot Tracing works might think that the cost of this query is proportional to the number of requests it matches, but this would be completely wrong. To answer this query, Pivot Tracing must pack <em>Advice</em> in all requests that go through <code>cl</code>. This baggage is then transmitted across <em>all</em> services downstream from <code>cl</code>. This needs to be done because the system doesn’t know a priori which of those requests will then go through <code>incr</code>.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2022-02-14/instrumentation-comp.jpeg" width="700"></p>
+
+<p>Any given query might affect the baggage content passed across <em>N</em> number of services, and there’s no way of knowing which services will be affected at query time.</p>
+
+<p>To make things even more complicated, the capacity reserved to answer tracing queries is shared across all system users. This introduces a new set of challenges around administering said capacity. Deciding which team should have priority to run a query is not something you want to be dealing with during an incident.</p>
+
+<p>The paper describes a series of query optimizations to keep the baggage level small. It also mentions a possible workaround to avoid packing too many tuples into the baggage, which consists of emitting all tuples instead of packing them. However, even with this workaround, some information still needs to be packed into the request context to be able to reconstruct the causality.</p>
+
+<p>One last concern regarding dynamic instrumentation is that, by definition, <strong>a given query modifies the system being observed</strong>. If you’ve ever tried troubleshooting a bug only to discover that it doesn’t happen when the application is run on debug mode, you know how annoying this could be. In certain situations running the query might even be counter-productive. For example, consider a user troubleshooting an incident on app performance. Running a Pivot Tracing query will further add extra overhead to the system, making things even worse.</p>
+
+<p>Despite all these pitfalls, I still believe Dynamic Instrumentation is a valuable tool and, I’d love to see it adopted in mainstream distributed tracing frameworks. The ability to write queries about any part of the code without having to manually instrument it’s just too good to pass on. We shouldn’t treat it as the primary instrumentation strategy but as a secondary method of answering complex, more specific queries crafted to troubleshoot particular incidents. Engineers designing these tools need to take extra care and put the proper safeguards in place to avoid users shooting themselves in the foot.</p>
+
+<p><img class="right-fill" src="http://jivimberg.io/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Adding Context to Extension Functions]]></title>
+    <link href="http://jivimberg.io/blog/2021/08/21/adding-context-to-extension-functions/"/>
+    <updated>2021-08-21T20:24:14-07:00</updated>
+    <id>http://jivimberg.io/blog/2021/08/21/adding-context-to-extension-functions</id>
+    <content type="html"><![CDATA[<p>Extension functions are great! But if you define them all over the place, it can get confusing pretty quickly. So here’s a cool idiom to limit extension function usage to a specific context.</p>
+
+<!--more-->
+
+
+<p>Last week I needed to write some code to generate <a href="https://github.com/Netflix/atlas/wiki/Stack-Language">Atlas Stack Language (ASL)</a> queries. ASL is loosely based on <a href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">Reverse Polish Notation</a>, so you first specify the parameters and then the operation. The query I was trying to generate looked something like this:</p>
+
+<p> <code>appName,myapp,:eq,userName,juan,:eq,:and</code></p>
+
+<p>I already had methods for the <code>appName</code> and <code>userName</code> parts and was trying to write the method for the <code>:and</code> operator. So I started by writing the tests:</p>
+
+<div class="kotlin-code" data-target-platform="junit" theme="darcula">
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+internal class ASLQueryBuilderTestV1 {
+
+    //sampleStart
+
+    // Tests will fail because `and` hasn't been implemented yet
+
+    @Test
+    fun `and should return correct expr if neither param is null`() {
+        val expr = and("one", "two")
+        assertEquals("one,two,:and", expr)
+    }
+
+    @Test
+    fun `and should return first param if second param is null`() {
+        val expr = and("one", null)
+        assertEquals("one", expr)
+    }
+
+    @Test
+    fun `and should return second param if receiver is null`() {
+        val expr = and(null, "two")
+        assertEquals("two", expr)
+    }
+
+    @Test
+    fun `and should return null if both params are null`() {
+        val expr = and(null, null)
+        assertNull(expr)
+    }
+    //sampleEnd
+}
+</div>
+
+
+<p>Ok, that’s a lie 🙈 I didn’t really start with the tests, as <a href="https://en.wikipedia.org/wiki/Test-driven_development">TDD</a> suggests. But let’s pretend I did for this example because the test does a good job at explaining the behavior I was going for. Note that the <code>:and</code> operator is only applied if both expressions are not <em>null</em>.</p>
+
+<p>So here&rsquo;s a straightforward implementation that makes all the tests go ✅:</p>
+
+<div class="kotlin-code" data-target-platform="junit" theme="darcula">
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+internal class ASLQueryBuilderTestV1 {
+
+    @Test
+    fun `and should return correct expr if neither param is null`() {
+        val expr = and("one", "two")
+        assertEquals("one,two,:and", expr)
+    }
+
+    @Test
+    fun `and should return first param if second param is null`() {
+        val expr = and("one", null)
+        assertEquals("one", expr)
+    }
+
+    @Test
+    fun `and should return second param if receiver is null`() {
+        val expr = and(null, "two")
+        assertEquals("two", expr)
+    }
+
+    @Test
+    fun `and should return null if both params are null`() {
+        val expr = and(null, null)
+        assertNull(expr)
+    }
+}
+
+//sampleStart
+fun and(expr1: String?, expr2: String?): String? {
+    return when {
+        expr1 != null && expr2 != null -> "$expr1,$expr2,:and"
+        expr1 != null && expr2 == null -> expr1
+        expr1 == null && expr2 != null -> expr2
+        else -> null
+    }
+}
+//sampleEnd
+</div>
+
+
+<p>My <code>and()</code> method was working, but it was not beautiful. Every time I read it, I had to do some mental gymnastics to understand what was going on 🧠🏋</p>
+
+<p>Here, judge for yourself:</p>
+
+<div class="kotlin-code" theme="darcula" data-highlight-only>
+val expr = and(appNameEquals("myapp"), userNameEquals("juan"))
+//      🤔 <- me thinking 
+// expr means      (appName == myapp) AND (userName == juan)"
+// expr generated  "appName,myapp,:eq,userName,juan,:eq,:and"
+</div>
+
+
+<p>So I had an idea, what if I write it as an <a href="https://kotlinlang.org/docs/functions.html#infix-notation"><code>infix</code> function</a>? Infix functions can only take a single parameter, and I need to receive two expressions, so my only option was to make <code>and</code> an extension function. And that’s what I did:</p>
+
+<div class="kotlin-code" data-target-platform="junit" theme="darcula">
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+internal class ASLQueryBuilderTestV1 {
+
+    @Test
+    fun `and should return correct expr if neither param is null`() {
+        val expr = "one" and "two"
+        assertEquals("one,two,:and", expr)
+    }
+
+    @Test
+    fun `and should return first param if second param is null`() {
+        val expr = "one" and null
+        assertEquals("one", expr)
+    }
+
+    @Test
+    fun `and should return second param if receiver is null`() {
+        val expr = null and "two"
+        assertEquals("two", expr)
+    }
+
+    @Test
+    fun `and should return null if both params are null`() {
+        val expr = null and null
+        assertNull(expr)
+    }
+}
+
+//sampleStart
+infix fun String?.and(other: String?): String? {
+    return when {
+        this != null && other != null -> "$this,$other,:and"
+        this != null && other == null -> this
+        this == null && other != null -> other
+        else -> null
+    }
+}
+//sampleEnd
+</div>
+
+
+<p>Ahh! This reads almost like English. <em>Me like it very much!</em></p>
+
+<p>Except for one thing&hellip;</p>
+
+<p><code>String?</code> is a pretty basic type, and <code>and()</code> is a pretty common function name. Months from now, somebody will be writing some code and IntelliJ will suggest this:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-08-21/wrong-suggestion.png"></p>
+
+<p>😱 Watch out unsuspecting coder! That <code>and</code> function doesn&rsquo;t do what you think it does!</p>
+
+<p>Leaving this extension function around might be dangerous. So, how can we restrict callers to use it only when writing ASL queries?</p>
+
+<h2>Extension member functions to the rescue!</h2>
+
+<p>The trick is to create a new class named <code>AslQueryBuilder</code> and make <code>and()</code> a member function of this class. By doing so, we make sure the extension function can only be called from an instance of <code>AslQueryBuilder</code>. Nobody will confuse <code>AslQueryBuilder.and()</code> with <code>String.plus()</code>.</p>
+
+<div class="kotlin-code" theme="darcula" data-highlight-only>
+class ASLQueryBuilder {
+    infix fun String?.and(other: String?): String? {
+        return when {
+            this != null && other != null -> "$this,$other,:and"
+            this != null && other == null -> this
+            this == null && other != null -> other
+            else -> null
+        }
+    }
+}
+</div>
+
+
+<p>IntelliJ will no longer suggest <code>and()</code> to any random <code>String?</code> unless AslQueryBuilder is in scope. Problem solved! 💪</p>
+
+<p>We can use Kotlin&rsquo;s <code>with()</code> function to put an instance of <code>AslQueryBuilder</code> in scope to call <code>and()</code>.</p>
+
+<div class="kotlin-code" data-target-platform="junit" theme="darcula">
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Test
+
+internal class ASLQueryBuilderTestV3 {
+    //sampleStart
+    private val aslQueryBuilder = ASLQueryBuilder()
+
+    @Test
+    fun `and should return correct expr if neither param is null`() {
+        val expr = with(aslQueryBuilder) { "one" and "two" }
+        expectThat(expr).isEqualTo("one,two,:and")
+    }
+
+    @Test
+    fun `and should return first param if second param is null`() {
+        val expr = with(aslQueryBuilder) { "one" and null }
+        expectThat(expr).isEqualTo("one")
+    }
+
+    @Test
+    fun `and should return second param if receiver is null`() {
+        val expr = with(aslQueryBuilder) { null and "two" }
+        expectThat(expr).isEqualTo("two")
+    }
+
+    @Test
+    fun `and should return null if both params are null`() {
+        val expr = with(aslQueryBuilder) { null and null }
+        expectThat(expr).isNull()
+    }
+    //sampleEnd
+}
+
+infix fun String?.and(other: String?): String? {
+    return when {
+        this != null && other != null -> "$this,$other,:and"
+        this != null && other == null -> this
+        this == null && other != null -> other
+        else -> null
+    }
+}
+</div>
+
+
+<h2>Putting it all together</h2>
+
+<p>Now that we have an <code>ASLQueryBuilder</code> class, let&rsquo;s add the other two required methods in there too:</p>
+
+<div class="kotlin-code" theme="darcula">
+class ASLQueryBuilder {
+
+    infix fun String?.and(other: String?): String? {
+        return when {
+            this != null && other != null -> "$this,$other,:and"
+            this != null && other == null -> this
+            this == null && other != null -> other
+            else -> null
+        }
+    }
+
+    fun appNameEquals(appName: String?): String? {
+        return appName?.let { ":appName,$it,eq" }
+    }
+
+    fun userNameEquals(userName: String?): String? {
+        return userName?.let { ":userName,$it,eq" }
+    }
+}
+
+fun main() {
+    val aslQueryBuilder = ASLQueryBuilder()
+    val finalExpression = with(aslQueryBuilder) {
+        appNameEquals("myApp") and userNameEquals("juan")
+    }
+    print(finalExpression) // :appName,myApp,eq,:userName,juan,eq,:and
+}
+</div>
+
+
+<p>And that’s it! The query generation code reads nicely and is easy to understand, and <strong>developers can&rsquo;t call the functions without the explicit <code>ASLQueryBuilder</code> context instance, so nobody will use them accidentally</strong>. With this technique we can add any extensions we want to common types without worrying it might pollute the auto-complete and be misused.</p>
+
+<hr />
+
+<p>That’s all for today! If you liked this approach, make sure to check <a href="https://proandroiddev.com/an-introduction-context-oriented-programming-in-kotlin-2e79d316b0a2">An introduction to context-oriented programming in Kotlin</a> and <a href="https://github.com/Kotlin/KEEP/blob/context-receivers/proposals/context-receivers.md#contextual-functions-and-property-accessors">KEEP-259</a> for what might come in future versions of Kotlin.</p>
+
+<p><img class="right-fill" src="http://jivimberg.io/images/signatures/signature13.png" width="200" title="‘My signature’" ></p>
+
+<p><script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"\></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sifter: Scalable Sampling for Distributed Tracing]]></title>
+    <link href="http://jivimberg.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces/"/>
+    <updated>2021-07-28T08:39:37-07:00</updated>
+    <id>http://jivimberg.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces</id>
+    <content type="html"><![CDATA[<p>Distributed tracing can be ridiculously expensive if you try to trace a hundred percent of requests. A common technique to reduce costs is to sample only a small portion of the traffic. But naive sampling techniques like <em>uniform sampling</em> will inevitably capture more common-case executions and might miss the more interesting edge cases. Instead, <strong><a href="https://dl.acm.org/doi/10.1145/3357223.3362736">Sifter’s approach</a> is to bias sampling decisions towards outliers and anomalous traces.</strong> This way, anomalous traces have a higher chance of being sampled, and the more uninteresting traces are discarded.</p>
+
+<!--more-->
+
+
+<h2>How it works</h2>
+
+<p>Sifter uses the incoming stream of traces to <strong>builds a model that approximates the system’s common-case behavior</strong>. To make a sampling decision, it checks how well the model matches the incoming trace. Sampling is biased toward traces that are <em>not</em> well approximated (outliers and anomalous traces).</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-07-28/full-pipeline.png"></p>
+
+<h3>The model</h3>
+
+<p>Sifter uses a 2-layer neural network that models the probability of an event occurring given its immediate predecessors and successors. To create this model, they first extract all <em>N</em>-length paths for each trace.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-07-28/paths.png"></p>
+
+<p>For a given path (p_0<em>, …, p_N</em>), the neural network predicts the probability of p_N/2_ given its surrounding events p_0<em>, … , p_N</em> (excluding  p_N/2_). The model gives better predictions for paths that are seeing more frequently in the input dataset.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-07-28/neural-network.png"></p>
+
+<h3>Sampling</h3>
+
+<p>To make a sampling decision, Sifter first extracts all <em>N</em>-length paths from traces and feeds that into the model. It then uses the output to calculate the prediction&rsquo;s <em>loss</em>, that is the difference between the predicted and actual events. <strong>The higher the loss, the more “interesting” the trace is.</strong></p>
+
+<p>The <em>loss</em> is then weighted against the loss of the <em>k</em> most recent traces.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-07-28/formula-loss.png"></p>
+
+<p>If all traces have the same <em>loss</em>, then the trace is sampled uniformly at random with probability <em>α</em>. Otherwise, the probability is calculated using this formula:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-07-28/formula-sampling.png"></p>
+
+<p>Traces with the lowest <em>loss</em> will have a sampling probability of zero. Traces with the highest loss will have the highest sampling probability.</p>
+
+<h3>Updating the model</h3>
+
+<p>Sifter does a gradient descent back-propagation pass on the model for every trace seen to keep the model up-to-date. It also adds the trace’s loss into the window of <em>k</em> most recent traces and pops the oldest value. Note that <strong>this happens on every trace regardless of whether it is sampled or not.</strong></p>
+
+<h2>Sifter’s Properties</h2>
+
+<p>The following list is a summary of Sifter’s design choices and their consequences:</p>
+
+<ul>
+<li><strong>Sifter’s operates online over a continuous stream of traces.</strong>  The overhead added by sampling is in the order of milliseconds. This latency is affected only by the trace size and the number of unique events in a trace. It is independent of the workload volume and the number of previously sampled traces.</li>
+<li><strong>Sifter is not feature-based.</strong> The model used to identify interesting traces does not require any feature engineering from developers. As a consequence, Sifter’s approach is not limited to what developers consider interesting a priori. Instead, interesting features on the sampled traces can be discovered rather than engineered.</li>
+<li>As a corollary to the previous point, <strong>Sifter can automatically adapt to changes in traffic over time.</strong> The model is updated with every incoming trace, and the sampling probability is adjusted as the workload distribution changes.</li>
+<li>The amount of memory needed to keep Sifter’s model is a function of <em>N</em> the path size, <em>E</em> the label vocabulary, and <em>k</em> the number of most recently seen traces we consider. The total size is constant with respect to the workload volume and the number of sampling traces.</li>
+<li><strong>Sifter does not require any pre-training or manual configuration before operation.</strong> On bootstrap, it’ll start making random sampling decisions while learning the model’s system behavior with every new trace.</li>
+<li>Sifter’s model converts traces into a <em>directed acyclic graph</em> of labels based on event origin, i.e. source file and line number. It does not consider other span features like timing, tags, annotations, etc.</li>
+</ul>
+
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Google Docs Could Be So Much Better!]]></title>
+    <link href="http://jivimberg.io/blog/2021/03/07/google-docs-could-be-so-much-better/"/>
+    <updated>2021-03-07T18:50:06-08:00</updated>
+    <id>http://jivimberg.io/blog/2021/03/07/google-docs-could-be-so-much-better</id>
+    <content type="html"><![CDATA[<p>Lots of businesses run on Google Docs. It&rsquo;s how we write memos, define strategies, discuss proposals, document decisions, write tutorials, and plenty of other things.</p>
+
+<p>Google Docs is a fantastic piece of technology. I almost can&rsquo;t imagine how we worked before it (<em>productStrategy-Jun-2004-version13.docx</em> anyone?). And yet, I sometimes feel like it could be so much more! Like we&rsquo;ll look back in 10 years and think: <em>“My god! I can’t believe we were working that way!”</em>. Improving Docs has the potential of completely overhauling the way information flows through an organization. Here are some ideas on how Google could improve it.</p>
+
+<!--more-->
+
+
+<h2>Smart Summaries</h2>
+
+<p>It’s early in the morning, and you’re checking your emails. You notice your boss shared the new strategy memo. You still have 15’ minutes to your next meeting, so you think: <em>“I’ll catch up on this one real quick”</em>. You start reading and, in the first paragraph, you found a reference to another doc you were not aware of. So you open the link on a new tab and keep going. As you tread through the doc, you find more and more links to review. Before you know your browser looks like this:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/tabs.png" width="700"></p>
+
+<p>What you thought would take five minutes ends up being an endeavor that takes you the whole morning.</p>
+
+<p>There’s probably no good way around this problem if you need to absorb every detail. But more often than not, all you need is a high level overview of the referenced content. The further away you move from your starting doc, the less detail you probably want.</p>
+
+<p>Wouldn’t it be nice if Docs could automagically generate that summary by using a bit of AI? We could read the auto-generated summary and decide if we need to go deeper down the rabbit hole. The experience would be similar to the <a href="https://www.youtube.com/watch?v=AAeloLXO8T0">Link Preview feature</a> released in 2020.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/link-preview.gif"></p>
+
+<h2>Discovery and Navigation</h2>
+
+<p>Google Docs favors a filesystem-like organization. You can sort your docs into folders and browse them in a tree view, just like you would navigate files on your local machine.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/folders.png" width="200"></p>
+
+<p>It’s a well-known pattern that we are all familiar with, and it works great when there’s a centralized authority dictating how things are supposed to be organized. But that’s not how knowledge works. Our brain likes to connect thoughts and ideas in the most unintuitive ways, making connections that at first would look random. Some note-taking apps recognized this need and built experiences around the concept of navigating documents based on how they relate to each other. If the idea sounds strange, just think about how web pages work by links that point to other pages. Imagine if we could capture this relationship <strong>on both ends, and list all outgoing and incoming connections</strong>. This is exactly how <a href="https://collectednotes.com/blog/zettelkasten">Collected Notes</a> works.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/collected-notes.jpeg" width="650"></p>
+
+<p>This paradigm lets us navigate the relationship in both directions! Let’s say we wrote a thoughtful memo on <a href="https://jivimberg.io/blog/2020/05/09/the-whiteboard-interview-is-broken/">”why we should stop asking people to invert a binary tree as part of the interview process”</a>. People seemed to like it and start sharing it around. Soon it gains traction, and everybody in the company is talking about it. With bi-directional links, we’d be able to see how our ideas are referenced on other documents. We can keep an eye on any proposals (or refutals) that are inspired by the original post.</p>
+
+<p>From these links, we could create new visualizations to represent how documents relate to each other. This can help us identify the most popular docs at a glance and discover patterns like high-level strategy docs linked by more specific implementation docs. <a href="https://roamresearch.com/">Roam Research</a> has a view called <a href="https://roamresearch.com/#/app/help/graph">“Graph Overview”</a> to serve this purpose. Each dot represents a note, and each line is a reference. The bigger the dot, the more connections it has.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/roam.png" width="500"></p>
+
+<h2>Consuming content</h2>
+
+<p>We all know Google Docs is an <em>amazing</em> tool for producing content. For consuming it? Not so much 😒👎🏼 Yet the time we spend reading documents is far greater than the time we spend writing them. Improving the reading experience would make everybody a more effective collaborator.</p>
+
+<blockquote><p>Learning is more effective when it is an active rather than a passive process.</p><footer><strong>Kurt Lewin</strong></footer></blockquote>
+
+
+<p>To comprehend something more easily, we need to work with the content. We need to highlight important parts, scratch things out, scribble notes and comments on the margins, etc. In other words, we need to pour our ideas on the doc and make it our own. My favorite app to do this kind of interactive reading is <a href="https://www.liquidtext.net/">LiquidText</a>, it works especially well on an iPad with the Apple Pencil.  I use it to read docs, articles, papers, and sometimes even books.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/liquid-text.jpeg" width="700"></p>
+
+<p>Imagine if we could get a similar experience <em>within</em> Google Docs. What if we could have a private view of the doc where we’d be able to mark it and comment it to our heart’s content. Of course, you can get halfway there today by copying the doc before reading it, but that’d totally break the collaborative features since the copy will never get the updates/comments the original will receive.</p>
+
+<p>The fact that these notes would be private doesn’t mean that we can’t mine them for insight. It’d be pretty easy to leverage the private highlights to power the AI summary mentioned above, or to provide an auto-highlighting feature alla Kindle.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-03-29/highlight.jpeg" width="500"></p>
+
+<hr />
+
+<p>What do you think? Do these features sound helpful to you? I’d love to hear <em>your ideas</em> on how to improve Docs. Drop me a comment below  👇</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature6.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[About Deploying on Fridays]]></title>
+    <link href="http://jivimberg.io/blog/2021/01/22/about-deploying-on-fridays/"/>
+    <updated>2021-01-22T08:55:35-08:00</updated>
+    <id>http://jivimberg.io/blog/2021/01/22/about-deploying-on-fridays</id>
+    <content type="html"><![CDATA[<p>Common knowledge says that you don’t deploy on Friday if you want to have a peaceful weekend. Yet, some people will tell you that if you’re not comfortable deploying every day of the week, you’re doing it wrong. They’ll say that deploying shouldn’t be scary and that you probably don’t have enough tests. So, which one is it?</p>
+
+<!--more-->
+
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-01-22/homer-deploying.png" width="350"></p>
+
+<h2>The problem with Fridays</h2>
+
+<p>Fridays are the last day of the working week, and for many teams, it might also be the end of the sprint/cycle/iteration. Explicit or not, there’s a deadline looming between the developer and the weekend. We invested long hours on this new feature, and we just want to push it out the door, close the ticket, and come back to a clean slate on Monday. Nobody likes heading into the weekend feeling like a fraud because they couldn’t complete the planned tasks in time. The bigger the task, the more eager we are to close it.</p>
+
+<p>So what do we do? We rush it. Maybe we skip testing in a staging environment or turn a blind eye to that flaky test that always fails, and <em>we ship it</em>. We feel the weight being lifted off our shoulders as we click deploy, and we head out the door smiling, ready to enjoy the weekend.</p>
+
+<p>Only somebody will have to clean up our mess when things go south.</p>
+
+<h2>When is a task completed?</h2>
+
+<p>To understand how to combat the danger of Fridays, let’s consider the <em>software lifecycle</em>. That is, the things that happen between <em>“I have to implement feature X”</em> and  <em>“<em>people using it in production</em>”</em>.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-01-22/software-lifecycle1.jpeg" width="700"></p>
+
+<p>From the developer&rsquo;s point of view, when would you say that feature X is <em>Done</em>? Is it once the branch is merged? Is it after the code is deployed? The answer depends on what your team considers the developer’s responsibility. On teams doing <a href="https://netflixtechblog.com/full-cycle-developers-at-netflix-a08c31f83249">Full Cycle Development</a>, the same person writing the code is the one that will test, operate and deploy the service. Which means that <strong>the feature can only be marked as Done once it’s being used in production.</strong></p>
+
+<p>Deploying is only one step, after which you <strong>release</strong> the change to some (or all) of your users and <strong>observe</strong> that it is working as intended. <em><em>Spoiler Alert</em></em> Sometimes it won’t be, and you’ll have to go back to the code and add little fixes here and there.</p>
+
+<p>Treating deployments as just another phase of the software lifecycle enables <a href="https://www.infoq.com/articles/observability-driven-development/">Observability Driven Development</a>. Letting developers <em>see</em> how their code behaves in production before closing the task.</p>
+
+<h2>Optimizing the feedback loops</h2>
+
+<p>The software lifecycle diagram shown above is an over-simplification. In reality, the flow is never a straight line. Every step can send you back to a previous step: Started coding and found a flaw in the design, go back to design  🔙, a test started failing, go back to develop 🔙, etc.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-01-22/software-lifecycle2.jpeg" width="700"></p>
+
+<p><a href="https://martinfowler.com/articles/developer-effectiveness.html">The secret sauce to a highly efficient team is keeping these feedback loops as short as possible</a>. If your tests take thirty minutes to run, by the time you see the failure, you’re already deep in some other task (or worse, on your 9th YouTube video).</p>
+
+<p>Deploying is no different. If it takes months for your code to reach production, by the time your users start using your new feature (and uncovering bugs), you have already moved on to something else. You no longer have the context fresh on your mind, and you barely recall the details and the design decisions taken at the time (which is why <a href="https://jivimberg.io/blog/2020/12/26/documenting-decisions/">you should be documenting those decisions</a>).</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-01-22/software-lifecycle3.jpeg" width="700"></p>
+
+<h2>How to make deployments less scary</h2>
+
+<p><strong>The single most important change you can make to have less scary deployments, is to deploy small changes. Ideally, deploying one change at a time. One Pull Request ➡️ one Deploy.</strong> This will inevitably lead to more deployments because now you might have to do ten deployments to match your big dump releases of the past. This is good! The more you deploy, the less scary it is.</p>
+
+<p>Deploying small changes also gives you better visibility into how your code is affecting the service. <strong>By releasing one change at a time, developers can use telemetry to observe how the code behaves in production and spot bugs before your users do</strong>. In contrast, if you batch multiple PRs in a single deploy, you might have a harder time figuring out which of the changes caused the issue. You might even have to convince the developer that what caused the issue is indeed their commit and not somebody else’s bundled together in the same release. You can avoid all this hassle by following the “one PR ➡️ one Deploy” rule.</p>
+
+<p>And the benefits don’t end there! Smaller changes also mean shorter code reviews. It’s easier for developers reviewing your code to spot bugs in a small PR than in a huge one that modifies hundreds of lines. This is another way in which smaller changes bring better code quality.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2021-01-22/huge-pr.jpeg" width="400"></p>
+
+<p>Last but not least, smaller PRs produce short-lived branches, reducing the number of merge conflicts one has to deal with.</p>
+
+<h2>Deploying != Releasing</h2>
+
+<p>For this approach to work, you need to trust devs with the keys to production. Depending on how your team operates, this might sound risky. <em>Are you saying developers can put code in production whenever they want?</em> Yes! That’s exactly what we’re advocating for. As pointed out earlier, this will mean more deploys, but it’s generally safer than the humongous release approach. Even if it feels like you lose control of what goes out the door. Yes, you’ll be deploying bugs from time to time, but the blast radius is limited, and the change is easier to rollback.</p>
+
+<p><strong>Now, this doesn’t mean that all users are immediately able to see the new changes as soon as you deploy.</strong> The terms <em>deploy</em> and <em>release</em> are sometimes used interchangeably, so let’s define how we’ll use them here:</p>
+
+<ul>
+<li><strong>Deploy:</strong> Put a new version of the code in production.</li>
+<li><strong>Release:</strong> Make some functionality available to users.</li>
+</ul>
+
+
+<p>You can (and should) still control at what rate new functionality is released to users. You might use a rollout strategy where only a subset of power-users get to see what you’re working on and provide feedback before the feature is released to a broader audience. Or, you might want to start by observing how it works on a small percentage of users and then gradually roll out to everyone else. You can achieve this by hiding the new code behind <a href="https://martinfowler.com/articles/feature-toggles.html">Feature Flags</a> and have it conditionally enabled. This provides the extra benefit of being able to enable and disable the code with a simple configuration change (without requiring a deploy), should a critical bug be found.</p>
+
+<h2>It’s not about testing</h2>
+
+<p>One common argument from the <em>“deploy on Fridays”</em> camp is about testing. It goes like this:</p>
+
+<blockquote><p>If you’re scared of deploying on a Friday, it means you either don’t have enough tests or your tests are not good enough.</p></blockquote>
+
+<p>I don’t buy it.</p>
+
+<p>No matter how many tests you have, how good your coverage is, you can’t be sure you’re not releasing a bug. In the words of Dijkstra: <em> Program testing can be used to show the presence of bugs, but never to show their absence.</em></p>
+
+<p>Most automated tests are about validating the scenarios the dev can come up with during development. They don’t account for things we can’t predict<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. So most testing is limited by the imagination of the person writing the test.</p>
+
+<p>Furthermore, our tests usually run in a fake environment where many of the components are mocked. From service stubs to in-memory databases, we use every trick in the book to <a href="https://jivimberg.io/blog/2020/07/27/effective-testing-reducing-non-determinism/">reduce non-determinism from our tests</a>, but this comes at the cost of test fidelity. Our tests no longer accurately represent what happens in production. This is why we need observability and <a href="https://copyconstruct.medium.com/testing-in-production-the-safe-way-18ca102d0ef1">testing in production</a>. This is why we need to <em>deploy</em> and <em>observe</em> to ensure our code is working as intended.</p>
+
+<h2>Conclusion</h2>
+
+<p>To sum up, deploying is just an additional step of the software lifecycle. <strong>You should deploy any day of the week, providing you’re willing to stick around to observe how your code behaves in production. </strong> If you just want to deploy, and run home to start the weekend, then maybe <em>don’t</em>. Because no matter how many tests you have, you haven’t seen your code running in a real environment yet. In the future, we might have DevOps AI to observe and rollback our changes automatically if something looks weird. Until then, though, you’re on the hook for making sure your code is working as intended. <em>Especially on Fridays.</em></p>
+
+<p>Piecemeal deployments will help you release faster and will improve your code quality. The idea is counter-intuitive, but it works: you have to do the scary thing over and over until it becomes an uninteresting event. Releasing frequently will help you catch bugs sooner and will make your team more efficient.</p>
+
+<hr />
+
+<p>Many of the ideas in this post are inspired by the podcasts <a href="https://www.heavybit.com/library/podcasts/o11ycast/">Oll1cast</a> and <a href="https://maintainable.fm/">Maintainable</a>, as well as the books <a href="https://www.amazon.com/Software-Engineering-Google-Lessons-Programming/dp/1492082791">Software Engineering at Google</a> and <a href="https://www.oreilly.com/library/view/distributed-tracing-in/9781492056621/">Distributed Tracing in Practice</a>. If you enjoy these topics, go check them out.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature7.png" width="200" title="‘My signature’" ></p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>That’s what exploratory testing is for, and it’s a creative endeavor that doesn’t scale linearly with code.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Documenting Decisions]]></title>
+    <link href="http://jivimberg.io/blog/2020/12/26/documenting-decisions/"/>
+    <updated>2020-12-26T13:51:06-08:00</updated>
+    <id>http://jivimberg.io/blog/2020/12/26/documenting-decisions</id>
+    <content type="html"><![CDATA[<p>It’s Monday morning. You’re sitting at your desk with your steaming cup of Joe, ready to sink your teeth into that new feature you have to develop. The <code>git pull</code> downloads months worth of changes, and you dive into the code. Piece by piece, you start building a mental model of the system, trying to make sense of the different components. But something doesn’t feel right. Why was it built this way? It feels weird, it feels so obviously wrong, so poorly designed, so suboptimal.</p>
+
+<p>You realize you need help. Whoever wrote this mess should be able to provide some context. You run <code>git blame</code> and your own name hits you in the face like a brick. You start thinking that maybe it’s no so wrong. That you probably had your reasons. If you could only go back in time and ask your past self…</p>
+
+<!--more-->
+
+
+<h2>Architecture Decision Logs</h2>
+
+<p>Good developers write code that is easy to understand and use comments to provide additional context. Great teams write documentation explaining how the system is designed and how it is supposed to work. But even if you are blessed with both, there’s still a piece that is usually missing. <strong>Something that can answer the question: <em>How did we end up here?</em>.</strong> Something that can provide context on why the system was designed this way, on what other options were considered and rejected, on why we picked this particular technology or pattern.</p>
+
+<p>That’s exactly what an <a href="https://github.com/joelparkerhenderson/architecture_decision_record">Architecture Decision Log (ADR)</a> is for.</p>
+
+<blockquote><p>An <strong>Architecture Decision Record (ADR)</strong> is a document that captures an important architectural decision made along with its context and consequences.</p>
+
+<p>An <strong>Architecture Decision Log (ADL)</strong> is the collection of all ADRs created and maintained for a particular project (or organization).</p></blockquote>
+
+<p>An Architecture Decision Log can help us capture the context, motivations, and assumptions behind a decision. We are basically doing a brain dump of all the things that were considered before making a final call on something.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-12-26/architecture.gif" width="500"></p>
+
+<p>If one thing is constant about developing software is change. New features are requested, the app grows and it has to support an increasing number of requests, people leave the team and new developers join. By keeping an Architecture Decision Log, we capture the thought process that goes into a decision, <strong>so that future maintainers can understand why something is the way it is, and use this information to evaluate new changes.</strong>  Maybe an assumption made about how users would use the app turned out not to be true. Or perhaps a requirement about the size of stored data has changed, and the existing database can’t scale accordingly.</p>
+
+<p>And that’s not all! ADLs can also provide information about the path not taken. We can document what other alternatives were considered and why they didn’t fly. If some possible solution was initially considered, chances are it’ll come up again as a suggestion in the future. By documenting the research, we avoid new team members wasting their time going down the same rabbit holes explored in the past. Or at least we provide a starting point for a potential re-evaluation.</p>
+
+<h2>The Template</h2>
+
+<p>There are a bunch of templates you can follow in this <a href="https://github.com/joelparkerhenderson/architecture_decision_record#adr-example-templates">GitHub repo</a>. But to be honest, the template doesn’t really matter as much as actually writing them. I usually go with something like this:</p>
+
+<ul>
+<li><strong>Information:</strong> This is like a header where you can include the date, the topic, and who’s writing. Most of this metadata can be obtained from the history if you’re versioning your documentation (as you should), but I think it’s worth repeating it at the start of the document for clarity.</li>
+<li><strong>Problem Context:</strong> A brief description of what you’re trying to solve and why. <em>Don’t forget the why</em>, it might be obvious to you at the time of writing, but it won’t be to someone else in a couple of months/years.</li>
+<li><strong>Details:</strong> This is usually the longest part. Here you can describe all the alternative solutions explored and detail the pros and cons of each approach.</li>
+<li><strong>What was decided:</strong> In this section, you document the final decision as well as the rationale on why one option was picked over the others. Usually, you’ll be making some guess or assumption about how the system will evolve in the future, make sure to include those too.</li>
+</ul>
+
+
+<p>If you’re curious about what they look like, you can see some ADR examples <a href="https://github.com/joelparkerhenderson/architecture_decision_record/tree/master/examples">here</a>.</p>
+
+<h2>Tooling</h2>
+
+<p>You can start your Architecture Decision Log as a new section of your documentation. <strong>I favor keeping documentation as close to the code as possible. Ideally, in the same repository.</strong> Why? Because it’s easier to keep them in sync that way. For example, you can submit your code and documentation changes as part of the same PR. It also makes it more discoverable, as searching for a term in the IDE will bring up results on both code and documentation.</p>
+
+<p>Whatever tool you use, make sure your documentation is searchable and, above all, easy to edit. Ideally, it should also be versioned. I think <a href="https://www.mkdocs.org/">MkDocs</a> fits the bill pretty well, and it’s easy to setup.</p>
+
+<h2>How to write a good ADRs</h2>
+
+<p>Some advice on how to write a good Architecture Decision Record:</p>
+
+<ol>
+<li><strong>Write everything down, even if it’s obvious.</strong> The document you are writing might need to be read by somebody new to the team years from now. Try to paint a complete picture.</li>
+<li><strong>It’s not just about the technical stuff.</strong> Many factors that contribute to a design decision. It might be the team size, the team knowledge of a specific technology or some deadline that needs to be met.</li>
+<li><strong>Keep it honest.</strong> Engineering is about cutting corners. There’s no shame in taking shortcuts, so don’t try to hide it. If some decision was taken because of time constraints or the team resorted to a technology only because it’s what they know best, then better to be upfront about it.</li>
+<li><strong>Keep it short or include a TL;DR.</strong> Keep it easily digestible. If you are including all of the research done, you might want to consider adding it as an appendix. If the document is too long, make sure there’s a good summary on the top so that somebody not interested in the details can still get an overview of the decision.</li>
+<li><strong>ADRs are immutable.</strong> You’re capturing a snapshot of a decision, so there’s no need to update ADRs after time has passed. If new things come up, you can always create a new document and link it to the previous one.</li>
+<li><strong>You can write ADRs even if you don’t have code.</strong> I had tasks that ended up being just an ADR. Maybe you start exploring some performance improvement only to realize it is not feasible. Instead of just scrapping all the code, make sure to include an ADR detailing what the idea was, and why it didn’t succeed. That way, the next time somebody suggests it, they can learn from your attempt instead of falling into the same pitfalls.</li>
+<li><strong>Make it fun.</strong> Just because it’s documentation doesn’t mean it has to be boring. Tell a story. Make it fun! include pictures, diagrams, memes. Use emojis! 😄</li>
+</ol>
+
+
+<h2>The future (hopefully)</h2>
+
+<p>I believe there’s plenty of room for improvement and innovation in the area of documentation tooling. <strong>One thing I’d love to see are smart ADRs that would trigger a notification when one of the assumptions documented breaks.</strong> For example, let’s say your team chose to keep some information in memory for every request because the payload size is expected to be small. They made the call, implemented the code and wrote the appropriate ADR. It’d be great if they could also include a metric as part of the documentation that would monitor that the assumption holds. That way, the team would get notified if, at some point, the expectation is no longer valid. The alert would link to the ADR including context about what system decisions are affected by this violation, and what other facts need to be considered if a change is required.</p>
+
+<hr />
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Effective Testing - Show What's Important, Hide the Rest]]></title>
+    <link href="http://jivimberg.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest/"/>
+    <updated>2020-09-07T18:05:00-07:00</updated>
+    <id>http://jivimberg.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest</id>
+    <content type="html"><![CDATA[<p>What we include in a test is as important as what we leave out. Having the right amount of information helps us understand what the test is doing at a glance.</p>
+
+<!--more-->
+
+
+<p>Let&rsquo;s say we need to check our Restaurants are behaving correctly. We want to validate two things:</p>
+
+<ol>
+<li>That a restaurants can only cook a <code>Recipe</code> if they have all the necessary ingredients.</li>
+<li>That vegan restaurants do not serve non-vegan food</li>
+</ol>
+
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-09-07/restaurantTestsBefore.png" width="700" title="‘Repetitive tests’" ></p>
+
+<p>This works fine, but writing a new <code>Recipe</code> for every single test gets repetitive pretty fast. More importantly, most lines of the test are spent creating the <code>Recipe</code> object. By having to spell out every single property, we lose track of what’s important for each specific test.</p>
+
+<p>Luckily, we can use <a href="https://kotlinlang.org/docs/reference/functions.html#default-arguments">Kotlin default arguments</a> to make the tests better. We could introduce default values directly on the <code>Recipe</code> class, but that would mean we’d have to pick sensible defaults for Recipes in production. We probably don’t want to allow for this flexibility, as we want to force users to specify those properties for each recipe defined. Instead, we will write a <a href="https://phauer.com/2018/best-practices-unit-testing-kotlin/#use-helper-functions-with-default-arguments-to-ease-object-creation"><em>helper function</em></a> with default arguments to handle the <code>Recipe</code> creation. We’ll make it <code>private</code> so that it’s only accessible in the test class.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-09-07/helperFunction.png" width="700" title="‘Helper function’" ></p>
+
+<p>Now we can re-write our tests to make use of the helper function:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-09-07/restaurantTestsAfter.png" width="700" title="‘Improved tests’" ></p>
+
+<p>On each test, we only specify the property that the test cares about and leave out all the other ones. This way, somebody glancing at the test can immediately identify what we’re checking, and it’s not distracted by the details on how to create a <code>Recipe</code> object.</p>
+
+<p>Note that this is a simplified example. In real life, the object being created could have multiple nested objects and require many steps to be initialized. All that code would be hidden in our helper function instead of bloating every test.</p>
+
+<p>We could have written the test for vegan recipes without specifying any property, and it would still pass.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-09-07/notExplicit.png" width="700" title="‘Not explicit enough tests’" ></p>
+
+<p>By default <code>isVegan</code> is true, so we&rsquo;re not required to define it. However, <strong>we opted for explicitly specifying it in the test</strong>, just so that somebody reading the test would know that the value of <code>isVegan</code>  is important for this test. As an extra benefit, the test will not break if, in the future, somebody decides to change the default value for <code>isVegan</code>.</p>
+
+<hr />
+
+<p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Effective Testing - Reducing Non-determinism to Avoid Flaky Tests]]></title>
+    <link href="http://jivimberg.io/blog/2020/07/27/effective-testing-reducing-non-determinism/"/>
+    <updated>2020-07-27T22:00:54-07:00</updated>
+    <id>http://jivimberg.io/blog/2020/07/27/effective-testing-reducing-non-determinism</id>
+    <content type="html"><![CDATA[<p>Flaky tests are those that randomly fail for no apparent reason. If you have a flaky test, you might re-run it, over and over, until it succeeds. If you have a <em>couple</em> of them, the chances of all passing at the same time are slim, so maybe you ignore the failures. You know, just this one time… Soon enough, you’re not paying attention to failures on this test suite. Congratulations! Your tests are now worthless.</p>
+
+<!--more-->
+
+
+<h2>Prefer smaller tests</h2>
+
+<p>Non-determinism is often introduced as a consequence of relying on external services. For example, let’s say our test needs to read data from a database, the test might fail if the database is down, or the data is not present, or has changed.</p>
+
+<p>You&rsquo;ve probably seen the <a href="https://martinfowler.com/bliki/TestPyramid.html">Test Pyramid</a> before. Tests are classified by scope, and the recommendation is to favor tests with reduced scopes (i.e. Unit Tests).</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-31/TestingPyramid.jpg" width="700" title="‘Using data classes for assertions’" ></p>
+
+<p>At Google they came up with a new dimension: <em>Test Size</em><sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>. Tests are grouped in categories <strong>based on the resources a test needs to run</strong> (memory, processes, time, etc.).</p>
+
+<ul>
+<li><strong>X-Small</strong> tests are limited to a single thread or coroutine. They are not allowed to sleep, do I/O operations, or make network calls.</li>
+<li><strong>Small</strong> tests run on a single process. All other X-Small restrictions still apply.</li>
+<li><strong>Medium</strong> tests are confined to a single machine. Can’t make network calls to anywhere other than <code>localhost</code>.</li>
+<li><strong>Large</strong> tests can span multiple machines. They&rsquo;re allowed to do everything.</li>
+</ul>
+
+
+<p><em>Scope</em> and <em>Size</em> are related, but independent. You could have an end-to-end test of a CLI tool that runs in a single process.</p>
+
+<p>How does this tie back to our crusade against flaky tests? Simple, <strong>the smaller the test, the more deterministic it’ll be.</strong> As a bonus perk, they also tend to be faster.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-31/TestSizes.jpg" width="700" title="‘Test sizes’" ></p>
+
+<p>Google went the extra mile and built infrastructure to enforce these constraints. For example, a test marked as <em>Small</em> would fail if it tried to do I/O.</p>
+
+<h2>How to make your test small</h2>
+
+<p>Some ways you can reduce the size of your test:</p>
+
+<ol>
+<li>Use <a href="https://martinfowler.com/bliki/TestDouble.html">Test Doubles</a> to avoid making calls to external services.</li>
+<li>Use an <a href="https://www.baeldung.com/spring-boot-h2-database">in-memory Database</a>.</li>
+<li>Use an <a href="https://github.com/google/jimfs">in-memory filesystem</a>.</li>
+<li>Design your classes so that <a href="https://github.com/google/guava/wiki/CachesExplained#testing-timed-eviction">test can provide a custom time source</a> instead of relying on the system clock.</li>
+<li>Use <a href="https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test">kotlinx-coroutines-test</a> to virtually advance time without having to make your test wait.</li>
+<li>Use <a href="https://www.testcontainers.org/">Testcontainers</a> to turn a <em>Large</em> test into a <em>Medium</em> one.</li>
+</ol>
+
+
+<h2>The trade-off</h2>
+
+<p>The downside of artificially isolating your tests is that they lose <em>Fidelity</em>. Meaning, what you end up testing is further away from what will run in production. <a href="https://jivimberg.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null/">I’ve been bitten by this in the past</a>.</p>
+
+<p>The trick is to have a test distribution similar to the one proposed by the Test Pyramid. We should have lots of <em>Small</em> and <em>X-Small</em> tests, some <em>Medium</em> tests, and only a few <em>Large</em> tests.</p>
+
+<hr />
+
+<p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>The name is unfortunate as it’s not immediately obvious what Size refers to.<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Effective Testing - Expressive Assertions]]></title>
+    <link href="http://jivimberg.io/blog/2020/07/18/effective-testing-expressive-assertions/"/>
+    <updated>2020-07-18T11:58:34-07:00</updated>
+    <id>http://jivimberg.io/blog/2020/07/18/effective-testing-expressive-assertions</id>
+    <content type="html"><![CDATA[<p>Using expressive assertions can help us figure out why a test fails without having to go through the code.</p>
+
+<!--more-->
+
+
+<p>Let&rsquo;s start with an example. Here&rsquo;s a test making sure our recipe has tomatoes 🍅</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/badAssertion.png" width="700" title="‘A test with a non-descriptive assertion’" ></p>
+
+<p>At first glance, everything looks ok. The test passes, it is easy to read, and it follows <a href="https://jivimberg.io/blog/2020/07/10/effective-testing-test-structure/">the <em>”Given - When - Then”</em>  structure</a>.</p>
+
+<p>Some months go by, and one day our test starts failing.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/badAssertionOutput.png" width="700" title="‘The output of a test with a non-descriptive assertion’" ></p>
+
+<p>At this point, we&rsquo;ve probably forgotten everything about the recipe, and we’re not sure what’s causing the failure. <a href="https://jivimberg.io/blog/2020/07/05/effective-testing-use-descriptive-test-names/">The test name is not helping us much either</a>.</p>
+
+<p>To avoid this situation, we can include a message that will be displayed whenever the assertion fails.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/withMessage.png" width="700" title="‘Assertion with explicit message’" ></p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/withMessageOutput.png" width="700" title="‘Output of a test with an assertion with explicit message’" ></p>
+
+<p>Now the failure is obvious. There is no 🍅 on the recipe. <strong>We can immediately tell what’s wrong without even looking at the test code.</strong> But we can do better…</p>
+
+<h2>Assertion libraries</h2>
+
+<p>Let&rsquo;s face it, writing this kind of detailed message for every assertion would be a pain in the ass. Fortunately, we don’t have to. Instead, <strong>we can use an <a href="https://blog.frankel.ch/comparison-assertion-libraries/">expressive assertion library</a> to do the heavy lifting for us.</strong> This is how our code would look like using <a href="https://strikt.io/">Strikt</a>:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/strikt.png" width="700" title="‘Example using Strikt’" ></p>
+
+<p>We&rsquo;re using <a href="https://kotlinlang.org/docs/reference/functions.html#infix-notation">Kotlin infix notation</a> to make the code more readable. This a stylistic decision, you don’t have to use it if you don’t like it.</p>
+
+<p>You might notice we&rsquo;re calling the <code>contains</code> method on the assertion itself. This is possible because Strikt can tell that the type we’re asserting on, is a <em>String</em>, and thus, it can provide methods explicitly tailored to Strings. This is what the error message would look like in this case:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/outputStrikt.png" width="700" title="‘Output of the basic Strikt example’" ></p>
+
+<p><strong>Almost the same information we got from writing our own message, but without the boilerplate.</strong></p>
+
+<p>Assertion libraries are like swiss army knives; they provide all kinds of assertions for different types of objects. I suggest learning a few of the core ones through the documentation, and then letting the IDE guide you with auto-suggestions to discover new ones.</p>
+
+<p>Here are some more examples of type-specific assertions:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/collectionAssertion.png" width="700" title="‘Collection specific assertions’" ></p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/assertingExceptions.png" width="700" title="‘Asserting exceptions’" ></p>
+
+<h2>Asserting on objects</h2>
+
+<p>When validating properties on objects, you might be tempted to write something like this:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/badObjectAssertions.png" width="700" title="‘Manually asserting properties on object’" ></p>
+
+<p>You can probably tell why this is bad. By the time we see the failure, we no longer have context on what property we’re asserting.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/objectAssertionOutput.png" width="700" title="‘Using data classes for assertions’" ></p>
+
+<p>Was it checking the <code>title</code>, the <code>author</code>, or something else?</p>
+
+<p>Instead, you can take advantage of the fact that Data Classes automatically get <code>equals</code> and <code>toString</code> implementations. So we can use an <code>assertEquals</code> and get a nice looking message showing us both instances.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/dataClasses.png" width="700" title="‘Using data classes for assertions’" ></p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/dataClassesOutput.png" width="700" title="‘Using data classes test output’" ></p>
+
+<p>If we don&rsquo;t care about comparing all properties we can use <a href="https://strikt.io/wiki/traversing-subjects/">Strikt to assert only specific fields</a>:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/traversingObjects.png" width="700" title="‘Using Strikt to traverse objects on assertions’" ></p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-19/traversingObjectsOutput.png" width="700" title="‘Strikt object traversal test output’" ></p>
+
+<p>The <a href="https://strikt.io/wiki/assertion-styles/">block assertion style</a> means that even though the <em>title</em> assertion failed Strikt will still check for <em>page count</em> and <strong>it’ll provide output for all the assertions in the block.</strong></p>
+
+<hr />
+
+<p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Effective Testing - Test Structure]]></title>
+    <link href="http://jivimberg.io/blog/2020/07/10/effective-testing-test-structure/"/>
+    <updated>2020-07-10T23:53:38-07:00</updated>
+    <id>http://jivimberg.io/blog/2020/07/10/effective-testing-test-structure</id>
+    <content type="html"><![CDATA[<p>One way to make sure your tests are readable is to have them all adhere to the same structure.</p>
+
+<!--more-->
+
+
+<p>By far, the most common structure is <strong>&ldquo;Given - When - Then”</strong> (aka <em>“Arrange, Act, Assert”</em>). It goes like this:</p>
+
+<ol>
+<li><strong>On Given</strong>: We create the objects and set up the needed state.</li>
+<li><strong>On When</strong>: We perform the action we want to test.</li>
+<li><strong>On Then</strong>: We validate the state changed as expected.</li>
+</ol>
+
+
+<p>For example:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-10/exampleJunit.png" width="700" title="‘Example of the proposed structure using JUnit’" ></p>
+
+<p>The comments explaining each section are optional, and can be omitted on trivial scenarios like the one shown here.</p>
+
+<p>Note how we use whitespace to clearly separate each section. Anybody familiar with the structure will be able to easily identify each section at a glance.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-10/testSections.jpg" width="700" title="‘Colored sections on test’" ></p>
+
+<p>Some testing libraries like <a href="https://github.com/kotest/kotest/">Kotest</a> support a style that already includes the <em>Given</em>, <em>When</em> and <em>Then</em> keywords, making the structure explicit.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-10/exampleKotest.png" width="700" title="‘Example of the proposed structure using Kotest’" ></p>
+
+<hr />
+
+<p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature13.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Effective Testing - Use Descriptive Test Names]]></title>
+    <link href="http://jivimberg.io/blog/2020/07/05/effective-testing-use-descriptive-test-names/"/>
+    <updated>2020-07-05T23:21:07-07:00</updated>
+    <id>http://jivimberg.io/blog/2020/07/05/effective-testing-use-descriptive-test-names</id>
+    <content type="html"><![CDATA[<p>Picking good test names can help us identify what&rsquo;s wrong with our code when something fails.</p>
+
+<!--more-->
+
+
+<p>It&rsquo;s Friday afternoon. You finally finished that long refactor you’ve been working on for the whole week. Everything is looking good. Except you run the tests and see one failure.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-05/BadNames.png" title="‘Test output with bad test names’" ></p>
+
+<p style='text-align: center; font-size: 42px;'>
+🤔
+</p>
+
+
+<p>Unfortunately, <strong>you can&rsquo;t really tell what&rsquo;s broken from looking at that output</strong>. You’ll have to browse the test code to identify the failure.</p>
+
+<p>But what if the output looked more like this:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-05/GoodNames.png" title="‘Test output with good test names’" ></p>
+
+<p>Now the issue is obvious. <strong>You can immediately tell which part of the code is not working and what the output should be.</strong></p>
+
+<p>Test names are the first (and often only) piece of information we see about a test. Using a descriptive test name can help us identify what’s broken at a glance. Furthermore, it helps us keep the test focused on validating one specific behavior, discouraging us from inflating the test with other unrelated assertions.</p>
+
+<h2>How</h2>
+
+<p>Instead of just using the name of the method being tested, try focusing on the behavior you want to validate. <strong>Describe the state of the system, the action performed, and the expected output.</strong> More often than not, you’ll end up with a huge name, something you probably wouldn’t use on production code, but that’s ok.</p>
+
+<p>If you&rsquo;re using Kotlin, you can <a href="https://kotlinlang.org/docs/reference/coding-conventions.html#function-names">use backticks to have whitespaces in your function name</a>. If you’re working with <a href="https://junit.org/junit5/docs/current/user-guide/">JUnit</a> you can leverage the <a href="https://junit.org/junit5/docs/5.0.3/api/org/junit/jupiter/api/DisplayName.html"><code>@DisplayName</code></a> annotation for prettier names. You can even get emojis in there:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-05/WithEmojis.png" title="‘Test output with emojis’" ></p>
+
+<p>You can also write a custom name generator using <code>@DisplayNameGeneration</code> <a href="https://www.baeldung.com/junit-custom-display-name-generator">as shown here</a>.</p>
+
+<p>Some testing libraries like <a href="https://github.com/kotest/kotest/">Kotest</a>, also <a href="https://github.com/kotest/kotest/blob/master/doc/styles.md#should-spec">support nesting tests</a>:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-07-05/NestedNames.png" title="‘Test output with emojis’" ></p>
+
+<hr />
+
+<p>You can read more about test naming in Chapter 12 of <a href="https://www.amazon.com/Software-Engineering-Google-Lessons-Programming/dp/1492082791/ref=sr_1_2?dchild=1&amp;keywords=software+engineering+at+google&amp;link_code=qs&amp;qid=1594020903&amp;sr=8-2&amp;tag=wwwcanoniccom-20">Software Engineering at Google</a>.</p>
+
+<p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature14.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Working With Queues]]></title>
+    <link href="http://jivimberg.io/blog/2020/05/30/working-with-queues/"/>
+    <updated>2020-05-30T19:29:39-07:00</updated>
+    <id>http://jivimberg.io/blog/2020/05/30/working-with-queues</id>
+    <content type="html"><![CDATA[<p>Queues are a powerful tool for building reliable systems. In this article, I’ll describe some of the tips and tricks I came across when working with queues.</p>
+
+<p>Some of the advice is specific to Amazon SQS queues because that’s what I’ve been using the most lately. And also because some of them come from <a href="https://aws.amazon.com/builders-library/avoiding-insurmountable-queue-backlogs/">this amazing article</a> from the <a href="https://aws.amazon.com/builders-library/">Amazon Builders’ Library</a>.</p>
+
+<!--more-->
+
+
+<h2>The trade-off</h2>
+
+<p>Queues can be used to increase the system’s availability by accepting new messages even if our service is down. They help us decouple producers from consumers. When using systems like SQS, we also get a durability guarantee, because we know messages published won’t be lost if our system fails as they are persisted in the queue. Additionally, we get an increase in reliability since we can configure our system to retry the processing of a message in case of failure.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-06-07/Availability.png" title="‘Example of how queues can increase availability’" ></p>
+
+<p>These advantages come at a cost. <strong>We get better reliability, availability, and durability at the price of increased latency</strong>. Meaning, messages can take longer to be processed compared to a synchronous system. This is because our system might have to go through a backlog of old messages before getting to the one just published. Furthermore, if the pace at which messages are put on the queue is faster than the speed at which our system can process them, the system might never be able to catch up!</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-06-07/Overflow.gif" title="‘Animation on how a slow consuming queue can overflow’" ></p>
+
+<p>Let’s go over some of the things we can do to prevent or mitigate these risks.</p>
+
+<h3>1. Wrapping your queues</h3>
+
+<p>Instead of exposing the queues to clients, you can wrap them with an ordering API. This way, we maintain more control over what’s published in the queue. Wrapping queues have many benefits:</p>
+
+<ol>
+<li>We can run validations over the message payload and reject malformed messages with an appropriate error.</li>
+<li>We can enrich the message payload with caller information.</li>
+<li>We can authenticate callers to control access.</li>
+<li>We can implement some of the patterns mentioned below to control fairness in a multi-tenant system and handle surges.</li>
+</ol>
+
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-06-07/WrapQueues.png" title="‘System diagram for wrapping queues’" ></p>
+
+<p>The downside of wrapping the queues is that we turn an asynchronous call into synchronous. Now our system has to be up to process new messages. We’re trading the availability improvements for more control.</p>
+
+<h3>2. Dealing with a backlog</h3>
+
+<p>The price of increased availability is having to deal with the backlog of messages that occur in a surge or after a failure. One way to do so is by dropping old messages.  When consuming a new message, we can compare the current time with the time the message was published and discard the message if it is greater than some value. Of course, this only works if the systems can tolerate this type of message loss.</p>
+
+<p>Another technique is to move the excess to a spillover queue to be processed later. The system will first work on the new messages on the main queue, and only tackle the ones on the spillover queue once resources are available. This way, we can approximate LIFO order, which might be more appropriate for systems dealing with real-time events.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-06-07/Spillover.png" title="‘Diagram of a system using spillover queue’" ></p>
+
+<p>Finally, we can measure the size of the backlog and scale the number of consumers accordingly. Once the backlog is back to its normal size, we can scale down the consumer instances.</p>
+
+<h3>3. Ensuring fairness</h3>
+
+<p>One of the challenges of having multiple customers is having to guarantee fairness. That is, making sure one client is not exhausting all the available resources, creating significant latencies on other clients’ messages. This is especially true in multi-tenant environments where clients might not be aware they’re sharing resources with other people.</p>
+
+<p>One possible solution is to have different customers publish to different queues, and have the system consume in a round-robin fashion. This is a simple solution, but it does not scale well. If we had thousands of customers, we’d have to manage and poll thousands of queues. Instead, we can have a fixed number of queues and hash each customer to a small number of them. Whenever we receive a message, we retrieve the queues assigned to that customer and put the message on the queue with the shortest backlog. That way, if a client is producing lots of messages on their queues, other workflows are automatically routed to less utilized queues. One caveat worth considering, is that message order is not preserved in this model.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-06-07/Sharding.gif" title="‘Animation of multi-tenant system using sharing’" ></p>
+
+<p>Another solution is to set a rate for messages processed for each customer. Once the customer has gone over the specified rate, messages are put in a spillover queue to be deal with later. This pattern is similar to the one we applied for old messages in the previous section, only in this case we’re using it to prevent one client from exhausting all the processing power.</p>
+
+<h3>3. Ensure enough capacity for surges</h3>
+
+<p>It is crucial to reserve additional resources to be able to handle spikes in traffic. One smart idea is to measure the number of messages retrieved while polling. If the system is retrieving more messages on every poll attempt, it means we probably don’t have enough spare resources to handle a surge.</p>
+
+<h3>4. Updating the visibility timeout</h3>
+
+<p>The way Amazon SQS works is that whenever a consumer receives a message, the message remains on the queue hidden. Other consumers won’t be able to see the message for a period of time known as <em>visibilityTimeout</em>. Once the <em>visibilityTimeout</em> period is up, if the message has not been deleted from the queue, other consumers will be able to get it and process it.</p>
+
+<p>If processing a message is taking too long, we run the risk of going over the <em>visibilityTimeout</em> period. If that happens, another client will receive the message and start churning away, spending more resources on it, even though the first consumer has a better chance of finishing first. To avoid this, when we realize processing is taking too long, we can heartbeat SQS to let it know we’re still working. We do this by updating the <em>visibilityTimeout</em> period for a particular message.</p>
+
+<p>We can also use the ability to programmatically modify the <em>visibilityTimeout</em> for a message to speed up retries. Say our queue is configured with a <em>visibilityTimeout</em> of 10 minutes, and while processing a message, we face a transient error, we can set <em>visibilityTimeout</em> to zero to make it retry faster.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature8.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Whiteboard Interview Is Broken]]></title>
+    <link href="http://jivimberg.io/blog/2020/05/09/the-whiteboard-interview-is-broken/"/>
+    <updated>2020-05-09T17:48:02-07:00</updated>
+    <id>http://jivimberg.io/blog/2020/05/09/the-whiteboard-interview-is-broken</id>
+    <content type="html"><![CDATA[<p>We have deluded ourselves into thinking that being able to invert a binary tree on a whiteboard is the hallmark of great software engineering. It’s time we look for better ways of evaluating coding skills.</p>
+
+<!--more-->
+
+
+
+
+<blockquote class="twitter-tweet  tw-align-center"><p lang="en" dir="ltr">Hello, my name is David. I would fail to write bubble sort on a whiteboard. I look code up on the internet all the time. I don&#39;t do riddles.</p>&mdash; DHH (@dhh) <a href="https://twitter.com/dhh/status/834146806594433025?ref\_src=twsrc%5Etfw">February 21, 2017</a></blockquote>
+
+
+<p> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<h2>Why whiteboard coding doesn&rsquo;t work</h2>
+
+<p>The whiteboard code interview is a poor predictor of candidate performance because it only focuses on a narrow subset of skills that are rarely used on the day-to-day job. Think about it, when was the last time you had to write a merge sort from scratch and without googling?</p>
+
+<p><strong>Whiteboard coding imposes a set of arbitrary limitations that look nothing like the tasks the candidate will perform once it’s hired. </strong></p>
+
+<p>We make candidates write code on a whiteboard where refactoring is virtually impossible. We don’t allow them to look stuff up on Google or bounce ideas off a teammate. They’re supposed to have all the knowledge required to solve the problem in their head and come up with a good solution on the spot. To make matters worse, they’re placed under an artificial time constraint with the added stress of being watched perform.</p>
+
+<p>At their best whiteboard interviews can testify to a good level of puzzle-solving, some knowledge of data structures, and the ability to retain multiple indexes in your head to simulate a whiteboard code execution. All skills specifically <a href="https://jivimberg.io/blog/2019/01/10/how-to-prepare-for-the-silicon-valley-interview-part-2/">learned and practiced for the occasion</a>. A whole industry has spawned around helping engineers ace the whiteboard interview: <a href="https://www.amazon.com/Cracking-Coding-Interview-Programming-Questions/dp/0984782850">books</a>, <a href="https://leetcode.com/">platforms</a>, <a href="https://www.youtube.com/watch?v=8T7a09V1KZo">talks</a>. And don’t get me wrong, they really work!</p>
+
+<p>But whiteboarding fails to test for things that more closely correlate to <em>good</em> software development. It says nothing about whether the candidate can write clean code. It doesn’t tell you if they can navigate a project and introduce changes. If they’re good at refactoring code and working at the right level of abstraction.  If they know how to design and evolve an API. If they’re proficient at troubleshooting and debugging issues. In essence, whiteboarding fails at telling us whether the candidate can write maintainable code that will last longer than the 40 minutes of the typical coding interview.</p>
+
+<blockquote class="twitter-tweet  tw-align-center"><p lang="en" dir="ltr">Google: 90% of our engineers use the software you wrote (Homebrew), but you can’t invert a binary tree on a whiteboard so fuck off.</p>&mdash; Max Howell (@mxcl) <a href="https://twitter.com/mxcl/status/608682016205344768?ref\_src=twsrc%5Etfw">June 10, 2015</a></blockquote>
+
+
+<p> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+
+<h2>Then why do we do it?</h2>
+
+<p>Some would say the whiteboard interview is a rite of passage people need to go through before joining the company. <em>“I went through this experience and did well so the new candidate should do it too”</em>. For the most part, I don’t believe that’s the main reason. I think we just repeat what we’ve seen from other engineers/companies without stopping to think why we do it this way.</p>
+
+<p>I don&rsquo;t know a single engineer that enjoys interviewing. I’d go as far as to say that some of us dread the task. So whenever we’re assigned with evaluating a candidate on their code skills we take the easy way out. We look up some clever interview questions, we study the answers and possible followups, and we roll with it. Thus perpetuating the tradition of whiteboard interviews. To make matters worse, most of the time we are neither trained nor evaluated on how we conduct the interview. And since the impact tends to be long-term and hard to measure people are not really motivated in investing time to improve the process.</p>
+
+<h2>What should we do instead?</h2>
+
+<p><strong>Simple: we should test people in problems and environments as close as possible to what they’ll be doing on the job. </strong></p>
+
+<p>For example, <a href="https://blog.jonrshar.pe/2016/Dec/05/pivotal-interviews.html">Pivotal Labs</a> have the candidate spend a full day pair-programming with the interviewer. No tricky algorithmic puzzle, no whiteboard. A real task at hand and dev-to-dev collaboration.</p>
+
+<p>Another option is to provide a take-home exercise. There’s no artificial time constraint, they can use any 3rd party library and Google whatever they need. Afterward, you can use the submitted code as a starting point for the on-site and ask the candidate to iterate on the solution, either by building a new feature, improving the performance, or working around some limitations.</p>
+
+<p>Yet another option is to give the candidate some code and ask them to refactor it to introduce a new functionality.</p>
+
+<p>One clever thing I&rsquo;ve seen one of my colleagues do at Netflix is to introduce a bug in one of the apps the team maintains, then tell the candidate what users are experiencing and ask them to find the bug and fix it. He assists the candidates with the context needed to understand how the system behaves and nudges them in the right direction if they start going into a rabbit hole.</p>
+
+<p>The ideal scenario, of course, is to have the candidate work with the team for a couple of months before making a decision. That’s why it’s probably easier to hire people already contributing to Open Source projects your company maintains. Unfortunately most of the time this is not really feasible.</p>
+
+<hr />
+
+<p>Improving the coding interview takes time. But it’s hard to think of a better way investment than something that’ll help you hire great software engineers. Hopefully, with time we’ll see fewer and fewer whiteboard interviews.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature4.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to Craft Effective Presentations]]></title>
+    <link href="http://jivimberg.io/blog/2020/03/13/how-to-create-effective-presentations/"/>
+    <updated>2020-03-13T15:17:29-07:00</updated>
+    <id>http://jivimberg.io/blog/2020/03/13/how-to-create-effective-presentations</id>
+    <content type="html"><![CDATA[<p>This is a compilation of all the things I learned for creating effective presentations.</p>
+
+<!--more-->
+
+
+<h2>The golden rule: <strong>NO BULLET POINTS </strong></h2>
+
+<p>If you can only take one thing from this article let it be this: <em>DO NOT use bullet-points on your slides</em>.</p>
+
+<p>There&rsquo;s a simple reason for this: Humans brains are really dumb. They can’t process spoken and written words at the same time. <strong>People will either read the slides or listen to you, but not both.</strong> And since you’re presenting my guess is you want them paying attention to you. So drop all that extra text so people can focus on what you’re saying.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/badExample.png" width="600" title="‘Slide with a lot of text’" ></p>
+
+<p>The first step to a bullet-free slide is breaking your content into smaller chunks. <strong>Each slide should focus on a single idea that can be expressed in one or two sentences</strong> (no more than 20 words). Less is more. The rest of the content, the things that you’d normally put in the bullet points, can be spoken. There’s no limit to the number of slides you can use, just make sure you’re only adding the key points on text and speaking the rest.</p>
+
+<p>You&rsquo;ll soon find out that doing this kind of breakdown is hard. Condensing each topic to a single line takes time. But I promise you, once you do this you’ll be halfway through to creating a great presentation.</p>
+
+<p>Now that you have your central ideas, let&rsquo;s talk about styling. The main goal is to keep it simple so viewers are not distracted. Choose a sans-serif typeface (the ones without the ornaments) and make your text HUGE.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/serif-vs-sans-serif.jpg" width="400" title="‘Example of serif and sans serif fonts’" ></p>
+
+<p>Big letters are important because everybody in the room should be able to read it, and it’ll help you stay under the 20 words limit. Pick contrasting colors for text and background. You can use <a href="https://colorhunt.co/">Color Hunt</a> to find a cool palette for your deck.  Finally, place the text in the upper left corner. You can add an image or graph if needed, but don’t put something just because you have the space. Make sure it’s meaningful. Keep it short, keep it simple.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/bigText.png" width="600" title="‘Big text is easier to read’" ></p>
+
+<p style='text-align: center;'>
+(Yes, this is the whole slide)
+</p>
+
+
+<h2>The handout</h2>
+
+<p>You might be worried that, by removing text from the slides, people won’t get the full context when going through your deck after the presentation. The solution is to create 2 different artifacts: a presentation and a handout.</p>
+
+<p>All you have to do is move the text from the slides to the presenter notes.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/presenterNotes.png" width="600" title="‘Handout example’" ></p>
+
+<p>Then, to email your presentation just select <em>Print settings and preview</em> and choose <em>1 slide with notes</em>. Now you have a PDF handout to send after the presentation that includes all the context needed to understand each slide. As a bonus you also get notes you can use while presenting.</p>
+
+<h2>Guiding the audience focus</h2>
+
+<p>Now that we have trimmed the fat from the content it’s time to deal with other sources of distraction. Every single thing not contributing to the message is noise and should go.</p>
+
+<p>First, avoid cluttered templates. They might look cute on page but they can distract the audience.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/clutteredTemplates.png" width="600" title="‘Example of a slide with a cluttered template’" ></p>
+
+<p>Also, get rid of all the cheese transitions. The only animations you should need is <em>appear </em>and<em> disappear</em> to reveal content as you talk. You can also color and opacity on text or images to guide the audience attention. To achieve this you simply duplicate the slide and apply the appropriate changes.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/focus.gif" width="600" title="‘Example of using color and opacity to guide audience focus’" ></p>
+
+<p>The only exception to the &ldquo;no animation rule&rdquo; is if your animation is needed to express the slide’s idea. For example, you might animate a pointer to represent the order of execution on a snippet of code, as I did here:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/animationExample2.gif" title="‘Example of a valid use of animation in a slide’" ></p>
+
+<p style='text-align: center;'>
+(I used Magic Move on  Keynote to create this)
+</p>
+
+
+<p>The same rule applies to all other elements of your slide: layout, image size and placement, color, etc. People will infer meaning from all these things, so make sure they’re reinforcing your message and not working against it. For example if you’re talking about three things that happened one after the other align them horizontally and sort them left to right. If you mention a big number make the text big. If you’re comparing two similar things make them the same size and place them side by side. Note how in the “elements of design” slide shown above, the text placement emphasizes the words’ meaning.</p>
+
+<p>Finally, if you have gifs on you presentation, <strong>make sure to stop them after one or two repetitions</strong>. Anything, blinking or moving on the screen is competing with you for attention. <a href="https://davidwalsh.name/prevent-gif-loop">https://davidwalsh.name/prevent-gif-loop</a></p>
+
+<h2>Start with a hook</h2>
+
+<blockquote><p>Humans think in stories, and we try to make sense of the world by telling stories. <em>Yuval Noah Harari</em></p></blockquote>
+
+<p>You know how most presentations start with: &ldquo;My name is Juan and I’m professional turtle trainer, today I’ll talk about depression in turtles“? People already showed up, so they either know who you are or care about the topic you’ll be presenting about, or both. So instead of opening with a boring introduction try using a hook.</p>
+
+<p>Review Start your presentation with a story, a joke or an anecdote related to the topic. Grab the attention of the audience from your first line. Once they’re  hooked in and paying attention you can introduce yourself. You see this all the time on TED talks like this one:</p>
+
+<div style="max-width:600px;margin:30px auto"><div style="position:relative;height:0;padding-bottom:56.25%"><iframe src="https://embed.ted.com/talks/shawn_achor_the_happy_secret_to_better_work" width="854" height="480" style="position:absolute;left:0;top:0;width:100%;height:100%" frameborder="0" scrolling="no" allowfullscreen></iframe></div></div>
+
+
+<h2>Repeat, Repeat, Repeat</h2>
+
+<p>If you want your message to stick <strong>say it multiple times</strong>. The trick to avoid boring your audience is to say the same thing in many different ways. Paraphrase, use an image, present an example or a counter-example, make a rethorical question, use a conversational style… Get creative!</p>
+
+<p>This works because different people prefer different styles of communication. Some of us are more visually inclined, some like specific examples over generalizations, etc. Also, by repeating the mains ideas you’re signaling the audience what’s important. You’re separating the wheat from the chaff. Last but not least, it also works because people get distracted and they might have missed the point the first time.</p>
+
+<p>When possible try to evoke some emotion. As the <a href="https://en.wikipedia.org/wiki/Head_First_(book_series)">Head First Series</a> taught us: <em>“brains are tuned to pay attention to the biochemistry of emotions”</em>. Share a personal anecdote, make them laugh with a joke or pique their curiosity with a controversial claim and you can guarantee they’ll be paying attention.</p>
+
+<h2>The slides</h2>
+
+<p>Let&rsquo;s go over some of the most common types of slides and how to improve them.</p>
+
+<h3>The title slide</h3>
+
+<p>Most of the time the title slide includes just the title of the talk. Instead, consider providing some context on what’s going to be covered in the presentation as a full sentence. If you’re opening with a hook you can have visuals on your title slide to get right into it.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/titleSlides.png" width="700" title="‘Example of title slides’" ></p>
+
+<h3>The intro slide</h3>
+
+<p>Consider using a blank screen for your introduction. This way you guarantee the attention will be on you and not your slides. Another option is to use a personal photo, related to the topic at hand. Either way, remember that it’s best to open with a hook instead of your introduction.</p>
+
+<h3>The agenda slide</h3>
+
+<p>Most of the time you don&rsquo;t really need an agenda slide. Just jump straight to the content. But if you do include one, make sure you use a small number of sections. Three or four is the sweet spot. You can use images and colors as visual representation of each section.</p>
+
+<h3>The quote slide</h3>
+
+<p>You should have the quote on your slide, only if you’re going to read it word by word. If what you’re saying doesn’t match the text on the screen people will get confused. Another option is to simply blank the screen while reading the quote (here you get to paraphrase if you want).</p>
+
+<h3>The image slide</h3>
+
+<p>When using images go big. Don&rsquo;t worry about breaking the template if you’re using one. Take an empty slide and set the image as background. Don’t put text on it unless you really need to. And if you do use contrasting colors, or place the text over a box with a transparent background to make it readable.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/imageSlides.png" width="700" title="‘Examples of image slides’" ></p>
+
+<h3>The code slide</h3>
+
+<p>Make sure to use syntax highlighting to make the code more readable. Copy and paste from your favorite IDE or use an online syntax highlighting tool to get a color palette that works with your background.</p>
+
+<p><strong>Remove all boilerplate</strong>. If it’s obvious it can be omitted. For example, if you’re showing  a Java class remove all getters, setters and constructors. Don’t worry if the code on the slide doesn’t really compile. You can include the actual code in the handout or link to a public repo or gist.</p>
+
+<p>If the code has multiple parts you&rsquo;ll be talking about, highlight only the section you’re focusing on and gray out all the rest.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-04-23/codeSlide.gif" width="600" title="‘Example of using color and opacity to guide audience focus’" ></p>
+
+<p>Consider using pseudo code so people don&rsquo;t need to be familiar with your language of choice to understand the slide.</p>
+
+<p>Finally, if you like living on the edge and want to do live coding on the stage, you can open your code in full screen on a different workspace and have a separator slide to transition to the editor. Some IDEs have a <a href="https://www.jetbrains.com/help/idea/ide-viewing-modes.html">presentation mode</a> you can use to make the font huge and remove all other distractions. Just make sure to have a plan B because demos always fail.</p>
+
+<h3>The &ldquo;Thank You&rdquo; slide</h3>
+
+<p>Many times this is the slide that stays on screen for the most time. Don’t just write “Thank you” or “Q &amp; A”. Use it to present a summary of the main ideas on your presentation. Make sure to include your social handles in case somebody from the audience wants to reach out to you.</p>
+
+<h2>Bonus: Blanking out the screen</h2>
+
+<p>In this article I mention using an empty slide or blanking out the screen for some sections like the introduction or the quote slide. Having nothing on the screen means all eyes are on you. There’s nothing competing for the audience attention. You’ll be surprised with how well this works.</p>
+
+<p>To achieve this you can either user an empty slide with a black background, or use one of the <a href="https://support.google.com/docs/answer/1696717?co=GENIE.Platform=Desktop&amp;hl=en">keyboard shortcuts</a> in any part of your presentation.</p>
+
+<hr />
+
+<h2>Acknowledgements</h2>
+
+<p>Some of these things I learned from <a href="https://zachholman.com/talks">Zach Holman writings</a> (check his website <a href="https://speaking.io/">speaking.io</a>). More recently I attended a course from <a href="http://christinehaasconsulting.com/services/">Christine Haas Consulting</a> which really helped me polish my presentation skills. The rest comes from years of watching great presenters and practicing. That’s the only way to improve, right?</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hexagonal Architecture on Spring Boot]]></title>
+    <link href="http://jivimberg.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot/"/>
+    <updated>2020-02-01T20:51:59-08:00</updated>
+    <id>http://jivimberg.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot</id>
+    <content type="html"><![CDATA[<p>In this article, I&rsquo;ll show how to implement a Spring Boot application using Hexagonal Architecture.</p>
+
+<!--more-->
+
+
+<p>We&rsquo;ll build a Bank Account simulation with <em>deposit</em> and <em>withdraw</em> operations exposed through REST endpoints.</p>
+
+<h2>Hexagonal Architecture</h2>
+
+<p>Hexagonal architecture is an architectural style that <strong>focuses on keeping the business logic decoupled from external concerns</strong>.</p>
+
+<p>The business core interacts with other components through ports and adapters. This way, we can change the underlying technologies without having to modify the application core.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-02-01/HexagonalArchitecture-generic.png" width="700" title="‘Generic Hexagonal Architecture diagram’" ></p>
+
+<h2>Application Core</h2>
+
+<h3>Domain Model</h3>
+
+<p>Let&rsquo;s start with the domain model. Its main responsibility is to model the business rules. It also verifies that the objects are always in a valid state:</p>
+
+<figure class='code'><figcaption><span>BankAccount.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccount</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">Long</span> <span class="n">id</span><span class="o">;</span>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">BigDecimal</span> <span class="n">balance</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">if</span><span class="o">(</span><span class="n">balance</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">amount</span><span class="o">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>              <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>          <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="n">balance</span> <span class="o">=</span> <span class="n">balance</span><span class="o">.</span><span class="na">subtract</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>          <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">balance</span> <span class="o">=</span> <span class="n">balance</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The domain model should have no dependency on any specific technology. That&rsquo;s the reason why you&rsquo;ll find no Spring annotations here.</p>
+
+<h3>Ports</h3>
+
+<p>Now it&rsquo;s time to have our business logic interact with the outside world. To achieve this, we&rsquo;ll introduce some ports.</p>
+
+<p>First, let&rsquo;s define 2 incoming ports. <strong>These are used by external components to call our application</strong>. In this case, we&rsquo;ll have one per use case. One for <em>Deposit</em>:</p>
+
+<figure class='code'><figcaption><span>DepositUseCase.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">DepositUseCase</span> <span class="o">{</span>
+</span><span class='line'>      <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And one for <em>Withdraw</em>:</p>
+
+<figure class='code'><figcaption><span>WithdrawUseCase.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">WithdrawUseCase</span> <span class="o">{</span>
+</span><span class='line'>      <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Similarly, we&rsquo;ll also have 2 outgoing ports. <strong>These are for our application to interact with the database</strong>. Once again, we&rsquo;ll have one per use case. One for <em>Loading</em> the Account:</p>
+
+<figure class='code'><figcaption><span>LoadAccountPort.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">LoadAccountPort</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">Optional</span><span class="o">&lt;</span><span class="n">BankAccount</span><span class="o">&gt;</span> <span class="nf">load</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And one for <em>Saving</em> it:</p>
+
+<figure class='code'><figcaption><span>SaveAccountPort.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SaveAccountPort</span> <span class="o">{</span>
+</span><span class='line'>      <span class="kt">void</span> <span class="nf">save</span><span class="o">(</span><span class="n">BankAccount</span> <span class="n">bankAccount</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Service</h3>
+
+<p>Next, we&rsquo;ll create a service to tie all the pieces together and drive the execution:</p>
+
+<figure class='code'><figcaption><span>BankAccountService.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountService</span> <span class="kd">implements</span> <span class="n">DepositUseCase</span><span class="o">,</span> <span class="n">WithdrawUseCase</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">LoadAccountPort</span> <span class="n">loadAccountPort</span><span class="o">;</span>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">SaveAccountPort</span> <span class="n">saveAccountPort</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">BankAccount</span> <span class="n">account</span> <span class="o">=</span> <span class="n">loadAccountPort</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+</span><span class='line'>                  <span class="o">.</span><span class="na">orElseThrow</span><span class="o">(</span><span class="nl">NoSuchElementException:</span><span class="o">:</span><span class="k">new</span><span class="o">);</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="n">account</span><span class="o">.</span><span class="na">deposit</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="n">saveAccountPort</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">account</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">withdraw</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">BankAccount</span> <span class="n">account</span> <span class="o">=</span> <span class="n">loadAccountPort</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="n">id</span><span class="o">)</span>
+</span><span class='line'>                  <span class="o">.</span><span class="na">orElseThrow</span><span class="o">(</span><span class="nl">NoSuchElementException:</span><span class="o">:</span><span class="k">new</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>          <span class="kt">boolean</span> <span class="n">hasWithdrawn</span> <span class="o">=</span> <span class="n">account</span><span class="o">.</span><span class="na">withdraw</span><span class="o">(</span><span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>  
+</span><span class='line'>          <span class="k">if</span><span class="o">(</span><span class="n">hasWithdrawn</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>              <span class="n">saveAccountPort</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">account</span><span class="o">);</span>
+</span><span class='line'>          <span class="o">}</span>
+</span><span class='line'>          <span class="k">return</span> <span class="n">hasWithdrawn</span><span class="o">;</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note how the service implements the incoming ports. On each method, it uses the <em>Load</em> port to fetch the account from the database. Then, it performs the changes on the domain model. And finally, it saves those changes through the <em>Save</em> port.</p>
+
+<h2>Adapters</h2>
+
+<h3>Web</h3>
+
+<p>To complete our application, we need to provide implementations for the defined ports. We call these adapters.</p>
+
+<p>For the incoming interactions, we&rsquo;ll create a REST controller:</p>
+
+<figure class='code'><figcaption><span>BankAccountController.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@RestController</span>
+</span><span class='line'><span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">&quot;/account&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountController</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">private</span> <span class="kd">final</span> <span class="n">DepositUseCase</span> <span class="n">depositUseCase</span><span class="o">;</span>
+</span><span class='line'>      <span class="kd">private</span> <span class="kd">final</span> <span class="n">WithdrawUseCase</span> <span class="n">withdrawUseCase</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/{id}/deposit/{amount}&quot;</span><span class="o">)</span>
+</span><span class='line'>      <span class="kt">void</span> <span class="nf">deposit</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">depositUseCase</span><span class="o">.</span><span class="na">deposit</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@PostMapping</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;/{id}/withdraw/{amount}&quot;</span><span class="o">)</span>
+</span><span class='line'>      <span class="kt">void</span> <span class="nf">withdraw</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">Long</span> <span class="n">id</span><span class="o">,</span> <span class="nd">@PathVariable</span> <span class="kd">final</span> <span class="n">BigDecimal</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">withdrawUseCase</span><span class="o">.</span><span class="na">withdraw</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="n">amount</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The controller uses the defined ports to make calls to the application core.</p>
+
+<h3>Persistence</h3>
+
+<p>For the persistence layer, we&rsquo;ll use Mongo DB through Spring Data:</p>
+
+<figure class='code'><figcaption><span>SpringDataBankAccountRepository.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SpringDataBankAccountRepository</span> <span class="kd">extends</span> <span class="n">MongoRepository</span><span class="o">&lt;</span><span class="n">BankAccount</span><span class="o">,</span> <span class="n">Long</span><span class="o">&gt;</span> <span class="o">{</span> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also, we&rsquo;ll create a <em>BankAccountRepository</em> class that connects the outgoing ports with the <em>SpringDataBankAccountRepository</em>:</p>
+
+<figure class='code'><figcaption><span>BankAccountRepository.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Component</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BankAccountRepository</span> <span class="kd">implements</span> <span class="n">LoadAccountPort</span><span class="o">,</span> <span class="n">SaveAccountPort</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="kd">private</span> <span class="n">SpringDataBankAccountRepository</span> <span class="n">repository</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="c1">// Constructor</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">BankAccount</span><span class="o">&gt;</span> <span class="nf">load</span><span class="o">(</span><span class="n">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="n">repository</span><span class="o">.</span><span class="na">findById</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Override</span>
+</span><span class='line'>      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">save</span><span class="o">(</span><span class="n">BankAccount</span> <span class="n">bankAccount</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="n">repository</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">bankAccount</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Infrastructure</h3>
+
+<p>Finally, we need to tell Spring to expose the <em>BankAccountService</em> as a bean, so it can be injected in the controller:</p>
+
+<figure class='code'><figcaption><span>BeanConfiguration.java </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
+</span><span class='line'><span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">basePackageClasses</span> <span class="o">=</span> <span class="n">HexagonalApplication</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BeanConfiguration</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="nd">@Bean</span>
+</span><span class='line'>      <span class="n">BankAccountService</span> <span class="nf">bankAccountService</span><span class="o">(</span><span class="n">BankAccountRepository</span> <span class="n">repository</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>          <span class="k">return</span> <span class="k">new</span> <span class="nf">BankAccountService</span><span class="o">(</span><span class="n">repository</span><span class="o">,</span> <span class="n">repository</span><span class="o">);</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Defining the beans in the Adapters layer helps us maintain the infrastructure code decoupled from the business logic.</p>
+
+<h2>Conclusion</h2>
+
+<p>In this article, we&rsquo;ve seen how to implement an application using Hexagonal Architecture and Spring Boot. This is what the system ends up looking like:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2020-02-01/HexagonalArchitecture-impl.png" width="700" title="‘Generic Hexagonal Architecture Spring Boot example’" ></p>
+
+<p>The code for this example is <a href="https://github.com/jivimberg/hexagonal-architecture">available on Github</a>.</p>
+
+<hr />
+
+<p>This article is based on the <em>highly recommendable</em> <a href="https://leanpub.com/get-your-hands-dirty-on-clean-architecture">&ldquo;Get Your Hands Dirty on Clean Architecture</a> by <a href="https://twitter.com/TomHombergs">Tom Hombergs</a>, and <a href="https://www.baeldung.com/hexagonal-architecture-ddd-spring">this Baeldung article</a> by <a href="https://www.baeldung.com/author/lukasz-rys/">Łukasz Ryś</a>.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature9.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Book Recommendations: Shape Up]]></title>
+    <link href="http://jivimberg.io/blog/2019/09/15/book-recommendations-shape-up/"/>
+    <updated>2019-09-15T10:51:31-07:00</updated>
+    <id>http://jivimberg.io/blog/2019/09/15/book-recommendations-shape-up</id>
+    <content type="html"><![CDATA[<p>I love reading about how people do creative work. Be it <a href="https://en.wikipedia.org/wiki/On_Writing:_A_Memoir_of_the_Craft">writing books</a> or <a href="http://the-witness.net/news/">designing video games</a>, there’s something magical about peeking behind the curtain and learning how the pros do their thing.</p>
+
+<p>Today I’m reviewing <a href="https://basecamp.com/shapeup">Shape Up</a>, a book about the process of writing software at Basecamp.</p>
+
+<!--more-->
+
+
+<p><a href="https://basecamp.com/shapeup"><img class="center" src="http://jivimberg.io/images/posts/2019-09-29/shapeUpCover.png" width="700" title="‘Book cover’" ></a></p>
+
+<p>(<em>I promise those potato shapes ☝️ will make sense by the time you finish the book</em>)</p>
+
+<h1>What is it?</h1>
+
+<p>Shape Up is a book by <a href="https://twitter.com/rjs">Ryan Singer</a> about how <a href="https://basecamp.com/about">Basecamp</a> (the company) writes <a href="https://basecamp.com/">Basecamp</a> (the app). It goes through the development process, from the moment a new idea comes up, ‘till it shows up in production as a fully implemented feature.</p>
+
+<h1>Why does it matter?</h1>
+
+<p><strong>Because it’s fresh!</strong> This is not your run-of-the-mill <em>“How we do Agile”</em> kind of book. There are no Kickoff meetings, no Kanban boards, no Daily Standup. They don’t even keep a backlog!</p>
+
+<p>Coming from the people that wrote <a href="https://basecamp.com/books/remote">Remote</a> and <a href="https://basecamp.com/books/calm">It doesn’t have to be crazy at work</a>, you know this is a company that’s not afraid to innovate.</p>
+
+<blockquote><p>Now that our process is fully formed, documented, and ready to go, we’re here to share it with all those curious enough to listen to a new way of doing things. Explorers, pioneers, those who don’t care what everyone else is doing. Those who want to work better than the rest.</p><footer><strong>Jason Fried</strong> <cite>Basecamp CEO</cite></footer></blockquote>
+
+
+<p>Also, it doesn’t hurt that it is short, well-written, and has real-life examples and stick-figure drawings. <strong>Oh! and it’s free!! 💸</strong></p>
+
+<h1>So, what did you learn?</h1>
+
+<p>A bunch of things! I’m not going to cover everything because I wouldn’t be able to do it justice. Instead, I’ll focus on a couple of nuggets of wisdom. If you find them interesting, go check the book! Getting a better sense of how the whole process is structured shines a new light on the bits you’ll find described here.</p>
+
+<h2>The shape of your task</h2>
+
+<p>A big part of the book is about what happens before the developer starts coding. It is about choosing and defining what’s going to be built. This is what Basecamp calls <a href="https://basecamp.com/shapeup/1.1-chapter-02"><em>”Shaping”</em></a>, and it is so integral to their process that it’s right there on the book’s title. I found this refreshing since, more often than not, books will focus on the execution of tasks instead of how to come up with them.</p>
+
+<p>Basecamp uses cycles of six weeks.  While the developers are busy delivering features, a group of senior staff members<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup> works on defining what’s going to come next. If the project is approved (more on this later), a team of developers will use this spec to make it happen on the next cycle.</p>
+
+<p>The key to Shaping is that it has to happen at <strong>the proper level of abstraction</strong>. Go too abstract, and the dev team might end up building the wrong thing. Go too concrete, and they have no wiggle room to work around a technical pitfall or revise a design choice.</p>
+
+<p><img class="right" src="http://jivimberg.io/images/posts/2019-09-29/knob.png" width="400" title="‘Abstraction knob’" ></p>
+
+<p>For example, they’d use fat marker drawings instead of wireframes, to avoid delving too deep into the UI design details.</p>
+
+<p>You want to end up with a good definition of the problem and a rough sketch of the solution. A clear sense of what’s part of the solution and what’s out of scope. A set of elements and how they connect to each other, but no comprehensive list of tasks or high-res mockups. Those things will come later when the dev team takes over and starts exploring the solution.</p>
+
+<p><img class="left" src="http://jivimberg.io/images/posts/2019-09-29/fatMarker.png" width="150" title="‘Fat marker sketch’" ></p>
+
+<p>Only once shaping is complete, they’d take it to the <a href="https://basecamp.com/shapeup/2.2-chapter-08#the-betting-table"><em>“betting table“</em></a> where they decide if this is something they want to bet the next six weeks on. If the pitch is , it goes into the next cycle. If it’s not, then nothing happens. There’s no centralized backlog or list of rejected ideas. If somebody considers it important or thinks that a better solution can be found, they’ll lobby for it again six weeks later.</p>
+
+<h2>Evaluating new ideas and user requests</h2>
+
+<p>Every single new idea and feature request gets the same answer:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-09-29/interesting.png" width="400" title="‘Interesting! Maybe some time’" ></p>
+
+<p>Basecamp believes an idea needs to go through the shaping process detailed above before they’re ready to bet on it.  When a new request comes in, they’d first try to identify what’s the user need (which sometimes might be quite different from what the user is asking for). Then, they see how they can solve the requirement with a minimal amount of effort. They acknowledge there’s always a better, more complete solution if you have infinite time at your disposal. The trick here is to find a good solution that works under the given constraints (in their case, that it can be built by a small team of engineers and designers in no more than six weeks)</p>
+
+<p>If they’re not able to narrow down the problem and it’s not critical, they simply let it rest and wait to see if the same problem shows up again, so they can get a better sense of what they’re solving for. <strong>Grab-bags such as: “Redesign profile page” or “Refactor engine” are a no-go</strong>. The scope has to be well-defined before they’re ready to bet on an idea.</p>
+
+<h2>Showing progress</h2>
+
+<p>This is how we track progress in our industry:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-09-29/scrum.jpg" width="700" title="‘Wall full of post-it notes’" ></p>
+
+<p>The problem with this approach is that it only works if all required tasks are known up-front. And let’s face, 99% of the time, that’s not the case. Most of the time, you’d start coding the first task only to discover that a new component needs to be added, and you’ll have to fix a few connections this change will introduce.</p>
+
+<p>The book acknowledges this exploration phase as an inherent part of the developers' work. It makes the distinction between 2 different types of tasks:</p>
+
+<ul>
+<li><strong>Imagined tasks</strong>: Those thought about before you start coding</li>
+<li><strong>Discovered tasks</strong>: Those you discover as you go.</li>
+</ul>
+
+
+<p>The tool they came up with to communicate progress are <a href="https://basecamp.com/features/hill-charts">Hill Charts</a>, and they look like this:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-09-29/hillChart1.png" width="600" title="‘Hill Chart’" ></p>
+
+<p>As you can tell, it’s not (only) a function of pending tasks, but also of confidence in that all remaining tasks have been discovered.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-09-29/hillChart2.png" width="600" title="‘Hill Chart 2’" ></p>
+
+<p>A good way of gaining confidence at the start of a project is to begin with the pieces that present the most uncertainty, and move them to the top of the hill first. Doing this before finishing the downhill stuff reduces the chances the project will be late.</p>
+
+<hr />
+
+<p>That’s all…</p>
+
+<p>If you enjoyed the review, you’ll love the book. <a href="https://basecamp.com/shapeup">Go check it out!!</a></p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature5.png" width="200" title="‘My signature’" ></p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>Not sure why they’re not referred to as PMs in the book<a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Book Recommendations: The Advantage]]></title>
+    <link href="http://jivimberg.io/blog/2019/08/11/book-recommendations-the-advantage/"/>
+    <updated>2019-08-11T20:09:32-07:00</updated>
+    <id>http://jivimberg.io/blog/2019/08/11/book-recommendations-the-advantage</id>
+    <content type="html"><![CDATA[<p>Today I’m reviewing <a href="https://read.amazon.com/kp/embed?asin=B006ORWT3Y&amp;preview=newtab&amp;linkCode=kpe&amp;ref_=cm_sw_r_kb_dp_CFpuDbJQRH32R">The Advantage</a> by <a href="https://twitter.com/patricklencioni">Patrick Lencioni</a>. A book written for leaders looking to build a healthy organization.</p>
+
+<!--more-->
+
+
+
+
+<iframe type="text/html" width="336" height="550" frameborder="0" allowfullscreen style="margin: auto; display: block; max-width:100%"  src="https://read.amazon.com/kp/card?asin=B006ORWT3Y&preview=inline&linkCode=kpe&ref_=cm_sw_r_kb_dp_CFpuDbJQRH32R" ></iframe>
+
+
+<h1>Intro</h1>
+
+<p>The book opens explaining why organizational health is so important. This is <em>The Advantage</em> referenced by the title. If you&rsquo;re not sold on the idea that culture is a big business advantage by the end of the chapter, you&rsquo;re probably better off reading something else…</p>
+
+<h1>The 6 questions</h1>
+
+<p>Next, the author goes on to describe <em>The Four Disciplines Model</em> ™. In a nutshell:</p>
+
+<h2>1. Build a Cohesive Leadership Team</h2>
+
+<p>Keep the team small. Make sure every leader understands that playing for the leadership team is more important than favoring their specific departments. Foster conflict, but achieve commitment (<a href="https://en.wikipedia.org/wiki/Disagree_and_commit">&ldquo;Disagree and commit&rdquo;</a>). Once you reach commitment, keep people accountable. Finally, <strong>embrace feedback</strong>, you have to be willing to be vulnerable with your team-mates. It is ok to admit when you fuck up<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup>.</p>
+
+<h2>2. Create Clarity</h2>
+
+<p>Once you have a good leadership team, make sure you&rsquo;re aligned on the important topics. To achieve this, the leadership team should answer 6 questions:</p>
+
+<ol>
+<li>Why do we exist?</li>
+<li>How do we behave?</li>
+<li>What do we do?</li>
+<li>How will we succeed?</li>
+<li>What is most important, right now?</li>
+<li>Who must do what?</li>
+</ol>
+
+
+<p>The answers to these questions will become the kernel of every decision taken. So, don&rsquo;t fall for generic marketing 💩. Be really specific on what your key differentiator is, and drop everything else. If you&rsquo;re not willing to center all your business in, say, <em>customer satisfaction</em> just don&rsquo;t mention it.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-08-11/dunder-mifflin.jpg" title="‘Dunder Mifflin mission statement’" ></p>
+
+<p>Bottomline, if your answers sound like <a href="https://dundermifflinpaper.com/">Dunder Mifflin</a>&rsquo;s mission statement you&rsquo;re doing it wrong.</p>
+
+<p>As soon as there&rsquo;s agreement and commitment on these answers the leadership team needs to communicate them to the rest of the organization.</p>
+
+<h2>3. Over-communicate Clarity</h2>
+
+<p>The book advocates for 2 communication strategies:</p>
+
+<ul>
+<li>Cascading communication: <strong>the same message</strong> should be relayed down the ranks, organically. That is, don&rsquo;t just learn a script and repeat it like a robot, understand the message and pass it through face to face. Give people the chance to ask questions to clarify meaning.</li>
+<li>Over-communication: <strong>Repeat</strong> the message until it sticks. Say it again, and again, and again&hellip; Only after hearing the same thing from multiple source people will believe it.</li>
+</ul>
+
+
+<h2>4. Reinforce clarity</h2>
+
+<p>Finally, make sure <strong>all</strong> actions are aligned with the answers agreed upon by the leadership team. Actions speak louder than words. Lead by example.</p>
+
+<p>All company processes should reinforce these values. When hiring don&rsquo;t just look for technical ability, check for cultural fit first. The first few days of a new hire in the company are key to instruct new employees on the company values. Don&rsquo;t waste them with trivial stuff like setting up the email account, they&rsquo;ll have time for that. Similarly, every benefit, promotion and reward should be designed to remind employees what&rsquo;s important.</p>
+
+<h1>Meetings</h1>
+
+<p>The last part of the book focuses on how to have meaningful meetings. It proposes a framework of 4 different type of meetings:</p>
+
+<ul>
+<li><strong>Daily checkins:</strong> aka <a href="https://en.wikipedia.org/wiki/Stand-up_meeting">Standup Meetings</a>.</li>
+<li><strong>Weekly staff meetings:</strong> in which the author proposes setting no agenda beforehand and instead using the first 15 minutes to align on what topics should be discussed.</li>
+<li><strong>Adhoc topical meetings:</strong>  2 to 4 hours meetings focused on a single topic.</li>
+<li><strong>Quarterly off-site</strong> 1 or 2 days offsite to revisit and reiterate on the 6 questions.</li>
+</ul>
+
+
+<p>To be honest I didn&rsquo;t find much <em>new</em> knowledge on the meetings topic. But maybe that&rsquo;s only because I was familiar with the author&rsquo;s book on the subject: <a href="https://www.amazon.com/Death-Meeting-Leadership-Solving-Business/dp/0787968056">Death by meetings</a>.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature11.png" width="200" title="‘My signature’" ></p>
+<div class="footnotes">
+<hr/>
+<ol>
+<li id="fn:1">
+<p>More on this in <a href="https://jivimberg.io/blog/2018/09/30/book-recommendations-radical-candor/">Radical Candor</a><a href="#fnref:1" rev="footnote">&#8617;</a></p></li>
+</ol>
+</div>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Graphic Design Tools for Backend Engineers]]></title>
+    <link href="http://jivimberg.io/blog/2019/06/07/graphic-design-tools-for-backend-engineers/"/>
+    <updated>2019-06-07T22:14:38-07:00</updated>
+    <id>http://jivimberg.io/blog/2019/06/07/graphic-design-tools-for-backend-engineers</id>
+    <content type="html"><![CDATA[<p>You might think that being a backend engineer means you’ll never have to draw anything more complex than a bunch of boxes connected with arrows (or hexagons if are going all cloud native). This is simply not true, and that’s why you’re here.</p>
+
+<p>At some point you’ll find yourself producing system diagrams, flow-charts, slides, mockups, maybe even icons! So, let me show you some tools and tricks I picked up over the years to fake it at design.</p>
+
+<!--more-->
+
+
+<h2>Hand-draw images</h2>
+
+<p>Maybe you noticed that some of the drawings that I use on this website look like they where done by a 5 year old. Like this one:</p>
+
+<p><a href="https://jivimberg.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines/"><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/consumerDiagram.png" width="800" title="‘A hand drawing’" ></a></p>
+
+<p>I create these using <a href="https://products.office.com/en-us/onenote/digital-note-taking-app">Microsoft’s OneNote</a> on my wife’s <a href="https://www.microsoft.com/en-us/p/surface-pro-5th-gen/8nkt9wttrbjk?activetab=pivot:overviewtab">Surface Pro</a>. The app it’s somewhat basic, but it does one key thing: it lets you select your traces, move them around and scale them with simple gestures. And that’s really alI you need.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/surfacePro.jpg" width="600" title="‘Drawing on a SurfacePro’" ></p>
+
+<p>Also you can drop any kind of file to OneDrop and draw on top of it.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/meFramed.png" width="200" title="‘A doodle on my face’" ></p>
+
+<p>But, as I said, the Surface Pro is not mine, so I don’t get to take it to work. At the office I use a low-tech alternative: a <strong><a href="https://getrocketbook.com/">Rocketbook</a></strong>. It’s a notebook you can erase with water.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/rocketbook.gif" title="‘Rocketbook animation’" ></p>
+
+<p>The pages are from a plasticky material, but it feels pretty close to drawing on actual paper. And you get karma points for not needing dead trees to do your half-ass doodles.</p>
+
+<p>The best thing is that it comes with an app that allows you to scan your drawings and configure an action based on an icon you mark on the page. This helps me digitalize all my notes in a breeze. I can sketch something quickly, take out my phone and share it in Slack in 2 seconds, and without having to shell out $1k for an iPad.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/slack.png" title="‘Slack conversation with drawing’" ></p>
+
+<p>My only complain is that you have to wait a couple of minutes for the pages to dry when you’re cleaning it. So cleaning the whole book might take you 15 or 20 minutes. But I only do this once a month so it’s not that big of a deal for me.</p>
+
+<h2>System diagrams and Flowcharts</h2>
+
+<p>Let’s face it, most of your diagrams will still be boxes, cylinders and stick-figures. You don’t want your wiki page or slides including an image like this:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/ugly-whiteboard.png" width="400" title="‘Whiteboard image that looks ugly’" ></p>
+
+<p>Why not do it with style? Meet <strong><a href="https://whimsical.com">Whimsical</a></strong>. With this tool you’ll be able to spit beautiful diagrams in seconds. It’s deceptively simple. It has smart snap to grip and auto-grouping that at times feels like it’s reading your mind.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/whimsical.gif" width="800" title="‘Whimsical demo’" ></p>
+
+<p>It can do flowcharts, mind maps, wireframes and sticky notes. The catch is you only get 4 <em>“boards”</em> for free. After that it’s $10 a month💰</p>
+
+<p>If you don’t feel like paying you can always use <a href="https://www.draw.io/">draw.io</a>. It has Google Drive integration, and a wide variety of shapes for different types of diagrams (Flow-chars, UML, BPMN, etc).</p>
+
+<p>Use the comic style to get your diagrams to look like this:</p>
+
+<p><a href="https://jivimberg.io/blog/2018/07/03/writing-githooks-in-kotlin/"><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/drawio.png" title="‘Draw.io example’" > </a></p>
+
+<p><em>(This diagram is from my <a href="https://jivimberg.io/blog/2018/07/03/writing-githooks-in-kotlin/">“Writing Githooks in Kotlin”</a> post)</em></p>
+
+<p>If all you’re trying to create is a UML of your existing code then you should check <a href="https://www.jetbrains.com/help/idea/class-diagram.html">this Intellij feature</a> that gives you just that in a couple clicks.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/intellijUML.png" width="600" title="‘UML diagram from Intellij’" ></p>
+
+<p>Similarly if you’re using Spring you can <a href="https://www.jetbrains.com/help/idea/spring-support.html">get a beans dependencies diagram</a> just as easily.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/beans-dependencies.png" width="600" title="‘Beans dependencies diagram on Intellij’" ></p>
+
+<h2>Sharing snippets of code</h2>
+
+<p>If you need to share a snippet of code you can create a Gist like this one: <a href="https://gist.github.com/jivimberg/8cae46cdb5b98c0d19176efcde2eadd9">sendForm.gs</a>. And you can easily embed them in a page:</p>
+
+<div><script src='https://gist.github.com/8cae46cdb5b98c0d19176efcde2eadd9.js'></script>
+<noscript><pre><code>function sendFormEmail() {
+    var toEmailAddress = &quot;someone@gmail.com&quot;;
+    var htmlMessage = HtmlService.createHtmlOutputFromFile(&quot;Name-of-your-HTML-file.html&quot;).getContent();
+    var subject = &quot;Subject&quot;;
+    var message = &quot;Some message&quot;;
+    MailApp.sendEmail(toEmailAddress, subject, message, {
+      htmlBody: htmlMessage
+    });
+}
+
+function createTimeDrivenTriggers() {
+    // Trigger every day at 6 pm.
+    ScriptApp.newTrigger(&#39;sendFormEmail&#39;)
+    .timeBased()
+    .atHour(18)
+    .everyDays(1) // Frequency is required if you are using atHour() or nearMinute()
+    .create();
+}</code></pre></noscript></div>
+
+
+<p>Gist are great because they have version history, can be commented, forked and starred and you can group multiple files in a single Gist.</p>
+
+<p>If you happen to be working with Kotlin you can also use <a href="https://play.kotlinlang.org/">Kotlin Playground</a>, this way you also get the ability to execute the code. Here is <a href="https://pl.kotl.in/_h-DbUrtj">an example</a>. You can also embed them as well, or better yet, <a href="https://blog.jetbrains.com/kotlin/2018/04/embedding-kotlin-playground/">include Kotlin playground as a script in your page</a> and have all your code blocks converted to runnable snippets.</p>
+
+<xmp class="kotlin-code" theme="darcula">
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.channels.produce
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
+import kotlin.system.measureTimeMillis
+
+//sampleStart
+@ExperimentalCoroutinesApi
+@UseExperimental(FlowPreview::class)
+suspend fun main() {
+    val time = measureTimeMillis {
+        (1..10).asFlow()
+            .parallelMap(3, 3) { delay(100); it * 2 }
+            .collect { print("$it ") }
+    }
+    println()
+    println("Execution time in millis: $time")
+}
+//sampleEnd
+
+@kotlinx.coroutines.FlowPreview
+@kotlinx.coroutines.ExperimentalCoroutinesApi
+fun <T, R> Flow<T>.parallelMap(
+    bufferSize: Int,
+    concurrency: Int,
+    transform: suspend (value: T) -> R
+): Flow<R> {
+    require(bufferSize >= 0) { "Expected non-negative buffer size, but had $bufferSize" }
+    require(concurrency > 0) { "Expected concurrency level greater than 0, but had $concurrency" }
+
+    return flow {
+        coroutineScope {
+            val inputChannel = produce {
+                collect { send(it) }
+                close()
+            }
+
+            val outputChannel = Channel<R>(capacity = bufferSize)
+
+            // Launch $concurrency workers that consume from
+            // input channel (fan-out) and publish to output channel (fan-in)
+            val workers = (1..concurrency).map {
+                launch {
+                    for (item in inputChannel) {
+                        outputChannel.send(transform(item))
+                    }
+                }
+            }
+
+            // Wait for all workers to finish and close the output channel
+            launch {
+                workers.forEach { it.join() }
+                outputChannel.close()
+            }
+
+            // consume from output channel and emit
+            outputChannel.consumeEach { emit(it) }
+        }
+    }
+}
+</xmp>
+
+
+<p>Finally, if all you want is to show some highlighted code you can use <a href="https://carbon.now.sh">carbon.sh</a> to get a beautiful image of your source code, like this one:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/carbon.png" title="‘Carbon.sh demo’" ></p>
+
+<h2>Presentations</h2>
+
+<p>I’ve used a lot of <a href="https://prezi.com"><strong>Prezis</strong></a> in the past. If you’ve never seen a Prezi think a giant canvas where you drop stuff, and each slide is basically zooming to a different portion of the canvas. Here’s an example of a Prezi I did about the things I learned from <a href="https://www.coursera.org/learn/gamification">Coursera’s gamification course</a> by <a href="https://www.coursera.org/instructor/~226710">Kevin Werbach</a>.</p>
+
+<iframe id="iframe_container" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="" allow="autoplay; fullscreen" width="550" height="400" src="https://prezi.com/embed/uyg0exmhwbrn/?bgcolor=ffffff&amp;lock_to_path=0&amp;autoplay=0&amp;autohide_ctrls=0&amp;landing_data=bHVZZmNaNDBIWnNjdEVENDRhZDFNZGNIUE43MHdLNWpsdFJLb2ZHanI5dkNTakxDRmJwb3czakswMFhxZHJkNGtRPT0&amp;landing_sign=YH6jqN1LpGyTSh-ze0MNsqdGvDrfivc-HRxIPrpG7H8"></iframe>
+
+
+<p>It’s an awesome tool that adds a world of possibilities to your presentations. But, with time I understood that just throwing cool transitions doesn’t make your presentation that much better. As any good designer knows, <a href="https://material.io/design/motion/#principles">animations need to serve a purpose</a>. Prezi works best when you use its zooming effects to reinforce the ideas you’re trying to communicate, or to use the canvas layout so that viewers get a good sense on how the content is organized. If you combine this tools in a meaningful way you can create amazing presentations <a href="https://prezi.com/mgujrvianlqb/virtual-tour-ceva-logistics/">like this one</a>.</p>
+
+<p>This days, though, if I need to throw a deck together quickly, I hit <a href="https://www.slidescarnival.com/"><strong>Slides Carnivals</strong></a>. I pick a template that matches the topic I’m covering, import it in Google Slides and start working on it. Only if I need some fancy animations I’d use Keynote (see next topic).</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/slidesCarnival.png" width="800" title="‘Slides carnival’" ></p>
+
+<p>Finally,  it doesn’t really matter which tools you use if you’re just going to cramp 3 paragraphs of text in a slide. And no, having bullet points doesn’t make it any better.  You need to <a href="https://zachholman.com/posts/slide-design-for-developers/">give your deck some ❤️</a>. But  that’s a topic for another day.</p>
+
+<h2>Animations</h2>
+
+<p>Animations can be super useful to visualize complex concepts. Specially on the backend world where much of our work consists of translating the mental model we have of the system into code. Creating visual cues, like animations, helps us communicate our intent in an unambiguous way.</p>
+
+<p>Don’t believe me? Try explaining how the <a href="https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/index.html">different kinds of Kotlin channels</a> behave using just words. Then check this animation:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-04-18/Channels.gif" width="600" title="‘Channels animation’" ></p>
+
+<p>You can create simple animations like this one 👆 on <strong><a href="https://www.apple.com/keynote/">Keynote</a></strong>. Using <em>Magic move</em> and playing around with the order you can create all kind of choreographed animations. When you’re satisfied with the result, <a href="https://support.apple.com/kb/PH28038?locale=en_US&amp;viewlocale=en_US">you can export your creation as a gif</a> and share it with the world.</p>
+
+<h2>UI Mocks</h2>
+
+<p>If you ever worked with non-tech people you know the importance of showing something. Just telling them about what a system will do or how it would look it’s not enough. They have to see it 👀. That’s why low-res mockups are so powerful. You can use a tool like <a href="https://balsamiq.com/">Balsamiq</a> to create something like this in minutes. And you can even make them interactive to show how different screens would connect to each other.</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/balsamiq.png" width="600" title="‘balsamic example’" ></p>
+
+<p>Whimsical also has wire-framing capabilities:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/whimsical-wireframe.png" title="‘Whimsical wireframe’" ></p>
+
+<p>If you’re looking for something more high-res checkout <a href="https://www.invisionapp.com">InVision</a>, that’s what all the cool kids are using this days.</p>
+
+<h2>Logos, banners and more</h2>
+
+<p><strong><a href="https://www.canva.com">Canva</a></strong> is probably the <strong>best design tools for non-designers</strong> you’ll find online, hands down.  I’ve used it for all kind of things. I’ve used it to create logos:</p>
+
+<p><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/Kassette.png" width="250" title="‘Logo created in Canva’" ></p>
+
+<p>Presentations:</p>
+
+<p><a href="https://jivimberg.io/blog/2014/10/12/notes-on-api-design/"><img class="left" src="http://jivimberg.io/images/posts/2019-06-18/Stability.jpg" width="225" title="'Stability'" > </a></p>
+
+<p><a href="https://jivimberg.io/blog/2014/10/12/notes-on-api-design/"><img class="left" src="http://jivimberg.io/images/posts/2019-06-18/MinimizeAccessibility.jpg" width="225" title="'Minimize Accessibility'" >  </a></p>
+
+<p><a href="https://jivimberg.io/blog/2014/10/12/notes-on-api-design/"><img src="http://jivimberg.io/images/posts/2019-06-18/ImplVsInterface.jpg" width="225" title="'Implementation Vs Interface'" > </a></p>
+
+<p>My resume:</p>
+
+<p><a href="https://drive.google.com/file/d/12FKryxTfewr_QtvQtTDMJf-NwmuySY2k/view"><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/resume-1.png" width="500" title="‘My Resume’" ></a></p>
+
+<p>Banners for <a href="https://play.google.com/store/apps/details?id=com.eightblocksaway.android.practicepronunciation&amp;hl=en_US">an Android app I wrote</a>:</p>
+
+<p><a href="https://play.google.com/store/apps/details?id=com.eightblocksaway.android.practicepronunciation&amp;hl=en_US"><img class="center" src="http://jivimberg.io/images/posts/2019-06-18/PracticePronunciation.png" width="400" title="‘Practice pronunciation banner’" ></a></p>
+
+<p>And much, much more… Seriously, if you’ve never used it just go and check it out because it’s amazing, and super simple to use.</p>
+
+<h2>Icons</h2>
+
+<p>Check out the <a href="https://romannurik.github.io/AndroidAssetStudio/icons-generic.html">Icon generator</a>, part of the <a href="https://romannurik.github.io/AndroidAssetStudio/index.html">Android Asset Studio</a> tools put together by <a href="https://roman.nurik.net/">@Romanurik</a>. Specially if you’re doing something on Android.</p>
+
+<h2>Bonus tips</h2>
+
+<p><strong>Tip 1:</strong> Searching Google Images for some fancy image to drop into your diagram? Add <code>filetype:png</code> to your search to filter for PNG images. Also, make use the search tools to filter by color, size and license type!</p>
+
+<p><strong>Tip 2:</strong> <strong><code>⌘ + Shift + 5</code></strong>. Screenshot everything. Screenshot your code in the IDE, screenshot multiple frames from a video and turn it into a gif, screenshot your drawings when the app you’re using doesn’t export to image (<a href="https://answers.microsoft.com/en-us/office/forum/office_2013_release-onenote/how-do-i-export-a-onenote-2013-page-as-an-image/825a08e3-f6c4-4d14-9e3e-c1ec54eb7b99?auth=1">I’m looking at you OneNote</a>). For example, for this post I wanted to create the photo border effect on my picture up there 👆. I knew Keynote had such effect but it’s not meant for image editing. So what did I do? I created a new slide with white background, drop my image, added the desired effect, <em>⌘ + Shift + 5 </em>, and voila! I know it’s hacky, but it gets the work done!</p>
+
+<p><strong>Tip 3:</strong> Befriend graphic designers. Ask them what tools they use. Watch them work. Take note on how they dress.</p>
+
+<p> <img class="right-fill" src="http://jivimberg.io/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
+
+<script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
+
+
+
+]]></content>
+  </entry>
+  
+</feed>

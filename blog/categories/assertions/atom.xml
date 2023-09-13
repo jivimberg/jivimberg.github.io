@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Assertions | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/assertions/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -25,21 +25,21 @@
 
 <p>Let&rsquo;s start with an example. Here&rsquo;s a test making sure our recipe has tomatoes 🍅</p>
 
-<p>{% img center /images/posts/2020-07-19/badAssertion.png 700 ‘A test with a non-descriptive assertion’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/badAssertion.png" width="700" title="‘A test with a non-descriptive assertion’" ></p>
 
 <p>At first glance, everything looks ok. The test passes, it is easy to read, and it follows <a href="https://jivimberg.io/blog/2020/07/10/effective-testing-test-structure/">the <em>”Given - When - Then”</em>  structure</a>.</p>
 
 <p>Some months go by, and one day our test starts failing.</p>
 
-<p>{% img center /images/posts/2020-07-19/badAssertionOutput.png 700 ‘The output of a test with a non-descriptive assertion’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/badAssertionOutput.png" width="700" title="‘The output of a test with a non-descriptive assertion’" ></p>
 
 <p>At this point, we&rsquo;ve probably forgotten everything about the recipe, and we’re not sure what’s causing the failure. <a href="https://jivimberg.io/blog/2020/07/05/effective-testing-use-descriptive-test-names/">The test name is not helping us much either</a>.</p>
 
 <p>To avoid this situation, we can include a message that will be displayed whenever the assertion fails.</p>
 
-<p>{% img center /images/posts/2020-07-19/withMessage.png 700 ‘Assertion with explicit message’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/withMessage.png" width="700" title="‘Assertion with explicit message’" ></p>
 
-<p>{% img center /images/posts/2020-07-19/withMessageOutput.png 700 ‘Output of a test with an assertion with explicit message’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/withMessageOutput.png" width="700" title="‘Output of a test with an assertion with explicit message’" ></p>
 
 <p>Now the failure is obvious. There is no 🍅 on the recipe. <strong>We can immediately tell what’s wrong without even looking at the test code.</strong> But we can do better…</p>
 
@@ -47,13 +47,13 @@
 
 <p>Let&rsquo;s face it, writing this kind of detailed message for every assertion would be a pain in the ass. Fortunately, we don’t have to. Instead, <strong>we can use an <a href="https://blog.frankel.ch/comparison-assertion-libraries/">expressive assertion library</a> to do the heavy lifting for us.</strong> This is how our code would look like using <a href="https://strikt.io/">Strikt</a>:</p>
 
-<p>{% img center /images/posts/2020-07-19/strikt.png 700 ‘Example using Strikt’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/strikt.png" width="700" title="‘Example using Strikt’" ></p>
 
 <p>We&rsquo;re using <a href="https://kotlinlang.org/docs/reference/functions.html#infix-notation">Kotlin infix notation</a> to make the code more readable. This a stylistic decision, you don’t have to use it if you don’t like it.</p>
 
 <p>You might notice we&rsquo;re calling the <code>contains</code> method on the assertion itself. This is possible because Strikt can tell that the type we’re asserting on, is a <em>String</em>, and thus, it can provide methods explicitly tailored to Strings. This is what the error message would look like in this case:</p>
 
-<p>{% img center /images/posts/2020-07-19/outputStrikt.png 700 ‘Output of the basic Strikt example’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/outputStrikt.png" width="700" title="‘Output of the basic Strikt example’" ></p>
 
 <p><strong>Almost the same information we got from writing our own message, but without the boilerplate.</strong></p>
 
@@ -61,33 +61,33 @@
 
 <p>Here are some more examples of type-specific assertions:</p>
 
-<p>{% img center /images/posts/2020-07-19/collectionAssertion.png 700 ‘Collection specific assertions’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/collectionAssertion.png" width="700" title="‘Collection specific assertions’" ></p>
 
-<p>{% img center /images/posts/2020-07-19/assertingExceptions.png 700 ‘Asserting exceptions’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/assertingExceptions.png" width="700" title="‘Asserting exceptions’" ></p>
 
 <h2>Asserting on objects</h2>
 
 <p>When validating properties on objects, you might be tempted to write something like this:</p>
 
-<p>{% img center /images/posts/2020-07-19/badObjectAssertions.png 700 ‘Manually asserting properties on object’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/badObjectAssertions.png" width="700" title="‘Manually asserting properties on object’" ></p>
 
 <p>You can probably tell why this is bad. By the time we see the failure, we no longer have context on what property we’re asserting.</p>
 
-<p>{% img center /images/posts/2020-07-19/objectAssertionOutput.png 700 ‘Using data classes for assertions’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/objectAssertionOutput.png" width="700" title="‘Using data classes for assertions’" ></p>
 
 <p>Was it checking the <code>title</code>, the <code>author</code>, or something else?</p>
 
 <p>Instead, you can take advantage of the fact that Data Classes automatically get <code>equals</code> and <code>toString</code> implementations. So we can use an <code>assertEquals</code> and get a nice looking message showing us both instances.</p>
 
-<p>{% img center /images/posts/2020-07-19/dataClasses.png 700 ‘Using data classes for assertions’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/dataClasses.png" width="700" title="‘Using data classes for assertions’" ></p>
 
-<p>{% img center /images/posts/2020-07-19/dataClassesOutput.png 700 ‘Using data classes test output’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/dataClassesOutput.png" width="700" title="‘Using data classes test output’" ></p>
 
 <p>If we don&rsquo;t care about comparing all properties we can use <a href="https://strikt.io/wiki/traversing-subjects/">Strikt to assert only specific fields</a>:</p>
 
-<p>{% img center /images/posts/2020-07-19/traversingObjects.png 700 ‘Using Strikt to traverse objects on assertions’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/traversingObjects.png" width="700" title="‘Using Strikt to traverse objects on assertions’" ></p>
 
-<p>{% img center /images/posts/2020-07-19/traversingObjectsOutput.png 700 ‘Strikt object traversal test output’ %}</p>
+<p><img class="center" src="/images/posts/2020-07-19/traversingObjectsOutput.png" width="700" title="‘Strikt object traversal test output’" ></p>
 
 <p>The <a href="https://strikt.io/wiki/assertion-styles/">block assertion style</a> means that even though the <em>title</em> assertion failed Strikt will still check for <em>page count</em> and <strong>it’ll provide output for all the assertions in the block.</strong></p>
 
@@ -95,7 +95,7 @@
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
-<p> {% img right-fill /images/signatures/signature2.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   

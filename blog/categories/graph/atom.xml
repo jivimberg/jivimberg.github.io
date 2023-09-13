@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Graph | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/graph/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -49,88 +49,162 @@ data class Woman (
 
 <p>In OO-talk that’s just one Type with a reference to itself like this:</p>
 
-<p>{% img center /images/posts/2018-08-04/UML.jpg 240 ’UML’ %}</p>
+<p><img class="center" src="/images/posts/2018-08-04/UML.jpg" width="240" title="’UML’" ></p>
 
 <p>And once we start creating a bunch of mothers, we’ll get a <a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">directed acyclic graph</a>. Although for this example, and to keep things simple, <strong>we’ll just model the offspring of just one single person</strong> so we get a nice tree like this:</p>
 
-<p>{% img center /images/posts/2018-08-04/tree.jpg 480 ’Tree’ %}</p>
+<p><img class="center" src="/images/posts/2018-08-04/tree.jpg" width="480" title="’Tree’" ></p>
 
 <p>But in DB this is stored in <strong>2 tables</strong>. One contains the Woman data and the other one the relationships.</p>
 
-<p>{% codeblock %}</p>
-
-<table>
-<thead>
-<tr>
-<th> Id </th>
-<th> Name   </th>
-<th>       </th>
-<th> Woman_Id </th>
-<th>  Daughters_Id </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> 1  </td>
-<td> Wendy  </td>
-<td>       </td>
-<td> 1        </td>
-<td> 2             </td>
-</tr>
-<tr>
-<td> 1  </td>
-<td> Wendy  </td>
-<td>       </td>
-<td> 1        </td>
-<td> 3             </td>
-</tr>
-<tr>
-<td> 2  </td>
-<td> Brenda </td>
-<td>       </td>
-<td> 2        </td>
-<td> 4             </td>
-</tr>
-<tr>
-<td> 2  </td>
-<td> Brenda </td>
-<td>       </td>
-<td> 2        </td>
-<td> 5             </td>
-</tr>
-<tr>
-<td> 3  </td>
-<td> Carol  </td>
-<td>       </td>
-<td> 3        </td>
-<td> 6             </td>
-</tr>
-<tr>
-<td> 4  </td>
-<td> Linda  </td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td> 5  </td>
-<td> Betty  </td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td> 6  </td>
-<td> Lisa   </td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-
-
-<p>{% endcodeblock %}</p>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;table>
+</span><span class='line'>&lt;thead>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;th> Id &lt;/th>
+</span><span class='line'>&lt;th> Name   &lt;/th>
+</span><span class='line'>&lt;th>       &lt;/th>
+</span><span class='line'>&lt;th> Woman_Id &lt;/th>
+</span><span class='line'>&lt;th>  Daughters_Id &lt;/th>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;/thead>
+</span><span class='line'>&lt;tbody>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 1  &lt;/td>
+</span><span class='line'>&lt;td> Wendy  &lt;/td>
+</span><span class='line'>&lt;td>       &lt;/td>
+</span><span class='line'>&lt;td> 1        &lt;/td>
+</span><span class='line'>&lt;td> 2             &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 1  &lt;/td>
+</span><span class='line'>&lt;td> Wendy  &lt;/td>
+</span><span class='line'>&lt;td>       &lt;/td>
+</span><span class='line'>&lt;td> 1        &lt;/td>
+</span><span class='line'>&lt;td> 3             &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 2  &lt;/td>
+</span><span class='line'>&lt;td> Brenda &lt;/td>
+</span><span class='line'>&lt;td>       &lt;/td>
+</span><span class='line'>&lt;td> 2        &lt;/td>
+</span><span class='line'>&lt;td> 4             &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 2  &lt;/td>
+</span><span class='line'>&lt;td> Brenda &lt;/td>
+</span><span class='line'>&lt;td>       &lt;/td>
+</span><span class='line'>&lt;td> 2        &lt;/td>
+</span><span class='line'>&lt;td> 5             &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 3  &lt;/td>
+</span><span class='line'>&lt;td> Carol  &lt;/td>
+</span><span class='line'>&lt;td>       &lt;/td>
+</span><span class='line'>&lt;td> 3        &lt;/td>
+</span><span class='line'>&lt;td> 6             &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 4  &lt;/td>
+</span><span class='line'>&lt;td> Linda  &lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 5  &lt;/td>
+</span><span class='line'>&lt;td> Betty  &lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 6  &lt;/td>
+</span><span class='line'>&lt;td> Lisa   &lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;td>&lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;/tbody>
+</span><span class='line'>&lt;/table>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></p>
 
 <p>We’ll focus in just one single type of query, namely:</p>
 
@@ -285,80 +359,146 @@ data class Woman(
 
 <p>If you’re using Oracle then we can solve this using a native query with <a href="https://docs.oracle.com/cd/B19306_01/server.102/b14200/queries003.htm"><code>CONNECT BY</code></a>. Turns out this clause was created specifically for <strong>selecting rows in hierarchical order</strong>.</p>
 
-<p>{% img center /images/posts/2018-08-04/connectby.gif  ’Connect by syntax’ %}</p>
+<p><img class="center" src="/images/posts/2018-08-04/connectby.gif" title="’Connect by syntax’" ></p>
 
 <p>We use <code>START WITH</code> to specify the root node of the hierarchy, and then <code>CONNECT BY</code> to specify the relationship between rows. Our query would look like this:</p>
 
-<p>{% codeblock lang:sql %}</p>
-
-<p>SELECT w.id, w.name, wd.daughters_id
-FROM woman w
-LEFT JOIN woman_daughters wd ON w.id = wd.woman_id
-START WITH w.id = ?1
-CONNECT BY PRIOR wd.daughters_id = w.id</p>
-
-<p>{% endcodeblock %}</p>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">SELECT</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span><span class="p">,</span> <span class="n">w</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">wd</span><span class="p">.</span><span class="n">daughters_id</span>
+</span><span class='line'><span class="k">FROM</span> <span class="n">woman</span> <span class="n">w</span>
+</span><span class='line'><span class="k">LEFT</span> <span class="k">JOIN</span> <span class="n">woman_daughters</span> <span class="n">wd</span> <span class="k">ON</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">woman_id</span>
+</span><span class='line'><span class="k">START</span> <span class="k">WITH</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="o">?</span><span class="mi">1</span>
+</span><span class='line'><span class="k">CONNECT</span> <span class="k">BY</span> <span class="k">PRIOR</span> <span class="n">wd</span><span class="p">.</span><span class="n">daughters_id</span> <span class="o">=</span> <span class="n">w</span><span class="p">.</span><span class="n">id</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>Note how in the <code>CONNECT BY</code> clause we use <code>PRIOR</code> to refer to the parent row.</p>
 
 <p>This achieves exactly what we want <strong>in just one query!</strong>. But this doesn’t come for free. By using native queries we are stepping out of the <em>JPA magical world™</em>. This means that what the query returns is not an object but a list of rows of the form:</p>
 
-<p>{% codeblock %}</p>
-
-<table>
-<thead>
-<tr>
-<th> Id </th>
-<th> Name   </th>
-<th> Daughters_id </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> 1  </td>
-<td> Wendy  </td>
-<td> 2            </td>
-</tr>
-<tr>
-<td> 1  </td>
-<td> Wendy  </td>
-<td> 3            </td>
-</tr>
-<tr>
-<td> 2  </td>
-<td> Brenda </td>
-<td> 4            </td>
-</tr>
-<tr>
-<td> 2  </td>
-<td> Brenda </td>
-<td> 5            </td>
-</tr>
-<tr>
-<td> 3  </td>
-<td> Carol  </td>
-<td> 6            </td>
-</tr>
-<tr>
-<td> 4  </td>
-<td> Linda  </td>
-<td> null         </td>
-</tr>
-<tr>
-<td> 5  </td>
-<td> Betty  </td>
-<td> null         </td>
-</tr>
-<tr>
-<td> 6  </td>
-<td> Lisa   </td>
-<td> null         </td>
-</tr>
-</tbody>
-</table>
-
-
-<p>{% endcodeblock %}</p>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;table>
+</span><span class='line'>&lt;thead>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;th> Id &lt;/th>
+</span><span class='line'>&lt;th> Name   &lt;/th>
+</span><span class='line'>&lt;th> Daughters_id &lt;/th>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;/thead>
+</span><span class='line'>&lt;tbody>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 1  &lt;/td>
+</span><span class='line'>&lt;td> Wendy  &lt;/td>
+</span><span class='line'>&lt;td> 2            &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 1  &lt;/td>
+</span><span class='line'>&lt;td> Wendy  &lt;/td>
+</span><span class='line'>&lt;td> 3            &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 2  &lt;/td>
+</span><span class='line'>&lt;td> Brenda &lt;/td>
+</span><span class='line'>&lt;td> 4            &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 2  &lt;/td>
+</span><span class='line'>&lt;td> Brenda &lt;/td>
+</span><span class='line'>&lt;td> 5            &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 3  &lt;/td>
+</span><span class='line'>&lt;td> Carol  &lt;/td>
+</span><span class='line'>&lt;td> 6            &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 4  &lt;/td>
+</span><span class='line'>&lt;td> Linda  &lt;/td>
+</span><span class='line'>&lt;td> null         &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 5  &lt;/td>
+</span><span class='line'>&lt;td> Betty  &lt;/td>
+</span><span class='line'>&lt;td> null         &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;tr>
+</span><span class='line'>&lt;td> 6  &lt;/td>
+</span><span class='line'>&lt;td> Lisa   &lt;/td>
+</span><span class='line'>&lt;td> null         &lt;/td>
+</span><span class='line'>&lt;/tr>
+</span><span class='line'>&lt;/tbody>
+</span><span class='line'>&lt;/table>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>&lt;p></span></code></pre></td></tr></table></div></figure></p>
 
 <p>So we’ll have to write the code to transform this back to our domain model. To achieve this I used the <code>@SqlResultSetMapping</code> to model the native query result.</p>
 

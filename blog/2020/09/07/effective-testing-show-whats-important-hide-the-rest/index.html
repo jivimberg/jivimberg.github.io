@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Effective Testing - Show What's Important, Hide the Rest - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Effective Testing - Show What's Important, Hide the Rest written September 7, 2020 in builder, effective-testing-series, testing, tests What we &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<!-- Twitter card configuration from: https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image -->
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@jivimberg">
+  <meta name="twitter:creator" content="@jivimberg">
+  <meta name="twitter:title" content="Effective Testing - Show what's important, hide the rest">
+  <meta name="twitter:description" content="Effective Testing - Show What's Important, Hide the Rest written September 7, 2020 in builder, effective-testing-series, testing, tests What we include in a test is as important as what we leave out &hellip;">
+  <meta name="twitter:image" content="https://jivimberg.io/images/background.jpg">
+
+
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W97HTLLN1Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W97HTLLN1Y');
+</script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Effective Testing - Show What's Important, Hide the Rest</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2020-09-07T18:05:00-07:00" pubdate data-updated="true">September 7, 2020</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/builder/'>builder</a>, <a class='category' href='/blog/categories/effective-testing-series/'>effective-testing-series</a>, <a class='category' href='/blog/categories/testing/'>testing</a>, <a class='category' href='/blog/categories/tests/'>tests</a>
+  
+</span>
+
+
+        </div>
+        <p>What we include in a test is as important as what we leave out. Having the right amount of information helps us understand what the test is doing at a glance.</p>
+
+<!--more-->
+
+
+<p>Let&rsquo;s say we need to check our Restaurants are behaving correctly. We want to validate two things:</p>
+
+<ol>
+<li>That a restaurants can only cook a <code>Recipe</code> if they have all the necessary ingredients.</li>
+<li>That vegan restaurants do not serve non-vegan food</li>
+</ol>
+
+
+<p><img class="center" src="/images/posts/2020-09-07/restaurantTestsBefore.png" width="700" title="‘Repetitive tests’" ></p>
+
+<p>This works fine, but writing a new <code>Recipe</code> for every single test gets repetitive pretty fast. More importantly, most lines of the test are spent creating the <code>Recipe</code> object. By having to spell out every single property, we lose track of what’s important for each specific test.</p>
+
+<p>Luckily, we can use <a href="https://kotlinlang.org/docs/reference/functions.html#default-arguments">Kotlin default arguments</a> to make the tests better. We could introduce default values directly on the <code>Recipe</code> class, but that would mean we’d have to pick sensible defaults for Recipes in production. We probably don’t want to allow for this flexibility, as we want to force users to specify those properties for each recipe defined. Instead, we will write a <a href="https://phauer.com/2018/best-practices-unit-testing-kotlin/#use-helper-functions-with-default-arguments-to-ease-object-creation"><em>helper function</em></a> with default arguments to handle the <code>Recipe</code> creation. We’ll make it <code>private</code> so that it’s only accessible in the test class.</p>
+
+<p><img class="center" src="/images/posts/2020-09-07/helperFunction.png" width="700" title="‘Helper function’" ></p>
+
+<p>Now we can re-write our tests to make use of the helper function:</p>
+
+<p><img class="center" src="/images/posts/2020-09-07/restaurantTestsAfter.png" width="700" title="‘Improved tests’" ></p>
+
+<p>On each test, we only specify the property that the test cares about and leave out all the other ones. This way, somebody glancing at the test can immediately identify what we’re checking, and it’s not distracted by the details on how to create a <code>Recipe</code> object.</p>
+
+<p>Note that this is a simplified example. In real life, the object being created could have multiple nested objects and require many steps to be initialized. All that code would be hidden in our helper function instead of bloating every test.</p>
+
+<p>We could have written the test for vegan recipes without specifying any property, and it would still pass.</p>
+
+<p><img class="center" src="/images/posts/2020-09-07/notExplicit.png" width="700" title="‘Not explicit enough tests’" ></p>
+
+<p>By default <code>isVegan</code> is true, so we&rsquo;re not required to define it. However, <strong>we opted for explicitly specifying it in the test</strong>, just so that somebody reading the test would know that the value of <code>isVegan</code>  is important for this test. As an extra benefit, the test will not break if, in the future, somebody decides to change the default value for <code>isVegan</code>.</p>
+
+<hr />
+
+<p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
+
+<p> <img class="right-fill" src="/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest/';
+        var disqus_url = 'http://jivimberg.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2020/07/27/effective-testing-reducing-non-determinism/" title="Previous Post: Effective Testing - Reducing non-determinism to avoid flaky tests">&laquo; Previous: Effective Testing - Reducing non-determinism to avoid flaky tests</a>
+        
+
+        
+          <a class="pull-right" href="/blog/2020/12/26/documenting-decisions/" title="Next Post: Documenting Decisions">Next: Documenting Decisions &raquo;</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Whiteboard | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/whiteboard/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -71,7 +71,7 @@
 
 <p>Improving the coding interview takes time. But it’s hard to think of a better way investment than something that’ll help you hire great software engineers. Hopefully, with time we’ll see fewer and fewer whiteboard interviews.</p>
 
-<p> {% img right-fill /images/signatures/signature4.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature4.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   

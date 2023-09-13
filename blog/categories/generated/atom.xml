@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Generated | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/generated/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -29,33 +29,41 @@
 
 <hr />
 
-<p>{% img center /images/posts/2018-08-12/JaCoCo-before.png 720 ’JaCoCo before’ %}</p>
+<p><img class="center" src="/images/posts/2018-08-12/JaCoCo-before.png" width="720" title="’JaCoCo before’" ></p>
 
-<p>{% blockquote Me, Every time I saw the coverage report %}
-What!? I didn’t even write those functions! There’s no way I’m writing tests for them. I’m pretty sure the compiler knows what it’s doing…
-{% endblockquote %}</p>
+<p><blockquote><p>What!? I didn’t even write those functions! There’s no way I’m writing tests for them. I’m pretty sure the compiler knows what it’s doing…</p><footer><strong>Me</strong> <cite>Every Time I Saw the Coverage Report</cite></footer></blockquote></p>
 
 <p>Good news is that this <a href="https://github.com/goodwinnk">has been fixed</a> in the latest JaCoCo release (thanks to <a href="https://github.com/goodwinnk">goodwink</a>). Bad news is that <strong>0.8.2 is not out yet</strong> 😞</p>
 
 <p>If you are like me, and can’t wait to get this working, you can <strong>use the SNAPSHOT version of JaCoCo</strong> making this changes on your <code>build.gradle</code>:</p>
 
-<p>{% codeblock lang:kotlin %}
-repositories {
-    …
-    maven(&ldquo;<a href="https://oss.sonatype.org/content/repositories/snapshots">https://oss.sonatype.org/content/repositories/snapshots</a>&rdquo;)
-}</p>
-
-<p>jacoco {
-    toolVersion = &ldquo;0.8.2-SNAPSHOT&rdquo;
-}</p>
-
-<p>{% endcodeblock %}</p>
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='kotlin'><span class='line'><span class="n">repositories</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">…</span>
+</span><span class='line'>    <span class="n">maven</span><span class="p">(&amp;</span><span class="n">ldquo</span><span class="p">;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="p">=</span><span class="s">&quot;https://oss.sonatype.org/content/repositories/snapshots&quot;</span><span class="p">&gt;</span><span class="n">https</span><span class="p">:</span><span class="c1">//oss.sonatype.org/content/repositories/snapshots&lt;/a&gt;&amp;rdquo;)</span>
+</span><span class='line'><span class="p">}&lt;/</span><span class="n">p</span><span class="p">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">&lt;</span><span class="n">p</span><span class="p">&gt;</span><span class="n">jacoco</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">toolVersion</span> <span class="p">=</span> <span class="p">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="m">0.8</span><span class="p">.</span><span class="m">2</span><span class="p">-</span><span class="n">SNAPSHOT</span><span class="p">&amp;</span><span class="n">rdquo</span><span class="p">;</span>
+</span><span class='line'><span class="p">}&lt;/</span><span class="n">p</span><span class="p">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">&lt;</span><span class="n">p</span><span class="p">&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p><em>(I’m using <a href="https://github.com/gradle/kotlin-dsl">Gradle with Kotlin DSL</a> in this example)</em></p>
 
 <p>Now you can finally take your Kotlin coverage to 100% without having to write tests for <code>component1()</code> and <code>component2()</code>.</p>
 
-<p>{% img center /images/posts/2018-08-12/JaCoCo-after.png 720 ’JaCoCo after’ %}</p>
+<p><img class="center" src="/images/posts/2018-08-12/JaCoCo-after.png" width="720" title="’JaCoCo after’" ></p>
 ]]></content>
   </entry>
   

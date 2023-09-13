@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Mockk | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/mockk/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -23,7 +23,7 @@
 <!--more-->
 
 
-<p>{% img center /images/posts/2019-05-18/mockkAllTheThings.gif ‘Channels animation’ %}</p>
+<p><img class="center" src="/images/posts/2019-05-18/mockkAllTheThings.gif" title="‘Channels animation’" ></p>
 
 <h2>Regular mocking</h2>
 
@@ -328,7 +328,7 @@ class ClockTest {
 
 <p>This is by no means a comprehensive guide. My intention was just to showcase same of the things that Mockk can do for you. For an in-depth introduction I recommend checking the <a href="https://blog.kotlin-academy.com/search?q=mockk"><em>“Mocking is not rocket science”</em> series in Kotlin Academy</a>.</p>
 
-<p> {% img right-fill /images/signatures/signature10.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
 
 <script src="https://unpkg.com/kotlin-playground@1" data-selector=".kotlin-code"></script>
 

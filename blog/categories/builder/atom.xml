@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Builder | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/builder/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -31,17 +31,17 @@
 </ol>
 
 
-<p>{% img center /images/posts/2020-09-07/restaurantTestsBefore.png 700 ‘Repetitive tests’ %}</p>
+<p><img class="center" src="/images/posts/2020-09-07/restaurantTestsBefore.png" width="700" title="‘Repetitive tests’" ></p>
 
 <p>This works fine, but writing a new <code>Recipe</code> for every single test gets repetitive pretty fast. More importantly, most lines of the test are spent creating the <code>Recipe</code> object. By having to spell out every single property, we lose track of what’s important for each specific test.</p>
 
 <p>Luckily, we can use <a href="https://kotlinlang.org/docs/reference/functions.html#default-arguments">Kotlin default arguments</a> to make the tests better. We could introduce default values directly on the <code>Recipe</code> class, but that would mean we’d have to pick sensible defaults for Recipes in production. We probably don’t want to allow for this flexibility, as we want to force users to specify those properties for each recipe defined. Instead, we will write a <a href="https://phauer.com/2018/best-practices-unit-testing-kotlin/#use-helper-functions-with-default-arguments-to-ease-object-creation"><em>helper function</em></a> with default arguments to handle the <code>Recipe</code> creation. We’ll make it <code>private</code> so that it’s only accessible in the test class.</p>
 
-<p>{% img center /images/posts/2020-09-07/helperFunction.png 700 ‘Helper function’ %}</p>
+<p><img class="center" src="/images/posts/2020-09-07/helperFunction.png" width="700" title="‘Helper function’" ></p>
 
 <p>Now we can re-write our tests to make use of the helper function:</p>
 
-<p>{% img center /images/posts/2020-09-07/restaurantTestsAfter.png 700 ‘Improved tests’ %}</p>
+<p><img class="center" src="/images/posts/2020-09-07/restaurantTestsAfter.png" width="700" title="‘Improved tests’" ></p>
 
 <p>On each test, we only specify the property that the test cares about and leave out all the other ones. This way, somebody glancing at the test can immediately identify what we’re checking, and it’s not distracted by the details on how to create a <code>Recipe</code> object.</p>
 
@@ -49,7 +49,7 @@
 
 <p>We could have written the test for vegan recipes without specifying any property, and it would still pass.</p>
 
-<p>{% img center /images/posts/2020-09-07/notExplicit.png 700 ‘Not explicit enough tests’ %}</p>
+<p><img class="center" src="/images/posts/2020-09-07/notExplicit.png" width="700" title="‘Not explicit enough tests’" ></p>
 
 <p>By default <code>isVegan</code> is true, so we&rsquo;re not required to define it. However, <strong>we opted for explicitly specifying it in the test</strong>, just so that somebody reading the test would know that the value of <code>isVegan</code>  is important for this test. As an extra benefit, the test will not break if, in the future, somebody decides to change the default value for <code>isVegan</code>.</p>
 
@@ -57,7 +57,7 @@
 
 <p>This post is part of the <a href="https://jivimberg.io/blog/categories/effective-testing-series/">Effective Testing Series</a>.</p>
 
-<p> {% img right-fill /images/signatures/signature10.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature10.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   

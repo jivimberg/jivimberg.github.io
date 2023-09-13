@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Queues | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/queues/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -29,11 +29,11 @@
 
 <p>Queues can be used to increase the system’s availability by accepting new messages even if our service is down. They help us decouple producers from consumers. When using systems like SQS, we also get a durability guarantee, because we know messages published won’t be lost if our system fails as they are persisted in the queue. Additionally, we get an increase in reliability since we can configure our system to retry the processing of a message in case of failure.</p>
 
-<p>{% img center /images/posts/2020-06-07/Availability.png ‘Example of how queues can increase availability’ %}</p>
+<p><img class="center" src="/images/posts/2020-06-07/Availability.png" title="‘Example of how queues can increase availability’" ></p>
 
 <p>These advantages come at a cost. <strong>We get better reliability, availability, and durability at the price of increased latency</strong>. Meaning, messages can take longer to be processed compared to a synchronous system. This is because our system might have to go through a backlog of old messages before getting to the one just published. Furthermore, if the pace at which messages are put on the queue is faster than the speed at which our system can process them, the system might never be able to catch up!</p>
 
-<p>{% img center /images/posts/2020-06-07/Overflow.gif ‘Animation on how a slow consuming queue can overflow’ %}</p>
+<p><img class="center" src="/images/posts/2020-06-07/Overflow.gif" title="‘Animation on how a slow consuming queue can overflow’" ></p>
 
 <p>Let’s go over some of the things we can do to prevent or mitigate these risks.</p>
 
@@ -49,7 +49,7 @@
 </ol>
 
 
-<p>{% img center /images/posts/2020-06-07/WrapQueues.png ‘System diagram for wrapping queues’ %}</p>
+<p><img class="center" src="/images/posts/2020-06-07/WrapQueues.png" title="‘System diagram for wrapping queues’" ></p>
 
 <p>The downside of wrapping the queues is that we turn an asynchronous call into synchronous. Now our system has to be up to process new messages. We’re trading the availability improvements for more control.</p>
 
@@ -59,7 +59,7 @@
 
 <p>Another technique is to move the excess to a spillover queue to be processed later. The system will first work on the new messages on the main queue, and only tackle the ones on the spillover queue once resources are available. This way, we can approximate LIFO order, which might be more appropriate for systems dealing with real-time events.</p>
 
-<p>{% img center /images/posts/2020-06-07/Spillover.png ‘Diagram of a system using spillover queue’ %}</p>
+<p><img class="center" src="/images/posts/2020-06-07/Spillover.png" title="‘Diagram of a system using spillover queue’" ></p>
 
 <p>Finally, we can measure the size of the backlog and scale the number of consumers accordingly. Once the backlog is back to its normal size, we can scale down the consumer instances.</p>
 
@@ -69,7 +69,7 @@
 
 <p>One possible solution is to have different customers publish to different queues, and have the system consume in a round-robin fashion. This is a simple solution, but it does not scale well. If we had thousands of customers, we’d have to manage and poll thousands of queues. Instead, we can have a fixed number of queues and hash each customer to a small number of them. Whenever we receive a message, we retrieve the queues assigned to that customer and put the message on the queue with the shortest backlog. That way, if a client is producing lots of messages on their queues, other workflows are automatically routed to less utilized queues. One caveat worth considering, is that message order is not preserved in this model.</p>
 
-<p>{% img center /images/posts/2020-06-07/Sharding.gif ‘Animation of multi-tenant system using sharing’ %}</p>
+<p><img class="center" src="/images/posts/2020-06-07/Sharding.gif" title="‘Animation of multi-tenant system using sharing’" ></p>
 
 <p>Another solution is to set a rate for messages processed for each customer. Once the customer has gone over the specified rate, messages are put in a spillover queue to be deal with later. This pattern is similar to the one we applied for old messages in the previous section, only in this case we’re using it to prevent one client from exhausting all the processing power.</p>
 
@@ -85,7 +85,7 @@
 
 <p>We can also use the ability to programmatically modify the <em>visibilityTimeout</em> for a message to speed up retries. Say our queue is configured with a <em>visibilityTimeout</em> of 10 minutes, and while processing a message, we face a transient error, we can set <em>visibilityTimeout</em> to zero to make it retry faster.</p>
 
-<p> {% img right-fill /images/signatures/signature8.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature8.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   

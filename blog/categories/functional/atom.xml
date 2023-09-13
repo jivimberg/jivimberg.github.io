@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Functional | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/functional/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -23,7 +23,7 @@
 <!--more-->
 
 
-<p>{% img center /images/posts/2018-05-19/trainSwitch.jpg ’Train switch’ %}</p>
+<p><img class="center" src="/images/posts/2018-05-19/trainSwitch.jpg" title="’Train switch’" ></p>
 
 <p>Spring 5 introduced the <a href="https://spring.io/blog/2016/09/22/new-in-spring-5-functional-web-framework">Functional Web Framework</a> and with it the ability to do functional routing. Basically instead of annotating your methods with the good old <code>@RequestMapping</code> you can now write functions that go from a <code>Request</code> to a <code>Response&lt;T&gt;</code> (called <code>HandlerFunction&lt;T&gt;</code>). And then use a <code>RouterFunction&lt;T&gt;</code> to map which path will end up in which handler.</p>
 
@@ -96,7 +96,7 @@ fun getSectionHandler(section: Section): (ServerRequest) -\> Mono<ServerResponse
 
 <p>Now this is only one of the <em>tricks</em> that can be done with functional routing. Having a <a href="https://spring.io/blog/2017/08/01/spring-framework-5-kotlin-apis-the-functional-way#functional-routing-with-the-kotlin-dsl-for-spring-webflux">Kotlin DSL</a> means we can do <strong>any kind of scripting we can think of</strong> when defining the routes. As always:</p>
 
-<p>{% img center /images/posts/2018-05-19/withGreatPower.png ’With great power comes great responsibility’ %}</p>
+<p><img class="center" src="/images/posts/2018-05-19/withGreatPower.png" title="’With great power comes great responsibility’" ></p>
 
 <p>Abusing this feature would make your routing logic a <strong>tangled mess</strong>, too hard to understand and maintain. So be smart about it.</p>
 

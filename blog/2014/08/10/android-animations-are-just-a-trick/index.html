@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Android Animations Are Just a Trick - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Android Animations Are Just a Trick written August 10, 2014 in android So I was learning to animate Views in Android using this video and was having &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.io/blog/2014/08/10/android-animations-are-just-a-trick">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<!-- Twitter card configuration from: https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image -->
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@jivimberg">
+  <meta name="twitter:creator" content="@jivimberg">
+  <meta name="twitter:title" content="Android animations are just a trick">
+  <meta name="twitter:description" content="Android Animations Are Just a Trick written August 10, 2014 in android So I was learning to animate Views in Android using this video and was having trouble with the second time the animation runned &hellip;">
+  <meta name="twitter:image" content="https://jivimberg.io/images/background.jpg">
+
+
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W97HTLLN1Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W97HTLLN1Y');
+</script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Android Animations Are Just a Trick</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2014-08-10T12:44:27-07:00" pubdate data-updated="true">August 10, 2014</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/android/'>android</a>
+  
+</span>
+
+
+        </div>
+        <p>So I was learning to animate Views in Android using <a href="http://youtu.be/_UWXqFBF86U]">this video</a> and was having trouble with the second time the animation runned. First run the objects end up in their destination, second run it was mayhem.
+I had fallen victim to the great misunderstanding everyone makes about Android animations: <strong>they are just a magic trick</strong>.</p>
+
+<!--more-->
+
+
+<p>The animated View isn&rsquo;t actually moving (or rotating, or scaling, or fading). The animation is actually just an order to the rendering engine to perform a last minute transformation on the desired object. <strong>The real object never leaves it&rsquo;s initial position.</strong></p>
+
+<p>So the first time my animation runned I was making the view move from A to B. Now the second time I was trying to move it from B to C, but even when I was seeing the View in B (because I&rsquo;ve setted the <code>android:fillAfter="true"</code> flag) the real object was in A the whole time. Therefore the second run of the animation ended up in disaster.</p>
+
+<p>To fix this there are 2 solutions:</p>
+
+<ol>
+<li>Update the View object once the animation has finished using an <a href="http://developer.android.com/reference/android/view/animation/Animation.AnimationListener.html">AnimationListener</a> and do it <code>onAnimationEnd()</code>.</li>
+<li>Use an <a href="http://developer.android.com/reference/android/animation/ObjectAnimator.html">ObjectAnimator</a> which updates the underlying property while performing the animation. Or use <a href="http://nineoldandroids.com/">NineOldAndroids</a> if your target sdk is &lt;11.</li>
+</ol>
+
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.io/blog/2014/08/10/android-animations-are-just-a-trick/';
+        var disqus_url = 'http://jivimberg.io/blog/2014/08/10/android-animations-are-just-a-trick/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2014/07/17/keep-trying-with-guava-retrying/" title="Previous Post: Keep trying with Guava Retrying">&laquo; Previous: Keep trying with Guava Retrying</a>
+        
+
+        
+          <a class="pull-right" href="/blog/2014/08/21/email-google-form-daily/" title="Next Post: Email Google Form daily">Next: Email Google Form daily &raquo;</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

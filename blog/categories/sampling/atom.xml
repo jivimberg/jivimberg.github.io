@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Sampling | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/sampling/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -27,17 +27,17 @@
 
 <p>Sifter uses the incoming stream of traces to <strong>builds a model that approximates the system’s common-case behavior</strong>. To make a sampling decision, it checks how well the model matches the incoming trace. Sampling is biased toward traces that are <em>not</em> well approximated (outliers and anomalous traces).</p>
 
-<p>{% img center /images/posts/2021-07-28/full-pipeline.png %}</p>
+<p><img class="center" src="/images/posts/2021-07-28/full-pipeline.png"></p>
 
 <h3>The model</h3>
 
 <p>Sifter uses a 2-layer neural network that models the probability of an event occurring given its immediate predecessors and successors. To create this model, they first extract all <em>N</em>-length paths for each trace.</p>
 
-<p>{% img center /images/posts/2021-07-28/paths.png %}</p>
+<p><img class="center" src="/images/posts/2021-07-28/paths.png"></p>
 
 <p>For a given path (p_0<em>, …, p_N</em>), the neural network predicts the probability of p_N/2_ given its surrounding events p_0<em>, … , p_N</em> (excluding  p_N/2_). The model gives better predictions for paths that are seeing more frequently in the input dataset.</p>
 
-<p>{% img center /images/posts/2021-07-28/neural-network.png %}</p>
+<p><img class="center" src="/images/posts/2021-07-28/neural-network.png"></p>
 
 <h3>Sampling</h3>
 
@@ -45,11 +45,11 @@
 
 <p>The <em>loss</em> is then weighted against the loss of the <em>k</em> most recent traces.</p>
 
-<p>{% img center /images/posts/2021-07-28/formula-loss.png %}</p>
+<p><img class="center" src="/images/posts/2021-07-28/formula-loss.png"></p>
 
 <p>If all traces have the same <em>loss</em>, then the trace is sampled uniformly at random with probability <em>α</em>. Otherwise, the probability is calculated using this formula:</p>
 
-<p>{% img center /images/posts/2021-07-28/formula-sampling.png %}</p>
+<p><img class="center" src="/images/posts/2021-07-28/formula-sampling.png"></p>
 
 <p>Traces with the lowest <em>loss</em> will have a sampling probability of zero. Traces with the highest loss will have the highest sampling probability.</p>
 
@@ -71,7 +71,7 @@
 </ul>
 
 
-<p> {% img right-fill /images/signatures/signature3.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   

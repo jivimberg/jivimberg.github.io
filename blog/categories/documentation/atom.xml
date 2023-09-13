@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Documentation | Coding Forest]]></title>
   <link href="http://jivimberg.io/blog/categories/documentation/atom.xml" rel="self"/>
   <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:30:37+00:00</updated>
+  <updated>2023-09-13T06:52:42+00:00</updated>
   <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -37,7 +37,7 @@
 
 <p>An Architecture Decision Log can help us capture the context, motivations, and assumptions behind a decision. We are basically doing a brain dump of all the things that were considered before making a final call on something.</p>
 
-<p>{% img center /images/posts/2020-12-26/architecture.gif 500 %}</p>
+<p><img class="center" src="/images/posts/2020-12-26/architecture.gif" width="500"></p>
 
 <p>If one thing is constant about developing software is change. New features are requested, the app grows and it has to support an increasing number of requests, people leave the team and new developers join. By keeping an Architecture Decision Log, we capture the thought process that goes into a decision, <strong>so that future maintainers can understand why something is the way it is, and use this information to evaluate new changes.</strong>  Maybe an assumption made about how users would use the app turned out not to be true. Or perhaps a requirement about the size of stored data has changed, and the existing database can’t scale accordingly.</p>
 
@@ -84,7 +84,7 @@
 
 <hr />
 
-<p> {% img right-fill /images/signatures/signature2.png 200 ‘My signature’ %}</p>
+<p> <img class="right-fill" src="/images/signatures/signature2.png" width="200" title="‘My signature’" ></p>
 ]]></content>
   </entry>
   
