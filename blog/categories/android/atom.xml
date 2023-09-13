@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Android | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/android/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-12T19:44:25-07:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/android/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-12T20:50:49-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Android Animations Are Just a Trick]]></title>
-    <link href="http://jivimberg.io/blog/2014/08/10/android-animations-are-just-a-trick/"/>
+    <link href="http://jivimberg.github.io/blog/2014/08/10/android-animations-are-just-a-trick/"/>
     <updated>2014-08-10T12:44:27-07:00</updated>
-    <id>http://jivimberg.io/blog/2014/08/10/android-animations-are-just-a-trick</id>
+    <id>http://jivimberg.github.io/blog/2014/08/10/android-animations-are-just-a-trick</id>
     <content type="html"><![CDATA[<p>So I was learning to animate Views in Android using <a href="http://youtu.be/_UWXqFBF86U]">this video</a> and was having trouble with the second time the animation runned. First run the objects end up in their destination, second run it was mayhem.
 I had fallen victim to the great misunderstanding everyone makes about Android animations: <strong>they are just a magic trick</strong>.</p>
 
@@ -40,9 +40,9 @@ I had fallen victim to the great misunderstanding everyone makes about Android a
   
   <entry>
     <title type="html"><![CDATA[AutoValue for Android]]></title>
-    <link href="http://jivimberg.io/blog/2014/04/20/autovalue-for-android/"/>
+    <link href="http://jivimberg.github.io/blog/2014/04/20/autovalue-for-android/"/>
     <updated>2014-04-20T17:14:00-07:00</updated>
-    <id>http://jivimberg.io/blog/2014/04/20/autovalue-for-android</id>
+    <id>http://jivimberg.github.io/blog/2014/04/20/autovalue-for-android</id>
     <content type="html"><![CDATA[<p>Remember <a href="http://jivimberg.github.io/blog/2014/04/07/value-types-the-easy-way/">my last post</a> on value types using <a href="https://github.com/google/auto/tree/master/value">Google&rsquo;s AutoValue</a>? Today while doing some work on a new Android project I&rsquo;m starting I thought: <em>&lsquo;Great chance to use AutoValue!&rsquo;</em>. Guess what, there is a port of Google AutoValue for the Android platform.</p>
 
 <!-- More -->

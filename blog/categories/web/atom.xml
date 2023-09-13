@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Web | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/web/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-12T19:44:25-07:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/web/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-12T20:50:49-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Book Recommendations: Isomorphic JavaScript Web Development]]></title>
-    <link href="http://jivimberg.io/blog/2018/04/30/book-recommendations-isomorphic-javascript-web-development/"/>
+    <link href="http://jivimberg.github.io/blog/2018/04/30/book-recommendations-isomorphic-javascript-web-development/"/>
     <updated>2018-04-30T07:15:04-07:00</updated>
-    <id>http://jivimberg.io/blog/2018/04/30/book-recommendations-isomorphic-javascript-web-development</id>
+    <id>http://jivimberg.github.io/blog/2018/04/30/book-recommendations-isomorphic-javascript-web-development</id>
     <content type="html"><![CDATA[<p>I finally got around to finish the new book my friend and colleague <a href="http://tomasalabes.me/">@talabes</a> wrote and I think it’s great. Here’s why.</p>
 
 <!--more-->

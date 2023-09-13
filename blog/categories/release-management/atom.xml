@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Release Management | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/release-management/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-12T19:44:25-07:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/release-management/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-12T20:50:49-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Feature Flags]]></title>
-    <link href="http://jivimberg.io/blog/2014/09/20/feature-flags/"/>
+    <link href="http://jivimberg.github.io/blog/2014/09/20/feature-flags/"/>
     <updated>2014-09-20T14:53:01-07:00</updated>
-    <id>http://jivimberg.io/blog/2014/09/20/feature-flags</id>
+    <id>http://jivimberg.github.io/blog/2014/09/20/feature-flags</id>
     <content type="html"><![CDATA[<p>In this post I&rsquo;ll introduce the concept of Feature Toggles as a release alternative to <a href="http://martinfowler.com/bliki/FeatureBranch.html">FeatureBranches</a>. This technique is also known as: Feature toggles, Feature switches, Feature flippers, etc.</p>
 
 <!-- more -->

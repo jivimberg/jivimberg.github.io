@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Subscriptions | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/subscriptions/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-12T19:44:25-07:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/subscriptions/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-12T20:50:49-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Reactive GraphQL Subscriptions From Kafka]]></title>
-    <link href="http://jivimberg.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka/"/>
+    <link href="http://jivimberg.github.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka/"/>
     <updated>2018-10-23T07:58:14-07:00</updated>
-    <id>http://jivimberg.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka</id>
+    <id>http://jivimberg.github.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka</id>
     <content type="html"><![CDATA[<p>In this post I’ll be exploring how to implement <a href="https://github.com/facebook/graphql/blob/master/rfcs/Subscriptions.md">GraphQL subscriptions</a> <em>reactively</em> on a Spring Boot application using <a href="https://kafka.apache.org/">Kafka</a>.</p>
 
 <!--more-->

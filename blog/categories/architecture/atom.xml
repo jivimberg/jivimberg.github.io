@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Architecture | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/architecture/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-12T19:44:25-07:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/architecture/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-12T20:50:49-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Pulling an Inverse Conway Maneuver at Netflix]]></title>
-    <link href="http://jivimberg.io/blog/2023/09/04/the-inverse-conway-maneuver/"/>
+    <link href="http://jivimberg.github.io/blog/2023/09/04/the-inverse-conway-maneuver/"/>
     <updated>2023-09-04T10:07:02-07:00</updated>
-    <id>http://jivimberg.io/blog/2023/09/04/the-inverse-conway-maneuver</id>
+    <id>http://jivimberg.github.io/blog/2023/09/04/the-inverse-conway-maneuver</id>
     <content type="html"><![CDATA[<p>When I joined Netflix Platform team, a few years ago, the Observability offering was composed of many different applications. There was Atlas for metrics, Edgar for tracing, Radar for Logs and Alerts, Lumen for dashboards, Telltale for app health, to name a few. It was a portfolio of about 20 different apps, ranging from high-level business specific tools to analyze streaming sessions to low-level tools for CPU profiling.</p>
 
 <!--more-->
@@ -64,9 +64,9 @@
   
   <entry>
     <title type="html"><![CDATA[On Graceful Degradation of Service]]></title>
-    <link href="http://jivimberg.io/blog/2023/08/14/on-graceful-degradation-of-service/"/>
+    <link href="http://jivimberg.github.io/blog/2023/08/14/on-graceful-degradation-of-service/"/>
     <updated>2023-08-14T20:29:04-03:00</updated>
-    <id>http://jivimberg.io/blog/2023/08/14/on-graceful-degradation-of-service</id>
+    <id>http://jivimberg.github.io/blog/2023/08/14/on-graceful-degradation-of-service</id>
     <content type="html"><![CDATA[<p>This is the door to my in-laws’ apartment.</p>
 
 <!--more-->
@@ -109,9 +109,9 @@
   
   <entry>
     <title type="html"><![CDATA[Documenting Decisions]]></title>
-    <link href="http://jivimberg.io/blog/2020/12/26/documenting-decisions/"/>
+    <link href="http://jivimberg.github.io/blog/2020/12/26/documenting-decisions/"/>
     <updated>2020-12-26T13:51:06-08:00</updated>
-    <id>http://jivimberg.io/blog/2020/12/26/documenting-decisions</id>
+    <id>http://jivimberg.github.io/blog/2020/12/26/documenting-decisions</id>
     <content type="html"><![CDATA[<p>It’s Monday morning. You’re sitting at your desk with your steaming cup of Joe, ready to sink your teeth into that new feature you have to develop. The <code>git pull</code> downloads months worth of changes, and you dive into the code. Piece by piece, you start building a mental model of the system, trying to make sense of the different components. But something doesn’t feel right. Why was it built this way? It feels weird, it feels so obviously wrong, so poorly designed, so suboptimal.</p>
 
 <p>You realize you need help. Whoever wrote this mess should be able to provide some context. You run <code>git blame</code> and your own name hits you in the face like a brick. You start thinking that maybe it’s no so wrong. That you probably had your reasons. If you could only go back in time and ask your past self…</p>
@@ -184,9 +184,9 @@
   
   <entry>
     <title type="html"><![CDATA[Working With Queues]]></title>
-    <link href="http://jivimberg.io/blog/2020/05/30/working-with-queues/"/>
+    <link href="http://jivimberg.github.io/blog/2020/05/30/working-with-queues/"/>
     <updated>2020-05-30T19:29:39-07:00</updated>
-    <id>http://jivimberg.io/blog/2020/05/30/working-with-queues</id>
+    <id>http://jivimberg.github.io/blog/2020/05/30/working-with-queues</id>
     <content type="html"><![CDATA[<p>Queues are a powerful tool for building reliable systems. In this article, I’ll describe some of the tips and tricks I came across when working with queues.</p>
 
 <p>Some of the advice is specific to Amazon SQS queues because that’s what I’ve been using the most lately. And also because some of them come from <a href="https://aws.amazon.com/builders-library/avoiding-insurmountable-queue-backlogs/">this amazing article</a> from the <a href="https://aws.amazon.com/builders-library/">Amazon Builders’ Library</a>.</p>
@@ -260,9 +260,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hexagonal Architecture on Spring Boot]]></title>
-    <link href="http://jivimberg.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot/"/>
+    <link href="http://jivimberg.github.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot/"/>
     <updated>2020-02-01T20:51:59-08:00</updated>
-    <id>http://jivimberg.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot</id>
+    <id>http://jivimberg.github.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot</id>
     <content type="html"><![CDATA[<p>In this article, I&rsquo;ll show how to implement a Spring Boot application using Hexagonal Architecture.</p>
 
 <!--more-->

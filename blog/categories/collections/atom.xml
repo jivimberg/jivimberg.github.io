@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Collections | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/collections/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-12T19:44:25-07:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/collections/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-12T20:50:49-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Map.merge]]></title>
-    <link href="http://jivimberg.io/blog/2018/07/20/map-dot-merge/"/>
+    <link href="http://jivimberg.github.io/blog/2018/07/20/map-dot-merge/"/>
     <updated>2018-07-20T07:32:49-07:00</updated>
-    <id>http://jivimberg.io/blog/2018/07/20/map-dot-merge</id>
+    <id>http://jivimberg.github.io/blog/2018/07/20/map-dot-merge</id>
     <content type="html"><![CDATA[<p>Sometimes is the small things… Like finding a new method that does exactly what you were needing.</p>
 
 <!--more-->
@@ -118,9 +118,9 @@
   
   <entry>
     <title type="html"><![CDATA[Implementing takeWhileInclusive in Kotlin]]></title>
-    <link href="http://jivimberg.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin/"/>
+    <link href="http://jivimberg.github.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin/"/>
     <updated>2018-06-02T13:33:38-07:00</updated>
-    <id>http://jivimberg.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin</id>
+    <id>http://jivimberg.github.io/blog/2018/06/02/implementing-takewhileinclusive-in-kotlin</id>
     <content type="html"><![CDATA[<p>Implementing <code>takeWhileInclusive</code> extension function in Kotlin.</p>
 
 <!--more-->
@@ -363,9 +363,9 @@ inline fun String.takeWhileInclusive(
   
   <entry>
     <title type="html"><![CDATA[Parallel Map in Java (From Kotlin)]]></title>
-    <link href="http://jivimberg.io/blog/2018/05/07/parallel-map-in-java/"/>
+    <link href="http://jivimberg.github.io/blog/2018/05/07/parallel-map-in-java/"/>
     <updated>2018-05-07T13:19:58-07:00</updated>
-    <id>http://jivimberg.io/blog/2018/05/07/parallel-map-in-java</id>
+    <id>http://jivimberg.github.io/blog/2018/05/07/parallel-map-in-java</id>
     <content type="html"><![CDATA[<p>Following up of my <a href="http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin/">previous post</a>, I was curious how a parallel map operation would look like using Java’s <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#parallelStream--"><code>parallelStream</code></a>. Here’s what I find out.</p>
 
 <!--more-->
@@ -472,9 +472,9 @@ fun main(args: Array<String>) {
   
   <entry>
     <title type="html"><![CDATA[Parallel Map in Kotlin]]></title>
-    <link href="http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin/"/>
+    <link href="http://jivimberg.github.io/blog/2018/05/04/parallel-map-in-kotlin/"/>
     <updated>2018-05-04T16:32:00-07:00</updated>
-    <id>http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin</id>
+    <id>http://jivimberg.github.io/blog/2018/05/04/parallel-map-in-kotlin</id>
     <content type="html"><![CDATA[<p>Ever wonder how to run <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/map.html"><code>map</code></a>  in parallel using coroutines? This is how you do it.</p>
 
 <!--more-->

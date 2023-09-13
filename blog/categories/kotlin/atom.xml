@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Kotlin | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/kotlin/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-12T19:44:25-07:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/kotlin/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-12T20:50:49-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Adding Context to Extension Functions]]></title>
-    <link href="http://jivimberg.io/blog/2021/08/21/adding-context-to-extension-functions/"/>
+    <link href="http://jivimberg.github.io/blog/2021/08/21/adding-context-to-extension-functions/"/>
     <updated>2021-08-21T20:24:14-07:00</updated>
-    <id>http://jivimberg.io/blog/2021/08/21/adding-context-to-extension-functions</id>
+    <id>http://jivimberg.github.io/blog/2021/08/21/adding-context-to-extension-functions</id>
     <content type="html"><![CDATA[<p>Extension functions are great! But if you define them all over the place, it can get confusing pretty quickly. So here’s a cool idiom to limit extension function usage to a specific context.</p>
 
 <!--more-->
@@ -305,9 +305,9 @@ fun main() {
   
   <entry>
     <title type="html"><![CDATA[Mockk All the Things]]></title>
-    <link href="http://jivimberg.io/blog/2019/05/09/mockk-features-rundown/"/>
+    <link href="http://jivimberg.github.io/blog/2019/05/09/mockk-features-rundown/"/>
     <updated>2019-05-09T07:57:47-07:00</updated>
-    <id>http://jivimberg.io/blog/2019/05/09/mockk-features-rundown</id>
+    <id>http://jivimberg.github.io/blog/2019/05/09/mockk-features-rundown</id>
     <content type="html"><![CDATA[<p>Over the last few years Mockk has been gaining ground as the go-to mocking library in KotlinWorld ™. Just recently, it was listed as <em>“adopt”</em> in the <a href="https://www.thoughtworks.com/radar/languages-and-frameworks/mockk">ThoughtWorks technology Radar</a>. Want to know what all the fuss is about?</p>
 
 <!--more-->
@@ -629,9 +629,9 @@ class ClockTest {
   
   <entry>
     <title type="html"><![CDATA[Different Kinds of Channels in Kotlin]]></title>
-    <link href="http://jivimberg.io/blog/2019/04/18/different-kinds-of-channels-in-kotlin/"/>
+    <link href="http://jivimberg.github.io/blog/2019/04/18/different-kinds-of-channels-in-kotlin/"/>
     <updated>2019-04-18T07:59:14-07:00</updated>
-    <id>http://jivimberg.io/blog/2019/04/18/different-kinds-of-channels-in-kotlin</id>
+    <id>http://jivimberg.github.io/blog/2019/04/18/different-kinds-of-channels-in-kotlin</id>
     <content type="html"><![CDATA[<p>Overview of the different kinds of Kotlin channels and their behaviors.</p>
 
 <!--more-->
@@ -667,9 +667,9 @@ class ClockTest {
   
   <entry>
     <title type="html"><![CDATA[SQS Consumer Using Kotlin Coroutines]]></title>
-    <link href="http://jivimberg.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines/"/>
+    <link href="http://jivimberg.github.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines/"/>
     <updated>2019-02-23T16:52:48-03:00</updated>
-    <id>http://jivimberg.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines</id>
+    <id>http://jivimberg.github.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines</id>
     <content type="html"><![CDATA[<p>Today we’ll see how to write a SQS consumer that processes messages in a parallel, non-blocking way, using Kotlin coroutines.</p>
 
 <!--more-->
@@ -1003,9 +1003,9 @@ private suspend fun processMsg(message: Message) = withContext(Dispatchers.Defau
   
   <entry>
     <title type="html"><![CDATA[Using UUID on Spring Data JPA Entities]]></title>
-    <link href="http://jivimberg.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities/"/>
+    <link href="http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities/"/>
     <updated>2018-11-05T07:25:37-08:00</updated>
-    <id>http://jivimberg.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities</id>
+    <id>http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities</id>
     <content type="html"><![CDATA[<p>In this article I’ll explore <strong>how to model a <a href="https://stackoverflow.com/questions/6033905/create-the-perfect-jpa-entity">JPA Entity</a> using an <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a></strong> as Primary Key working with <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA.</a></p>
 
 <!--more-->

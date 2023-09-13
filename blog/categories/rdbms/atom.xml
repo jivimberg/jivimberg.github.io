@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Rdbms | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/rdbms/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-12T19:44:25-07:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/rdbms/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-12T20:50:49-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hierarchical Queries on RDBMS With JPA]]></title>
-    <link href="http://jivimberg.io/blog/2018/08/04/recursive-queries-on-rdbms-with-jpa/"/>
+    <link href="http://jivimberg.github.io/blog/2018/08/04/recursive-queries-on-rdbms-with-jpa/"/>
     <updated>2018-08-04T11:29:52-07:00</updated>
-    <id>http://jivimberg.io/blog/2018/08/04/recursive-queries-on-rdbms-with-jpa</id>
+    <id>http://jivimberg.github.io/blog/2018/08/04/recursive-queries-on-rdbms-with-jpa</id>
     <content type="html"><![CDATA[<p>Hello! In this post I’ll explore the different alternatives for querying hierarchical data stored on a RDBMS using <a href="http://www.oracle.com/technetwork/java/javaee/tech/persistence-jsp-140049.html">JPA</a>.</p>
 
 <!--more-->

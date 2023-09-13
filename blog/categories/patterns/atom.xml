@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Patterns | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/patterns/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-12T19:44:25-07:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/patterns/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-12T20:50:49-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Working With Queues]]></title>
-    <link href="http://jivimberg.io/blog/2020/05/30/working-with-queues/"/>
+    <link href="http://jivimberg.github.io/blog/2020/05/30/working-with-queues/"/>
     <updated>2020-05-30T19:29:39-07:00</updated>
-    <id>http://jivimberg.io/blog/2020/05/30/working-with-queues</id>
+    <id>http://jivimberg.github.io/blog/2020/05/30/working-with-queues</id>
     <content type="html"><![CDATA[<p>Queues are a powerful tool for building reliable systems. In this article, I’ll describe some of the tips and tricks I came across when working with queues.</p>
 
 <p>Some of the advice is specific to Amazon SQS queues because that’s what I’ve been using the most lately. And also because some of them come from <a href="https://aws.amazon.com/builders-library/avoiding-insurmountable-queue-backlogs/">this amazing article</a> from the <a href="https://aws.amazon.com/builders-library/">Amazon Builders’ Library</a>.</p>

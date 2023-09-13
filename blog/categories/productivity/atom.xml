@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Productivity | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/productivity/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-12T19:44:25-07:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/productivity/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-12T20:50:49-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Graphic Design Tools for Backend Engineers]]></title>
-    <link href="http://jivimberg.io/blog/2019/06/07/graphic-design-tools-for-backend-engineers/"/>
+    <link href="http://jivimberg.github.io/blog/2019/06/07/graphic-design-tools-for-backend-engineers/"/>
     <updated>2019-06-07T22:14:38-07:00</updated>
-    <id>http://jivimberg.io/blog/2019/06/07/graphic-design-tools-for-backend-engineers</id>
+    <id>http://jivimberg.github.io/blog/2019/06/07/graphic-design-tools-for-backend-engineers</id>
     <content type="html"><![CDATA[<p>You might think that being a backend engineer means you’ll never have to draw anything more complex than a bunch of boxes connected with arrows (or hexagons if are going all cloud native). This is simply not true, and that’s why you’re here.</p>
 
 <p>At some point you’ll find yourself producing system diagrams, flow-charts, slides, mockups, maybe even icons! So, let me show you some tools and tricks I picked up over the years to fake it at design.</p>
@@ -268,9 +268,9 @@ fun <T, R> Flow<T>.parallelMap(
   
   <entry>
     <title type="html"><![CDATA[IntelliJ IDEA Tips]]></title>
-    <link href="http://jivimberg.io/blog/2018/06/10/intellij-idea-tips/"/>
+    <link href="http://jivimberg.github.io/blog/2018/06/10/intellij-idea-tips/"/>
     <updated>2018-06-10T17:11:52-07:00</updated>
-    <id>http://jivimberg.io/blog/2018/06/10/intellij-idea-tips</id>
+    <id>http://jivimberg.github.io/blog/2018/06/10/intellij-idea-tips</id>
     <content type="html"><![CDATA[<p>Here are a couple of <strong>IntelliJ IDEA</strong> shortcuts and configurations I wish I’d known sooner.</p>
 
 <!--more-->
@@ -335,9 +335,9 @@ fun <T, R> Flow<T>.parallelMap(
   
   <entry>
     <title type="html"><![CDATA[Email Google Form Daily]]></title>
-    <link href="http://jivimberg.io/blog/2014/08/21/email-google-form-daily/"/>
+    <link href="http://jivimberg.github.io/blog/2014/08/21/email-google-form-daily/"/>
     <updated>2014-08-21T23:18:14-07:00</updated>
-    <id>http://jivimberg.io/blog/2014/08/21/email-google-form-daily</id>
+    <id>http://jivimberg.github.io/blog/2014/08/21/email-google-form-daily</id>
     <content type="html"><![CDATA[<p>Here I&rsquo;ll show you how you can email a Google Form daily, weekly or whatever. I&rsquo;ll achieve this by using <a href="https://developers.google.com/apps-script/">Google App Scripts</a>. Here we go</p>
 
 <!--more-->

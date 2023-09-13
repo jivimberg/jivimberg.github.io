@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Builder | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/builder/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-12T19:44:25-07:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/builder/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-12T20:50:49-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Show What's Important, Hide the Rest]]></title>
-    <link href="http://jivimberg.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest/"/>
+    <link href="http://jivimberg.github.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest/"/>
     <updated>2020-09-07T18:05:00-07:00</updated>
-    <id>http://jivimberg.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest</id>
+    <id>http://jivimberg.github.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest</id>
     <content type="html"><![CDATA[<p>What we include in a test is as important as what we leave out. Having the right amount of information helps us understand what the test is doing at a glance.</p>
 
 <!--more-->

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Product | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/product/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-12T19:44:25-07:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/product/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-12T20:50:49-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[On Graceful Degradation of Service]]></title>
-    <link href="http://jivimberg.io/blog/2023/08/14/on-graceful-degradation-of-service/"/>
+    <link href="http://jivimberg.github.io/blog/2023/08/14/on-graceful-degradation-of-service/"/>
     <updated>2023-08-14T20:29:04-03:00</updated>
-    <id>http://jivimberg.io/blog/2023/08/14/on-graceful-degradation-of-service</id>
+    <id>http://jivimberg.github.io/blog/2023/08/14/on-graceful-degradation-of-service</id>
     <content type="html"><![CDATA[<p>This is the door to my in-laws’ apartment.</p>
 
 <!--more-->
