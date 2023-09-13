@@ -1,4 +1,4 @@
-name: 'Octopress Deploy Action'
+name: 'Octopress Deploy'
 on: [workflow_dispatch]
 
 jobs:
