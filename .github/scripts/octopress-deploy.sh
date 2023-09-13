@@ -32,4 +32,9 @@ execute chmod 600 ~/.ssh/known_hosts
 execute git config --global user.email "$git_user_email"
 execute git config --global user.name "$git_user_name"
 
+cd _deploy
+git pull origin master --rebase
+
+cd -
+
 execute rake deploy
