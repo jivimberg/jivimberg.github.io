@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://jivimberg.io
+url: http://jivimberg.github.io
 title: Coding Forest
 subtitle: A blog about code and stuff
 author: Juan Ignacio Vimberg
@@ -19,7 +19,7 @@ date_format: "ordinal"
 subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
-email: 
+email:
 
 encoding: utf-8
 
@@ -94,7 +94,7 @@ delicious_count: 3
 
 # Disqus Comments
 disqus_short_name: whilt
-disqus_show_comment_count: true 
+disqus_show_comment_count: true
 
 # Google Analytics
 google_analytics_tracking_id: UA-49016076-1
