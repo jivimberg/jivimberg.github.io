@@ -16,3 +16,18 @@ The python version is set globally with pyenv doing: `pyenv global 2.7.X` (repla
 In the future it might be best to set global to python 3 and use pyenv to configure the local version.
 
 I used the command `fish_add_path -v (pyenv root)/shims` to put pyenv execs on the path. But noticed that it was clashing with some chruby configuration that existed under /Users/jvimberg@netflix.com/.config/fish/config.fish. After installing chruby-fish and removing that custom configuration on config.fish then everything started working fine.
+
+---
+
+## Liquid Exception: incompatible character encodings: UTF-8 and ASCII-8BIT
+
+--- 
+
+## Errno::ENOENT: No such file or directory @ dir_chdir - _deploy on `rake deploy`
+
+If you delete the `_deploy` directory you have to do: `rake setup_github_pages`
+
+Ref: https://github.com/imathis/octopress/issues/334
+
+Then do: `git checkout -b master` to create the master branch.
+You might need to pull changes with `git pull origin master --rebase`
