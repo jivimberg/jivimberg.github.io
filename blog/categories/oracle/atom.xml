@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Oracle | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/oracle/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2023-08-23T00:43:06-03:00</updated>
-  <id>http://jivimberg.github.io/</id>
+  <link href="http://jivimberg.io/blog/categories/oracle/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-12T19:44:25-07:00</updated>
+  <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Oracle, JPA and the Mystery of the String That Was Null]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null/"/>
+    <link href="http://jivimberg.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null/"/>
     <updated>2018-06-23T10:34:26-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null</id>
+    <id>http://jivimberg.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null</id>
     <content type="html"><![CDATA[<p>This is the story of how Oracle DB was messing up Kotlin’s type system, and what I did to fix it.</p>
 
 <!--more-->

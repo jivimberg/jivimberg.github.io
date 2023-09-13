@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Githook | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/githook/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2023-08-23T00:43:06-03:00</updated>
-  <id>http://jivimberg.github.io/</id>
+  <link href="http://jivimberg.io/blog/categories/githook/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-12T19:44:25-07:00</updated>
+  <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Writing Githooks in Kotlin]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/07/03/writing-githooks-in-kotlin/"/>
+    <link href="http://jivimberg.io/blog/2018/07/03/writing-githooks-in-kotlin/"/>
     <updated>2018-07-03T19:45:28-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/07/03/writing-githooks-in-kotlin</id>
+    <id>http://jivimberg.io/blog/2018/07/03/writing-githooks-in-kotlin</id>
     <content type="html"><![CDATA[<p>You’re already using Kotlin on your codebase. Maybe, you’ve even migrated to the new <a href="https://github.com/gradle/kotlin-dsl">Kotlin DSL for Gradle</a>. Wouldn’t it be nice if you could use Kotlin for your <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">git hooks</a> too?</p>
 
 <!--more-->

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Migrations | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/migrations/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2023-08-23T00:43:06-03:00</updated>
-  <id>http://jivimberg.github.io/</id>
+  <link href="http://jivimberg.io/blog/categories/migrations/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-12T19:44:25-07:00</updated>
+  <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[How Platform Teams Get Shit Done]]></title>
-    <link href="http://jivimberg.github.io/blog/2023/07/28/how-platform-teams-get-shit-done/"/>
+    <link href="http://jivimberg.io/blog/2023/07/28/how-platform-teams-get-shit-done/"/>
     <updated>2023-07-28T00:43:59-03:00</updated>
-    <id>http://jivimberg.github.io/blog/2023/07/28/how-platform-teams-get-shit-done</id>
+    <id>http://jivimberg.io/blog/2023/07/28/how-platform-teams-get-shit-done</id>
     <content type="html"><![CDATA[<p><a href="https://thepete.net/">Pete Hodgson</a> explored the different ways in which a Platform team works with other teams to get shit done in <a href="https://martinfowler.com/articles/platform-teams-stuff-done.html">this article</a>. I thought it was interesting to see how collaboration changes based on the type of work, so I put together this visual summary to compare and contrast each type of interaction.</p>
 
 <!--more-->

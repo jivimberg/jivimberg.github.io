@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Spring | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/spring/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2023-08-23T00:43:06-03:00</updated>
-  <id>http://jivimberg.github.io/</id>
+  <link href="http://jivimberg.io/blog/categories/spring/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-12T19:44:25-07:00</updated>
+  <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hexagonal Architecture on Spring Boot]]></title>
-    <link href="http://jivimberg.github.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot/"/>
+    <link href="http://jivimberg.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot/"/>
     <updated>2020-02-01T20:51:59-08:00</updated>
-    <id>http://jivimberg.github.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot</id>
+    <id>http://jivimberg.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot</id>
     <content type="html"><![CDATA[<p>In this article, I&rsquo;ll show how to implement a Spring Boot application using Hexagonal Architecture.</p>
 
 <!--more-->
@@ -371,9 +371,9 @@
   
   <entry>
     <title type="html"><![CDATA[Using UUID on Spring Data JPA Entities]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities/"/>
+    <link href="http://jivimberg.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities/"/>
     <updated>2018-11-05T07:25:37-08:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities</id>
+    <id>http://jivimberg.io/blog/2018/11/05/using-uuid-on-spring-data-jpa-entities</id>
     <content type="html"><![CDATA[<p>In this article I’ll explore <strong>how to model a <a href="https://stackoverflow.com/questions/6033905/create-the-perfect-jpa-entity">JPA Entity</a> using an <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">UUID</a></strong> as Primary Key working with <a href="https://spring.io/projects/spring-data-jpa">Spring Data JPA.</a></p>
 
 <!--more-->
@@ -581,9 +581,9 @@ class Celeb(
   
   <entry>
     <title type="html"><![CDATA[Reactive GraphQL Subscriptions From Kafka]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka/"/>
+    <link href="http://jivimberg.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka/"/>
     <updated>2018-10-23T07:58:14-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka</id>
+    <id>http://jivimberg.io/blog/2018/10/23/reactive-graphql-subscriptions-from-kafka</id>
     <content type="html"><![CDATA[<p>In this post I’ll be exploring how to implement <a href="https://github.com/facebook/graphql/blob/master/rfcs/Subscriptions.md">GraphQL subscriptions</a> <em>reactively</em> on a Spring Boot application using <a href="https://kafka.apache.org/">Kafka</a>.</p>
 
 <!--more-->
@@ -685,9 +685,9 @@ class SubscriptionsResolverImpl(
   
   <entry>
     <title type="html"><![CDATA[Random Thoughts on Using Gradle With Kotlin DSL]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl/"/>
+    <link href="http://jivimberg.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl/"/>
     <updated>2018-08-28T08:36:57-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl</id>
+    <id>http://jivimberg.io/blog/2018/08/28/random-thoughts-on-gradle-and-kotlin-dsl</id>
     <content type="html"><![CDATA[<p>Since Gradle 3.0 you can <a href="https://blog.gradle.org/kotlin-meets-gradle"><strong>write your build scripts using Kotlin instead of Groovy</strong></a>. I was curious, so I decided to give it a try. Here are my thoughts on the process.</p>
 
 <!--more-->
@@ -764,9 +764,9 @@ class SubscriptionsResolverImpl(
   
   <entry>
     <title type="html"><![CDATA[Oracle, JPA and the Mystery of the String That Was Null]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null/"/>
+    <link href="http://jivimberg.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null/"/>
     <updated>2018-06-23T10:34:26-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null</id>
+    <id>http://jivimberg.io/blog/2018/06/23/oracle-jpa-and-the-mistery-of-the-string-that-was-null</id>
     <content type="html"><![CDATA[<p>This is the story of how Oracle DB was messing up Kotlin’s type system, and what I did to fix it.</p>
 
 <!--more-->

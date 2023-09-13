@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Producer | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/producer/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2023-08-23T00:43:06-03:00</updated>
-  <id>http://jivimberg.github.io/</id>
+  <link href="http://jivimberg.io/blog/categories/producer/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-12T19:44:25-07:00</updated>
+  <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[SQS Consumer Using Kotlin Coroutines]]></title>
-    <link href="http://jivimberg.github.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines/"/>
+    <link href="http://jivimberg.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines/"/>
     <updated>2019-02-23T16:52:48-03:00</updated>
-    <id>http://jivimberg.github.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines</id>
+    <id>http://jivimberg.io/blog/2019/02/23/sqs-consumer-using-kotlin-coroutines</id>
     <content type="html"><![CDATA[<p>Today we’ll see how to write a SQS consumer that processes messages in a parallel, non-blocking way, using Kotlin coroutines.</p>
 
 <!--more-->

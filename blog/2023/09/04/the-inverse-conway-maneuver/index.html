@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Pulling an Inverse Conway Maneuver at Netflix - Coding Forest</title>
+  <meta name="author" content="Juan Ignacio Vimberg">
+
+  
+  <meta name="description" content="Pulling an Inverse Conway Maneuver at Netflix written September 4, 2023 in architecture, collaboration, sociotechnical When I joined Netflix &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jivimberg.io/blog/2023/09/04/the-inverse-conway-maneuver">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Coding Forest" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+<!-- Twitter card configuration from: https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/summary-card-with-large-image -->
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@jivimberg">
+  <meta name="twitter:creator" content="@jivimberg">
+  <meta name="twitter:title" content="Pulling an Inverse Conway Maneuver at Netflix">
+  <meta name="twitter:description" content="Pulling an Inverse Conway Maneuver at Netflix written September 4, 2023 in architecture, collaboration, sociotechnical When I joined Netflix Platform team, a few years ago, the Observability &hellip;">
+  <meta name="twitter:image" content="https://jivimberg.io/images/background.jpg">
+
+
+
+  
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W97HTLLN1Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W97HTLLN1Y');
+</script>
+
+
+</head>
+
+  <body>
+    <a href="/" class="home-icon">
+      <img src="/images/home.png"/>
+    </a>
+
+    <article role="article" class="full-single-article">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <h1>Pulling an Inverse Conway Maneuver at Netflix</h1>
+        <div class="meta">
+          written 
+
+
+
+
+
+
+
+
+  
+
+
+
+<time datetime="2023-09-04T10:07:02-07:00" pubdate data-updated="true">September 4, 2023</time> in
+          
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/architecture/'>architecture</a>, <a class='category' href='/blog/categories/collaboration/'>collaboration</a>, <a class='category' href='/blog/categories/sociotechnical/'>sociotechnical</a>
+  
+</span>
+
+
+        </div>
+        <p>When I joined Netflix Platform team, a few years ago, the Observability offering was composed of many different applications. There was Atlas for metrics, Edgar for tracing, Radar for Logs and Alerts, Lumen for dashboards, Telltale for app health, to name a few. It was a portfolio of about 20 different apps, ranging from high-level business specific tools to analyze streaming sessions to low-level tools for CPU profiling.</p>
+
+<!--more-->
+
+
+<p>The Observability org was composed of three different teams of about a dozen ICs each. Teams had a mix of <em>front-end</em>, <em>back-end</em> and <em>full-stack</em> engineers, and there was one <em>designer</em> and one <em>PM</em> shared across the three teams. Each team was responsible for handful of applications, and it was common practice to form sub-teams . My team, for example owned Edgar and Telltale among a few other business specific tools.  [Talk about subteams inside each team]</p>
+
+<p><img class="center" src="/images/posts/2018-06-10/Darcula.png" width="720" title="`Darcula theme`" ></p>
+
+<p>It is no coincidence that this org structure produced <em>a set of independent apps</em> to achieve its goal of serving the observability needs of the company. The force at play here is known as Conway&rsquo;s Law</p>
+
+<blockquote><p>Organizations, who design systems, are constrained to produce designs which are copies of the communication structures of these organizations. <em>Melvin E. Conway</em></p></blockquote>
+
+<p>In true Netflix fashion we operated as highly aligned, loosely coupled teams with a high level of independence. ICs owned the roadmap (which was aligned with the org&rsquo;s goals) and had final say in all technology and architecture decisions. Teams owned the full software lifecycle for each of the applications they maintained XXX</p>
+
+<p>[Talk about team independence. Different PR practices, different deployment strategy, testing, support hour, different tech stacks, different ticketing system, etc.]</p>
+
+<p><img class="right-fill" src="/images/signatures/signature1.png" width="200" title="‘My signature’" ></p>
+
+<hr />
+
+<p>“inverse Conway maneuver” (or reverse Conway maneuver), whereby an organization focuses on organizing team structures to match the architecture they want the system to exhibit rather than expecting teams to follow a mandated architecture design.10 — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=505">505</a> ^ref-26718</p>
+
+<p>“If the architecture of the system and the architecture of the organization are at odds, the architecture of the organization wins.” — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=602">602</a> ^ref-30562</p>
+
+<p>Communication paths (along formal reporting lines or not) within an organization effectively restrict the kinds of solutions that the organization can devise. — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=612">612</a> ^ref-39678</p>
+
+<p>There is a logical implication of Conway’s law here, in the words of Ruth Malan: “if we have managers deciding &hellip; which services will be built, by which teams, we implicitly have managers deciding on the system architecture.” — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=696">696</a> ^ref-4372</p>
+
+<p>(This makes me think bout hoa observability tem is designed to achieve the explore gol but not the bbckend unification through wide events. Which in my opinion is what we should be investing in, instead of just combining signAls on the front end.)</p>
+
+<p>One key implication of Conway’s law is that not all communication and collaboration is good. Thus it is important to define “team interfaces” to set expectations around what kind of work requires strong collaboration and what doesn’t. Many organizations assume that more communication is always better, but this is not really the case. — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=713">713</a> ^ref-5352</p>
+
+<p>“managers should focus their efforts on understanding the causes of unaddressed design interfaces &hellip; and unpredicted team interactions &hellip; across modular systems.” — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=717">717</a></p>
+
+<p>Fast flow requires restricting communication between teams. Team collaboration is important for gray areas of development, where discovery and expertise is needed to make progress. But in areas where execution prevails—not discovery—communication becomes an unnecessary overhead. — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=797">797</a> ^ref-42424</p>
+
+<p>The danger of allowing multiple teams to change the same system or subsystem is that no one owns either the changes made or the resulting mess. However, when a single team owns the system or subsystem, and the team has the autonomy to plan their own work, then that team can make sensible decisions about short-term fixes with the knowledge that they will be removing any dirty fixes in the next few weeks. — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=906">906</a> ^ref-8835
+(This is why ownership is important)</p>
+
+<p>Instead, teams should view themselves as stewards or caretakers as opposed to private owners. Think of code as gardening, not policing. — location: <a href="kindle://book?action=open&amp;asin=B09JWT9S4D&amp;location=915">915</a> ^ref-65338</p>
+
+
+        
+        <hr class="divider-short"/>
+        
+        <section>
+          <h1>Comments</h1>
+          <div id="disqus_thread" aria-live="polite">
+
+<script type="text/javascript">
+      var disqus_shortname = 'whilt';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jivimberg.io/blog/2023/09/04/the-inverse-conway-maneuver/';
+        var disqus_url = 'http://jivimberg.io/blog/2023/09/04/the-inverse-conway-maneuver/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+</div>
+        </section>
+        
+      </div>
+    </div>
+  </div>
+</article>
+
+<hr class="divider-short"/>
+
+<div class="archive-link">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        
+          <a class="pull-left" href="/blog/2023/08/14/on-graceful-degradation-of-service/" title="Previous Post: On graceful degradation of service">&laquo; Previous: On graceful degradation of service</a>
+        
+
+        
+          <a class="pull-right" href="/blog/2023/09/12/hello-world/" title="Next Post: Hello World">Next: Hello World &raquo;</a>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+    <footer id="footer" class="her-row">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1">
+  <a href="/"><h4>Home</h4></a>
+</div>
+
+<div class="col-md-2">
+  <div class="social-icon-list">
+    <a title="Twitter" class="social-icon" href="https://twitter.com/jivimberg"><img src="/images/twitter.png"/></a>
+    <a title="LinkedIn" class="social-icon" href="https://linkedin.com/in/jivimberg/"><img src="/images/linkedin.png"/></a>
+    <a title="GitHub" class="social-icon" href="https://github.com/jivimberg"><img src="/images/github.png"/></a>
+  </div>
+</div>
+
+<div class="pull-right">
+  <h4>Powered by <a href="http://octopress.org/">Octopress</a>. Designed by <a href="http://AdrianArtiles.com">Adrian Artiles</a>.</h4>
+</div>
+
+
+    </div>
+  </div>
+</footer>
+
+  </body>
+</html>

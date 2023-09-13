@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Soft-skill | Coding Forest]]></title>
-  <link href="http://jivimberg.github.io/blog/categories/soft-skill/atom.xml" rel="self"/>
-  <link href="http://jivimberg.github.io/"/>
-  <updated>2023-08-23T00:43:06-03:00</updated>
-  <id>http://jivimberg.github.io/</id>
+  <link href="http://jivimberg.io/blog/categories/soft-skill/atom.xml" rel="self"/>
+  <link href="http://jivimberg.io/"/>
+  <updated>2023-09-12T19:44:25-07:00</updated>
+  <id>http://jivimberg.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Graphic Design Tools for Backend Engineers]]></title>
-    <link href="http://jivimberg.github.io/blog/2019/06/07/graphic-design-tools-for-backend-engineers/"/>
+    <link href="http://jivimberg.io/blog/2019/06/07/graphic-design-tools-for-backend-engineers/"/>
     <updated>2019-06-07T22:14:38-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2019/06/07/graphic-design-tools-for-backend-engineers</id>
+    <id>http://jivimberg.io/blog/2019/06/07/graphic-design-tools-for-backend-engineers</id>
     <content type="html"><![CDATA[<p>You might think that being a backend engineer means you’ll never have to draw anything more complex than a bunch of boxes connected with arrows (or hexagons if are going all cloud native). This is simply not true, and that’s why you’re here.</p>
 
 <p>At some point you’ll find yourself producing system diagrams, flow-charts, slides, mockups, maybe even icons! So, let me show you some tools and tricks I picked up over the years to fake it at design.</p>
@@ -268,9 +268,9 @@ fun <T, R> Flow<T>.parallelMap(
   
   <entry>
     <title type="html"><![CDATA[Book Recommendations: Radical Candor]]></title>
-    <link href="http://jivimberg.github.io/blog/2018/09/30/book-recommendations-radical-candor/"/>
+    <link href="http://jivimberg.io/blog/2018/09/30/book-recommendations-radical-candor/"/>
     <updated>2018-09-30T11:28:59-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2018/09/30/book-recommendations-radical-candor</id>
+    <id>http://jivimberg.io/blog/2018/09/30/book-recommendations-radical-candor</id>
     <content type="html"><![CDATA[<p>Last week I finished <a href="https://www.amazon.com/Radical-Candor-Kim-Scott/dp/B01MY574EE/ref=sr_1_1?ie=UTF8&amp;qid=1538332470&amp;sr=8-1&amp;keywords=radical+candor">Radical Candor</a> a book by <a href="https://www.kimmalonescott.com/">Kim Scott</a> about <em>how to be a good boss without being an asshole</em>. Here’s what I learned.</p>
 
 <!--more-->
