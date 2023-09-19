@@ -31,3 +31,9 @@ Ref: https://github.com/imathis/octopress/issues/334
 
 Then do: `git checkout -b master` to create the master branch.
 You might need to pull changes with `git pull origin master --rebase`
+
+---
+
+## error: src refspec master does not match any
+
+Change `_deploy` branch to `master`
