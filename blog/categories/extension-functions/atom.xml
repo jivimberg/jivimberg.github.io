@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Extension-functions | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/extension-functions/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:52:42+00:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/extension-functions/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-19T00:49:57-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Adding Context to Extension Functions]]></title>
-    <link href="http://jivimberg.io/blog/2021/08/21/adding-context-to-extension-functions/"/>
+    <link href="http://jivimberg.github.io/blog/2021/08/21/adding-context-to-extension-functions/"/>
     <updated>2021-08-21T20:24:14-07:00</updated>
-    <id>http://jivimberg.io/blog/2021/08/21/adding-context-to-extension-functions</id>
+    <id>http://jivimberg.github.io/blog/2021/08/21/adding-context-to-extension-functions</id>
     <content type="html"><![CDATA[<p>Extension functions are great! But if you define them all over the place, it can get confusing pretty quickly. So here’s a cool idiom to limit extension function usage to a specific context.</p>
 
 <!--more-->

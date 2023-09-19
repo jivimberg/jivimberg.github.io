@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Guava | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/guava/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:52:42+00:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/guava/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-19T00:49:57-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Keep Trying With Guava Retrying]]></title>
-    <link href="http://jivimberg.io/blog/2014/07/17/keep-trying-with-guava-retrying/"/>
+    <link href="http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying/"/>
     <updated>2014-07-17T14:22:07-07:00</updated>
-    <id>http://jivimberg.io/blog/2014/07/17/keep-trying-with-guava-retrying</id>
+    <id>http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying</id>
     <content type="html"><![CDATA[<p>We were having a <a href="http://en.wikipedia.org/wiki/Race_condition#Software">race condition</a> on a server which was &ldquo;fixed&rdquo; by adding an sleep to the thread to check again later. Yes, it sucked, so I decided to make something more sophisticated and went looking for a library to handle retries with multiple strategies. That&rsquo;s when I first read about <a href="https://github.com/rholder/guava-retrying">Guava Retrying</a>.</p>
 
 <!--more-->
@@ -75,9 +75,9 @@ try {
   
   <entry>
     <title type="html"><![CDATA[Guava - Fun With Comparisons]]></title>
-    <link href="http://jivimberg.io/blog/2014/03/28/guava-fun-with-comparisons/"/>
+    <link href="http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons/"/>
     <updated>2014-03-28T17:26:47-07:00</updated>
-    <id>http://jivimberg.io/blog/2014/03/28/guava-fun-with-comparisons</id>
+    <id>http://jivimberg.github.io/blog/2014/03/28/guava-fun-with-comparisons</id>
     <content type="html"><![CDATA[<p>Implementing <code>compare()</code> and <code>compareTo()</code> methods was never fun. Luckily <a href="https://code.google.com/p/guava-libraries/">Guava</a> provides an utility that makes comparison methods easier to write and more pleasing to the eye.</p>
 
 <!--more-->
@@ -156,9 +156,9 @@ private enum Age { YOUNG, OLD }
   
   <entry>
     <title type="html"><![CDATA[Guava - Using and Avoiding Null]]></title>
-    <link href="http://jivimberg.io/blog/2014/03/19/guava-using-and-avoiding-null/"/>
+    <link href="http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null/"/>
     <updated>2014-03-19T00:34:41-07:00</updated>
-    <id>http://jivimberg.io/blog/2014/03/19/guava-using-and-avoiding-null</id>
+    <id>http://jivimberg.github.io/blog/2014/03/19/guava-using-and-avoiding-null</id>
     <content type="html"><![CDATA[<p>I&rsquo;m starting a series of posts on <a href="https://code.google.com/p/guava-libraries/">Guava</a> (Google&rsquo;s core libraries). Today I am going to start with <strong>null</strong>, how to use it, and how to avoid it when necessary.</p>
 
 <!--more-->

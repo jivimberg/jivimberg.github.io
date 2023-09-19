@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Java | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/java/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:52:42+00:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-19T00:49:57-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Hexagonal Architecture on Spring Boot]]></title>
-    <link href="http://jivimberg.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot/"/>
+    <link href="http://jivimberg.github.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot/"/>
     <updated>2020-02-01T20:51:59-08:00</updated>
-    <id>http://jivimberg.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot</id>
+    <id>http://jivimberg.github.io/blog/2020/02/01/hexagonal-architecture-on-spring-boot</id>
     <content type="html"><![CDATA[<p>In this article, I&rsquo;ll show how to implement a Spring Boot application using Hexagonal Architecture.</p>
 
 <!--more-->
@@ -371,9 +371,9 @@
   
   <entry>
     <title type="html"><![CDATA[Map.merge]]></title>
-    <link href="http://jivimberg.io/blog/2018/07/20/map-dot-merge/"/>
+    <link href="http://jivimberg.github.io/blog/2018/07/20/map-dot-merge/"/>
     <updated>2018-07-20T07:32:49-07:00</updated>
-    <id>http://jivimberg.io/blog/2018/07/20/map-dot-merge</id>
+    <id>http://jivimberg.github.io/blog/2018/07/20/map-dot-merge</id>
     <content type="html"><![CDATA[<p>Sometimes is the small things… Like finding a new method that does exactly what you were needing.</p>
 
 <!--more-->
@@ -474,9 +474,9 @@
   
   <entry>
     <title type="html"><![CDATA[Parallel Map in Java (From Kotlin)]]></title>
-    <link href="http://jivimberg.io/blog/2018/05/07/parallel-map-in-java/"/>
+    <link href="http://jivimberg.github.io/blog/2018/05/07/parallel-map-in-java/"/>
     <updated>2018-05-07T13:19:58-07:00</updated>
-    <id>http://jivimberg.io/blog/2018/05/07/parallel-map-in-java</id>
+    <id>http://jivimberg.github.io/blog/2018/05/07/parallel-map-in-java</id>
     <content type="html"><![CDATA[<p>Following up of my <a href="http://jivimberg.io/blog/2018/05/04/parallel-map-in-kotlin/">previous post</a>, I was curious how a parallel map operation would look like using Java’s <a href="https://docs.oracle.com/javase/8/docs/api/java/util/Collection.html#parallelStream--"><code>parallelStream</code></a>. Here’s what I find out.</p>
 
 <!--more-->
@@ -583,9 +583,9 @@ fun main(args: Array<String>) {
   
   <entry>
     <title type="html"><![CDATA[Using PowerMock + TestNG to Mock a Static Class]]></title>
-    <link href="http://jivimberg.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class/"/>
+    <link href="http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class/"/>
     <updated>2016-04-03T08:38:47-07:00</updated>
-    <id>http://jivimberg.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class</id>
+    <id>http://jivimberg.github.io/blog/2016/04/03/using-powermock-plus-testng-to-mock-a-static-class</id>
     <content type="html"><![CDATA[<p>￼
 This week I needed to test a class that depended on a method from an static class. I saw we were using <a href="https://github.com/jayway/powermock" title="PowerMock">PowerMock</a> and thought to myself: <em>“Well this sounds pretty common, I bet it’s easy to accomplish”</em>. But of course I ran into half a dozen issues before I was able to make it work. Here’s my two cents to make your experience easier than mine.</p>
 
@@ -725,9 +725,9 @@ public class MyTest {
   
   <entry>
     <title type="html"><![CDATA[Keep Trying With Guava Retrying]]></title>
-    <link href="http://jivimberg.io/blog/2014/07/17/keep-trying-with-guava-retrying/"/>
+    <link href="http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying/"/>
     <updated>2014-07-17T14:22:07-07:00</updated>
-    <id>http://jivimberg.io/blog/2014/07/17/keep-trying-with-guava-retrying</id>
+    <id>http://jivimberg.github.io/blog/2014/07/17/keep-trying-with-guava-retrying</id>
     <content type="html"><![CDATA[<p>We were having a <a href="http://en.wikipedia.org/wiki/Race_condition#Software">race condition</a> on a server which was &ldquo;fixed&rdquo; by adding an sleep to the thread to check again later. Yes, it sucked, so I decided to make something more sophisticated and went looking for a library to handle retries with multiple strategies. That&rsquo;s when I first read about <a href="https://github.com/rholder/guava-retrying">Guava Retrying</a>.</p>
 
 <!--more-->

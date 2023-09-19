@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Sampling | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/sampling/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:52:42+00:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/sampling/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-19T00:49:57-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Sifter: Scalable Sampling for Distributed Tracing]]></title>
-    <link href="http://jivimberg.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces/"/>
+    <link href="http://jivimberg.github.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces/"/>
     <updated>2021-07-28T08:39:37-07:00</updated>
-    <id>http://jivimberg.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces</id>
+    <id>http://jivimberg.github.io/blog/2021/07/28/sifter-scalable-sampling-for-distributed-traces</id>
     <content type="html"><![CDATA[<p>Distributed tracing can be ridiculously expensive if you try to trace a hundred percent of requests. A common technique to reduce costs is to sample only a small portion of the traffic. But naive sampling techniques like <em>uniform sampling</em> will inevitably capture more common-case executions and might miss the more interesting edge cases. Instead, <strong><a href="https://dl.acm.org/doi/10.1145/3357223.3362736">Sifter’s approach</a> is to bias sampling decisions towards outliers and anomalous traces.</strong> This way, anomalous traces have a higher chance of being sampled, and the more uninteresting traces are discarded.</p>
 
 <!--more-->

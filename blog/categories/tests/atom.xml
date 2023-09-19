@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Tests | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/tests/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:52:42+00:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/tests/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-19T00:49:57-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Show What's Important, Hide the Rest]]></title>
-    <link href="http://jivimberg.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest/"/>
+    <link href="http://jivimberg.github.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest/"/>
     <updated>2020-09-07T18:05:00-07:00</updated>
-    <id>http://jivimberg.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest</id>
+    <id>http://jivimberg.github.io/blog/2020/09/07/effective-testing-show-whats-important-hide-the-rest</id>
     <content type="html"><![CDATA[<p>What we include in a test is as important as what we leave out. Having the right amount of information helps us understand what the test is doing at a glance.</p>
 
 <!--more-->
@@ -63,9 +63,9 @@
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Reducing Non-determinism to Avoid Flaky Tests]]></title>
-    <link href="http://jivimberg.io/blog/2020/07/27/effective-testing-reducing-non-determinism/"/>
+    <link href="http://jivimberg.github.io/blog/2020/07/27/effective-testing-reducing-non-determinism/"/>
     <updated>2020-07-27T22:00:54-07:00</updated>
-    <id>http://jivimberg.io/blog/2020/07/27/effective-testing-reducing-non-determinism</id>
+    <id>http://jivimberg.github.io/blog/2020/07/27/effective-testing-reducing-non-determinism</id>
     <content type="html"><![CDATA[<p>Flaky tests are those that randomly fail for no apparent reason. If you have a flaky test, you might re-run it, over and over, until it succeeds. If you have a <em>couple</em> of them, the chances of all passing at the same time are slim, so maybe you ignore the failures. You know, just this one time… Soon enough, you’re not paying attention to failures on this test suite. Congratulations! Your tests are now worthless.</p>
 
 <!--more-->
@@ -135,9 +135,9 @@
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Expressive Assertions]]></title>
-    <link href="http://jivimberg.io/blog/2020/07/18/effective-testing-expressive-assertions/"/>
+    <link href="http://jivimberg.github.io/blog/2020/07/18/effective-testing-expressive-assertions/"/>
     <updated>2020-07-18T11:58:34-07:00</updated>
-    <id>http://jivimberg.io/blog/2020/07/18/effective-testing-expressive-assertions</id>
+    <id>http://jivimberg.github.io/blog/2020/07/18/effective-testing-expressive-assertions</id>
     <content type="html"><![CDATA[<p>Using expressive assertions can help us figure out why a test fails without having to go through the code.</p>
 
 <!--more-->
@@ -221,9 +221,9 @@
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Test Structure]]></title>
-    <link href="http://jivimberg.io/blog/2020/07/10/effective-testing-test-structure/"/>
+    <link href="http://jivimberg.github.io/blog/2020/07/10/effective-testing-test-structure/"/>
     <updated>2020-07-10T23:53:38-07:00</updated>
-    <id>http://jivimberg.io/blog/2020/07/10/effective-testing-test-structure</id>
+    <id>http://jivimberg.github.io/blog/2020/07/10/effective-testing-test-structure</id>
     <content type="html"><![CDATA[<p>One way to make sure your tests are readable is to have them all adhere to the same structure.</p>
 
 <!--more-->
@@ -262,9 +262,9 @@
   
   <entry>
     <title type="html"><![CDATA[Effective Testing - Use Descriptive Test Names]]></title>
-    <link href="http://jivimberg.io/blog/2020/07/05/effective-testing-use-descriptive-test-names/"/>
+    <link href="http://jivimberg.github.io/blog/2020/07/05/effective-testing-use-descriptive-test-names/"/>
     <updated>2020-07-05T23:21:07-07:00</updated>
-    <id>http://jivimberg.io/blog/2020/07/05/effective-testing-use-descriptive-test-names</id>
+    <id>http://jivimberg.github.io/blog/2020/07/05/effective-testing-use-descriptive-test-names</id>
     <content type="html"><![CDATA[<p>Picking good test names can help us identify what&rsquo;s wrong with our code when something fails.</p>
 
 <!--more-->

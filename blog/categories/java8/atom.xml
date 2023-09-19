@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Java8 | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/java8/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:52:42+00:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/java8/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-19T00:49:57-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Map.merge]]></title>
-    <link href="http://jivimberg.io/blog/2018/07/20/map-dot-merge/"/>
+    <link href="http://jivimberg.github.io/blog/2018/07/20/map-dot-merge/"/>
     <updated>2018-07-20T07:32:49-07:00</updated>
-    <id>http://jivimberg.io/blog/2018/07/20/map-dot-merge</id>
+    <id>http://jivimberg.github.io/blog/2018/07/20/map-dot-merge</id>
     <content type="html"><![CDATA[<p>Sometimes is the small things… Like finding a new method that does exactly what you were needing.</p>
 
 <!--more-->

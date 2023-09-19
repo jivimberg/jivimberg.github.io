@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Basecamp | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/basecamp/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:52:42+00:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/basecamp/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-19T00:49:57-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Book Recommendations: Shape Up]]></title>
-    <link href="http://jivimberg.io/blog/2019/09/15/book-recommendations-shape-up/"/>
+    <link href="http://jivimberg.github.io/blog/2019/09/15/book-recommendations-shape-up/"/>
     <updated>2019-09-15T10:51:31-07:00</updated>
-    <id>http://jivimberg.io/blog/2019/09/15/book-recommendations-shape-up</id>
+    <id>http://jivimberg.github.io/blog/2019/09/15/book-recommendations-shape-up</id>
     <content type="html"><![CDATA[<p>I love reading about how people do creative work. Be it <a href="https://en.wikipedia.org/wiki/On_Writing:_A_Memoir_of_the_Craft">writing books</a> or <a href="http://the-witness.net/news/">designing video games</a>, there’s something magical about peeking behind the curtain and learning how the pros do their thing.</p>
 
 <p>Today I’m reviewing <a href="https://basecamp.com/shapeup">Shape Up</a>, a book about the process of writing software at Basecamp.</p>

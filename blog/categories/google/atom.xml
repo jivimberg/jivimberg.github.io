@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Google | Coding Forest]]></title>
-  <link href="http://jivimberg.io/blog/categories/google/atom.xml" rel="self"/>
-  <link href="http://jivimberg.io/"/>
-  <updated>2023-09-13T06:52:42+00:00</updated>
-  <id>http://jivimberg.io/</id>
+  <link href="http://jivimberg.github.io/blog/categories/google/atom.xml" rel="self"/>
+  <link href="http://jivimberg.github.io/"/>
+  <updated>2023-09-19T00:49:57-07:00</updated>
+  <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Guice at a Glance]]></title>
-    <link href="http://jivimberg.io/blog/2019/02/08/guice-at-a-glance/"/>
+    <link href="http://jivimberg.github.io/blog/2019/02/08/guice-at-a-glance/"/>
     <updated>2019-02-08T15:12:32-08:00</updated>
-    <id>http://jivimberg.io/blog/2019/02/08/guice-at-a-glance</id>
+    <id>http://jivimberg.github.io/blog/2019/02/08/guice-at-a-glance</id>
     <content type="html"><![CDATA[<p>A visual overview of <a href="https://github.com/google/guice">Google’s Guice</a> model.</p>
 
 <!--more-->
