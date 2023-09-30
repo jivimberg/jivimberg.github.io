@@ -4,7 +4,7 @@ title: "I was trying to sound smart, and now I regret it"
 date: 2023-09-22 10:00:27 -0700
 comments: true
 categories: sociotechnical collaboration
-description: Talking difficult might be more harmful than think. This is why you should use jargon with care.
+description: Talking difficult might be more harmful than think. Use jargon with care.
 image: /images/posts/2023-09-22/hyrums-law-xkcd.png
 ---
 
