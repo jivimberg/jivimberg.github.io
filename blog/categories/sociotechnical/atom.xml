@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Sociotechnical | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/sociotechnical/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2023-09-19T00:49:57-07:00</updated>
+  <updated>2023-09-29T20:54:54-07:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,6 +12,48 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[I Was Trying to Sound Smart, and Now I Regret It]]></title>
+    <link href="http://jivimberg.github.io/blog/2023/09/22/the-way-we-talk/"/>
+    <updated>2023-09-22T10:00:27-07:00</updated>
+    <id>http://jivimberg.github.io/blog/2023/09/22/the-way-we-talk</id>
+    <content type="html"><![CDATA[<p>Maybe it&rsquo;s because I&rsquo;m an immigrant desperately trying to fit in. Maybe it&rsquo;s one more way of keeping the imposter syndrome at bay. Whatever the reason, I&rsquo;ve always been low-key obsessed with software development lingo. I&rsquo;d go through meetings dropping <em>principles</em> and <em>laws</em> every chance I got. I&rsquo;d lurk Slack channels waiting for a chance to pounce on a conversation to say &ldquo;That&rsquo;d make it worse based on <a href="https://en.wikipedia.org/wiki/Brooks%27s_law">Brooke&rsquo;s Law</a>&rdquo; or &ldquo;You&rsquo;re falling for <a href="https://en.wikipedia.org/wiki/Confirmation_bias">confirmation bias</a>!&rdquo;. Because I thought that gave me street cred. Same way I&rsquo;d cover my laptop with stickers to showcase all the frameworks I knew and the conferences I&rsquo;ve been to (but only if it was a modern framework and a <em>&ldquo;cool&rdquo;</em> conference). Just last week, I <a href="https://jivimberg.io/blog/2023/09/04/the-inverse-conway-maneuver/">wrote a post</a> teaching an imaginary audience about <a href="https://en.wikipedia.org/wiki/Conway%27s_law">Conway&rsquo;s Law</a> and posted it on the social network for professional narcissists.</p>
+
+<!--more-->
+
+
+<p>But it&rsquo;s not just an egotistical affectation. I honestly believe there are some benefits to knowing these laws and principles by name. Labeling things helps us <em>think</em> about them. I don&rsquo;t fully understand why; I&rsquo;d need a major in Philosophy to explain this properly, but all I know is Computer Science, so to me, using a name for a complex idea feels like defining a variable. It gives us a handle to refer to it without worrying about the internals. That way, our brains can work with this concept (comparing it, finding applications, counter-examples, etc.) without needing to delve into its definition&rsquo;s nuances every time. Similar to how we can pass around a reference to an object and work with it without caring for its implementation.</p>
+
+<p>Giving things a name may also help us communicate more efficiently among peers. <strong>We can better use of the communication bandwidth by referring to a complex concept by its name.</strong> It&rsquo;s the difference between saying:</p>
+
+<blockquote><p><em>&ldquo;We should be careful about making that change! This service is widely use, so there&rsquo;ll probably be some users relying on such behavior even if we made no promises about it, and it&rsquo;s not documented on the API&rdquo;</em></p></blockquote>
+
+<p>and</p>
+
+<blockquote><p><em>&ldquo;Let&rsquo;s be careful and consider <a href="https://www.hyrumslaw.com/">Hyrum&rsquo;s Law</a>&rdquo;.</em></p></blockquote>
+
+<p><img class="center" src="/images/posts/2023-09-22/hyrums-law-xkcd.png" width="400"></p>
+
+<p>Unfortunately, when speaking the words, we cannot include the hyperlink as I did above. <strong>The shortcut only works if both persons known what <em>&ldquo;Hyrum&rsquo;s Law&rdquo;</em> means.</strong> It&rsquo;s as they say: &ldquo;It takes too to dance that ballroom dance originated in Buenos Aires, characterized by marked rhythms and postures and abrupt pauses&rdquo;. You might think this is no big deal. After all, if the listener doesn&rsquo;t know the meaning, they can always interrupt the conversation and ask. But you&rsquo;d be surprised how rare this is. Admitting to one&rsquo;s ignorance in front of your peers takes a fair amount of courage and trust. The more people in a meeting, the harder it is to ask for clarification. Mention <em>&ldquo;Fincher&rsquo;s Law&rdquo;</em> in a hundred person town-hall, and I can guarantee you not one person will ask what it means. Even though they don&rsquo;t know about it because I just made it up. For the following few minutes, half of them will be running Google searches on the side while trying to keep up with the rest of the presentation. The other half was already browsing their Amazon wishlists, half-listening.</p>
+
+<p> There&rsquo;s an even worse scenario: When both parties know what a term means, but their definitions are not quite the same. The last project I worked on was delayed for a few days because the front-end and back-end engineers (aka me) thought their respective definitions of &ldquo;upstream service&rdquo; was the correct one. <strong>There are few things more pernicious to software than uncheck assumptions.</strong></p>
+
+<p>Another reason to avoid technical jargon is that it contributes to gate-keeping. <strong>Talking difficult might improve communication (providing you avoid the pitfalls mentioned above), but it makes it harder for a newcomer to understand what the hell is going on.</strong> This applies to everything: a new junior developer who just joined the team, the documentation you write for your products, the README file on an open-source project, etc. The more lingo you use, the more people you leave out.</p>
+
+<p>To sum up, if you&rsquo;re going to use technical jargon or cite a law or principle, make sure that:</p>
+
+<ol>
+<li>Your audience understands what you&rsquo;re talking about.</li>
+<li>Your definition and the audience definition match.</li>
+<li>You&rsquo;re not talking to (or writing for) newcomers.</li>
+<li>You&rsquo;re not speaking for a big audience.</li>
+</ol>
+
+
+<p><img class="right-fill" src="/images/signatures/signature1.png" width="200" title="‘My signature’" ></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Pulling an Inverse Conway Maneuver at Netflix]]></title>
