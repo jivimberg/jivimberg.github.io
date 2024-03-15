@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://jivimberg.github.io/blog/2024/03/15/herding-cats-how-to-ace-large-scale-migrations/</loc>
+<lastmod>2024-03-15T15:38:11-07:00</lastmod>
+</url>
+<url>
 <loc>http://jivimberg.github.io/blog/2023/09/22/the-way-we-talk/</loc>
 <lastmod>2023-09-22T10:00:27-07:00</lastmod>
 </url>
@@ -726,23 +730,5 @@
 </url>
 <url>
 <loc>http://jivimberg.github.io/blog/categories/sociotechnical/</loc>
-</url>
-<url>
-<loc>http://jivimberg.github.io/blog/posts/2/</loc>
-</url>
-<url>
-<loc>http://jivimberg.github.io/blog/posts/3/</loc>
-</url>
-<url>
-<loc>http://jivimberg.github.io/blog/posts/4/</loc>
-</url>
-<url>
-<loc>http://jivimberg.github.io/blog/posts/5/</loc>
-</url>
-<url>
-<loc>http://jivimberg.github.io/blog/posts/6/</loc>
-</url>
-<url>
-<loc>http://jivimberg.github.io/blog/posts/7/</loc>
 </url>
 </urlset>
