@@ -76,7 +76,7 @@ You might need to pull changes with `git pull origin master --rebase`
 
 ## error: src refspec master does not match any
 
-Change `_deploy` branch to `master`
+Change `_deploy` branch to `master` by doing: `git checkout -b master` inside the `_deploy` directory.
 
 ---
 
