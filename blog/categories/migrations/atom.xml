@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Migrations | Coding Forest]]></title>
   <link href="http://jivimberg.github.io/blog/categories/migrations/atom.xml" rel="self"/>
   <link href="http://jivimberg.github.io/"/>
-  <updated>2024-03-15T15:54:10-07:00</updated>
+  <updated>2025-01-30T18:26:11+01:00</updated>
   <id>http://jivimberg.github.io/</id>
   <author>
     <name><![CDATA[Juan Ignacio Vimberg]]></name>
@@ -12,115 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Herding Cats - How to Ace Large Scale Migrations]]></title>
-    <link href="http://jivimberg.github.io/blog/2024/03/15/herding-cats-how-to-ace-large-scale-migrations/"/>
-    <updated>2024-03-15T15:38:11-07:00</updated>
-    <id>http://jivimberg.github.io/blog/2024/03/15/herding-cats-how-to-ace-large-scale-migrations</id>
-    <content type="html"><![CDATA[<p>As a member of the Platform team, one of my responsibilities is to plan and execute large-scale migrations. These pose a unique challenge: how to get people to complete some tasks without any authority over them.</p>
-
-<!--more-->
-
-
-<h2>The Challenge</h2>
-
-<p>I will focus on large-scale changes in which multiple teams must update their code to complete the migration. An automated workflow that submits PRs might work better for minor changes like updating library versions. But for anything more complex than that, you&rsquo;ll need to enlist the help of the codebase owner, as they are the ones who know how to test and deploy the required changes.</p>
-
-<p>The problem is that migrations are not fun. Nobody wakes up in the morning saying, &ldquo;Today is a great day to do some migrating.&rdquo; They are like brushing your teeth or eating your veggies; you do it because you have to. Your job is to get multiple teams to do it, sometimes even the whole company, and they must complete it before some deadline.</p>
-
-<p>If you want migrations to be completed, the right incentives need to be in place:</p>
-
-<ul>
-<li>Management has to commit to making it happen, and there needs to be alignment on how the migration is prioritized against other tasks. This doesn&rsquo;t mean it always has to be the highest priority; it means people have to be on the same page regarding its priority.</li>
-<li>Developers need to understand why some change is necessary. What are the benefits of migrating, and what are the risks of not doing so.</li>
-<li>The culture needs to reward migration efforts. This might sound vague, but it looks like this in practice: the work is acknowledged in public forums such as town halls and all-hands, and people making it happen are rewarded.</li>
-</ul>
-
-
-<h2>Before you start: Appoint a Migration Leader</h2>
-
-<p>One key requirement for a successful migration is to appoint a &ldquo;Migration Leader,&rdquo; an IC or PM who acts as a liaison for the migration. Their job is to plan, coordinate, and drive the migration to completion.</p>
-
-<h2>Divide Migration Into 4 Stages</h2>
-
-<p><img class="center" src="/images/posts/2024-03-15/migration-stages.png"></p>
-
-<h3>1. Planning</h3>
-
-<p>The first step is to answer the following questions:</p>
-
-<ol>
-<li>What needs to be done? Why?</li>
-<li>Who needs to do it?</li>
-<li>How to do it? (Migration steps)</li>
-<li>When?</li>
-</ol>
-
-
-<p>The <em>What</em> and <em>Why</em> should be easy to answer. It is crucial to capture and communicate <em>why</em> we are embarking on this migration. Devs are practical, purpose-driven individuals; explaining why something needs to happen will help you convince them to do it. Sweeten the pill by mentioning the advantages the new thing provides, if any.</p>
-
-<p>Make a list of affected repositories that need to be migrated and identify their owners. The goal is to gauge the scope of the migration and identify the teams that will need to be engaged to make it happen. Dependency analysis and codebase search can be powerful tools for this task. At this point, it is also helpful to capture other codebase details that affect the migration instructions, such as language, number of usages that need to be migrated, etc.</p>
-
-<p>Next, we move to the <em>How</em>. Start by performing the migration yourself (on one of your team repositories if possible) and document every step. Once that&rsquo;s done, do a few white-glove migrations for other teams: pick a handful of repositories from other teams and pair with them to run the migration. Using the list from the previous step, select a varied sample of repositories to cover the different scenarios users might face. Use these experiences to refine the migration documentation.</p>
-
-<p>Documentation is integral to the smooth execution of a migration. In a large-scale migration, it&rsquo;s expected that different scenarios will arise for different users. Instead of trying to cram everything into the same guide, create different guides and make sure to point users to the guide that is relevant to them.</p>
-
-<p>Based on what you learned from the previous steps, you should have a good sense of the size and complexity of the migration. Using this information, set a deadline for completion. Give the teams a few cycles to add the migration to their plans and execute. At this stage, the <em>When</em> is just an estimation, but it is important to have a date for which to aim.</p>
-
-<h3>2. Kick-off the Migration Campaign</h3>
-
-<p>By now, your migration documents are ready, and a few teams have gone through the process. You&rsquo;ve done your homework and are ready to kick off the migration campaign.</p>
-
-<p>For best results, the migration kick-off should be done before planning for the next cycle starts. That way, teams can allocate time to it instead of making it a mid-cycle distraction.</p>
-
-<p>Kick off by broadcasting the intent of the migration and the expected timelines through org-wide communication. Next, engage the specific teams that need to do the work. The rule of thumb is that the wider the audience, the less granular the information. So, for example, for a company-wide email, it is enough to state <em>What</em> and <em>When</em>, whereas for specific teams, you should also include details on How and links to the actual documentation.</p>
-
-<p>To avoid the <a href="https://en.wikipedia.org/wiki/Bystander_effect">Bystander effect</a>, identify a single point of contact for each repository that needs to be migrated. If possible, have it be the same person for all the repos owned by a team so they can reuse the knowledge.</p>
-
-<p>Create a new Slack channel and add all these people. This will be your fine-grain communication channel. It is also where people can collaborate, provide feedback, learn from each other, and ask questions.</p>
-
-<h3>3. The Bulk of the Migration Happens</h3>
-
-<p>Now, you go into reactive mode. It&rsquo;s time for the teams to do their part.</p>
-
-<p>Your job is to follow up with regular updates and keep tabs on which repositories have already migrated. The best way to do this is through a dashboard. You don&rsquo;t need something fancy; a simple spreadsheet would do (but if you can spare the resources, a little flair never hurts). The main questions the dashboard should answer are:</p>
-
-<ol>
-<li>What&rsquo;s the overall progress?</li>
-<li>What&rsquo;s missing?</li>
-</ol>
-
-
-<p>Allow users to slice the data by org/team. Showing a leaderboard comparing migration progress across orgs/teams is an effective way of encouraging people to take action. Nobody wants to be the cause of their team being at the bottom of the leaderboard.</p>
-
-<p><img class="center" src="/images/posts/2024-03-15/migration-dashboard.png"></p>
-
-<p>Be sure to reserve some time for office hours and support for teams that have questions or get stuck during the migration. Unforeseen issues will come up, so you better reserve some capacity to deal with them if you want to see the migration through.</p>
-
-<h3>4. Dealing with Stragglers</h3>
-
-<p>Most teams have already migrated. You only have a handful of projects left, but they seem to be stuck and barely making any progress.</p>
-
-<p>This is the make-or-break stage. This is where migrations go to die. Don&rsquo;t let this happen!</p>
-
-<p>Go through the list of pending teams and treat each as a problem to debug. Does the team know they have to migrate? Have they looked at the instructions? Do they understand what steps they have to perform? Are they blocked on something? Do they have the resources to complete it on time?</p>
-
-<p>It&rsquo;s time to don your enabler hat. Identify what&rsquo;s causing the delay and unblock the team. At times, you might have to sit down with the team and debug their code. Other times, you&rsquo;ll need to talk to managers and PMs to have the migration prioritized. Do whatever it takes, and don&rsquo;t give up!</p>
-
-<p>There will always be stragglers; there&rsquo;s no way around it. The only thing you can do is identify them early. Pay attention to the signs: a team going quiet for too long, the migration being pushed off for multiple quarters, a repository with no clear owner, etc. All these things should trigger your spidey sense and bring you to action.</p>
-
-<h2>Ending Note: Build Trust</h2>
-
-<p>One final piece of advice: build trust with your users. Developers need to know that if a platform initiates a migration, it&rsquo;s only because it&rsquo;s really worth it and that you have taken all the required steps to make it as seamless as possible for them.</p>
-
-<p>Be understanding about people&rsquo;s time and priorities. Chances are this won&rsquo;t be your last time working with them, so don&rsquo;t jeopardize your relationship to hit a deadline. And more generally, don&rsquo;t be a dick.</p>
-
-<p>May all your migrations complete!</p>
-
-<p><img class="right-fill" src="/images/signatures/signature3.png" width="200" title="‘My signature’" ></p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[How Platform Teams Get Shit Done]]></title>
