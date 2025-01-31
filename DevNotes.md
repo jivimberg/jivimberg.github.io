@@ -65,6 +65,8 @@ If using ZSH add [pyenv plugin](https://github.com/ohmyzsh/ohmyzsh/blob/master/p
 
 If you delete the `_deploy` directory you have to do: `rake setup_github_pages`
 
+https://github.com/jivimberg/jivimberg.github.io
+
 Ref: https://github.com/imathis/octopress/issues/334
 
 Then do: `git checkout -b master` to create the master branch.
